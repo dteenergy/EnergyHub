@@ -7,9 +7,9 @@ sap.ui.define([
     return UIComponent.extend("dteconsentapp.Component", {
         metadata: {
             manifest: "json",
-            interfaces: [
-                "sap.ui.core.IAsyncContentCreation"
-            ]
+            // interfaces: [
+            //     "sap.ui.core.IAsyncContentCreation"
+            // ]
         },
 
         init() {

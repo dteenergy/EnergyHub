@@ -26,6 +26,7 @@ modules:
           srv-url: ${default-url}
     requires:
       - name: dteConsentAppPortal-db
+      - name: dteConsentAppPortal-auth
 
   - name: dteConsentAppPortal-db-deployer
     type: hdb
@@ -41,3 +42,12 @@ resources:
     parameters:
       service: hana
       service-plan: hdi-shared
+  - name: dteConsentAppPortal-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
+      config:
+        xsappname: dteConsentAppPortal-xsuaa-service
+        tenant-mode: dedicated

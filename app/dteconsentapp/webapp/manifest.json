@@ -43,7 +43,6 @@
     }
   },
   "sap.ui5": {
-    "flexEnabled": true,
     "dependencies": {
       "minUI5Version": "1.130.2",
       "libs": {
@@ -90,9 +89,10 @@
         "controlAggregation": "pages",
         "controlId": "app",
         "transition": "slide",
-        "type": "View",
+        "async": true,
         "viewType": "XML",
-        "path": "dteconsentapp.view"
+        "viewPath": "dteconsentapp.view",
+        "clearControlAggregation": false
       },
       "routes": [
         {
@@ -101,12 +101,27 @@
           "target": [
             "TargetView1"
           ]
+        },
+        {
+          "name": "Landlord",
+          "pattern": "landlord",
+          "target": ["LandlordForm"]
         }
       ],
       "targets": {
         "TargetView1": {
-          "id": "View1",
-          "name": "View1"
+          "viewId": "View1",
+          "viewName": "View1",
+          "viewType": "XML",
+          "transition":"slide",
+          "clearControlAggregation": false
+        },
+        "LandlordForm": {
+          "viewType": "XML",
+          "transition":"slide",
+          "clearControlAggregation": false,
+          "viewId": "Landlord",
+          "viewName": "Landlord"
         }
       }
     },
