@@ -11,97 +11,9 @@ sap.ui.define([
             });
             this.getView().setModel(oModel, "locationModel");
             this.onAddAnotherLocation();
-
-            this.dqmAddresses = [
-                {
-                  "formattedAddress": "1600 Amphitheatre Pkwy, Mountain View, CA 94043, USA",
-                  "address": {
-                    "houseNumber": "1600",
-                    "streetName": "Amphitheatre Pkwy",
-                    "city": "Mountain View",
-                    "state": "California",
-                    "postalCode": "94043",
-                    "country": "United States",
-                    "countryCode": "US"
-                  }
-                },
-                {
-                  "formattedAddress": "1 Infinite Loop, Cupertino, CA 95014, USA",
-                  "address": {
-                    "houseNumber": "1",
-                    "streetName": "Infinite Loop",
-                    "city": "Cupertino",
-                    "state": "California",
-                    "postalCode": "95014",
-                    "country": "United States",
-                    "countryCode": "US"
-                  }
-                },
-                {
-                  "formattedAddress": "350 5th Ave, New York, NY 10118, USA",
-                  "address": {
-                    "houseNumber": "350",
-                    "streetName": "5th Ave",
-                    "city": "New York",
-                    "state": "New York",
-                    "postalCode": "10118",
-                    "country": "United States",
-                    "countryCode": "US"
-                  }
-                },
-                {
-                  "formattedAddress": "221B Baker St, London NW1 6XE, UK",
-                  "address": {
-                    "houseNumber": "221B",
-                    "streetName": "Baker St",
-                    "city": "London",
-                    "state": "England",
-                    "postalCode": "NW1 6XE",
-                    "country": "United Kingdom",
-                    "countryCode": "GB"
-                  }
-                },
-                {
-                  "formattedAddress": "Eiffel Tower, Champ de Mars, 5 Av. Anatole France, 75007 Paris, France",
-                  "address": {
-                    "houseNumber": "",
-                    "streetName": "Champ de Mars, 5 Av. Anatole France",
-                    "city": "Paris",
-                    "state": "Île-de-France",
-                    "postalCode": "75007",
-                    "country": "France",
-                    "countryCode": "FR"
-                  }
-                },
-                {
-                  "formattedAddress": "10 Downing St, London SW1A 2AA, UK",
-                  "address": {
-                    "houseNumber": "10",
-                    "streetName": "Downing St",
-                    "city": "London",
-                    "state": "England",
-                    "postalCode": "SW1A 2AA",
-                    "country": "United Kingdom",
-                    "countryCode": "GB"
-                  }
-                },
-                {
-                  "formattedAddress": "500 Terry A Francois Blvd, San Francisco, CA 94158, USA",
-                  "address": {
-                    "houseNumber": "500",
-                    "streetName": "Terry A Francois Blvd",
-                    "city": "San Francisco",
-                    "state": "California",
-                    "postalCode": "94158",
-                    "country": "United States",
-                    "countryCode": "US"
-                  }
-                }
-              ];
-
               
             const oAddressModel = new sap.ui.model.json.JSONModel({
-                dqmAddress: this.dqmAddresses
+                dqmAddress: [] // Array to hold the suggestion addresses
             });
 
             this.getView().setModel(oAddressModel, 'dqmAddressModel');
@@ -138,13 +50,32 @@ sap.ui.define([
             });
         },
 
-        onsuggestionItemSelected: function(oEvent){  
-            const selectedValue = oEvent.getParameter('selectedItem');
-            console.log(selectedValue); 
+        onbuildingLocationAddressChange: async function(oEvent){
+
+          const oView = this.getView();
+          const oAddModel = oView.getModel("dqmAddressModel");
+          
+          const newValue = oEvent.getParameter("value");
+          const subscription_key = "FHSdLToNjfzJbP0DyZrAuSadyk3cv3433c5uggPL80yV60ZxQ1NCJQQJ99ALACYeBjFqbPoVAAAgAZMP4eHm&typeahead=true";
+
+          const {data} = await axios.get(`https://atlas.microsoft.com/search/fuzzy/json?api-version=1.0&query=${newValue}&subscription-key=${subscription_key}&idxSet=POI,PAD`)
+          // console.log(data.results);
+
+          oAddModel.setProperty("/dqmAddress", data.results)
+        },
+
+        onsuggestionItemSelected: function(oEvent){
+          console.log(oEvent);
+            
+          const addressField = oEvent.getSource();
+          const oBindingContext = addressField.getBindingContext();
+          console.log(oBindingContext);
+          
+          const selectedValue = oEvent.getParameter('selectedItem');
+          console.log(selectedValue?.oPropagatedProperties?.oBindingContexts?.getPath()); 
         },
 
         onRemoveTrigger: function(oEvent){
-          console.log('Check Button trigger', oEvent);
           const oButton = oEvent.getSource();
           const oFragment = oButton.getParent();
 

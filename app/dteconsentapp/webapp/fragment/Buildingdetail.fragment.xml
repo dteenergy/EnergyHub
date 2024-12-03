@@ -11,9 +11,9 @@
 		<Input class="inputBox" value="{locationModel>accountNumber}" required="true"></Input>
 
 		<Label labelFor="account-manager-ph" text="Location Address"></Label>
-		<Input class="inputBox" value="{locationModel>locationAddress}" showSuggestion="true" suggestionItemSelected=".onsuggestionItemSelected" suggestionItems="{dqmAddressModel>/dqmAddress}" required="true">
+		<Input class="inputBox" value="{locationModel>locationAddress}" liveChange="onbuildingLocationAddressChange" showSuggestion="true" suggestionItemSelected=".onsuggestionItemSelected" suggestionItems="{dqmAddressModel>/dqmAddress}" required="true">
 			<suggestionItems>
-				<core:Item text="{dqmAddressModel>formattedAddress}"/>
+				<core:Item text="{dqmAddressModel>address/freeformAddress}"/>
 			</suggestionItems>
 		</Input>
 
