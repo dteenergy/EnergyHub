@@ -1,16 +1,19 @@
 sap.ui.define([
-    "sap/ui/core/mvc/Controller",
+    "dteconsentappclient/controller/BaseController",
     "sap/ui/core/Fragment"
-], (Controller, Fragment) => {
+], (BaseController, Fragment) => {
     "use strict";
 
-    return Controller.extend("dteconsentappclient.controller.Landlord", {
+    return BaseController.extend("dteconsentappclient.controller.Landlord", {
         onInit() {
-
+        // Assign url and headers into this controller global scope
+          const { url, headers } = this.getApiConfig();
+          this.HEADERS = headers;
+          this.SERVERHOST = url;
         },
 
         handleSubmit: async function () {
-            const {data} = await axios.get('/service/DTEApplicationDetail')
+            const {data} = await axios.get(`${this.SERVERHOST}service/DTEApplicationDetail`);
 
             
             console.log(data.value[0], 'While clicking submit');

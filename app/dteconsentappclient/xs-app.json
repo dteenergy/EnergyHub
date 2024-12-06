@@ -5,8 +5,8 @@
     {
       "source": "^/service/(.*)$",
       "target": "/service/$1",
-      "destination": "dteConsentAppPortal_auth_dteConsentAppPortal",
-      "authenticationType": "xsuaa",
+      "destination": "dteConsentAppPortal_No_auth_dteConsentAppPortal",
+      "authenticationType": "none",
       "csrfProtection": false
     },
     {
@@ -25,7 +25,7 @@
       "source": "^(.*)$",
       "target": "$1",
       "service": "html5-apps-repo-rt",
-      "authenticationType": "xsuaa"
+      "authenticationType": "none"
     }
   ]
 }

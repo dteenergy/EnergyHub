@@ -4,5 +4,4 @@ using {dteConsentApp as db} from '../db/schema';
 service DTEConsentAppPortal {
     // Entity Projections or Action configuration
     entity DTEApplicationDetail as projection on db.ApplicationDetail;
-
 };

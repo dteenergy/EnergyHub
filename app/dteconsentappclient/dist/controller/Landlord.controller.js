@@ -1,2 +1,2 @@
-sap.ui.define(["sap/ui/core/mvc/Controller","sap/ui/core/Fragment"],(e,n)=>{"use strict";return e.extend("dteconsentappclient.controller.Landlord",{onInit(){},handleSubmit:async function(){const{data:e}=await axios.get("/service/DTEApplicationDetail");console.log(e.value[0],"While clicking submit")}})});
+sap.ui.define(["dteconsentappclient/controller/BaseController","sap/ui/core/Fragment"],(t,e)=>{"use strict";return t.extend("dteconsentappclient.controller.Landlord",{onInit(){const{url:t,headers:e}=this.getApiConfig();this.HEADERS=e;this.SERVERHOST=t},handleSubmit:async function(){const{data:t}=await axios.get(`${this.SERVERHOST}service/DTEApplicationDetail`);console.log(t.value[0],"While clicking submit")}})});
 //# sourceMappingURL=Landlord.controller.js.map

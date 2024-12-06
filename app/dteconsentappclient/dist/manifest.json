@@ -129,6 +129,16 @@
             "viewName": "dteconsentappclient.view.App",
             "type": "XML",
             "id": "App"
+        },
+        "config": {
+            "routerConfig": {
+                "localApi": {
+                    "uri": "https://port4004-workspaces-ws-42tcx.us10.applicationstudio.cloud.sap"
+                },
+                "productionApi": {
+                    "uri": ""
+                }
+            }
         }
     },
     "sap.cloud": {

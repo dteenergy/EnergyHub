@@ -9,6 +9,7 @@ modules:
   requires:
   - name: pgInstance
   - name: dteConsentAppPortal-auth
+  - name: dteConsentAppPortal-destination-service
   provides:
   - name: srv-api
     properties:
@@ -49,6 +50,12 @@ modules:
           ServiceKeyName: dteConsentAppPortal-auth-key
           URL: ~{srv-api/srv-url}
           sap.cloud.service: dteConsentAppPortal
+        - Name: dteConsentAppPortal_No_auth_dteConsentAppPortal
+          ServiceInstanceName: dteConsentAppPortal-xsuaa-service
+          ServiceKeyName: dteConsentAppPortal-auth-key
+          forwardAuthToken: false
+          sap.cloud.service: dteConsentAppPortal
+          URL: ~{srv-api/srv-url}
         existing_destinations_policy: ignore
   build-parameters:
     no-source: true

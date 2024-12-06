@@ -37,7 +37,10 @@
     "requires": {
       "[production]": {
         "db": "postgres",
-        "auth": "mocked"
+        "auth": {
+          "kind": "xsuaa",
+          "restrict_all_services": false
+        }
       }
     }
   }
