@@ -5,10 +5,11 @@ sap.ui.define([
 
     return Controller.extend("dteconsentapp.controller.View1", {
         onInit() {
+            this.handleSubmitViewPage();
         },
 
-        handleSubmit: async function(){
-            const {data} = await axios.get('https://port4004-workspaces-ws-b66tw.us20.applicationstudio.cloud.sap/service/DTEApplicationDetail')
+        handleSubmitViewPage: async function(){
+            const {data} = await axios.get('https://port4004-workspaces-ws-7b5t6.us10.trial.applicationstudio.cloud.sap/service/DTEApplicationDetail')
 
             
             console.log(data.value[0], 'While clicking submit');

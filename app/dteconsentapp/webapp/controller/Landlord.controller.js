@@ -84,7 +84,11 @@ sap.ui.define([
           oFragment.destroy();
         },
 
-        onSubmit: function(){
+        onSubmit: async function(){
+            const {data} = await axios.get('/service/DTEApplicationDetail');
+
+            console.log(data.value[0], 'While clicking submit');
+            
             const oView = this.getView();
             const oModel = oView.getModel("locationModel");
             const aLocations = oModel.getProperty("/locations");

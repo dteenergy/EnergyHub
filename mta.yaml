@@ -1,8 +1,9 @@
 _schema-version: 3.3.0
 ID: dteConsentAppPortal
 version: 1.0.0
-description: "A simple CAP project."
+description: "DTE consent app portal project."
 parameters:
+  deploy-mode: html5-repo
   enable-parallel-deployments: true
 build-parameters:
   before-all:
@@ -11,43 +12,119 @@ build-parameters:
         - npm ci
         - npx cds build --production
 modules:
-  - name: dteConsentAppPortal-srv
-    type: nodejs
-    path: gen/srv
+- name: dteConsentAppPortal-srv
+  type: nodejs
+  path: gen/srv
+  parameters:
+    buildpack: nodejs_buildpack
+    readiness-health-check-type: http
+    readiness-health-check-http-endpoint: /health
+  build-parameters:
+    builder: npm
+  provides:
+    - name: srv-api # required by consumers of CAP services (e.g. approuter)
+      properties:
+        srv-url: ${default-url}
+  requires:
+    - name: dteConsentAppPortal-db
+    - name: dteConsentAppPortal-auth
+- name: dteConsentAppPortal-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: dteConsentAppPortal-destination-service
     parameters:
-      buildpack: nodejs_buildpack
-      readiness-health-check-type: http
-      readiness-health-check-http-endpoint: /health
-    build-parameters:
-      builder: npm
-    provides:
-      - name: srv-api # required by consumers of CAP services (e.g. approuter)
-        properties:
-          srv-url: ${default-url}
-    requires:
-      - name: dteConsentAppPortal-db
-      - name: dteConsentAppPortal-auth
-
-  - name: dteConsentAppPortal-db-deployer
-    type: hdb
-    path: gen/db
+      content-target: true
+  - name: dteConsentAppPortal_html_repo_host
     parameters:
-      buildpack: nodejs_buildpack
-    requires:
-      - name: dteConsentAppPortal-db
-
-resources:
-  - name: dteConsentAppPortal-db
-    type: com.sap.xs.hdi-container
-    parameters:
-      service: hana
-      service-plan: hdi-shared
+      service-key:
+        name: dteConsentAppPortal_html_repo_host-key
+  - name: srv-api
   - name: dteConsentAppPortal-auth
-    type: org.cloudfoundry.managed-service
     parameters:
-      service: xsuaa
-      service-plan: application
-      path: ./xs-security.json
-      config:
-        xsappname: dteConsentAppPortal-xsuaa-service
-        tenant-mode: dedicated
+      service-key:
+        name: dteConsentAppPortal-auth-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: dteconsentapp_dteConsentAppPortal_html_repo_host
+          ServiceInstanceName: dteConsentAppPortal-html5-app-host-service
+          ServiceKeyName: dteConsentAppPortal_html_repo_host-key
+          sap.cloud.service: dteConsentAppPortal
+        - Authentication: OAuth2UserTokenExchange
+          Name: dteConsentAppPortal_auth_dteConsentAppPortal
+          URL: ~{server/srv-url}
+          ServiceInstanceName: dteConsentAppPortal-xsuaa-service
+          ServiceKeyName: dteConsentAppPortal-auth-key
+          sap.cloud.service: dteConsentAppPortal
+        existing_destinations_policy: ignore
+  build-parameters:
+    no-source: true
+- name: dteConsentAppPortal-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: dteConsentAppPortal_html_repo_host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - dteconcentapp.zip
+      name: dteconsentapp
+      target-path: resources/
+- name: dteConsentAppPortal
+  type: html5
+  path: app/dteconsentapp
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: dteConsentAppPortal-db-deployer
+  type: hdb
+  path: gen/db
+  parameters:
+    buildpack: nodejs_buildpack
+  requires:
+    - name: dteConsentAppPortal-db
+resources:
+- name: dteConsentAppPortal-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: dteConsentAppPortal-destination-service
+    service-plan: lite
+- name: dteConsentAppPortal_html_repo_host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: dteConsentAppPortal-html5-app-host-service
+    service-plan: app-host
+- name: dteConsentAppPortal-db
+  type: com.sap.xs.hdi-container
+  parameters:
+    service: hana
+    service-plan: hdi-shared
+- name: dteConsentAppPortal-auth
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: xsuaa
+    service-plan: application
+    path: ./xs-security.json
+    service-name: dteConsentAppPortal-xsuaa-service

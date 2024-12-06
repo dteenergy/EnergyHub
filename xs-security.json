@@ -1,4 +1,6 @@
 {
+  "xsappname": "dteConsentAppPortal-xsuaa-service",
+  "tenant-mode": "dedicated",
   "scopes": [],
   "attributes": [],
   "role-templates": []

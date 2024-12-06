@@ -141,5 +141,9 @@
         }
       }
     }
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "dteConsentAppPortal"
   }
 }
