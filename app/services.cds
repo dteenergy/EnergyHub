@@ -1,2 +1,1 @@
-
-using from './dteconsentapp/annotations';
+using from './dteconsentappclient/annotations';

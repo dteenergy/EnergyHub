@@ -6,7 +6,7 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
-    "@cap-js/hana": "^1",
+    "@cap-js/postgres": "^1.10.4",
     "@sap/cds": "^8",
     "@sap/cds-dk": "^8.4.2",
     "@sap/xsenv": "^5.4.0",
@@ -17,11 +17,15 @@
   "devDependencies": {
     "@cap-js/cds-types": "^0.7.0",
     "@cap-js/sqlite": "^1",
-    "@sap/cds-dk": "^8"
+    "@sap/cds-dk": "^8",
+    "rimraf": "^5.0.5"
   },
   "scripts": {
     "start": "cds-serve",
-    "watch-dteconsentapp": "cds watch --open dteconsentapp/webapp/index.html?sap-ui-xx-viewCache=false"
+    "undeploy": "cf undeploy dteConsentAppPortal --delete-services --delete-service-keys --delete-service-brokers",
+    "build": "rimraf resources mta_archives && mbt build --mtar archive",
+    "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
+    "watch-dteconsentappclient": "cds watch --open dteconsentappclient/webapp/index.html?sap-ui-xx-viewCache=false"
   },
   "server": {
     "cors": true
@@ -32,7 +36,7 @@
     },
     "requires": {
       "[production]": {
-        "db": "hana",
+        "db": "postgres",
         "auth": "mocked"
       }
     }

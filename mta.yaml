@@ -1,33 +1,25 @@
 _schema-version: 3.3.0
 ID: dteConsentAppPortal
+description: DTE consent app portal project.
 version: 1.0.0
-description: "DTE consent app portal project."
-parameters:
-  deploy-mode: html5-repo
-  enable-parallel-deployments: true
-build-parameters:
-  before-all:
-    - builder: custom
-      commands:
-        - npm ci
-        - npx cds build --production
 modules:
 - name: dteConsentAppPortal-srv
   type: nodejs
   path: gen/srv
+  requires:
+  - name: pgInstance
+  - name: dteConsentAppPortal-auth
+  provides:
+  - name: srv-api
+    properties:
+      srv-url: ${default-url}
   parameters:
-    buildpack: nodejs_buildpack
-    readiness-health-check-type: http
-    readiness-health-check-http-endpoint: /health
+    memory: 256MB
   build-parameters:
     builder: npm
-  provides:
-    - name: srv-api # required by consumers of CAP services (e.g. approuter)
-      properties:
-        srv-url: ${default-url}
-  requires:
-    - name: dteConsentAppPortal-db
-    - name: dteConsentAppPortal-auth
+    ignore:
+        - node_modules
+        - package-lock.json
 - name: dteConsentAppPortal-destination-content
   type: com.sap.application.content
   requires:
@@ -53,9 +45,9 @@ modules:
           sap.cloud.service: dteConsentAppPortal
         - Authentication: OAuth2UserTokenExchange
           Name: dteConsentAppPortal_auth_dteConsentAppPortal
-          URL: ~{server/srv-url}
           ServiceInstanceName: dteConsentAppPortal-xsuaa-service
           ServiceKeyName: dteConsentAppPortal-auth-key
+          URL: ~{srv-api/srv-url}
           sap.cloud.service: dteConsentAppPortal
         existing_destinations_policy: ignore
   build-parameters:
@@ -71,12 +63,24 @@ modules:
     build-result: resources
     requires:
     - artifacts:
-      - dteconcentapp.zip
-      name: dteconsentapp
+      - dteconsentappclient.zip
+      name: dteconsentappclient
       target-path: resources/
-- name: dteConsentAppPortal
+- name: dteConsentAppPortal-db-deployer
+  type: nodejs
+  path: gen/pg
+  requires:
+  - name: pgInstance
+  parameters:
+    buildpack: nodejs_buildpack
+    no-route: true
+    no-start: true
+    tasks:
+      - name: deploy-to-postgresql
+        command: npm start
+- name: dteconsentappclient
   type: html5
-  path: app/dteconsentapp
+  path: app/dteconsentappclient
   build-parameters:
     build-result: dist
     builder: custom
@@ -84,13 +88,6 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
-- name: dteConsentAppPortal-db-deployer
-  type: hdb
-  path: gen/db
-  parameters:
-    buildpack: nodejs_buildpack
-  requires:
-    - name: dteConsentAppPortal-db
 resources:
 - name: dteConsentAppPortal-destination-service
   type: org.cloudfoundry.managed-service
@@ -116,15 +113,24 @@ resources:
     service: html5-apps-repo
     service-name: dteConsentAppPortal-html5-app-host-service
     service-plan: app-host
-- name: dteConsentAppPortal-db
-  type: com.sap.xs.hdi-container
+- name: pgInstance
+  type: org.cloudfoundry.managed-service
   parameters:
-    service: hana
-    service-plan: hdi-shared
+    service: postgresql-db
+    service-plan: trial
 - name: dteConsentAppPortal-auth
   type: org.cloudfoundry.managed-service
   parameters:
-    service: xsuaa
-    service-plan: application
     path: ./xs-security.json
+    service: xsuaa
     service-name: dteConsentAppPortal-xsuaa-service
+    service-plan: application
+parameters:
+  deploy-mode: html5-repo
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+  - builder: custom
+    commands:
+    - npm ci
+    - npx cds build --production
