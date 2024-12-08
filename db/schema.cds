@@ -3,7 +3,7 @@ namespace dteConsentApp;
 // Entity for Storing Application details.
 entity ApplicationDetail{
     key AppRefNo : UUID;
-    ApplicationStatus: appStatus default 'New';  
+    // ApplicationStatus: appStatus default 'New';  
     NumberOfTenants: Integer;
     SignatureSignedBy: String;
     SignatureSignedDate: Date;
@@ -11,9 +11,9 @@ entity ApplicationDetail{
     UpdatedAt: Timestamp @cds.on.insert: $now  @cds.on.update: $now;
 }
 
-type appStatus : String enum
-{   
-    New;
-    Approved;
-    Rejected;
-}
+// type appStatus : String enum
+// {   
+//     New;
+//     Approved;
+//     Rejected;
+// }

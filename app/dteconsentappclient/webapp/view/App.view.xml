@@ -1,7 +1,45 @@
-<mvc:View controllerName="dteconsentappclient.controller.App"
+<mvc:View xmlns:tnt="sap.tnt" 
+    controllerName="dteconsentappclient.controller.App"
     displayBlock="true"
     xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m">
-    <App id="app">
-    </App>
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:core="sap.ui.core"
+    xmlns:uxap="sap.uxap"
+    >
+    
+    <tnt:ToolHeader id="header" class="app-header">
+        <Text id="header-title" class="header-title" text="DTE Energy Data Hub"></Text>
+        <Image id="dte-logo" src="images/DTE-logo.png" alt="DTE-Logo"></Image>
+        <Link id="dte-web-site" class="dte-web-site" href="https://www.dteenergy.com/us/en.html" text="Visit DTEEnergy.com" icon="sap-icon://arrow-top"></Link>
+    </tnt:ToolHeader>
+    <Page id="idMainPage" showHeader="false" showFooter="true">
+      <content>
+        <App id="app" />
+        </content>
+        <footer>
+            <OverflowToolbar id="idUserFooterOverflowToolbar" class="footerAlignment">
+                <content>
+                <FlexBox id="footer-container" class="footer-container">
+
+                    <Image id="footer-logo-image" alt="DTE-logo" src="images/DTE-logo.png"></Image>
+                    <FlexBox id="social-media-container" class="social-media-container">
+                        <Image id="social-media-fb" src="images/Facebook.png" alt="facebook"></Image>
+                        <Image id="social-media-x" src="images/X-Twitter.png" alt="x-twitter"></Image>
+                        <Image id="social-media-insta" src="images/Instagram.png" alt="Instagram"></Image>
+                        <Image id="social-media-ytube" src="images/YouTube.png" alt="Youtube"></Image>
+                        <Image id="social-media-linkedin" src="images/LinkedIn.png" alt="LinkedIn"></Image>
+                    </FlexBox>
+ 
+                    <FlexBox id="legal-info" class="legal-info-details">
+                        <Link id="terms" class="legal-info-links" href="https://www.sap.com/india/index.html?url_id=auto_hp_redirect_india" text="Terms &amp; Conditions"></Link>
+                        <Link id="privacy-policy" class="legal-info-links" href="https://www.sap.com/india/index.html?url_id=auto_hp_redirect_india" text="Online Privacy Policy" target=""></Link>
+                        <Link id="contact" class="legal-info-links" href="https://www.sap.com/india/index.html?url_id=auto_hp_redirect_india" text="Contact Us" target=""></Link>
+                    </FlexBox>
+                    <Text id="idUserFooterText" class="footerText" text="© 2024 DTE Energy. All rights reserved" />
+                </FlexBox>
+                </content>
+            </OverflowToolbar>
+        </footer>
+    </Page>
 </mvc:View>
