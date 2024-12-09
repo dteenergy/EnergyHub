@@ -64,11 +64,10 @@ entity ApplicationConsent {
     Zipcode : String not null;
     AccountNumber : String not null;
     PhoneNumber : String;
-    EmailAddr: String not null;
+    EmailAddr: String;
     AuthPersonName : String;
     AuthDate: Date;
     AuthTitle: String;
-    AuthEmailAddr : String;
     ConsentStatus : consentStatus default 'New';
     CreatedAt: Timestamp @cds.on.insert: $now;
     UpdatedAt: Timestamp @cds.on.insert: $now  @cds.on.update: $now;
