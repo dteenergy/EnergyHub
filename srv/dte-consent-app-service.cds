@@ -1,7 +1,19 @@
 using {dteConsentApp as db} from '../db/schema';
 
+@impl: './handler/main-handler.js'
 @path : '/service'
 service DTEConsentAppPortal {
     // Entity Projections or Action configuration
-    entity DTEApplicationDetail as projection on db.ApplicationDetail;
+    entity ApplicationDetail as projection on db.ApplicationDetail;
+    entity AccountDetail as projection on db.AccountDetail;
+    entity BuildingDetail as projection on db.BuildingDetail;
+    entity ApplicationConsent as projection on db.ApplicationConsent;
+    
+    action CreateEnrollmentFormDetail(
+        SignatureSignedBy: String,
+        SignatureSignedDate: String,
+        AccountDetail : String,
+        BuildingDetail : String,
+        ApplicationConsent: String
+    ) returns String;
 };
