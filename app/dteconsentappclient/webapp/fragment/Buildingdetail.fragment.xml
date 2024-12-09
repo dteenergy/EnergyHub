@@ -1,0 +1,37 @@
+<core:FragmentDefinition xmlns:layout="sap.ui.layout"
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core"
+>	
+<FlexBox direction="Column" width="100%">
+		<Label labelFor="account-manager-ph" text="Building Name"></Label>
+		<Input class="inputBox" value="{locationModel>buildingName}" required="true">
+		</Input>
+
+		<Label labelFor="account-manager-ph" text="Account Number"></Label>
+		<Input class="inputBox" value="{locationModel>accountNumber}" required="true"></Input>
+
+		<Label labelFor="account-manager-ph" text="Location Address"></Label>
+		<Input class="inputBox" liveChange="onbuildingLocationAddressChange" showSuggestion="true" suggestionItemSelected=".onsuggestionItemSelected" suggestionItems="{dqmAddressModel>/dqmAddress}" required="true">
+			<suggestionItems>
+				<core:Item text="{dqmAddressModel>serviceAddress/houseNumber},{dqmAddressModel>serviceAddress/streetName},{dqmAddressModel>serviceAddress/secondaryCodes},{dqmAddressModel>serviceAddress/secondaryNumber},{dqmAddressModel>serviceAddress/city},{dqmAddressModel>serviceAddress/state},{dqmAddressModel>serviceAddress/zipCode}"/>
+			</suggestionItems>
+		</Input>
+
+		<Label labelFor="account-manager-ph" text="City"></Label>
+		<Input class="inputBox" value="{locationModel>city}" required="true"></Input>
+
+		<HBox justifyContent="SpaceBetween">
+			<layout:VerticalLayout>
+				<Label labelFor="state-list" text="State"></Label>
+				<ComboBox required="true" change="handleStateChange" selectedKey="{locationModel>state}">
+					<core:Item text="Tamilnadu" key="{locationModel>state}"></core:Item>
+				</ComboBox>
+			</layout:VerticalLayout>
+			<layout:VerticalLayout>
+				<Label labelFor="zipcode" text="zipcode"></Label>
+				<Input class="inputBox" value="{locationModel>zipcode}" required="true"/>
+			</layout:VerticalLayout>
+		</HBox>
+		<Button text="- Remove" press="onRemoveTrigger"></Button>
+</FlexBox>
+</core:FragmentDefinition>
