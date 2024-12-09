@@ -12,11 +12,8 @@ const createEnrollmentFormDetail = async (req, entity) => {
 
   try {
     // Parse the AccountDetail string into an array
-    // let accountDetailArray = [];
     let accountdetailJson;
-
     accountdetailJson = JSON.parse(AccountDetail);
-    // accountDetailArray.push(accountdetailJson);
 
     // Parse the buildingDetail string into an array
     let buildingsArray;
