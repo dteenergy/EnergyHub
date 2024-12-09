@@ -2,7 +2,7 @@ namespace dteConsentApp;
 
 entity ApplicationDetail{
     key AppId: UUID;
-    ApplicationStatus : appStatus default 'Rejected';
+    ApplicationStatus : appStatus default 'New';
     NumberOfTenants : Decimal default 0;
     SignatureSignedBy : String not null;
     SignatureSignedDate : Date not null;
@@ -62,14 +62,14 @@ entity ApplicationConsent {
     City: String not null;
     State: String not null;
     Zipcode : String not null;
-    AccountNumber : String;
+    AccountNumber : String not null;
     PhoneNumber : String;
-    EmailAddr: String;
+    EmailAddr: String not null;
     AuthPersonName : String;
     AuthDate: Date;
     AuthTitle: String;
-    ConsentStatus : consentStatus default 'New';
     AuthEmailAddr : String;
+    ConsentStatus : consentStatus default 'New';
     CreatedAt: Timestamp @cds.on.insert: $now;
     UpdatedAt: Timestamp @cds.on.insert: $now  @cds.on.update: $now;
 
@@ -78,6 +78,7 @@ entity ApplicationConsent {
 
 // aspects
 type appStatus : String enum {
+    New;
     Rejected;
     Accepted;
 }
