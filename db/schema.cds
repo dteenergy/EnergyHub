@@ -9,9 +9,9 @@ entity ApplicationDetail{
     CreatedAt: Timestamp @cds.on.insert: $now;
     UpdatedAt: Timestamp @cds.on.insert: $now  @cds.on.update: $now;
 
-    AccountDetail : Association to one AccountDetail on AccountDetail.AppRefId = $self;
-    BuildingDetail : Association to many BuildingDetail on BuildingDetail.AppRefId = $self;
-    ApplicationConsent : Association to many ApplicationConsent on ApplicationConsent.AppRefId = $self;
+    AccountDetailRefId : Association to one AccountDetail on AccountDetailRefId.AppRefId = $self;
+    BuildingDetailRefId : Association to many BuildingDetail on BuildingDetailRefId.AppRefId = $self;
+    ApplicationConsentRefId : Association to many ApplicationConsent on ApplicationConsentRefId.AppRefId = $self;
 }
 
 entity BuildingDetail {
