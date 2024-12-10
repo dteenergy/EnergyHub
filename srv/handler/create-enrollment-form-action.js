@@ -14,21 +14,21 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
     const AppId = uuidv4();
 
     // Get the response data
-    const { Enrollment } = req.data;
+    const { Enrollment } = req?.data;
 
     // Parse the String content
     let enrollmentDetail = JSON.parse(Enrollment);
 
     // Store the parsed ApplicationDetail
-    let ApplicationDetailData = enrollmentDetail.ApplicationDetail;
+    let ApplicationDetailData = enrollmentDetail?.ApplicationDetail;
 
     // Store the AccountDetail
     let accountdetailJson;
-    accountdetailJson = enrollmentDetail.AccountDetail;
+    accountdetailJson = enrollmentDetail?.AccountDetail;
 
     // Store the buildingDetail string into an array
     let buildingsArray;
-    buildingsArray = enrollmentDetail.BuildingDetail;
+    buildingsArray = enrollmentDetail?.BuildingDetail;
 
     // Store the parsed ApplciaitonConsent
     let applicationConsent;
@@ -43,22 +43,17 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
     ApplicationDetailData.AppId = AppId
 
     // Insert into ApplicationDetail with generated AppId
-    await tx.run(INSERT.into(entity.ApplicationDetail).entries(ApplicationDetailData));
+    await tx.run(INSERT.into(entity?.ApplicationDetail).entries(ApplicationDetailData));
 
     // Create the associated BuildingDetail entries
     const buildingEntries = buildingsArray?.map(detail => ({
-      BuildingName: detail.buildingName,
-      AccountNumber: detail.accountNumber,
-      Address: detail.locationAddress,
-      City: detail.city,
-      State: detail.state,
-      Zipcode: detail.zipcode,
-      AppRefId_AppId: AppId,
+      ...detail,
+      AppRefId_AppId: AppId,  
     }));
 
     // Insert all building details
     await tx.run(
-      INSERT.into(entity.BuildingDetail)
+      INSERT.into(entity?.BuildingDetail)
         .columns(['BuildingId'])
         .entries(buildingEntries)
     );
@@ -81,7 +76,7 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
     }));
 
     // Create the ApplicationConsent details
-    await tx.run(INSERT.into(entity.ApplicationConsent).entries(applicationConsent));
+    await tx.run(INSERT.into(entity?.ApplicationConsent).entries(applicationConsent));
 
     return {
       statusCode: 201,
