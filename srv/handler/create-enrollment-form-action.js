@@ -10,11 +10,10 @@ const { v4: uuidv4 } = require('uuid');
 const createEnrollmentFormDetail = async (req, entity, tx) => {
 
   try {
+    const { ApplicationDetail, BuildingDetail, AccountDetail, ConsentDetail } = req?.data;
+
     // Generate a unique AppId using uuid
     const AppId = uuidv4();
-
-    // Get the payload from the req and variable declaration
-    const { ApplicationDetail, BuildingDetail, AccountDetail, ConsentDetail } = req?.data;
 
     // Parse the String Payload
     const applicationParsedData = JSON.parse(ApplicationDetail);
