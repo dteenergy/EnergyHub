@@ -5,17 +5,17 @@
 	<VBox class="auth-and-release-container" width="100%">
 		<l:VerticalLayout class="vertical-layout">
 			<Label text="Name of Authorized Person" required="true"></Label>
-			<Input class="inputBox" type="Text" value=""></Input>
+			<Input class="inputBox" type="Text" value="o{AuthAndReleaseModel>/AuthPersonName}"></Input>
 		</l:VerticalLayout>
 
 		<l:VerticalLayout class="vertical-layout">
 			<Label text="Date"></Label>
-			<MaskInput mask="99/99/9999" width="100%" value=""/>
+			<MaskInput mask="99/99/9999" width="100%" value="{oAuthAndReleaseModel>/AuthDate}"/>
 		</l:VerticalLayout>
 
 		<l:VerticalLayout class="vertical-layout">
 			<Label text="Title"></Label>
-			<Input class="inputBox" type="Text" value=""></Input>
+			<Input class="inputBox" type="Text" value="{oAuthAndReleaseModel>/AuthTitle}"></Input>
 		</l:VerticalLayout>
 
 		<Text text="I understand that by reason of this Authorization, the named Authorized Third Party
@@ -35,7 +35,7 @@
 		</FlexBox>
 
 		<HBox>
-        <CheckBox select="handleTermsAndConditionVerified" text="I have read and understand the terms and conditions of this form." wrapping="true"/>
+        	<CheckBox select="handleTermsAndConditionVerified" text="I have read and understand the terms and conditions of this form." wrapping="true"/>
 		</HBox>
 
 	</VBox>

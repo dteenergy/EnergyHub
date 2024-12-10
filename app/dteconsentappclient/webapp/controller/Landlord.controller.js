@@ -1,9 +1,12 @@
 sap.ui.define([
     "dteconsentappclient/controller/BaseController",
     "sap/ui/core/Fragment",
-    "sap/ui/model/json/JSONModel"
-], (BaseController, Fragment, JSONModel) => {
+    "sap/ui/model/json/JSONModel",
+    "sap/ui/core/library"
+], (BaseController, Fragment, JSONModel, CoreLibrary) => {
     "use strict";
+
+    let accountDetails, locationInfo, customerConsentData, customerAuthData;
 
     return BaseController.extend("dteconsentappclient.controller.Landlord", {
         onInit() {
@@ -15,8 +18,34 @@ sap.ui.define([
           let oEnrollFormData = {
             SignatureSignedBy: "",
             SignatureSignedDate: "",
-            AccountDetail: {},
-            ConsentDetail: {}
+            AccountDetail: {
+                "CompanyName": "",
+                "CompanyAddress": "",
+                "City":"",
+                "State": "",
+                "Zipcode":"",
+                "SiteFirstName": "",
+                "SiteLastName": "",
+                "SiteContactTitle":"",
+                "SiteAddress":"",
+                "SiteCity":"",
+                "SiteState":"",
+                "SiteZipcode": null,
+                "SitePhoneNumber":"",
+                "SiteEmailAddr":""
+            },
+            ConsentDetail: {
+                "ConsentFirstName": "",
+                "ConsentLastName": "",
+                "ConsentContactTitle":"",
+                "ConsentAddress": "",
+                "ConsentCity":"",
+                "ConsentState": "",
+                "ConsentZipcode": null,
+                "ConsentAccountNumber":"",
+                "ConsentPhoneNumber":"",
+                "ConsentEmailAddr":""
+            }
         };
 
         // Set the JSONModel with the correct name
@@ -33,6 +62,7 @@ sap.ui.define([
         this.loadAuthAndRelease();
         },
 
+        // Add additional location(Building) container
         onAddAnotherLocation: function(){
             const oView = this.getView();
             const oModel = oView.getModel("locationModel");
@@ -51,12 +81,14 @@ sap.ui.define([
 
             const index = locations.length - 1;
 
+            // Load the location(Building) fragment in the enrollment form 
             Fragment.load({
                 name: "dteconsentappclient.fragment.Buildingdetail",
                 controller: this
             }).then(function (oFragment) {
                 let flexItems = []
                  
+                // Add the label for additional buildings
                 if(index > 0){
                 const buildingInfoLabel = new sap.m.Title({
                     text:  `Location ${index + 1}`,
@@ -65,13 +97,16 @@ sap.ui.define([
                 buildingInfoLabel.addStyleClass("location-inner-title");
                     flexItems = [buildingInfoLabel]
                 }
+
+                // Set and bind the model with the fragment
                 oFragment.setModel(oModel, "locationMoel");
                 oFragment.bindElement(`locationModel>/locations/${index}`);
                 const wrapper = new sap.m.FlexBox({
                     items: [...flexItems, oFragment],
                     direction: 'Column',
                 });
-                if(index > 0) wrapper.addStyleClass('location-additional-container');
+
+                // Add the fragment to the according container
                 buildingmainContainer.addItem(wrapper);
             }).catch(function (err) {
                 console.log(`Failed to load fragment:, ${err}`)
@@ -94,17 +129,18 @@ sap.ui.define([
             oEnrollModel.setProperty("/AccountDetail/EnergyPrgmParticipated", sSelectedVal);
         },
         
+        // Define model and load the Customer consent form fragment to the enrollment form
         loadConsentForm: function(){
-            const oConsentModel = new JSONModel({});
-            this.getView().setModel(oConsentModel, "oConsentModel");
+            const oView = this.getView();
+            const oEnrollModel = oView.getModel("oEnrollModel");
 
             const enrollmentConsentContainer = this.byId("enrollment-consent-section");
             Fragment.load({
                 name: "dteconsentappclient.fragment.Consentform",
                 controller: this
             }).then(function (oFragment) {
-                oFragment.setModel(oConsentModel, "oConsentModel");
-                oFragment.bindElement('oConsentModel>/');
+                oFragment.setModel(oEnrollModel, "oEnrollModel");
+                oFragment.bindElement('oEnrollModel');
                 
                 enrollmentConsentContainer.addItem(oFragment);
             }).catch(function (err) {
@@ -112,6 +148,7 @@ sap.ui.define([
             });
         },
 
+        // Define model and load the Customer Auth and Release section fragment to the enrollment form
         loadAuthAndRelease: function(){
             const oAuthAndReleaseModel = new JSONModel({});
             this.getView().setModel(oAuthAndReleaseModel, "oAuthAndReleaseModel");
@@ -130,17 +167,71 @@ sap.ui.define([
             });
         },
 
+				// Bind or unbind the data based on the checbox checked
+        onConsentAndSiteSameSelected: function(oEvent){
+					const isConsentAndSiteSame = oEvent.getParameters().selected;
+					const oEnrollModel = this.getView().getModel("oEnrollModel");
+					const enrollmentData = oEnrollModel.getData();
+					const accountDetailsKeys = Object.keys(enrollmentData.AccountDetail);
+
+					if(isConsentAndSiteSame){   
+							
+						accountDetailsKeys.map((key)=>{
+							if(key.startsWith('Site')){
+								const consentkey = key.replace('Site', 'Consent');
+								oEnrollModel.setProperty(`/ConsentDetail/${consentkey}`, enrollmentData['AccountDetail'][key]);
+							}
+						});
+									
+					}else{
+							oEnrollModel.setProperty('/ConsentDetail', {
+								"FirstName": "",
+								"LastName": "",
+								"ConsentContactTitle":"",
+								"ConsentAddress": "",
+								"ConsentCity":"",
+								"ConsentState": "",
+								"ConsentZipcode": null,
+								"ConsentAccountNumber":"",
+								"ConsentPhoneNumber":"",
+								"ConsentEmailAddr":""
+							});
+					}      
+        },
+
+        // Retrieve the all input data
+        retrieveAllInputbindings: function(){
+            accountDetails = this.getView().getModel("oEnrollModel").getData();
+            console.log(accountDetails);
+
+            locationInfo = this.getView().getModel("locationModel").getData();
+            console.log(locationInfo);
+
+            customerAuthData = this.getView().getModel("oAuthAndReleaseModel").getData();
+            console.log(customerAuthData);
+        },
+
+        // Validate account details
+        validateAccountDetails: function(){
+            const accountInfoContainer = this.byId("account-info-container");
+
+            accountInfoContainer.findAggregatedObjects(true, (control) => {
+							if (control instanceof sap.m.Input) {
+								console.log(control.mProperties);
+								
+								const bindingPath = control.getBinding('value').getPath();
+								console.log(bindingPath);
+									
+							}
+							
+						});
+            
+        },
+
         handleSubmit: async function () {
-            const enrollFormData = this.getView().getModel("oEnrollModel").getData();
-            // const consentFormData = this.getView().getModel("oConsentModel");
-             // Use the same model name as above
-            console.log(enrollFormData);
+            this.retrieveAllInputbindings();
+            this.validateAccountDetails();
+        },
 
-            let location = this.getView().getModel("locationModel").getData();
-            console.log(location);
-
-            let consent = this.getView().getModel("oConsentModel").getData();
-            console.log(consent);
-        }
     });
 });

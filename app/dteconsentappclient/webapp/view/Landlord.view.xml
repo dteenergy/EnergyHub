@@ -16,6 +16,9 @@
                             <Text id="required-instruction-content" text="Indicates a required field" />
                         </FlexBox>
                     </FlexBox>
+
+                    <Button id="submit-landlord-form" text="Submit" type="Emphasized" press="handleSubmit" class="button-customize"></Button>
+
                     
                     <!-- Landlord Enrollment form -->
                     <form:SimpleForm id="enrollment-form"  class="landlord-enrollment-form" layout="ResponsiveGridLayout">
@@ -78,12 +81,12 @@
 
                         <l:VerticalLayout id="site-contact-fst-name" class="vertical-layout">
                             <Label id="site-contact-fst-name-label" labelFor="site-contact-fst-name-value" text="FirstName"></Label>
-                            <Input id="site-contact-fst-name-value" class="inputBox" type="Text" required="true" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/FirstName}"/>
+                            <Input id="site-contact-fst-name-value" class="inputBox" type="Text" required="true" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/SiteFirstName}"/>
                         </l:VerticalLayout>
 
                         <l:VerticalLayout id="site-contact-lst-name" class="vertical-layout">
                             <Label id="site-contact-lst-name-label" labelFor="site-contact-lst-name-value" text="LastName"></Label>
-                            <Input id="site-contact-lst-name-value" class="inputBox" type="Text" required="true" placeholder="Filled out by user"  value="{oEnrollModel>/AccountDetail/LastName}"/>
+                            <Input id="site-contact-lst-name-value" class="inputBox" type="Text" required="true" placeholder="Filled out by user"  value="{oEnrollModel>/AccountDetail/SiteLastName}"/>
                         </l:VerticalLayout>
                         
                         <l:VerticalLayout id="site-contact-title" class="vertical-layout">
@@ -120,7 +123,7 @@
 
                         <l:VerticalLayout id="site-contact-email" class="vertical-layout">
                             <Label id="site-contact-email-label" labelFor="site-contact-email-value" text="Email Address"></Label>
-                            <Input id="site-contact-email-value" class="inputBox" type="Email" required="true" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/EmailAddr}"></Input>
+                            <Input id="site-contact-email-value" class="inputBox" type="Email" required="true" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/SiteEmailAddr}"></Input>
                         </l:VerticalLayout>
                     </VBox>
 
@@ -174,7 +177,7 @@
                         <Title id="auth-and-release-title" text="Tenant Authorization and Release" class="form-segment-heading" titleStyle="H6" />
                     </VBox>
 
-                    <Button id="submit-landlord-form" text="Submit" type="Emphasized" press="handleSubmit" class="button-customize"></Button>
+                    <!-- <Button id="submit-landlord-form" text="Submit" type="Emphasized" press="handleSubmit" class="button-customize"></Button> -->
                     
                         </form:content>
                     </form:SimpleForm>
