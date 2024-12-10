@@ -8,7 +8,7 @@ const { v4: uuidv4 } = require('uuid');
  * tx => function
  */
 const createEnrollmentFormDetail = async (req, entity, tx) => {
-  
+
   try {
     // Generate a unique AppId using uuid
     const AppId = uuidv4();
@@ -20,11 +20,10 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
     let enrollmentDetail = JSON.parse(Enrollment);
 
     // Store the parsed ApplicationDetail
-    let ApplicationDetailData = enrollmentDetail?.ApplicationDetail;
+    let applicationDetailData = enrollmentDetail?.ApplicationDetail;
 
     // Store the AccountDetail
-    let accountdetailJson;
-    accountdetailJson = enrollmentDetail?.AccountDetail;
+    let accountDetailData = enrollmentDetail?.AccountDetail;
 
     // Store the buildingDetail string into an array
     let buildingsArray;
@@ -33,55 +32,55 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
     // Store the parsed ApplicationConsent
     let applicationConsent;
     applicationConsent = enrollmentDetail.ApplicationConsent;
-    
+
     // Condition to check whether the JSON object contain value or not
-    if((applicationConsent?.length === 0) || (accountdetailJson?.length === 0) || 
-    (ApplicationDetailData?.length === 0) || (buildingsArray?.length === 0)) 
-      throw new Error('Failed to create the Enrollment form detail');
+    if ((applicationConsent?.length === 0) || (accountDetailData?.length === 0) ||
+      (applicationDetailData?.length === 0) || (buildingsArray?.length === 0))
+      return { 'status': 400, 'message': 'The data is invalid. Please review and correct the erroneous fields' }
 
-    // Application Detail  
-    ApplicationDetailData.AppId = AppId
+    // Set AppId to applicationDetailData
+    applicationDetailData.AppId = AppId
 
-    // Create the associated BuildingDetail entries
-    const buildingEntries = buildingsArray?.map(detail => ({
+    // Add AppRefId_AppId to each building entry
+    const buildingDetailData = buildingsArray?.map(detail => ({
       ...detail,
-      AppRefId_AppId: AppId,  
+      AppRefId_AppId: AppId,
     }));
 
-    // ApplicationConsent Detail
+    // Add AppRefId_AppId to each consent
     applicationConsent = applicationConsent.map(consent => ({
       ...consent,
       AppRefId_AppId: AppId
-    }));  
+    }));
 
-    // Append the AppRefId_AppId field in the Accountdetail
-    accountdetailJson.AppRefId_AppId = AppId;
+    // Assign the value of AppId to the AppRefId_AppId property of accountDetailData
+    accountDetailData.AppRefId_AppId = AppId;
 
     // Check if EnergyPrgmParticipated exists in the account object
-    if (!accountdetailJson.hasOwnProperty('EnergyPrgmParticipated')) {
-      accountdetailJson.EnergyPrgmParticipated = false;
-    }    
+    if (!accountDetailData.hasOwnProperty('EnergyPrgmParticipated')) {
+      accountDetailData.EnergyPrgmParticipated = false;
+    }
 
-    // Insert into ApplicationDetail with generated AppId
-    await tx.run(INSERT.into(entity?.ApplicationDetail).entries(ApplicationDetailData));
+    // Insert the applicationDetailData into the ApplicationDetail table using a transactional query
+    let applicationDetailRes = await tx.run(INSERT.into(entity?.ApplicationDetail).entries(applicationDetailData));
 
-    // Insert all BuildingDetails
-    await tx.run(
+    // Insert the buildingDetailData into the BuildingDetails table using a transactional query
+    let buildingDetailRes = await tx.run(
       INSERT.into(entity?.BuildingDetail)
         .columns(['BuildingId'])
-        .entries(buildingEntries)
+        .entries(buildingDetailData)
     );
 
-    // Insert AccountDetails
-    await tx.run(INSERT.into(entity.AccountDetail).entries(accountdetailJson));
+    // Insert accountDetailData into the AccountDetail table using a transactional query
+    let acccountDetailRes = await tx.run(INSERT.into(entity.AccountDetail).entries(accountDetailData));
 
-    // Create the ApplicationConsent details
-    await tx.run(INSERT.into(entity?.ApplicationConsent).entries(applicationConsent));
+    // Insert the applicationConsent into the ApplicationConsent table using a transactional query
+    let applicationConsentRes = await tx.run(INSERT.into(entity?.ApplicationConsent).entries(applicationConsent));
 
-    return {
-      statusCode: 201,
-      Message: "Enrollment form created successfully."
-    };
+    // Check if results were returned for all queries: ApplicationDetail, BuildingDetail, AccountDetail, and ApplicationConsent
+    if (applicationDetailRes.results.length > 0 && buildingDetailRes.results.length > 0
+      && acccountDetailRes.results.length > 0 && applicationConsentRes.results.length > 0)
+      return { statusCode: 200, Message: "Enrollment form created successfully." };
   } catch (error) {
     console.log("Enrollment Form Creation Error :", error);
     return {
