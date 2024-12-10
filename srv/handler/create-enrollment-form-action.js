@@ -13,15 +13,15 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
     // Generate a unique AppId using uuid
     const AppId = uuidv4();
 
-    // Get the payload from the req
+    // Get the payload from the req and variable declaration
     const { ApplicationDetail, BuildingDetail, AccountDetail, ConsentDetail } = req?.data;
+    let consentDetailPayload, buildingDetailPayload, applicationDetailResult, buildingDetailResult, acccountDetailResult, consentDetailResult;
     
     // Parse the String Payload
     const applicationParsedData = JSON.parse(ApplicationDetail);
     const buildingParsedData = JSON.parse(BuildingDetail);
     const accountParsedData = JSON.parse(AccountDetail);
     const consentParsedData = JSON.parse(ConsentDetail);
-    let consentDetailPayload, buildingDetailPayload;
 
     // Check the Object contains the empty check data and JSON object/arrays contain value or not
     const buildingParsedDataCheck = buildingParsedData?.some(e => 
@@ -48,16 +48,16 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
     }));    
     
     // Insert the applicationParsedData into the ApplicationDetail table using a transactional query
-    let applicationDetailResult = await tx.run(INSERT.into(entity?.ApplicationDetail).entries(applicationParsedData));
+    applicationDetailResult = await tx.run(INSERT.into(entity?.ApplicationDetail).entries(applicationParsedData));
 
     // Insert the buildingDetailPayload into the BuildingDetails table using a transactional query
-    let buildingDetailResult = await tx.run(INSERT.into(entity?.BuildingDetail).entries(buildingDetailPayload));
+    buildingDetailResult = await tx.run(INSERT.into(entity?.BuildingDetail).entries(buildingDetailPayload));
 
     // Insert accountParsedData into the AccountDetail table using a transactional query
-    let acccountDetailResult = await tx.run(INSERT.into(entity?.AccountDetail).entries(accountParsedData));
+    acccountDetailResult = await tx.run(INSERT.into(entity?.AccountDetail).entries(accountParsedData));
 
     // Insert the consentDetailPayload into the ApplicationConsent table using a transactional query
-    let consentDetailResult = await tx.run(INSERT.into(entity?.ApplicationConsent).entries(consentDetailPayload));
+    consentDetailResult = await tx.run(INSERT.into(entity?.ApplicationConsent).entries(consentDetailPayload));
       
     // Check if results were returned for all queries: ApplicationDetail, BuildingDetail, AccountDetail, and ApplicationConsent
     if((applicationDetailResult?.results?.length > 0) && (buildingDetailResult?.results?.length > 0)
