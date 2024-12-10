@@ -15,7 +15,7 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
 
     // Get the payload from the req and variable declaration
     const { ApplicationDetail, BuildingDetail, AccountDetail, ConsentDetail } = req?.data;
-    let consentDetailPayload, buildingDetailPayload, applicationDetailResult, buildingDetailResult, acccountDetailResult, consentDetailResult;
+    let consentDetailPayload, buildingDetailPayload, applicationDetailResult, buildingDetailResult, accountDetailResult, consentDetailResult;
     
     // Parse the String Payload
     const applicationParsedData = JSON.parse(ApplicationDetail);
@@ -54,14 +54,14 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
     buildingDetailResult = await tx.run(INSERT.into(entity?.BuildingDetail).entries(buildingDetailPayload));
 
     // Insert accountParsedData into the AccountDetail table using a transactional query
-    acccountDetailResult = await tx.run(INSERT.into(entity?.AccountDetail).entries(accountParsedData));
+    accountDetailResult = await tx.run(INSERT.into(entity?.AccountDetail).entries(accountParsedData));
 
     // Insert the consentDetailPayload into the ApplicationConsent table using a transactional query
     consentDetailResult = await tx.run(INSERT.into(entity?.ApplicationConsent).entries(consentDetailPayload));
       
     // Check if results were returned for all queries: ApplicationDetail, BuildingDetail, AccountDetail, and ApplicationConsent
     if((applicationDetailResult?.results?.length > 0) && (buildingDetailResult?.results?.length > 0)
-    && (acccountDetailResult?.results?.length > 0) && (consentDetailResult?.results?.length > 0))
+    && (accountDetailResult?.results?.length > 0) && (consentDetailResult?.results?.length > 0))
       return { statusCode: 200, Message: "Enrollment form created successfully." };
    
     } catch (error) {
