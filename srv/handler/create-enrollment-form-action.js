@@ -16,55 +16,42 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
     // Get the payload from the req
     const { ApplicationDetail, BuildingDetail, AccountDetail, ConsentDetail } = req?.data;
     
-    // Parse the String ApplicationDetail
-    let applicationParsedData = JSON.parse(ApplicationDetail);
-    
-    // Parse the String BuildingDetail
-    let buildingParsedData = JSON.parse(BuildingDetail);
-    
-    // Check the Object contains the Valid data.
+    // Parse the String Payload
+    const applicationParsedData = JSON.parse(ApplicationDetail);
+    const buildingParsedData = JSON.parse(BuildingDetail);
+    const accountParsedData = JSON.parse(AccountDetail);
+    const consentParsedData = JSON.parse(ConsentDetail);
+    let consentDetailPayload, buildingDetailPayload;
+
+    // Check the Object contains the empty check data and JSON object/arrays contain value or not
     const buildingParsedDataCheck = buildingParsedData?.some(e => 
       Object.values(e).includes("")
     ) ? [] : 'Building Details Contains the Valid data';
-
-    // Parse the String AccountDetail
-    let accountParsedData = JSON.parse(AccountDetail);
-
-    // Parse the String ConsentDetail
-    let consentParsedData = JSON.parse(ConsentDetail);
-    let consentDetailPayload;
     
-    // Condition to check whether the JSON object/arrays contain value or not
     if((Object.keys(applicationParsedData)?.length === 0) || (buildingParsedData?.length === 0) || 
     (buildingParsedDataCheck?.length === 0) || (Object.keys(accountParsedData)?.length === 0) || (consentParsedData?.length === 0))  
     return { 'status': 400, 'message': 'The data is invalid. Please review and correct the erroneous fields' }
 
-    // Set AppId to applicationParsedData
+    // Assign AppId to various parsed data objects and add AppRefId_AppId property where needed
     applicationParsedData.AppId = AppId
-
-    // Add AppRefId_AppId to each building entry in buildingParsedData
-    const buildingDetailPayload = buildingParsedData?.map(detail => ({
+    
+    buildingDetailPayload = buildingParsedData?.map(detail => ({
       ...detail,
       AppRefId_AppId: AppId,
     }));
-
-    // Assign the value of AppId to the AppRefId_AppId property of accountParsedData
+    
     accountParsedData.AppRefId_AppId = AppId;    
 
-    // Add AppRefId_AppId to each consent entry in consentParsedData
     consentDetailPayload = consentParsedData.map(consent => ({
       ...consent,
       AppRefId_AppId: AppId
-    }));    
+    }));        
 
     // Insert the applicationParsedData into the ApplicationDetail table using a transactional query
     let applicationDetailResult = await tx.run(INSERT.into(entity?.ApplicationDetail).entries(applicationParsedData));
 
     // Insert the buildingDetailPayload into the BuildingDetails table using a transactional query
-    let buildingDetailResult = await tx.run(
-      INSERT.into(entity?.BuildingDetail)
-        .entries(buildingDetailPayload)
-    );
+    let buildingDetailResult = await tx.run(INSERT.into(entity?.BuildingDetail).entries(buildingDetailPayload));
 
     // Insert accountParsedData into the AccountDetail table using a transactional query
     let acccountDetailResult = await tx.run(INSERT.into(entity?.AccountDetail).entries(accountParsedData));
