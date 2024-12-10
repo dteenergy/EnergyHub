@@ -15,12 +15,13 @@ sap.ui.define([
           let oEnrollFormData = {
             SignatureSignedBy: "",
             SignatureSignedDate: "",
-            AccountDetail: {}
+            AccountDetail: {},
+            ConsentDetail: {}
         };
 
         // Set the JSONModel with the correct name
         const oEnrollModel = new JSONModel(oEnrollFormData);
-        this.getView().setModel(oEnrollModel, "enrollModel");
+        this.getView().setModel(oEnrollModel, "oEnrollModel");
 
         const oModel = new JSONModel({
             locations: [], // Array to hold all building location data
@@ -51,19 +52,51 @@ sap.ui.define([
                 name: "dteconsentappclient.fragment.Buildingdetail",
                 controller: this
             }).then(function (oFragment) {
+                let flexItems = []
+                 // Create a new text label for Consumer Email Id
+                if(index > 0){
+                const buildingInfoLabel = new sap.m.Title({
+                    text:  `Location ${index + 1}`,
+                    titleStyle: 'H6'
+                });
+                buildingInfoLabel.addStyleClass("location-inner-title");
+                    flexItems = [buildingInfoLabel]
+                }
                 oFragment.setModel(oModel, "locationMoel");
                 oFragment.bindElement(`locationModel>/locations/${index}`);
-                buildingmainContainer.addItem(oFragment);
+                const wrapper = new sap.m.FlexBox({
+                    items: [...flexItems, oFragment],
+                    direction: 'Column',
+                });
+                if(index > 0) wrapper.addStyleClass('location-additional-container');
+                buildingmainContainer.addItem(wrapper);
             }).catch(function (err) {
                 console.log(`Failed to load fragment:, ${err}`)
             });
         },
 
-        handleSubmit: async function () {
-            const {data} = await axios.get(`${this.SERVERHOST}service/DTEApplicationDetail`);
+          // Define the event handler in your controller
+          onRadioButtonSelect: function (oEvent) {
+            // Get the selected button's text
+            let sSelectedText = oEvent.getSource().getSelectedButton().getText();
+            let sSelectedVal = false;
 
+            if(sSelectedText === 'Yes') sSelectedVal = true;
+            else sSelectedVal; 
             
-            console.log(data.value[0], 'While clicking submit');
+            // Get the model
+            let oEnrollModel = this.getView().getModel("oEnrollModel");
+
+            // Update the model with the selected value
+            oEnrollModel.setProperty("/AccountDetail/EnergyPrgmParticipated", sSelectedVal);
+        },
+
+        handleSubmit: async function () {
+            const enrollFormData = this.getView().getModel("oEnrollModel").getData(); // Use the same model name as above
+            console.log(enrollFormData);
+
+            let location = this.getView().getModel("locationModel").getData();
+            console.log(location);
         }
     });
 });
