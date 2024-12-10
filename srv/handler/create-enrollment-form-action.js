@@ -35,9 +35,7 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
     applicationParsedData.AppId = AppId
     
     buildingParsedData?.map(detail => detail.AppRefId_AppId = AppId);
-    
-    console.log(buildingParsedData, "Parsed");
-    
+        
     accountParsedData.AppRefId_AppId = AppId;    
 
     consentParsedData.map(consent => consent.AppRefId_AppId= AppId);    
