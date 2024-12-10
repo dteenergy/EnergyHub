@@ -4,51 +4,56 @@
 >
     <VBox id="consent-form-container" fitContainer="true" width="100%" class="consent-form-container">
 
-        <FlexBox id="consent-form_fst_name" direction="Column" class="vertical-layout">
+        <layout:VerticalLayout id="consent-form_fst_name" class="vertical-layout">
             <Label id="consent-form-fst-name-label" labelFor="consent-form-fst-name" text="FirstName"></Label>
-            <Input id="consent-form-fst-name" class="inputBox" type="Text" required="true" placeholder="Filled out by user" value="{oEnrollModel>/ConsentDetail/FirstName}"/>
-        </FlexBox>
+            <Input id="consent-form-fst-name" class="inputBox" type="Text" required="true" placeholder="Filled out by user" value="{oConsentModel>/FirstName}"/>
+        </layout:VerticalLayout>
 
-        <FlexBox id="consent-form_lst_name" direction="Column" class="vertical-layout">
+        <layout:VerticalLayout id="consent-form_lst_name" class="vertical-layout">
             <Label id="consent-form-lst-name-label" labelFor="consent-form-lst-name" text="LastName"></Label>
-            <Input id="consent-form-lst-name" class="inputBox" type="Text" required="true" placeholder="Filled out by user"  value="{oEnrollModel>/ConsentDetail/LastName}"/>
-        </FlexBox>
+            <Input id="consent-form-lst-name" class="inputBox" type="Text" required="true" placeholder="Filled out by user"  value="{oConsentModel>/LastName}"/>
+        </layout:VerticalLayout>
         
-        <FlexBox id="consent-form_title" direction="Column" class="vertical-layout">
+        <layout:VerticalLayout id="consent-form_title" class="vertical-layout">
             <Label id="consent-form-title-label" labelFor="consent-form-title" text="Site Contact Title"></Label>
-            <Input id="consent-form-title" class="inputBox" type="Text" required="true" placeholder="Filled out by user" value="{oEnrollModel>/ConsentDetail/SiteContactTitle}"/>
-        </FlexBox>
+            <Input id="consent-form-title" class="inputBox" type="Text" required="true" placeholder="Filled out by user" value="{oConsentModel>/ConsentContactTitle}"/>
+        </layout:VerticalLayout>
         
-        <l:VerticalLayout id="consent-form_address" class="vertical-layout">
+        <layout:VerticalLayout id="consent-form_address" class="vertical-layout">
             <Label id="consent-form-address-label" labelFor="consent-form-address" text="Site Address"></Label>
-            <Input id="consent-form-address" class="inputBox" type="Text" required="true" placeholder="Filled out by user" value="{oEnrollModel>/ConsentDetail/SiteAddress}"/>
-        </l:VerticalLayout>
+            <Input id="consent-form-address" class="inputBox" type="Text" required="true" placeholder="Filled out by user" value="{oConsentModel>/ConsentAddress}"/>
+        </layout:VerticalLayout>
         
-        <l:VerticalLayout id="consent-form_city" class="vertical-layout">
+        <layout:VerticalLayout id="consent-form_city" class="vertical-layout">
             <Label id="consent-form-city-label" labelFor="consent-form-city"  text="City"></Label>
-            <Input id="consent-form-city" class="inputBox" type="Text" required="true" placeholder="Filled out by user" value="{oEnrollModel>/ConsentDetail/SiteCity}"/>
-        </l:VerticalLayout>
+            <Input id="consent-form-city" class="inputBox" type="Text" required="true" placeholder="Filled out by user" value="{oConsentModel>/ConsentCity}"/>
+        </layout:VerticalLayout>
         
-        <l:VerticalLayout class="vertical-layout">
-        <Label id="consent-form-state-label" labelFor="consent-form-state-list" text="State"></Label>
-        <ComboBox id="consent-form-state-list" required="true" change="handleStateChange" width="100%" placeholder="Make a Selection" selectedKey="{oEnrollModel>/ConsentDetail/SiteState}">
-            <core:Item id="consent-form-item1" text="Tamilnadu" key="tamilnadu"></core:Item>
-        </ComboBox>
-        </l:VerticalLayout>
+        <layout:VerticalLayout class="vertical-layout">
+            <Label id="consent-form-state-label" labelFor="consent-form-state-list" text="State"></Label>
+            <ComboBox id="consent-form-state-list" required="true" change="handleStateChange" width="100%" placeholder="Make a Selection" selectedKey="{oConsentModel>/ConsentState}">
+                <core:Item id="consent-form-item1" text="Tamilnadu" key="tamilnadu"></core:Item>
+            </ComboBox>
+        </layout:VerticalLayout>
 
-        <l:VerticalLayout class="vertical-layout">
+        <layout:VerticalLayout class="vertical-layout">
             <Label id="consent-form-zipcode-label" labelFor="consent-form-zipcode" text="zipcode"></Label>
-            <Input id="consent-form-zipcode" class="inputBox" type="Number" required="true" placeholder="Filled out by user" value="{oEnrollModel>/ConsentDetail/SiteZipcode}"/>
-        </l:VerticalLayout>        
-    
-        <l:VerticalLayout id="consent-form_ph" class="vertical-layout">
-            <Label id="consent-form-ph-label" labelFor="consent-form-ph" text="Phone Number"></Label>
-            <Input id="consent-form-ph" class="inputBox" type="Number" required="true" placeholder="Filled out by user" value="{oEnrollModel>/ConsentDetail/SitePhoneNumber}"></Input>
-        </l:VerticalLayout>
+            <Input id="consent-form-zipcode" class="inputBox" type="Number" required="true" placeholder="Filled out by user" value="{oConsentModel>/ConsentZipcode}"/>
+        </layout:VerticalLayout>  
 
-        <l:VerticalLayout id="consent-form_email" class="vertical-layout">
+         <layout:VerticalLayout id="consent-form_accno" class="vertical-layout">
+            <Label id="consent-form-accno-label" labelFor="consent-form-accno" text="Account Number"></Label>
+            <Input id="consent-form-accno" class="inputBox" type="Text" required="true" placeholder="Filled out by user" value="{oConsentModel>/ConsentAccountNumber}"></Input>
+        </layout:VerticalLayout>      
+    
+        <layout:VerticalLayout id="consent-form_ph" class="vertical-layout">
+            <Label id="consent-form-ph-label" labelFor="consent-form-ph" text="Phone Number"></Label>
+            <Input id="consent-form-ph" class="inputBox" type="Number" required="true" placeholder="Filled out by user" value="{oConsentModel>/ConsentPhoneNumber}"></Input>
+        </layout:VerticalLayout>
+
+        <layout:VerticalLayout id="consent-form_email" class="vertical-layout">
             <Label id="consent-form-email-label" labelFor="consent-form-email" text="Email Address"></Label>
-            <Input id="consent-form-email" class="inputBox" type="Email" required="true" placeholder="Filled out by user" value="{oEnrollModel>/ConsentDetail/EmailAddr}"></Input>
-        </l:VerticalLayout>
+            <Input id="consent-form-email" class="inputBox" type="Email" required="true" placeholder="Filled out by user" value="{oConsentModel>/ConsentEmailAddr}"></Input>
+        </layout:VerticalLayout>
     </VBox>
 </core:FragmentDefinition>

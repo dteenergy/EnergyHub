@@ -27,7 +27,10 @@ sap.ui.define([
             locations: [], // Array to hold all building location data
         });
         this.getView().setModel(oModel, "locationModel");
+
         this.onAddAnotherLocation();
+        this.loadConsentForm();
+        this.loadAuthAndRelease();
         },
 
         onAddAnotherLocation: function(){
@@ -53,7 +56,7 @@ sap.ui.define([
                 controller: this
             }).then(function (oFragment) {
                 let flexItems = []
-                 // Create a new text label for Consumer Email Id
+                 
                 if(index > 0){
                 const buildingInfoLabel = new sap.m.Title({
                     text:  `Location ${index + 1}`,
@@ -90,13 +93,54 @@ sap.ui.define([
             // Update the model with the selected value
             oEnrollModel.setProperty("/AccountDetail/EnergyPrgmParticipated", sSelectedVal);
         },
+        
+        loadConsentForm: function(){
+            const oConsentModel = new JSONModel({});
+            this.getView().setModel(oConsentModel, "oConsentModel");
+
+            const enrollmentConsentContainer = this.byId("enrollment-consent-section");
+            Fragment.load({
+                name: "dteconsentappclient.fragment.Consentform",
+                controller: this
+            }).then(function (oFragment) {
+                oFragment.setModel(oConsentModel, "oConsentModel");
+                oFragment.bindElement('oConsentModel>/');
+                
+                enrollmentConsentContainer.addItem(oFragment);
+            }).catch(function (err) {
+                console.log(`Failed to load fragment:, ${err}`)
+            });
+        },
+
+        loadAuthAndRelease: function(){
+            const oAuthAndReleaseModel = new JSONModel({});
+            this.getView().setModel(oAuthAndReleaseModel, "oAuthAndReleaseModel");
+
+            const customerAuthAndReleaseContainer = this.byId("customer-auth-and-release-container");
+            Fragment.load({
+                name: "dteconsentappclient.fragment.AuthAndRelease",
+                controller: this
+            }).then(function (oFragment) {
+                oFragment.setModel(oAuthAndReleaseModel, "oAuthAndReleaseModel");
+                oFragment.bindElement('oAuthAndReleaseModel>/');
+                
+                customerAuthAndReleaseContainer.addItem(oFragment);
+            }).catch(function (err) {
+                console.log(`Failed to load fragment:, ${err}`)
+            });
+        },
 
         handleSubmit: async function () {
-            const enrollFormData = this.getView().getModel("oEnrollModel").getData(); // Use the same model name as above
+            const enrollFormData = this.getView().getModel("oEnrollModel").getData();
+            // const consentFormData = this.getView().getModel("oConsentModel");
+             // Use the same model name as above
             console.log(enrollFormData);
 
             let location = this.getView().getModel("locationModel").getData();
             console.log(location);
+
+            let consent = this.getView().getModel("oConsentModel").getData();
+            console.log(consent);
         }
     });
 });

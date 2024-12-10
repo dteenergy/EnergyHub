@@ -35,8 +35,6 @@
   .sapMIBar.footerAlignment {
     height: 11.5rem !important;
   }
-  .footerAlignment{
-  }
   .legal-info-links{
     padding: 3px;
     font-size: 14px;
@@ -58,10 +56,6 @@
   .legal-info-details{
     margin-bottom: 15px;
   }
-  /* .sapUiIcon{
-    rotate: 40deg;
-    color: #ffffff;
-  } */
   .dte-web-site{
     .sapMLnkText{
       padding-left: 3px
