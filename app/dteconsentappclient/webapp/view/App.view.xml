@@ -13,22 +13,21 @@
         <Image id="dte-logo" src="images/DTE-logo.png" alt="DTE-Logo"></Image>
         <Link id="dte-web-site" class="dte-web-site" href="https://www.dteenergy.com/us/en.html" text="Visit DTEEnergy.com" icon="sap-icon://arrow-top"></Link>
     </tnt:ToolHeader>
-    <Page id="idMainPage" showHeader="false" showFooter="true">
+    
+    <Page id="idMainPage" showHeader="false">
       <content>
         <App id="app" />
         </content>
-        <footer>
-            <OverflowToolbar id="idUserFooterOverflowToolbar" class="footerAlignment">
+            <!-- <footer>
+                <OverflowToolbar id="idUserFooterOverflowToolbar" class="footerAlignment" design="Solid">
                 <content>
                 <FlexBox id="footer-container" class="footer-container">
 
                     <Image id="footer-logo-image" alt="DTE-logo" src="images/DTE-logo.png"></Image>
-                    <FlexBox id="social-media-container" class="social-media-container">
-                        <Image id="social-media-fb" src="images/Facebook.png" alt="facebook"></Image>
-                        <Image id="social-media-x" src="images/X-Twitter.png" alt="x-twitter"></Image>
-                        <Image id="social-media-insta" src="images/Instagram.png" alt="Instagram"></Image>
-                        <Image id="social-media-ytube" src="images/YouTube.png" alt="Youtube"></Image>
-                        <Image id="social-media-linkedin" src="images/LinkedIn.png" alt="LinkedIn"></Image>
+                    <FlexBox id="social-media-container" class="social-media-container" items="{socialMediaModel>/sMediaDetails}">
+                    <items>
+                        <Image src="{socialMediaModel>path}" alt="{socialMediaModel>alt}" press="onSocialMedia"></Image>
+                        </items>
                     </FlexBox>
  
                     <FlexBox id="legal-info" class="legal-info-details">
@@ -40,6 +39,6 @@
                 </FlexBox>
                 </content>
             </OverflowToolbar>
-        </footer>
+            </footer> -->
     </Page>
 </mvc:View>

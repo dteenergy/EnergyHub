@@ -1,0 +1,70 @@
+.landloard-form-sub-container{
+    width: 38%;
+    flex-direction: column;
+}
+.landloard-form-main-container.sapMFlexBoxJustifyStart{
+    justify-content: center;
+}
+ .enrollment-form-header > *{
+    padding: 10px;
+ }
+.req-instruction-indicator{
+    color: red;
+}
+.add-button{
+    width: 50% !important;
+}
+.enrollment-form-header{
+    flex-direction: column;
+}
+.landlord-enrollment-form{
+    padding: 0 !important;
+}
+.account-info{
+    flex-direction: column;
+}
+.sapMLabelInner{
+    display: flex;
+    flex-direction: row-reverse;
+}
+.sapMLabelColonAndRequired{
+    padding-right: 3px;
+}
+.hr-line.sapMTB{
+    background: #d6d0d0;
+} 
+.sapMInputBaseContentWrapper{
+    height: 30px !important;
+    border-radius: 0 !important;
+}
+.state-and-code{
+    justify-content: space-between;
+}
+.building-container > *, .account-info-container > *, .site-contact-info-container > *{
+    padding-bottom: 15px;
+}
+.vertical-layout{
+    width: 100%;
+}
+.form-segment-heading{
+    margin-top: 10px;
+}
+.form-segment-heading.inline-title{
+    padding-bottom: 15px;
+}
+.sapUiFormResGridCont{
+    padding-bottom: 10px !important;
+}
+
+@media only screen and (max-width: 600px) {
+    .state-and-code{
+        flex-direction: column;
+    }
+    .landloard-form-sub-container{
+        width: 90%;
+        flex-direction: column;
+    }
+    .add-button{
+        width: 100% !important;
+    }
+}

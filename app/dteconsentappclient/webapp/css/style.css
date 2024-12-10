@@ -1,4 +1,7 @@
 /* Enter your custom styles here */
+.sapUiBody{
+  font-family: 'Open Sans';
+}
 .sapMText {
   letter-spacing: .7px;
 }
@@ -17,6 +20,7 @@
 .footerAlignment {
     display: flex;
     justify-content: center;
+    background-color: #1E3575 !important; 
   }
   .footerText {
     font-size: 11px;
@@ -32,7 +36,6 @@
     height: 11.5rem !important;
   }
   .footerAlignment{
-    background-color: #1E3575 !important; 
   }
   .legal-info-links{
     padding: 3px;
@@ -55,10 +58,10 @@
   .legal-info-details{
     margin-bottom: 15px;
   }
-  .sapUiIcon{
+  /* .sapUiIcon{
     rotate: 40deg;
     color: #ffffff;
-  }
+  } */
   .dte-web-site{
     .sapMLnkText{
       padding-left: 3px

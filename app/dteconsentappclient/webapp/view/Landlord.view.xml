@@ -1,7 +1,137 @@
 <mvc:View xmlns:core="sap.ui.core" xmlns:form="sap.ui.layout.form" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:l="sap.ui.layout" controllerName="dteconsentappclient.controller.Landlord">
     <Page id="landloard-form" showHeader="false">
         <content>
-            <Button id="sumit-button-1" press="handleSubmit" text="Submit"></Button>
+            <FlexBox id="landloard-form-main-container" class="landloard-form-main-container" >
+                <FlexBox id="landloard-form-sub-container" class="landloard-form-sub-container">
+                <items>
+                    <FlexBox id="enrollment-form-header" class="enrollment-form-header">
+                        <Title xmlns="sap.m" titleStyle="H5" text="DTE Energy Data Hub Enrollment Form" id="title" class="mainTitle"/>
+                        <Text id ="istruction" class="sub-content" wrapping="true" 
+                                text="Complete the information below to enroll for no fee to DTE’s Building Energy Usage Data Hub. In order for us to process your enrollment, you must complete all required fields on this form.">
+                        </Text>
+                        <FlexBox id="req-instruction" class="req-instruction">
+                            <Text id="req-instruction-indicator" class="req-instruction-indicator" text="*" />
+                            <Text id="req-instruction-content" text="Indicates a required field" />
+                        </FlexBox>
+                    </FlexBox>
+
+                    <form:SimpleForm id="enrollment-form"  class="landlord-enrollment-form" layout="ResponsiveGridLayout">
+                        <form:content>
+
+                        <!-- Account Information -->
+                        <VBox id="account-info-container" fitContainer="true" class="account-info-container">
+                            <Title id="account-info-title" titleStyle="H6" class="form-segment-heading" text="Account Information"></Title>
+                            <Text text="(as it appears on customer’s monthly DTE Energy bill)"></Text>
+
+                            <l:VerticalLayout class="vertical-layout">
+                                <Label id="company-name-label" labelFor="company-name" text="Company Name"></Label>
+                                <Input id="company-name" class="inputBox" required="true" type="Text" placeholder="Filled out by user"/>
+                            </l:VerticalLayout>
+
+                            <l:VerticalLayout class="vertical-layout">
+                                <Label id="company-address-label" labelFor="company-address" text="Company Address"></Label>
+                                <Input id="company-address" class="inputBox" required="true" type="Text" showSuggestion="true"  placeholder="Filled out by user"/>
+                            </l:VerticalLayout>
+
+                            <l:VerticalLayout class="vertical-layout">
+                                <Label id="company-city" labelFor="city"  text="City"></Label>
+                                <Input id="city" class="inputBox" type="Text" required="true" placeholder="Filled out by user"/>
+                            </l:VerticalLayout>
+
+                            <l:VerticalLayout class="vertical-layout">
+                            <Label id="company-state" labelFor="state-list" text="State"></Label>
+                            <ComboBox id="state-list" required="true" change="handleStateChange" width="100%">
+                                <core:Item id="item1" text="Tamilnadu" key="tamilnadu"></core:Item>
+                            </ComboBox>
+                            </l:VerticalLayout>
+
+                            <l:VerticalLayout id="zip-code" class="vertical-layout">
+                                <Label id="company-zipcode" labelFor="zipcode" text="zipcode"></Label>
+                                <Input id="zipcode" class="inputBox" required="true" placeholder="Filled out by user"/>
+                            </l:VerticalLayout>
+
+                            <Label id="company-account-manager-name" labelFor="account-manager-name" text="DTE Energy Account Manager Name(if applicable)"></Label>
+                            <Input id="account-manager-name" class="inputBox" type="Text"></Input>
+
+                            <Label id="company-account-manager-ph" labelFor="account-manager-ph" text="DTE Energy Account Manager Phone Number(if applicable)"></Label>
+                            <Input id="account-manager-ph" class="inputBox"></Input>
+
+                            <Label id="has-participate" text="Do you already participate in the DTE Energy Data Hub Program?"></Label>
+                            <RadioButtonGroup id="radio_group">
+                                <RadioButton id="yes" text="Yes"></RadioButton>
+                                <RadioButton id="no" text="No"></RadioButton>
+                            </RadioButtonGroup>
+                        </VBox>
+
+                        <Toolbar class="hr-line" height="1px" width="100%"></Toolbar>
+
+                    <!-- Site Contact Information -->
+                    <VBox id="site-contact-info-container" fitContainer="true" width="100%" class="site-contact-info-container">
+                        <Title id="site-contact-heading" titleStyle="H6" class="form-segment-heading" text="Site Contact Information"></Title>
+
+                        <FlexBox id="site_contact_fst_name" direction="Column" class="vertical-layout">
+                            <Label id="site-contact-fst-name-label" labelFor="site-contact-fst-name" text="FirstName"></Label>
+                            <Input id="site-contact-fst-name" class="inputBox" type="Text" required="true" placeholder="Filled out by user"/>
+                        </FlexBox>
+
+                        <FlexBox id="site_contact_lst_name" direction="Column" class="vertical-layout">
+                            <Label id="site-contact-lst-name-label" labelFor="site-contact-lst-name" text="LastName"></Label>
+                            <Input id="site-contact-lst-name" class="inputBox" type="Text" required="true" placeholder="Filled out by user"/>
+                        </FlexBox>
+                        
+                        <FlexBox id="site_contact_title" direction="Column" class="vertical-layout">
+                            <Label id="site-contact-title-label" labelFor="site-contact-title" text="Site Contact Title"></Label>
+                            <Input id="site-contact-title" class="inputBox" type="Text" required="true" placeholder="Filled out by user"/>
+                        </FlexBox>
+                        
+                        <l:VerticalLayout id="site_contact_address" class="vertical-layout">
+                            <Label id="site-contact-address-label" labelFor="site-contact-address" text="Site Address"></Label>
+                            <Input id="site-contact-address" class="inputBox" type="Text" required="true" placeholder="Filled out by user"/>
+                        </l:VerticalLayout>
+                        
+                        <l:VerticalLayout id="site_contact_city" class="vertical-layout">
+                            <Label id="site-contact-city-label" labelFor="site-contact-city"  text="City"></Label>
+                            <Input id="site-contact-city" class="inputBox" type="Text" required="true" placeholder="Filled out by user"/>
+                        </l:VerticalLayout>
+                        
+                        <l:VerticalLayout class="vertical-layout">
+                        <Label id="site-contact-state-label" labelFor="site-contact-state-list" text="State"></Label>
+                        <ComboBox id="site-contact-state-list" required="true" change="handleStateChange" width="100%" placeholder="Make a Selection">
+                            <core:Item id="site-contact-item1" text="Tamilnadu" key="tamilnadu"></core:Item>
+                        </ComboBox>
+                        </l:VerticalLayout>
+
+                        <l:VerticalLayout class="vertical-layout">
+                            <Label id="site-contact-zipcode-label" labelFor="site-contact-zipcode" text="zipcode"></Label>
+                            <Input id="site-contact-zipcode" class="inputBox" type="Text" required="true" placeholder="Filled out by user"/>
+                        </l:VerticalLayout>        
+                    
+                        <l:VerticalLayout id="site_contact_ph" class="vertical-layout">
+                            <Label id="site-contact-ph-label" labelFor="site-contact-ph" text="Phone Number"></Label>
+                            <Input id="site-contact-ph" class="inputBox" required="true" placeholder="Filled out by user"></Input>
+                        </l:VerticalLayout>
+
+                        <l:VerticalLayout id="site_contact_email" class="vertical-layout">
+                            <Label id="site-contact-email-label" labelFor="site-contact-email" text="Email Address"></Label>
+                            <Input id="site-contact-email" class="inputBox" type="Email" required="true" placeholder="Filled out by user"></Input>
+                        </l:VerticalLayout>
+                    </VBox>
+
+                    <Toolbar class="hr-line" height="1px" width="100%"></Toolbar>
+
+                    <!-- Location Information -->
+                    <Title id="location-info-title" titleStyle="H6" class="form-segment-heading inline-title" text="Location Information"></Title>
+                    
+                    <VBox id="building_detail_main_container" width="100%">
+                    </VBox>
+                    
+                    <Button id="add-building-detail" text=" + ADD Another Location" press="onAddAnotherLocation" class="add-button" ></Button>
+
+                        </form:content>
+                    </form:SimpleForm>
+                 </items>
+                </FlexBox>
+            </FlexBox>
         </content>
     </Page>
 </mvc:View>
