@@ -48,11 +48,11 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
       return { statusCode: 200, Message: "Enrollment form created successfully." };
 
   } catch (error) {
-    console.log("Enrollment Form Creation Error :", error);
-    return {
-      statusCode: 500,
-      error: error.message
-    };
+      console.log("Enrollment Form Creation Error :", error);
+      return {
+        statusCode: 500,
+        error: error.message
+      };  
   }
 };
 
