@@ -1,7 +1,126 @@
 <mvc:View xmlns:core="sap.ui.core" xmlns:form="sap.ui.layout.form" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:l="sap.ui.layout" controllerName="dteconsentappclient.controller.Landlord">
     <Page id="landloard-form">
         <content>
-            <Button id="sumit-button-1" press="handleSubmit" text="Submit"></Button>
+            <!-- <Button id="sumit-button-1" press="handleSubmit" text="Submit"></Button> -->
+            <VBox id="main-container" width="100%" justifyContent="Center" alignItems="Center">
+            <FlexBox xmlns="sap.m" width="50%" id="form" direction="Column" justifyContent="Center" alignItems="Center" backgroundDesign="Solid" class="main-container-class">
+                <items>
+                    <Title xmlns="sap.m" titleStyle="H5" text="DTE Energy Data Hub Enrollment Form" id="title" class="mainTitle"/>
+                    <Text id ="first-content" class="sub-content" wrapping="true"  text="Contrary to popular belief, Lorem Ipsum is not simply random text. 
+                                              It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. ">
+                    </Text>
+                    <Text id="second-content" class="sub-content" wrapping="true" text="Contrary to popular belief, Lorem Ipsum is not simply random text. 
+                                                    It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. ">
+                    </Text>
+                    
+                    <form:SimpleForm id="landlord-form" width="100%" layout="ResponsiveGridLayout">
+                    
+                    <!-- Account Information -->
+                    <Title id="account-info-title" titleStyle="H4" text="Account Information"></Title>
+                    <l:VerticalLayout id="company_name">
+                        <Label id="company-name-label" labelFor="company-name" text="Company Name"></Label>
+                        <Input id="company-name" class="inputBox" required="true" type="Text" value="{oEnrollModel>/AccountDetail/CompanyName}"/>
+                    </l:VerticalLayout>
+                    <l:VerticalLayout id="company_address">
+                        <Label id="company-address-label" labelFor="company-address" text="Company Address"></Label>
+                        <Input id="company-address" class="inputBox" required="true" type="Text" showSuggestion="true" value="{oEnrollModel>/AccountDetail/CompanyAddress}"/>
+                    </l:VerticalLayout>
+                    <l:VerticalLayout id="company_city">
+                        <Label id="company-city" labelFor="city"  text="City"></Label>
+                        <Input id="city" class="inputBox" type="Text" required="true" value="{oEnrollModel>/AccountDetail/City}"/>
+                    </l:VerticalLayout>
+                        <HBox id="state-code" justifyContent="SpaceBetween">
+                            <l:VerticalLayout id="state">
+                                <Label id="company-state" labelFor="state-list" text="State"></Label>
+                                <ComboBox id="state-list" required="true" change="handleStateChange" selectedKey="{oEnrollModel>/AccountDetail/State}">
+                                    <core:Item id="item1" text="Tamilnadu" key="tamilnadu"></core:Item>
+                                </ComboBox>
+                            </l:VerticalLayout>
+                            <l:VerticalLayout id="zip-code">
+                                <Label id="company-zipcode" labelFor="zipcode" text="zipcode"></Label>
+                                <Input id="zipcode" class="inputBox" required="true" value="{oEnrollModel>/AccountDetail/Zipcode}"/>
+                            </l:VerticalLayout>
+                        </HBox>
+                        <l:VerticalLayout id="company_account_manager_name">
+                            <Label id="company-account-manager-name" labelFor="account-manager-name" text="DTE Energy Account Manager Name(if applicable)"></Label>
+                            <Input id="account-manager-name" class="inputBox" type="Text" value="{oEnrollModel>/AccountDetail/AcctMgrName}"></Input>
+                        </l:VerticalLayout>
+                        <l:VerticalLayout id="company_account_manager_ph">
+                            <Label id="company-account-manager-ph" labelFor="account-manager-ph" text="DTE Energy Account Manager Phone Number(if applicable)"></Label>
+                            <Input id="account-manager-ph" class="inputBox" value="{oEnrollModel>/AccountDetail/AcctMgrPhNo}"></Input>
+                        </l:VerticalLayout>
+                        <l:VerticalLayout id="has_participate">
+                            <Label id="has-participate" text="Do you already participate in the DTE Energy Data Hub Program?"></Label>
+                            <RadioButtonGroup id="radio_group" select="onRadioButtonSelect" selectedIndex="1">
+                                <RadioButton id="yes" text="Yes"></RadioButton>
+                                <RadioButton id="no" text="No"></RadioButton>
+                            </RadioButtonGroup>
+                        </l:VerticalLayout>
+
+                        <!-- Site Contact Information -->
+                    <Title id="site-contact-title" titleStyle="H4" text="Site Contact Information"></Title>
+                    <l:VerticalLayout id="site_contact_name">
+                        <Label id="site-contact-name-label" labelFor="site-contact-name" text="First Name"></Label>
+                        <Input id="site-contact-name" class="inputBox" type="Text" required="true" value="{oEnrollModel>/AccountDetail/FirstName}"/>
+                    </l:VerticalLayout>
+                    <l:VerticalLayout id="site_contact_last">
+                        <Label id="site-contact-name-last" labelFor="site-contact-name" text="Last Name"></Label>
+                        <Input id="site-contact-last" class="inputBox" type="Text" required="true" value="{oEnrollModel>/AccountDetail/LastName}"/>
+                    </l:VerticalLayout>
+                    <l:VerticalLayout id="site_contact_title">
+                        <Label id="site-contact-title-label" labelFor="site-contact-name" text="Site Contact Title"></Label>
+                        <Input id="site-contact-title-value" class="inputBox" type="Text" required="true" value="{oEnrollModel>/AccountDetail/SiteContactTitle}"/>
+                    </l:VerticalLayout>
+                    <l:VerticalLayout id="site_contact_address">
+                        <Label id="site-contact-address-label" labelFor="site-contact-address" text="Site Address"></Label>
+                        <Input id="site-contact-address" class="inputBox" type="Text" required="true" value="{oEnrollModel>/AccountDetail/SiteAddress}"/>
+                    </l:VerticalLayout>
+                    <l:VerticalLayout id="site_contact_city">
+                        <Label id="site-contact-city-label" labelFor="city"  text="City"></Label>
+                        <Input id="site-contact-city" class="inputBox" type="Text" required="true" value="{oEnrollModel>/AccountDetail/SiteCity}"/>
+                    </l:VerticalLayout>
+                        <HBox id="site_contact_state" justifyContent="SpaceBetween">
+                            <l:VerticalLayout id="site-contact-state">
+                                <Label id="site-contact-state-label" labelFor="state-list" text="State"></Label>
+                                <ComboBox id="site-contact-state-list" required="true" change="handleStateChange" selectedKey="{oEnrollModel>/AccountDetail/SiteState}">
+                                    <core:Item id="site-contact-item1" text="Tamilnadu" key="tamilnadu"></core:Item>
+                                </ComboBox>
+                            </l:VerticalLayout>
+                            <l:VerticalLayout id="site-contact-zip-code">
+                                <Label id="site-contact-zipcode-label" labelFor="city" text="zipcode"></Label>
+                                <Input id="site-contact-zipcode" class="inputBox" type="Text" required="true" value="{oEnrollModel>/AccountDetail/SiteZipcode}"/>
+                            </l:VerticalLayout>
+                        </HBox>
+                        <l:VerticalLayout id="site_contact_ph">
+                            <Label id="site-contact-ph-label" labelFor="account-manager-ph" text="Phone Number"></Label>
+                            <Input id="site-contact-ph" class="inputBox" value="{oEnrollModel>/AccountDetail/SitePhoneNumber}"></Input>
+                        </l:VerticalLayout>
+                         <l:VerticalLayout id="site_contact_email">
+                            <Label id="site-contact-email-label" labelFor="account-manager-name" text="Email Address"></Label>
+                            <Input id="site-contact-email" class="inputBox" type="Email" required="true" value="{oEnrollModel>/AccountDetail/EmailAddr}"></Input>
+                        </l:VerticalLayout>
+
+                        <!-- Location Information -->
+                        <Title id="location-info-title" titleStyle="H4" text="Location Information"></Title>
+                        <VBox id="building_detail_main_container" width="100%">
+                        </VBox>
+                        <Title id="location-info-customer" titleStyle="H4" text="Customer Signature"></Title>
+                         <l:VerticalLayout id="customer-name">
+                            <Label id="customer-name-label" labelFor="account-manager-name" text="Customer Name"></Label>
+                            <Input id="customer-name-value" class="inputBox" type="Text" required="true" value="{oEnrollModel>/SignatureSignedBy}"></Input>
+                        </l:VerticalLayout>
+                         <l:VerticalLayout id="customer-date">
+                            <Label id="customer-date-label" labelFor="account-manager-name" text="Date"></Label>
+                            <Input id="customer-date-value" class="inputBox" type="Text" required="true" value="{oEnrollModel>/SignatureSignedDate}"></Input>
+                        </l:VerticalLayout>
+                        <Button id="add-building-detail" text="ADD Another Location" press="onAddAnotherLocation" width="50%"></Button>
+
+                        <Button id="submit-landlord-form" text="Submit" press="handleSubmit"></Button>
+
+                    </form:SimpleForm>
+                </items>
+            </FlexBox>
+        </VBox>
         </content>
     </Page>
 </mvc:View>
