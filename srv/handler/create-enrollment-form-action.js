@@ -8,8 +8,6 @@ const { v4: uuidv4 } = require('uuid');
  * tx => function
  */
 const createEnrollmentFormDetail = async (req, entity, tx) => {
-
-  console.log(typeof(req));
   
   try {
     // Generate a unique AppId using uuid
