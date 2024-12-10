@@ -6,8 +6,7 @@ const { v4: uuidv4 } = require('uuid');
  * req => String 
  * entity => function
  */
-const createEnrollmentFormDetail = async (req, entity) => {
-  const tx = cds.tx(req);
+const createEnrollmentFormDetail = async (req, entity, tx) => {
 
   try {
     // Generate a unique AppId using uuid
@@ -33,6 +32,11 @@ const createEnrollmentFormDetail = async (req, entity) => {
     // Store the parsed ApplciaitonConsent
     let applicationConsent;
     applicationConsent = enrollmentDetail.ApplicationConsent;
+    
+    // Condition to check whether the JSON object contain value or not
+    if((applicationConsent?.length === 0) || (accountdetailJson?.length === 0) || 
+    (ApplicationDetailData?.length === 0) || (buildingsArray?.length === 0)) 
+      throw new Error('Failed to create the Enrollment form detail');
 
     // Application Detail  
     ApplicationDetailData.AppId = AppId
@@ -41,7 +45,7 @@ const createEnrollmentFormDetail = async (req, entity) => {
     await tx.run(INSERT.into(entity.ApplicationDetail).entries(ApplicationDetailData));
 
     // Create the associated BuildingDetail entries
-    const buildingEntries = buildingsArray.map(detail => ({
+    const buildingEntries = buildingsArray?.map(detail => ({
       BuildingName: detail.buildingName,
       AccountNumber: detail.accountNumber,
       Address: detail.locationAddress,
@@ -68,35 +72,22 @@ const createEnrollmentFormDetail = async (req, entity) => {
 
     // Insert account details
     await tx.run(INSERT.into(entity.AccountDetail).entries(accountdetailJson));
-
-    // Retrieve the IDs of the newly inserted records
-    await tx.run(
-      SELECT.from(entity.AccountDetail)
-        .where({ AppRefId_AppId: AppId })
-        .orderBy('CreatedAt')
-        .limit(accountdetailJson.length)
-    );
-
+    
     // ApplicationConsent Detail
     applicationConsent = applicationConsent.map(consent => ({
       ...consent,
       AppRefId_AppId: AppId
     }));
 
+    // Create the ApplicationConsent details
     await tx.run(INSERT.into(entity.ApplicationConsent).entries(applicationConsent));
 
-    // Commit transaction and return success response
-    await tx.commit();
     return {
       statusCode: 201,
       Message: "Enrollment form created successfully."
     };
-    // }
   } catch (error) {
     console.log("Enrollment Form Creation Error :", error);
-
-    // Rollback transaction in case of failure
-    await tx.rollback();
     return {
       statusCode: 500,
       error: error.message

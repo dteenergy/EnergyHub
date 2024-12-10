@@ -2,14 +2,20 @@ const cds = require('@sap/cds');
 
 const createEnrollmentFormDetail = require('./create-enrollment-form-action');
 
-class DTEConsentAppPortal extends cds.ApplicationService{
-    async init(){
+module.exports = cds.service.impl(async function(srv){
+    
+    srv.on('CreateEnrollmentFormDetail',  async(req)=>
+        {
+            const tx = cds.tx(req);
+            
+            try{
+                const res = createEnrollmentFormDetail(req, this.entities, tx)
 
-        // Create the Enrollment form details
-        this.on('CreateEnrollmentFormDetail', async(req)=>createEnrollmentFormDetail(req, this.entities));
+                return res;
+            } catch(e){
 
-        super.init();
-    }
-}
-
-module.exports = DTEConsentAppPortal;
+                return {'error':'Failed to create'}
+            }
+            
+        })   
+})
