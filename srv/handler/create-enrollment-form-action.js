@@ -42,21 +42,17 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
     // Application Detail  
     ApplicationDetailData.AppId = AppId
 
-    // Insert into ApplicationDetail with generated AppId
-    await tx.run(INSERT.into(entity?.ApplicationDetail).entries(ApplicationDetailData));
-
     // Create the associated BuildingDetail entries
     const buildingEntries = buildingsArray?.map(detail => ({
       ...detail,
       AppRefId_AppId: AppId,  
     }));
 
-    // Insert all building details
-    await tx.run(
-      INSERT.into(entity?.BuildingDetail)
-        .columns(['BuildingId'])
-        .entries(buildingEntries)
-    );
+    // ApplicationConsent Detail
+    applicationConsent = applicationConsent.map(consent => ({
+      ...consent,
+      AppRefId_AppId: AppId
+    }));  
 
     // Append the AppRefId_AppId field in the Accountdetail
     accountdetailJson.AppRefId_AppId = AppId;
@@ -66,14 +62,18 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
       accountdetailJson.EnergyPrgmParticipated = false;
     }    
 
-    // Insert account details
+    // Insert into ApplicationDetail with generated AppId
+    await tx.run(INSERT.into(entity?.ApplicationDetail).entries(ApplicationDetailData));
+
+    // Insert all BuildingDetails
+    await tx.run(
+      INSERT.into(entity?.BuildingDetail)
+        .columns(['BuildingId'])
+        .entries(buildingEntries)
+    );
+
+    // Insert AccountDetails
     await tx.run(INSERT.into(entity.AccountDetail).entries(accountdetailJson));
-    
-    // ApplicationConsent Detail
-    applicationConsent = applicationConsent.map(consent => ({
-      ...consent,
-      AppRefId_AppId: AppId
-    }));
 
     // Create the ApplicationConsent details
     await tx.run(INSERT.into(entity?.ApplicationConsent).entries(applicationConsent));
