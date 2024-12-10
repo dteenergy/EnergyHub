@@ -58,7 +58,7 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
     }));    
 
     // Insert the applicationParsedData into the ApplicationDetail table using a transactional query
-    let appDetailResult = await tx.run(INSERT.into(entity?.ApplicationDetail).entries(applicationParsedData));
+    let applicationDetailResult = await tx.run(INSERT.into(entity?.ApplicationDetail).entries(applicationParsedData));
 
     // Insert the buildingDetailPayload into the BuildingDetails table using a transactional query
     let buildingDetailResult = await tx.run(
@@ -73,7 +73,7 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
     let consentDetailResult = await tx.run(INSERT.into(entity?.ApplicationConsent).entries(consentDetailPayload));
       
     // Check if results were returned for all queries: ApplicationDetail, BuildingDetail, AccountDetail, and ApplicationConsent
-    if((appDetailResult?.results?.length > 0) && (buildingDetailResult?.results?.length > 0)
+    if((applicationDetailResult?.results?.length > 0) && (buildingDetailResult?.results?.length > 0)
     && (acccountDetailResult?.results?.length > 0) && (consentDetailResult?.results?.length > 0))
       return { statusCode: 200, Message: "Enrollment form created successfully." };
    
