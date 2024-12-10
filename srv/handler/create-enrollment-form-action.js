@@ -45,8 +45,8 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
     consentDetailPayload = consentParsedData.map(consent => ({
       ...consent,
       AppRefId_AppId: AppId
-    }));        
-
+    }));    
+    
     // Insert the applicationParsedData into the ApplicationDetail table using a transactional query
     let applicationDetailResult = await tx.run(INSERT.into(entity?.ApplicationDetail).entries(applicationParsedData));
 
