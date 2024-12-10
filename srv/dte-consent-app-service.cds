@@ -10,6 +10,9 @@ service DTEConsentAppPortal {
     entity ApplicationConsent as projection on db.ApplicationConsent;
     
     action CreateEnrollmentFormDetail(
-        Enrollment : String
+        ApplicationDetail : String,
+        BuildingDetail : String,
+        AccountDetail : String,
+        ConsentDetail : String
     ) returns String;
 };
