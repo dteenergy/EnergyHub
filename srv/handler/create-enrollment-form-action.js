@@ -15,7 +15,7 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
 
     // Get the payload from the req and variable declaration
     const { ApplicationDetail, BuildingDetail, AccountDetail, ConsentDetail } = req?.data;
-    let consentDetailPayload, buildingDetailPayload, applicationDetailResult, buildingDetailResult, accountDetailResult, consentDetailResult;
+    let consentDetailPayload, buildingDetailPayload;
     
     // Parse the String Payload
     const applicationParsedData = JSON.parse(ApplicationDetail);
@@ -48,16 +48,16 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
     }));    
     
     // Insert the applicationParsedData into the ApplicationDetail table using a transactional query
-    applicationDetailResult = await tx.run(INSERT.into(entity?.ApplicationDetail).entries(applicationParsedData));
+    const applicationDetailResult = await tx.run(INSERT.into(entity?.ApplicationDetail).entries(applicationParsedData));
 
     // Insert the buildingDetailPayload into the BuildingDetails table using a transactional query
-    buildingDetailResult = await tx.run(INSERT.into(entity?.BuildingDetail).entries(buildingDetailPayload));
+    const buildingDetailResult = await tx.run(INSERT.into(entity?.BuildingDetail).entries(buildingDetailPayload));
 
     // Insert accountParsedData into the AccountDetail table using a transactional query
-    accountDetailResult = await tx.run(INSERT.into(entity?.AccountDetail).entries(accountParsedData));
+    const accountDetailResult = await tx.run(INSERT.into(entity?.AccountDetail).entries(accountParsedData));
 
     // Insert the consentDetailPayload into the ApplicationConsent table using a transactional query
-    consentDetailResult = await tx.run(INSERT.into(entity?.ApplicationConsent).entries(consentDetailPayload));
+    const consentDetailResult = await tx.run(INSERT.into(entity?.ApplicationConsent).entries(consentDetailPayload));
       
     // Check if results were returned for all queries: ApplicationDetail, BuildingDetail, AccountDetail, and ApplicationConsent
     if((applicationDetailResult?.results?.length > 0) && (buildingDetailResult?.results?.length > 0)
