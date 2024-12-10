@@ -5,6 +5,7 @@ const { v4: uuidv4 } = require('uuid');
  * Function: Create the Enrollment form details
  * req => String 
  * entity => function
+ * tx => function
  */
 const createEnrollmentFormDetail = async (req, entity, tx) => {
 
