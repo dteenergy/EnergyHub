@@ -13,10 +13,10 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
     // Generate a unique AppId using uuid
     const AppId = uuidv4();
 
-    // Get the response data
+    // Get the payload from the req
     const { Enrollment } = req?.data;
 
-    // Parse the String content
+    // Parse the String Enrollment String
     let enrollmentDetail = JSON.parse(Enrollment);
 
     // Store the parsed ApplicationDetail
@@ -30,7 +30,7 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
     let buildingsArray;
     buildingsArray = enrollmentDetail?.BuildingDetail;
 
-    // Store the parsed ApplciaitonConsent
+    // Store the parsed ApplicationConsent
     let applicationConsent;
     applicationConsent = enrollmentDetail.ApplicationConsent;
     
@@ -58,7 +58,7 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
         .entries(buildingEntries)
     );
 
-    // If AccountDetail exists, create associated records
+    // Append the AppRefId_AppId field in the Accountdetail
     accountdetailJson.AppRefId_AppId = AppId;
 
     // Check if EnergyPrgmParticipated exists in the account object
