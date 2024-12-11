@@ -1,6 +1,7 @@
 const cds = require('@sap/cds');
 
 const createEnrollmentFormDetail = require('./create-enrollment-form-action');
+const createConsentFormDetail = require('./create-consent-form-action');
 
 module.exports = cds.service.impl(async function (srv) {
     srv.on('CreateEnrollmentFormDetail', async (req) => {
@@ -13,6 +14,18 @@ module.exports = cds.service.impl(async function (srv) {
             return res;
         } catch (e) {
             return { 'error': 'Failed to create Enrollment Form' }
+        }
+    }),
+
+    srv.on('CreateConsentFormDetail', async(req)=>{
+        const tx = cds.tx(req);
+        try{
+            const consentRes = await createConsentFormDetail(req, this.entities, tx);
+            
+            
+            return consentRes;
+        } catch(e){
+            return {'error':'Failed to create the consent detail'}
         }
     })
 })
