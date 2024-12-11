@@ -32,8 +32,6 @@ const createConsentFormDetail = async (req, entity, tx) => {
         .columns(['AppId'])
     );
 
-    console.log(applicationDetailResult);
-    
     // Return 404 if no ApplicationDetail found
     if (applicationDetailResult?.length === 0)
       throw { status: 404, message: "Enrollment details not available for this AppId." }
