@@ -1,0 +1,90 @@
+.landloard-form-main-container{
+    background: #ffffff;
+}
+.landloard-form-sub-container{
+    width: 38%;
+    flex-direction: column;
+}
+.landloard-form-main-container.sapMFlexBoxJustifyStart{
+    justify-content: center;
+}
+ .enrollment-form-header > *{
+    padding: 10px;
+ }
+.required-instruction-indicator{
+    color: red;
+}
+.button-customize{
+    width: 50% !important;
+}
+.enrollment-form-header{
+    flex-direction: column;
+}
+.landlord-enrollment-form.sapUiSimpleForm {
+    padding: 0 !important;
+    /* width: 90%; */
+}
+.account-info{
+    flex-direction: column;
+}
+.sapMLabelInner{
+    display: flex;
+    flex-direction: row-reverse;
+}
+.sapMLabelColonAndRequired{
+    padding-right: 3px;
+}
+.hr-line.sapMTB{
+    background: #d6d0d0;
+} 
+.sapMInputBaseContentWrapper{
+    height: 30px !important;
+    border-radius: 0 !important;
+}
+.sapMBtnInner{
+    border-radius: 0 !important;
+}
+.state-and-code{
+    justify-content: space-between;
+}
+.building-container > *,
+.account-info-container > *,
+.site-contact-info-container > *, 
+.location-info-container > *,
+.auth-contact-info-container > *,
+.consent-form-container > *,
+.customer-release-header > *,
+.customer-auth-and-release > *,
+.enrollment-consent-section > *,
+.auth-and-release-container > *{
+    padding-bottom: 15px;
+}
+.vertical-layout{
+    width: 100%;
+}
+.form-segment-heading{
+    margin-top: 10px;
+}
+.location-inner-title{
+    padding-bottom: 15px;
+}
+.sapUiFormResGridCont{
+    padding-bottom: 10px !important;
+}
+.customer-release-header{
+    background: rgba(141, 200, 232, 0.1);
+    padding: 20px;
+}
+
+@media only screen and (max-width: 600px) {
+    .state-and-code{
+        flex-direction: column;
+    }
+    .landloard-form-sub-container{
+        width: 90%;
+        flex-direction: column;
+    }
+    .button-customize{
+        width: 100% !important;
+    }
+}

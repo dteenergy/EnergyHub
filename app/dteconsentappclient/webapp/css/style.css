@@ -1,1 +1,86 @@
 /* Enter your custom styles here */
+.sapUiBody{
+  font-family: 'Open Sans';
+}
+.sapMText {
+  letter-spacing: .7px;
+}
+.sapMIBar.app-header{
+  height: 4.5rem !important;
+  display: flex;
+  justify-content: space-between;
+  background-color: #1E3575 !important;
+}
+.sapMText.header-title{
+  color: #ffffff !important;
+}
+.sapFShellBarTitleHidden{
+  display: none;
+}
+.footerAlignment {
+    display: flex;
+    justify-content: center;
+    background-color: #1E3575 !important; 
+  }
+  .footerText {
+    font-size: 11px;
+    text-align: center;
+  }
+
+  .footer-container{
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .sapMIBar.footerAlignment {
+    height: 11.5rem !important;
+  }
+  .legal-info-links{
+    padding: 3px;
+    font-size: 14px;
+    text-decoration: none;
+  }
+  .sapMLnkText:not(:last-child)::after{
+    content: ' |';
+    color: white;
+  }
+  .sapMLnkText{
+    letter-spacing: .7px;
+    color: #ffffff;
+    font-weight: 100;
+  }
+  .footerText{
+    font-size: 11px;
+    color: #ffffff;
+  }
+  .legal-info-details{
+    margin-bottom: 15px;
+  }
+  .dte-web-site{
+    .sapMLnkText{
+      padding-left: 3px
+    }
+  }
+  .sapMLnk:hover {
+    text-decoration: none;
+  } 
+
+  @media only screen and (max-width: 600px) {
+    .legal-info-details{
+      flex-direction: column !important;
+      justify-content: center;
+      align-items: center;
+    }
+    .sapMIBar.app-header{
+      flex-direction: column-reverse;
+      justify-content: space-between;
+      background-color: #1E3575 !important;
+      padding-top: 16px !important;
+    }
+    .sapMLnk.dte-web-site{
+      display: none;
+    }
+    .sapMIBar.footerAlignment {
+      height: 14.5rem !important;
+    }
+  }
