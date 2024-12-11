@@ -17,15 +17,15 @@ const createConsentFormDetail = async (req, entity, tx) => {
     // Check the Consent details fields contains the empty value.
     const consentDetailFieldCheck = Object.values(consentDetailParsedData).some(value => value === '');
     if (consentDetailFieldCheck)
-      throw { status: 400, message: "Please fill in all required fields." }
+      throw { status: 400, message: 'Kindly fill all the required fields.' }
     if (!consentDetailParsedData.hasOwnProperty("AppId"))
-      throw { status: 400, message: 'The AppId field is required.Please provide the necessary value.' }
+      throw { status: 400, message: 'The AppId field is required. Please enter the required value.' }
 
-    // Validate the Emailid and Phonenumber from consentDetailParserdData
+    // Validate the Sensitive field information from consentDetailParsedData.
     validateWithRegex(consentDetailParsedData?.EmailAddr, 'email');
     validateWithRegex(consentDetailParsedData?.PhoneNumber, 'phoneNumber');
 
-    // Check if the ApplicationDetail entity contains the AppId from the ConsentParsedData
+    // Verify if the ApplicationDetail entity exists with the AppId from the ConsentParsedData.
     const applicationDetailResult = await tx.run(
       SELECT.from(entity.ApplicationDetail)
         .where({ AppId: consentDetailParsedData?.AppId })
@@ -36,7 +36,7 @@ const createConsentFormDetail = async (req, entity, tx) => {
     if (applicationDetailResult?.length === 0)
       throw { status: 404, message: "Enrollment details not available for this AppId." }
     else {
-      // Assign AppId and ConsentId to ApplicationConsent
+      // Assign AppId to ApplicationConsent
       consentDetailParsedData.AppRefId_AppId = applicationDetailResult[0].AppId;
 
       // Remove the AppId from the Payload
@@ -50,12 +50,12 @@ const createConsentFormDetail = async (req, entity, tx) => {
         return { status: 200, message: 'Consent Form Created successfully' }
     }
   } catch (error) {
-    if (error.status) {
-      return { status: error.status, message: error.message };
-    } else
-      return {
-        status: 500, error: error.message
-      }
+      if (error.status) {
+        return { status: error.status, message: error.message };
+      } else
+          return {
+            status: 500, error: error.message
+          }
   }
 }
 
