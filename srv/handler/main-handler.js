@@ -20,10 +20,10 @@ module.exports = cds.service.impl(async function (srv) {
     srv.on('CreateConsentFormDetail', async(req)=>{
         const tx = cds.tx(req);
         try{
-            const consentRes = await createConsentFormDetail(req, this.entities, tx);
+            // Method to create the Consent Form details
+            const consentResponse = await createConsentFormDetail(req, this.entities, tx);
             
-            
-            return consentRes;
+            return consentResponse;
         } catch(e){
             return {'error':'Failed to create the consent detail'}
         }
