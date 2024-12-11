@@ -15,8 +15,10 @@ const createConsentFormDetail = async (req, entity, tx) => {
     // Check the Consent details fields contains the empty value
     const consentDetailFieldCheck = Object.values(consentDetailParsedData).some(value => value === '');
 
-    if (consentDetailFieldCheck || !consentDetailParsedData.hasOwnProperty("AppId"))
-      return { 'status': 400, 'message': 'The data is invalid. Please fix the errors and include the required field, AppId.' }
+    if (consentDetailFieldCheck)
+      return { 'status': 400, 'message': "The fields have empty values, violating the 'not null' constraint." }
+    else if (!consentDetailParsedData.hasOwnProperty("AppId"))
+      return { 'status': 400, 'message': 'Required AppId field.' }
 
     // Check if the ApplicationDetail entity contains the AppId from the ConsentParsedData
     const applicationDetailResult = await tx.run(

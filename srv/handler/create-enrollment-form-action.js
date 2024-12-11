@@ -26,7 +26,7 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
 
     if ((Object.keys(applicationParsedData)?.length === 0) || (buildingParsedData?.length === 0) ||
       (buildingDetailFieldCheck) || (Object.keys(accountParsedData)?.length === 0) || (consentParsedData?.length === 0))
-      return { 'status': 400, 'message': 'The data is invalid. Please review and correct the erroneous fields' }
+      return { 'status': 400, 'message': 'Please fill the empty fields.' }
 
     // Assign AppId to Application Detail, Building Detail, Account Detail and Application Consent 
     applicationParsedData.AppId = AppId
