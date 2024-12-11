@@ -31,39 +31,39 @@
 
                             <l:VerticalLayout class="vertical-layout">
                                 <Label id="company-name-label" labelFor="company-name" text="Company Name"></Label>
-                                <Input id="company-name" class="inputBox" required="true" type="Text" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/CompanyName}"/>
+                                <Input id="company-name" class="inputBox" required="true" liveChange="onLiveChange" type="Text" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/CompanyName}"/>
                             </l:VerticalLayout>
 
                             <l:VerticalLayout class="vertical-layout">
                                 <Label id="company-address-label" labelFor="company-address" text="Company Address"></Label>
-                                <Input id="company-address" class="inputBox" required="true" type="Text" showSuggestion="true"  placeholder="Filled out by user"  value="{oEnrollModel>/AccountDetail/CompanyAddress}"/>
+                                <Input id="company-address" class="inputBox" required="true" type="Text" liveChange="onLiveChange" placeholder="Filled out by user"  value="{oEnrollModel>/AccountDetail/CompanyAddress}"/>
                             </l:VerticalLayout>
 
                             <l:VerticalLayout class="vertical-layout">
                                 <Label id="company-city" labelFor="city"  text="City"></Label>
-                                <Input id="city" class="inputBox" type="Text" required="true" placeholder="Filled out by user"  value="{oEnrollModel>/AccountDetail/City}"/>
+                                <Input id="city" class="inputBox" type="Text" required="true" placeholder="Filled out by user" liveChange="onLiveChange"  value="{oEnrollModel>/AccountDetail/City}"/>
                             </l:VerticalLayout>
 
                             <l:VerticalLayout class="vertical-layout">
                             <Label id="company-state" labelFor="state-list" text="State"></Label>
-                            <ComboBox id="state-list" required="true" change="handleStateChange" width="100%" placeholder="Make a Selection" selectedKey="{oEnrollModel>/AccountDetail/State}">
+                            <ComboBox id="state-list" required="true" change="onLiveChange" width="100%" placeholder="Make a Selection" selectedKey="{oEnrollModel>/AccountDetail/State}">
                                 <core:Item id="item1" text="Tamilnadu" key="tamilnadu"></core:Item>
                             </ComboBox>
                             </l:VerticalLayout>
 
                             <l:VerticalLayout id="zip-code" class="vertical-layout">
                                 <Label id="company-zipcode" labelFor="zipcode" text="zipcode"></Label>
-                                <Input id="zipcode" class="inputBox" type="Number" required="true" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/Zipcode}"/>
+                                <Input id="zipcode" class="inputBox" type="Number" required="true" liveChange="onLiveChange" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/Zipcode}"/>
                             </l:VerticalLayout>
 
                             <l:VerticalLayout id="acc-manager-name" class="vertical-layout">
                                 <Label id="company-account-manager-name" labelFor="account-manager-name" text="DTE Energy Account Manager Name (if applicable)"></Label>
-                                <Input id="account-manager-name" class="inputBox" type="Text" value="{oEnrollModel>/AccountDetail/AcctMgrName}"></Input>
+                                <Input id="account-manager-name" class="inputBox" type="Text" liveChange="onLiveChange" value="{oEnrollModel>/AccountDetail/AcctMgrName}"></Input>
                             </l:VerticalLayout>
 
                             <l:VerticalLayout id="acc-manager-ph" class="vertical-layout">
                                 <Label id="company-account-manager-ph" labelFor="account-manager-ph" text="DTE Energy Account Manager Phone Number (if applicable)"></Label>
-                                <Input id="account-manager-ph" class="inputBox" type="Number" value="{oEnrollModel>/AccountDetail/AcctMgrPhNo}"></Input>
+                                <Input id="account-manager-ph" class="inputBox" liveChange="onLiveChange" type="Number" value="{oEnrollModel>/AccountDetail/AcctMgrPhNo}"></Input>
                             </l:VerticalLayout>
 
                             <Label id="has-participate" text="Do you already participate in the DTE Energy Data Hub Program?"></Label>
@@ -81,49 +81,49 @@
 
                         <l:VerticalLayout id="site-contact-fst-name" class="vertical-layout">
                             <Label id="site-contact-fst-name-label" labelFor="site-contact-fst-name-value" text="FirstName"></Label>
-                            <Input id="site-contact-fst-name-value" class="inputBox" type="Text" required="true" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/SiteFirstName}"/>
+                            <Input id="site-contact-fst-name-value" class="inputBox" liveChange="onLiveChange" type="Text" required="true" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/SiteFirstName}"/>
                         </l:VerticalLayout>
 
                         <l:VerticalLayout id="site-contact-lst-name" class="vertical-layout">
                             <Label id="site-contact-lst-name-label" labelFor="site-contact-lst-name-value" text="LastName"></Label>
-                            <Input id="site-contact-lst-name-value" class="inputBox" type="Text" required="true" placeholder="Filled out by user"  value="{oEnrollModel>/AccountDetail/SiteLastName}"/>
+                            <Input id="site-contact-lst-name-value" class="inputBox" liveChange="onLiveChange" type="Text" required="true" placeholder="Filled out by user"  value="{oEnrollModel>/AccountDetail/SiteLastName}"/>
                         </l:VerticalLayout>
                         
                         <l:VerticalLayout id="site-contact-title" class="vertical-layout">
                             <Label id="site-contact-title-label" labelFor="site-contact-title-value" text="Site Contact Title"></Label>
-                            <Input id="site-contact-title-value" class="inputBox" type="Text" required="true" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/SiteContactTitle}"/>
+                            <Input id="site-contact-title-value" class="inputBox" liveChange="onLiveChange" type="Text" required="true" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/SiteContactTitle}"/>
                         </l:VerticalLayout>
                         
                         <l:VerticalLayout id="site-contact-address" class="vertical-layout">
                             <Label id="site-contact-address-label" labelFor="site-contact-address-value" text="Site Address"></Label>
-                            <Input id="site-contact-address-value" class="inputBox" type="Text" required="true" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/SiteAddress}"/>
+                            <Input id="site-contact-address-value" class="inputBox" liveChange="onLiveChange" type="Text" required="true" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/SiteAddress}"/>
                         </l:VerticalLayout>
                         
                         <l:VerticalLayout id="site-contact-city" class="vertical-layout">
                             <Label id="site-contact-city-label" labelFor="site-contact-city-value"  text="City"></Label>
-                            <Input id="site-contact-city-value" class="inputBox" type="Text" required="true" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/SiteCity}"/>
+                            <Input id="site-contact-city-value" class="inputBox" liveChange="onLiveChange" type="Text" required="true" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/SiteCity}"/>
                         </l:VerticalLayout>
                         
                         <l:VerticalLayout id="site-contact-state" class="vertical-layout">
                             <Label id="site-contact-state-label" labelFor="site-contact-state-list" text="State"></Label>
-                            <ComboBox id="site-contact-state-list" required="true" change="handleStateChange" width="100%" placeholder="Make a Selection" selectedKey="{oEnrollModel>/AccountDetail/SiteState}">
+                            <ComboBox id="site-contact-state-list" required="true" change="onLiveChange" width="100%" placeholder="Make a Selection" selectedKey="{oEnrollModel>/AccountDetail/SiteState}">
                                 <core:Item id="site-contact-item1" text="Tamilnadu" key="tamilnadu"></core:Item>
                             </ComboBox>
                         </l:VerticalLayout>
 
                         <l:VerticalLayout id="site-contact-zipcode" class="vertical-layout">
                             <Label id="site-contact-zipcode-label" labelFor="site-contact-zipcode-value" text="zipcode"></Label>
-                            <Input id="site-contact-zipcode-value" class="inputBox" type="Number" required="true" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/SiteZipcode}"/>
+                            <Input id="site-contact-zipcode-value" class="inputBox" liveChange="onLiveChange" type="Number" required="true" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/SiteZipcode}"/>
                         </l:VerticalLayout>        
                     
                         <l:VerticalLayout id="site-contact-ph" class="vertical-layout">
                             <Label id="site-contact-ph-label" labelFor="site-contact-ph-value" text="Phone Number"></Label>
-                            <Input id="site-contact-ph-value" class="inputBox" type="Number" required="true" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/SitePhoneNumber}"></Input>
+                            <Input id="site-contact-ph-value" class="inputBox" liveChange="onLiveChange" type="Number" required="true" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/SitePhoneNumber}"></Input>
                         </l:VerticalLayout>
 
                         <l:VerticalLayout id="site-contact-email" class="vertical-layout">
                             <Label id="site-contact-email-label" labelFor="site-contact-email-value" text="Email Address"></Label>
-                            <Input id="site-contact-email-value" class="inputBox" type="Email" required="true" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/SiteEmailAddr}"></Input>
+                            <Input id="site-contact-email-value" class="inputBox" liveChange="onLiveChange" type="Email" required="true" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/SiteEmailAddr}"></Input>
                         </l:VerticalLayout>
                     </VBox>
 

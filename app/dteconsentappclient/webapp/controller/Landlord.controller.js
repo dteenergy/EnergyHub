@@ -1,12 +1,11 @@
 sap.ui.define([
     "dteconsentappclient/controller/BaseController",
     "sap/ui/core/Fragment",
-    "sap/ui/model/json/JSONModel",
-    "sap/ui/core/library"
-], (BaseController, Fragment, JSONModel, CoreLibrary) => {
+    "sap/ui/model/json/JSONModel"
+], (BaseController, Fragment, JSONModel) => {
     "use strict";
 
-    let accountDetails, locationInfo, customerConsentData, customerAuthData;
+    let accountDetails, locationInfo, customerAuthData;
 
     return BaseController.extend("dteconsentappclient.controller.Landlord", {
         onInit() {
@@ -211,26 +210,51 @@ sap.ui.define([
             console.log(customerAuthData);
         },
 
-        // Validate account details
-        validateAccountDetails: function(){
-            const accountInfoContainer = this.byId("account-info-container");
+        // Validate account details and site details
+        validateAccountAndSiteDetails: function(sContainerId){
+					const oEnrollModel = this.getView().getModel("oEnrollModel");
+					const container = this.byId(sContainerId);
 
-            accountInfoContainer.findAggregatedObjects(true, (control) => {
-							if (control instanceof sap.m.Input) {
-								console.log(control.mProperties);
-								
-								const bindingPath = control.getBinding('value').getPath();
-								console.log(bindingPath);
-									
-							}
+
+					container.findAggregatedObjects(true, (control) => {
+						if (control instanceof sap.m.Input && !control.getId().includes("-popup-input") || control instanceof sap.m.ComboBox) {
 							
-						});
-            
+							const bindingPath = control.getBinding('value')?.getPath() || control.getBinding("selectedKey")?.getPath();
+							
+							if(bindingPath){
+								
+								const userInput = oEnrollModel.getProperty(bindingPath);
+								console.log(userInput);
+								
+								if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) {
+									control.setValueState("Error");
+								}
+							}
+								
+						}
+						
+					});
         },
+
+				// Remove the error value state while live change
+				onLiveChange: function(oEvent){
+					const oControl = oEvent.getSource();
+					
+					const userInput = oControl?.getValue() || oControl.getSelectedKey();
+					console.log( userInput);
+
+					if(userInput?.trim() !== "" && oControl?.mProperties['required']) {
+						oControl.setValueState("None");
+					}else{
+						oControl.setValueState("Error");
+					}
+				},
 
         handleSubmit: async function () {
             this.retrieveAllInputbindings();
-            this.validateAccountDetails();
+            this.validateAccountAndSiteDetails("account-info-container");
+						this.validateAccountAndSiteDetails("site-contact-info-container");
+						// this.validateAccountDetails("consent-form-container");
         },
 
     });
