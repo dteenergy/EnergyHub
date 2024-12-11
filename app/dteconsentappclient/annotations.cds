@@ -1,0 +1,1 @@
+using DTEConsentAppPortal as service from '../../srv/dte-consent-app-service';
