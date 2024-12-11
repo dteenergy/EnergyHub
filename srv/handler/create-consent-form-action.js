@@ -1,3 +1,5 @@
+const { validateWithRegex } = require("./regex-and-error-message");
+
 /**
  * Function: Create the Consent form details
  * req => Object 
@@ -14,11 +16,14 @@ const createConsentFormDetail = async (req, entity, tx) => {
 
     // Check the Consent details fields contains the empty value.
     const consentDetailFieldCheck = Object.values(consentDetailParsedData).some(value => value === '');
-
     if (consentDetailFieldCheck)
-      return { 'status': 400, 'message': "The fields have empty values, violating the 'not null' constraint." }
-    else if (!consentDetailParsedData.hasOwnProperty("AppId"))
-      return { 'status': 400, 'message': 'Required AppId field.' }
+      throw { status: 400, message: "Please fill in all required fields." }
+    if (!consentDetailParsedData.hasOwnProperty("AppId"))
+      throw { status: 400, message: 'The AppId field is required.Please provide the necessary value.' }
+
+    // Validate the Emailid and Phonenumber from consentDetailParserdData
+    validateWithRegex(consentDetailParsedData?.EmailAddr, 'email');
+    validateWithRegex(consentDetailParsedData?.PhoneNumber, 'phoneNumber');
 
     // Check if the ApplicationDetail entity contains the AppId from the ConsentParsedData
     const applicationDetailResult = await tx.run(
@@ -27,9 +32,11 @@ const createConsentFormDetail = async (req, entity, tx) => {
         .columns(['AppId'])
     );
 
+    console.log(applicationDetailResult);
+    
     // Return 404 if no ApplicationDetail found
     if (applicationDetailResult?.length === 0)
-      return { statusCode: 404, Message: "Enrollment details not available for this AppId." }
+      throw { status: 404, message: "Enrollment details not available for this AppId." }
     else {
       // Assign AppId and ConsentId to ApplicationConsent
       consentDetailParsedData.AppRefId_AppId = applicationDetailResult[0].AppId;
@@ -41,12 +48,15 @@ const createConsentFormDetail = async (req, entity, tx) => {
       const consentDetailResponse = await tx.run(INSERT.into(entity.ApplicationConsent).entries(consentDetailParsedData));
 
       // Check Consent Form Details inserted successfully
-      if (consentDetailResponse?.results?.length > 0) return { 'status': 200, 'message': 'Consent Form Created successfully' }
+      if (consentDetailResponse?.results?.length > 0) 
+        return { status: 200, message: 'Consent Form Created successfully' }
     }
   } catch (error) {
+    if (error.status) {
+      return { status: error.status, message: error.message };
+    } else
       return {
-        statusCode: 500,
-        error: error.message
+        status: 500, error: error.message
       }
   }
 }
