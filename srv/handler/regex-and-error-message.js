@@ -9,6 +9,10 @@ const phoneNumber = {
     "message" : "Please enter a valid phone number"
 }
 
+const emptyField = {
+    "message": "Please fill the empty fields."
+}
+
 /**
  * Function to validate the field value
  * @param {string} value 
@@ -32,5 +36,5 @@ const validateWithRegex = (value, fieldName) =>{
 }
 
 module.exports = {
-    validateWithRegex
+    validateWithRegex, emptyField
 }
