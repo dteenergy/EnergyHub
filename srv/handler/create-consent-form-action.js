@@ -1,5 +1,3 @@
-const { v4: uuidv4 } = require('uuid');
-
 /**
  * Function: Create the Consent form details
  * req => Object 
@@ -10,9 +8,6 @@ const createConsentFormDetail = async (req, entity, tx) => {
 
   try {
     const { ConsentDetail } = req?.data;
-
-    // Generate a unique ApplicationConsentId using uuid
-    const ConsentId = uuidv4();
 
     // Parse the String Payload
     let consentDetailParsedData = JSON.parse(ConsentDetail);
@@ -36,7 +31,6 @@ const createConsentFormDetail = async (req, entity, tx) => {
     else {
       // Assign AppId and ConsentId to ApplicationConsent
       consentDetailParsedData.AppRefId_AppId = applicationDetailResult[0].AppId;
-      consentDetailParsedData.ApplicationConsentId = ConsentId;
 
       // Remove the AppId from the Payload
       delete consentDetailParsedData.AppId;
@@ -45,7 +39,7 @@ const createConsentFormDetail = async (req, entity, tx) => {
       const consentDetailResponse = await tx.run(INSERT.into(entity.ApplicationConsent).entries(consentDetailParsedData));
 
       // Check Consent Form Details inserted successfully
-      if (consentDetailResponse?.results?.length > 0) return { 'status': 200, 'message': 'Created successfully' }
+      if (consentDetailResponse?.results?.length > 0) return { 'status': 200, 'message': 'Consent Form Created successfully' }
     }
   } catch (error) {
       return {
