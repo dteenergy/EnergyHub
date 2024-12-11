@@ -12,7 +12,8 @@
     "@sap/xsenv": "^5.4.0",
     "@sap/xssec": "^4",
     "cors": "^2.8.5",
-    "express": "^4"
+    "express": "^4",
+    "uuid": "^11.0.3"
   },
   "devDependencies": {
     "@cap-js/cds-types": "^0.7.0",

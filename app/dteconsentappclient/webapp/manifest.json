@@ -134,7 +134,7 @@
     "config": {
       "routerConfig": {
         "localApi": {
-          "uri": "https://port4004-workspaces-ws-42tcx.us10.applicationstudio.cloud.sap/"
+          "uri": "https://port4004-workspaces-ws-h7r7s.us10.applicationstudio.cloud.sap/"
         },
         "productionApi": {
           "uri": ""
