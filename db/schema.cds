@@ -40,7 +40,7 @@ entity AccountDetail {
     EnergyPrgmParticipated : Boolean default false;
     FirstName : String not null;
     LastName : String not null;
-    SiteContactTitle : String;
+    SiteContactTitle : String not null;
     SiteAddress : String not null;
     SiteCity : String not null;
     SiteState : String not null;
