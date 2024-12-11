@@ -1,5 +1,8 @@
 <mvc:View xmlns:core="sap.ui.core" xmlns:form="sap.ui.layout.form" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:l="sap.ui.layout" controllerName="dteconsentappclient.controller.Landlord">
-    <Page id="landloard-form" showHeader="false">
+    <Page id="landloard-form" showHeader="true">
+        <customHeader>
+            <core:Fragment fragmentName="dteconsentappclient.view.Header" type="XML" />
+        </customHeader>
         <content>
             <FlexBox id="landloard-form-main-container" class="landloard-form-main-container" >
                 <FlexBox id="landloard-form-sub-container" class="landloard-form-sub-container">
