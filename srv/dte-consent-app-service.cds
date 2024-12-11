@@ -15,4 +15,8 @@ service DTEConsentAppPortal {
         AccountDetail : String,
         ConsentDetail : String
     ) returns String;
+
+    action CreateConsentFormDetail(
+        ConsentDetail : String
+    ) returns String;
 };
