@@ -27,7 +27,7 @@ sap.ui.define([
             const isValidAppId = appId == "4322";
 
             /**
-             * Check requested Application is valid
+             * Check requested Application ID is valid
              * If true, then render Consent Form View 
              * Else navigate to 404 page.
              */
