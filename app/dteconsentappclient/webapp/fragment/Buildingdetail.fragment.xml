@@ -6,37 +6,37 @@
 		
 		<layout:VerticalLayout class="vertical-layout">
 			<Label text="Building Name" required="true"></Label>
-			<Input class="inputBox" value="{locationModel>buildingName}" liveChange="onLiveChange" required="true" placeholder="Filled out by user">
+			<Input class="inputBox" value="{locationModel>BuildingName}" liveChange="onLiveChange" required="true" placeholder="Filled out by user">
 			</Input>
 		</layout:VerticalLayout>
 
 		<layout:VerticalLayout class="vertical-layout">
 			<Label text="Account Number" required="true"></Label>
-			<Input class="inputBox" value="{locationModel>accountNumber}" liveChange="onLiveChange" required="true" placeholder="Filled out by user"></Input>
+			<Input class="inputBox" value="{locationModel>AccountNumber}" liveChange="onLiveChange" required="true" placeholder="Filled out by user"></Input>
 		</layout:VerticalLayout>
 
 		<layout:VerticalLayout class="vertical-layout">
 			<Label text="Location Address" required="true"></Label>
-			<Input class="inputBox" liveChange="onLiveChange" value="{locationModel>locationAddress}"  required="true" placeholder="Filled out by user">
+			<Input class="inputBox" liveChange="onLiveChange" value="{locationModel>Address}"  required="true" placeholder="Filled out by user">
 			</Input>
 		</layout:VerticalLayout>
 
 		<layout:VerticalLayout class="vertical-layout">
 			<Label text="City" required="true"></Label>
-			<Input class="inputBox" value="{locationModel>city}" liveChange="onLiveChange" required="true" placeholder="Filled out by user"></Input>
+			<Input class="inputBox" value="{locationModel>City}" liveChange="onLiveChange" required="true" placeholder="Filled out by user"></Input>
 		</layout:VerticalLayout>
 
 
 		<layout:VerticalLayout class="vertical-layout">
 			<Label text="State" required="true"></Label>
-			<ComboBox change="onLiveChange" required="true" selectedKey="{locationModel>state}" width="100%">
-				<core:Item text="Michigan" key="{locationModel>state}"></core:Item>
+			<ComboBox change="onLiveChange" required="true" selectedKey="{locationModel>State}" width="100%">
+				<core:Item text="Michigan" key="{locationModel>State}"></core:Item>
 			</ComboBox>
 		</layout:VerticalLayout>
 		
 		<layout:VerticalLayout class="vertical-layout">
-			<Label text="zipcode" required="true"></Label>
-			<Input class="inputBox" value="{locationModel>zipcode}" type="Number" liveChange="onLiveChange" required="true" placeholder="Filled out by user"/>
+			<Label text="Zipcode" required="true"></Label>
+			<Input class="inputBox" value="{locationModel>Zipcode}" type="Number" liveChange="onLiveChange" required="true" placeholder="Filled out by user"/>
 		</layout:VerticalLayout>
 	
 	</VBox>

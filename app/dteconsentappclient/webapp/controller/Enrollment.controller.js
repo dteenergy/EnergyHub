@@ -6,8 +6,9 @@ sap.ui.define([
 ], (BaseController, Fragment, JSONModel, GlobalInputValues) => {
     "use strict";
 
-    let accountDetails, 
-				locationInfo, 
+    let enrollmentDetails, 
+				consentDetails, 
+				locationDetails, 
 				validationFlags = {
 				accountDetailsValidation: true, 
 				siteDetailsValidation: true,
@@ -34,7 +35,9 @@ sap.ui.define([
                 "City":"",
                 "State": "",
                 "Zipcode":"",
-								"EnergyPrgmParticipated": true,
+								"EnergyPrgmParticipated": false,
+								"AcctMgrName":"",
+								"AcctMgrPhNo":"",
                 "SiteFirstName": "",
                 "SiteLastName": "",
                 "SiteContactTitle":"",
@@ -103,13 +106,14 @@ sap.ui.define([
             const locations = oModel.getProperty("/locations");
 
             locations.push({
-                buildingName: "",
-                accountNumber: "",
-                locationAddress: "",
-                city: "",
-                state: "Michigan",
-                zipcode: ""
+                BuildingName: "",
+                AccountNumber: "",
+                Address: "",
+                City: "",
+                State: "Michigan",
+                Zipcode: ""
             });
+
             oModel.setProperty("/locations", locations);
 
             const index = locations.length - 1;
@@ -260,18 +264,6 @@ sap.ui.define([
 					}
 				},
 
-        // Retrieve the all input data
-        retrieveAllInputbindings: function(){
-					accountDetails = this.getView().getModel("oEnrollModel").getData();
-					console.log(accountDetails);
-
-					const consentDetail = this.getView().getModel("oConsentModel").getData();
-					console.log(consentDetail);
-
-					locationInfo = this.getView().getModel("locationModel").getData();
-					console.log(locationInfo);
-        },
-
         /**
 				 * Validate account details site and auth details
 				 * @param {String} sContainerId Container Id
@@ -295,12 +287,6 @@ sap.ui.define([
 								const bindingPath = control.getBinding('value')?.getPath() || control.getBinding("selectedKey")?.getPath();
 								
 								if(bindingPath){
-
-									if(bindingPath === "/ConsentDetail/ConsentAccountNumber"){
-										console.log(oModel.getProperty(bindingPath));
-										console.log(oModel.getData());
-										
-									}
 									
 										const userInput = oModel.getProperty(bindingPath);
 										
@@ -364,6 +350,18 @@ sap.ui.define([
 					});
 				},
 
+				// Retrieve the all input data
+				retrieveAllInputbindings: function(){
+					enrollmentDetails = this.getView().getModel("oEnrollModel").getData();
+					console.log(enrollmentDetails);
+
+					consentDetails = this.getView().getModel("oConsentModel").getData()?.ConsentDetail;
+					console.log(consentDetails);
+
+					locationDetails = this.getView().getModel("locationModel").getData();
+					console.log(locationDetails);
+				},
+
 				validateTermsAndConditionIsVerified: function(sContainerId){
 					const oErrorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
 
@@ -375,44 +373,93 @@ sap.ui.define([
 							// Filtered the input and combobox controls
 							if (control instanceof sap.m.CheckBox) {
 								const inputvalue = control.getSelected();
+								console.log(inputvalue);
 								
 								const innerDiv = control.$().find(".sapMCbBg");
 								
 							if(inputvalue) {
 								oErrorVisibilityModel.setProperty('/isTermsAndConditionVerifiedStatus', false);
 								innerDiv.removeClass("checkbox-error-view");
+								console.log('checked');
 							}
-							else oErrorVisibilityModel.setProperty('/isTermsAndConditionVerifiedStatus', true);	
+							else {
+								oErrorVisibilityModel.setProperty('/isTermsAndConditionVerifiedStatus', true);	
 								innerDiv.addClass("checkbox-error-view");
+								console.log('unchecked');	
 							}		
+						}
             });
 				},
 
 				setErrorMessageTripVisibility: function(){
 					const oErrorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
-					console.log(Object.values(validationFlags), validationFlags);
+					console.log(Object.values(validationFlags));
 
 					if(Object.values(validationFlags).includes(false)) 
 						oErrorVisibilityModel.setProperty('/isInputInValid', true);
 					else oErrorVisibilityModel.setProperty('/isInputInValid', false);
 				},
 
-				submitAction: function(){
+				convertDateFormat: function(dateString) {
+					// Split the input date by '/'
+					const [day, month, year] = dateString.split('/');
+			
+					// Rearrange to 'YYYY-MM-DD' and return
+					return `${year}-${month}-${day}`;
+			},
+
+				submitAction: async function(){
 					const oErrorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
           const oErrorVisibilityModelData = oErrorVisibilityModel.getData();
 
-					console.log(oErrorVisibilityModelData);
+					console.log('axios call');
 					
-
 					if(!oErrorVisibilityModelData?.isInputInValid && !oErrorVisibilityModelData?.isTermsAndConditionVerifiedStatus){
-						// axios call
-						console.log('axios call to create');
 						
+						// Retrieve the data from binded models
+						this.retrieveAllInputbindings();
+
+						// Url to create the enrollment application
+						const enrollmentCreateUrl = this.SERVERHOST + 'service/CreateEnrollmentFormDetail';
+
+						const enrollmentFormDetails = {
+							AccountDetail: JSON.stringify({
+								...enrollmentDetails['AccountDetail'], 
+								FirstName: enrollmentDetails['AccountDetail']['SiteFirstName'], 
+								LastName: enrollmentDetails['AccountDetail']['SiteLastName'],
+								EmailAddr: enrollmentDetails['AccountDetail']['SiteEmailAddr']}),
+							BuildingDetail: JSON.stringify(locationDetails['locations']),
+							ApplicationDetail: JSON.stringify({'SignatureSignedBy': enrollmentDetails['SignatureSignedBy'], 'SignatureSignedDate': this.convertDateFormat(enrollmentDetails['SignatureSignedDate'])}),
+							ConsentDetail: JSON.stringify([{
+								"FirstName": consentDetails['ConsentFirstName'],
+								"LastName": consentDetails['ConsentLastName'],
+								"SiteContactTitle": consentDetails['ConsentContactTitle'],
+								"Address": consentDetails['ConsentAddress'],
+								"City": consentDetails['ConsentCity'],
+								"State": consentDetails['ConsentState'],
+								"Zipcode": consentDetails['ConsentZipcode'],
+								"AccountNumber": consentDetails['ConsentAccountNumber'],
+								"PhoneNumber": consentDetails['ConsentPhoneNumber'],
+								"EmailAddr": consentDetails['ConsentEmailAddr'],
+								"AuthPersonName": consentDetails['AuthPersonName'],
+								"AuthDate": this.convertDateFormat(consentDetails['AuthDate']),
+								"AuthTitle": consentDetails['AuthTitle'],
+							}])
+						};
+						
+						// Post request to create a enrollment application
+						const {data} = await axios.post(enrollmentCreateUrl, enrollmentFormDetails);
+						
+						if(data.value.statusCode === 200){
+							this.getOwnerComponent().getRouter().navTo("Confirmation", {
+								StatusCode: data.value.statusCode,
+								Message: data.value.Message
+							});
+						}
 					}
 				},
 
         handleSubmit: async function () {
-					this.retrieveAllInputbindings();
 					this.validateFormDetails("account-info-container", true, "oEnrollModel", "accountDetailsValidation");
 					this.validateFormDetails("site-contact-info-container", true, "oEnrollModel", "siteDetailsValidation");
 					this.validateBuildingDetails("building-detail-main-container");

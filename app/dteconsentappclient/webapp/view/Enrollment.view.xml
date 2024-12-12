@@ -50,7 +50,7 @@
                             </l:VerticalLayout>
 
                             <l:VerticalLayout id="zip-code" class="vertical-layout">
-                                <Label id="company-zipcode" labelFor="zipcode" text="zipcode"></Label>
+                                <Label id="company-zipcode" labelFor="zipcode" text="Zipcode"></Label>
                                 <Input id="zipcode" class="inputBox" type="Number" required="true" liveChange="onLiveChange" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/Zipcode}"/>
                             </l:VerticalLayout>
 
@@ -67,7 +67,7 @@
                             <Label id="has-participate" text="Do you already participate in the DTE Energy Data Hub Program?"></Label>
                             <RadioButtonGroup id="radio-group" select="onRadioButtonSelect">
                                 <RadioButton id="yes" text="Yes"></RadioButton>
-                                <RadioButton id="no" text="No"></RadioButton>
+                                <RadioButton id="no" text="No" selected="true"></RadioButton>
                             </RadioButtonGroup>
                         </VBox>
 
@@ -111,7 +111,7 @@
                         </l:VerticalLayout>
 
                         <l:VerticalLayout id="site-contact-zipcode" class="vertical-layout">
-                            <Label id="site-contact-zipcode-label" labelFor="site-contact-zipcode-value" text="zipcode"></Label>
+                            <Label id="site-contact-zipcode-label" labelFor="site-contact-zipcode-value" text="Zipcode"></Label>
                             <Input id="site-contact-zipcode-value" class="inputBox" liveChange="onLiveChange" type="Number" required="true" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/SiteZipcode}"/>
                         </l:VerticalLayout>        
                     
