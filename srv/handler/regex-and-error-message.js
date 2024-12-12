@@ -1,13 +1,16 @@
 // Standard validation message and regex.
-const email = {
-    "regex": /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-    "message": "Please enter a valid Email Id"
-}
-
-const phoneNumber = {
+const regexAndMessage  = {
+    email : {
+        "regex": /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+        "message": "Please enter a valid Email Id"
+    }
+,
+phoneNumber : {
     "regex": /^(?:\+1\s?)?(\(\d{3}\)|\d{3})[\s\-]?\d{3}[\s\-]?\d{4}$/,
     "message" : "Please enter a valid phone number"
+}    
 }
+
 
 const emptyField = {
     "message": "Please fill the empty fields."
