@@ -88,6 +88,9 @@
 .checkbox-error-view{
     border: 1px solid #f53232;
 }
+.checkbox-selected{
+    background: #1E3575;
+}
 
 @media only screen and (max-width: 600px) {
     .state-and-code{

@@ -6,14 +6,23 @@ sap.ui.define([
 ], (BaseController, Fragment, JSONModel, GlobalInputValues) => {
     "use strict";
 
-    let accountDetails, locationInfo, formDetailsValidation = true, locationDetailsValidation = true;
+    let accountDetails, 
+				locationInfo, 
+				validationFlags = {
+				accountDetailsValidation: true, 
+				siteDetailsValidation: true,
+				customerAuthDetailValidation: true,
+				locationDetailsValidation: true,
+				consentDetailValidation: true,
+				consentAuthDetailValidation: true
+				}
+
 
     return BaseController.extend("dteconsentappclient.controller.Enrollment", {
         onInit() {
 					
         // Assign url and headers into this controller global scope
-          const { url, headers } = this.getApiConfig();
-          this.HEADERS = headers;
+          const { url } = this.getApiConfig();
           this.SERVERHOST = url;
 
           let oEnrollFormData = {
@@ -35,27 +44,34 @@ sap.ui.define([
                 "SiteZipcode": null,
                 "SitePhoneNumber":"",
                 "SiteEmailAddr":""
-            },
-            ConsentDetail: {
-                "ConsentFirstName": "",
-                "ConsentLastName": "",
-                "ConsentContactTitle":"",
-                "ConsentAddress": "",
-                "ConsentCity":"",
-                "ConsentState": "",
-                "ConsentZipcode": null,
-                "ConsentAccountNumber":"",
-                "ConsentPhoneNumber":"",
-                "ConsentEmailAddr":"",
-								"AuthPersonName":"",
-								"AuthDate":"",
-								"AuthTitle":""
             }
         };
 
         // Set the JSONModel with the correct name
         const oEnrollModel = new JSONModel(oEnrollFormData);
         this.getView().setModel(oEnrollModel, "oEnrollModel");
+
+			let oConsentData = {
+				ConsentDetail: {
+					"ConsentFirstName": "",
+					"ConsentLastName": "",
+					"ConsentContactTitle":"",
+					"ConsentAddress": "",
+					"ConsentCity":"",
+					"ConsentState": "",
+					"ConsentZipcode": null,
+					"ConsentAccountNumber":"",
+					"ConsentPhoneNumber":"",
+					"ConsentEmailAddr":"",
+					"AuthPersonName":"",
+					"AuthDate":"",
+					"AuthTitle":""
+        }
+			};
+
+			// Set the JSONModel with the correct name
+			const oConsentModel = new JSONModel(oConsentData);
+			this.getView().setModel(oConsentModel, "oConsentModel");
 
         const oModel = new JSONModel({
             locations: [], // Array to hold all building location data
@@ -149,15 +165,15 @@ sap.ui.define([
         // Define model and load the Customer consent form fragment to the enrollment form
         loadConsentForm: function(){
             const oView = this.getView();
-            const oEnrollModel = oView.getModel("oEnrollModel");
+            const oConsentModel = oView.getModel("oConsentModel");
 
             const enrollmentConsentContainer = this.byId("enrollment-consent-section");
             Fragment.load({
                 name: "dteconsentappclient.fragment.Consentform",
                 controller: this
             }).then(function (oFragment) {
-                oFragment.setModel(oEnrollModel, "oEnrollModel");
-                oFragment.bindElement('oEnrollModel');
+                oFragment.setModel(oConsentModel, "oConsentModel");
+                oFragment.bindElement('oConsentModel');
                 
                 enrollmentConsentContainer.addItem(oFragment);
             }).catch(function (err) {
@@ -167,15 +183,15 @@ sap.ui.define([
 
         // Define model and load the Customer Auth and Release section fragment to the enrollment form
         loadAuthAndRelease: function(){
-            const oEnrollModel = this.getView().getModel("oEnrollModel");
+            const oConsentModel = this.getView().getModel("oConsentModel");
 
             const customerAuthAndReleaseContainer = this.byId("customer-auth-and-release-container");
             Fragment.load({
                 name: "dteconsentappclient.fragment.AuthAndRelease",
                 controller: this
             }).then(function (oFragment) {
-                oFragment.setModel(oEnrollModel, "oEnrollModel");
-                oFragment.bindElement('oEnrollModel');
+                oFragment.setModel(oConsentModel, "oConsentModel");
+                oFragment.bindElement('oConsentModel');
                 
                 customerAuthAndReleaseContainer.addItem(oFragment);
             }).catch(function (err) {
@@ -188,6 +204,9 @@ sap.ui.define([
 					const isConsentAndSiteSame = oEvent.getParameters().selected;
 					const oEnrollModel = this.getView().getModel("oEnrollModel");
 					const enrollmentData = oEnrollModel.getData();
+
+					const oConsentModel = this.getView().getModel("oConsentModel");
+					const consentData = oConsentModel.getData();
 					
 					const accountDetailsKeys = Object.keys(enrollmentData.AccountDetail);
 
@@ -201,12 +220,12 @@ sap.ui.define([
 						accountDetailsKeys.map((key)=>{
 							if(key.startsWith('Site')){
 								const consentkey = key.replace('Site', 'Consent');
-								oEnrollModel.setProperty(`/ConsentDetail/${consentkey}`, enrollmentData['AccountDetail'][key]);
+								oConsentModel.setProperty(`/ConsentDetail/${consentkey}`, enrollmentData['AccountDetail'][key]);
 							}
 						});
-						this.validateFormDetails("enrollment-consent-section", false);		
+						this.validateFormDetails("enrollment-consent-section", false, "oConsentModel", "consentDetailValidation");		
 					}else{
-							oEnrollModel.setProperty('/ConsentDetail', {
+						oConsentModel.setProperty('/ConsentDetail', {
 								"FirstName": "",
 								"LastName": "",
 								"ConsentContactTitle":"",
@@ -217,9 +236,9 @@ sap.ui.define([
 								"ConsentAccountNumber":"",
 								"ConsentPhoneNumber":"",
 								"ConsentEmailAddr":"",
-								"AuthPersonName": enrollmentData['ConsentDetail']['AuthPersonName'],
-								"AuthDate": enrollmentData['ConsentDetail']['AuthPersonName'],
-								"AuthTitle":enrollmentData['ConsentDetail']['AuthPersonName']
+								"AuthPersonName": consentData['ConsentDetail']['AuthPersonName'],
+								"AuthDate": consentData['ConsentDetail']['AuthPersonName'],
+								"AuthTitle": consentData['ConsentDetail']['AuthPersonName']
 							});
 					}      
         },
@@ -246,6 +265,9 @@ sap.ui.define([
 					accountDetails = this.getView().getModel("oEnrollModel").getData();
 					console.log(accountDetails);
 
+					const consentDetail = this.getView().getModel("oConsentModel").getData();
+					console.log(consentDetail);
+
 					locationInfo = this.getView().getModel("locationModel").getData();
 					console.log(locationInfo);
         },
@@ -254,12 +276,15 @@ sap.ui.define([
 				 * Validate account details site and auth details
 				 * @param {String} sContainerId Container Id
 				 * @param {Boolean} isShowError Have to add value state or not
+				 * @param {Object} model model with bind with the container
+				 * @param {String} validationStatus
 				 */
-        validateFormDetails: function(sContainerId, isShowError){
-					const oEnrollModel = this.getView().getModel("oEnrollModel");
+        validateFormDetails: function(sContainerId, isShowError, model, validationStatus){
+					const oModel = this.getView().getModel(model);
 					const container = this.byId(sContainerId);
 
-					formDetailsValidation = true;
+					validationFlags[validationStatus] = true;
+					
 					// To get the aggregated objects from the given container
 					container.findAggregatedObjects(true, (control) => {
 							
@@ -271,27 +296,26 @@ sap.ui.define([
 								
 								if(bindingPath){
 
-									if(control instanceof sap.m.MaskInput) {
-										console.log(bindingPath, oEnrollModel.getProperty(bindingPath));
+									if(bindingPath === "/ConsentDetail/ConsentAccountNumber"){
+										console.log(oModel.getProperty(bindingPath));
+										console.log(oModel.getData());
 										
 									}
 									
-										const userInput = oEnrollModel.getProperty(bindingPath);
+										const userInput = oModel.getProperty(bindingPath);
 										
 										// Validates that all required fields are filled; if a field is empty, marks it with an error state to indicate validation failure.
 										if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) {
 											if(isShowError){
 												control.setValueState("Error");
 											}
-											formDetailsValidation = false
+											validationFlags[validationStatus] = false
 										}else{
 											control.setValueState("None");
 										}
 								}		
 							}		
             });
-						console.log(formDetailsValidation);
-						
         },
 
 				// Check the input on live change and remove the error state
@@ -312,7 +336,7 @@ sap.ui.define([
 				validateBuildingDetails: function(sContainerId){
 					const olocationModel = this.getView().getModel("locationModel");
 					const container = this.byId(sContainerId);
-					locationDetailsValidation = true;
+					validationFlags["locationDetailsValidation"] = true;
 
 					/**
 					 * Building info have a list of items(one or more buildings)
@@ -332,15 +356,12 @@ sap.ui.define([
 									
 									if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) {
 										control.setValueState("Error");
-										locationDetailsValidation = false;
+										validationFlags["locationDetailsValidation"] = false;
 									}
 								}		
 							}
 						})
-						
 					});
-					console.log(locationDetailsValidation);
-					
 				},
 
 				validateTermsAndConditionIsVerified: function(sContainerId){
@@ -369,10 +390,11 @@ sap.ui.define([
 
 				setErrorMessageTripVisibility: function(){
 					const oErrorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
+					console.log(Object.values(validationFlags), validationFlags);
 
-					if(formDetailsValidation && locationDetailsValidation) 
-						oErrorVisibilityModel.setProperty('/isInputInValid', false);
-					else oErrorVisibilityModel.setProperty('/isInputInValid', true);
+					if(Object.values(validationFlags).includes(false)) 
+						oErrorVisibilityModel.setProperty('/isInputInValid', true);
+					else oErrorVisibilityModel.setProperty('/isInputInValid', false);
 				},
 
 				submitAction: function(){
@@ -391,12 +413,12 @@ sap.ui.define([
 
         handleSubmit: async function () {
 					this.retrieveAllInputbindings();
-					this.validateFormDetails("account-info-container", true);
-					this.validateFormDetails("site-contact-info-container", true);
+					this.validateFormDetails("account-info-container", true, "oEnrollModel", "accountDetailsValidation");
+					this.validateFormDetails("site-contact-info-container", true, "oEnrollModel", "siteDetailsValidation");
 					this.validateBuildingDetails("building-detail-main-container");
-					this.validateFormDetails("auth-info-container", true);
-					this.validateFormDetails("enrollment-consent-section", true);
-					this.validateFormDetails("customer-auth-and-release-container", true);
+					this.validateFormDetails("auth-info-container", true, "oEnrollModel", "customerAuthDetailValidation");
+					this.validateFormDetails("enrollment-consent-section", true, "oConsentModel", "consentDetailValidation");
+					this.validateFormDetails("customer-auth-and-release-container", true, "oConsentModel", "consentAuthDetailValidation");
 					this.validateTermsAndConditionIsVerified("customer-auth-and-release-container");
 					this.setErrorMessageTripVisibility();
 

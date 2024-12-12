@@ -17,7 +17,7 @@
 
 		<layout:VerticalLayout class="vertical-layout">
 			<Label text="Location Address" required="true"></Label>
-			<Input class="inputBox" liveChange="onLiveChange" required="true" placeholder="Filled out by user">
+			<Input class="inputBox" liveChange="onLiveChange" value="{locationModel>locationAddress}"  required="true" placeholder="Filled out by user">
 			</Input>
 		</layout:VerticalLayout>
 
@@ -36,7 +36,7 @@
 		
 		<layout:VerticalLayout class="vertical-layout">
 			<Label text="zipcode" required="true"></Label>
-			<Input class="inputBox" value="{locationModel>zipcode}" liveChange="onLiveChange" required="true" placeholder="Filled out by user"/>
+			<Input class="inputBox" value="{locationModel>zipcode}" type="Number" liveChange="onLiveChange" required="true" placeholder="Filled out by user"/>
 		</layout:VerticalLayout>
 	
 	</VBox>
