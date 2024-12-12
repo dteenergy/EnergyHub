@@ -8,7 +8,7 @@ sap.ui.define([
 
     let accountDetails, locationInfo, formDetailsValidation = true, locationDetailsValidation = true;
 
-    return BaseController.extend("dteconsentappclient.controller.Landlord", {
+    return BaseController.extend("dteconsentappclient.controller.Enrollment", {
         onInit() {
 					
         // Assign url and headers into this controller global scope

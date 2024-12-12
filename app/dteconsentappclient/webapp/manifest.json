@@ -100,29 +100,18 @@
       },
       "routes": [
         {
-          "name": "RouteView1",
-          "pattern": ":?query:",
-          "target": [
-            "TargetView1"
-          ]
-        },
-        {
-          "name": "Landlord",
-          "pattern": "landlord",
-          "target": ["LandlordForm"]
+          "name": "Enrollment",
+          "pattern": "landlord/enrollment",
+          "target": ["EnrollmentForm"]
         }
       ],
       "targets": {
-        "TargetView1": {
-          "id": "View1",
-          "name": "View1"
-        },
-        "LandlordForm": {
+        "EnrollmentForm": {
           "viewType": "XML",
           "transition":"slide",
           "clearControlAggregation": false,
-          "viewId": "Landlord",
-          "viewName": "Landlord"
+          "viewId": "Enrollment",
+          "viewName": "Enrollment"
         }
       }
     },

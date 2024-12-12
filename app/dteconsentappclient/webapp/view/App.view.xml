@@ -7,38 +7,9 @@
     xmlns:core="sap.ui.core"
     xmlns:uxap="sap.uxap"
     >
-    
-    <tnt:ToolHeader id="header" class="app-header">
-        <Text id="header-title" class="header-title" text="DTE Energy Data Hub"></Text>
-        <Image id="dte-logo" src="images/DTE-logo.png" alt="DTE-Logo"></Image>
-        <Link id="dte-web-site" class="dte-web-site" href="https://www.dteenergy.com/us/en.html" text="Visit DTEEnergy.com" icon="sap-icon://arrow-top"></Link>
-    </tnt:ToolHeader>
-    
     <Page id="idMainPage" showHeader="false">
       <content>
         <App id="app" />
         </content>
-            <!-- <footer>
-                <OverflowToolbar id="idUserFooterOverflowToolbar" class="footerAlignment" design="Solid">
-                <content>
-                <FlexBox id="footer-container" class="footer-container">
-
-                    <Image id="footer-logo-image" alt="DTE-logo" src="images/DTE-logo.png"></Image>
-                    <FlexBox id="social-media-container" class="social-media-container" items="{socialMediaModel>/sMediaDetails}">
-                    <items>
-                        <Image src="{socialMediaModel>path}" alt="{socialMediaModel>alt}" press="onSocialMedia"></Image>
-                        </items>
-                    </FlexBox>
- 
-                    <FlexBox id="legal-info" class="legal-info-details">
-                        <Link id="terms" class="legal-info-links" href="https://www.dteenergy.com/us/en/quicklinks/terms-conditions.html" text="Terms &amp; Conditions"></Link>
-                        <Link id="privacy-policy" class="legal-info-links" href="https://www.dteenergy.com/us/en/quicklinks/online-privacy-policy.html" text="Online Privacy Policy" target=""></Link>
-                        <Link id="contact" class="legal-info-links" href="https://www.dteenergy.com/us/en/quicklinks/contact-us.html" text="Contact Us" target=""></Link>
-                    </FlexBox>
-                    <Text id="idUserFooterText" class="footerText" text="© 2024 DTE Energy. All rights reserved" />
-                </FlexBox>
-                </content>
-            </OverflowToolbar>
-            </footer> -->
     </Page>
 </mvc:View>

@@ -1,4 +1,4 @@
-<mvc:View controllerName="dteconsentappclient.controller.View1"
+<mvc:View controllerName="dteconsentappclient.controller.Consent"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m">
     <Page id="page" title="{i18n>title}" showHeader="false">

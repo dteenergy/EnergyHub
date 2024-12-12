@@ -1,5 +1,8 @@
-<mvc:View xmlns:core="sap.ui.core" xmlns:form="sap.ui.layout.form" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:l="sap.ui.layout" controllerName="dteconsentappclient.controller.Landlord">
-    <Page id="landloard-form" showHeader="false">
+<mvc:View xmlns:core="sap.ui.core" xmlns:form="sap.ui.layout.form" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:l="sap.ui.layout" controllerName="dteconsentappclient.controller.Enrollment">
+    <Page id="landloard-form" showHeader="true" showFooter="true">
+        <customHeader>
+            <core:Fragment fragmentName="dteconsentappclient.fragment.Header" type="XML" />
+        </customHeader>
         <content>
             <FlexBox id="landloard-form-main-container" class="landloard-form-main-container" >
                 <FlexBox id="landloard-form-sub-container" class="landloard-form-sub-container">
@@ -16,9 +19,6 @@
                             <Text id="required-instruction-content" text="Indicates a required field" />
                         </FlexBox>
                     </FlexBox>
-
-                    <!-- <Button id="submit-landlord-form" text="Submit" type="Emphasized" press="handleSubmit" class="button-customize"></Button> -->
-
                     
                     <!-- Landlord Enrollment form -->
                     <form:SimpleForm id="enrollment-form"  class="landlord-enrollment-form" layout="ResponsiveGridLayout">
@@ -28,8 +28,6 @@
                         <VBox id="account-info-container" fitContainer="true" class="account-info-container">
                             <Title id="account-info-title" titleStyle="H6" class="form-segment-heading" text="Account Information"></Title>
                             <Text text="(as it appears on customer’s monthly DTE Energy bill)" />
-
-                            <core:HTML content="&lt;h6&gt;&lt;span class=&quot;form-segment-heading&quot;&gt;Account Information&lt;span/&gt;"></core:HTML>
 
                             <l:VerticalLayout class="vertical-layout">
                                 <Label id="company-name-label" labelFor="company-name" text="Company Name"></Label>

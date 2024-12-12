@@ -3,7 +3,7 @@ sap.ui.define([
 ], (Controller) => {
     "use strict";
 
-    return Controller.extend("dteconsentappclient.controller.View1", {
+    return Controller.extend("dteconsentappclient.controller.Consent", {
         onInit() {
         }
     });
