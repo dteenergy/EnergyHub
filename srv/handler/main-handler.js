@@ -18,6 +18,7 @@ module.exports = cds.service.impl(async function (srv) {
 		}
 	}),
 
+		// Validate the Application Id
 		srv.on('Application', async (req) => {
 			const { ApplicationDetail } = this.entities;
 			// Get the encrypted app reference id
