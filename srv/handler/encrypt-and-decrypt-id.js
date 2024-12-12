@@ -9,9 +9,9 @@ const valueEncrypt = async (data) => {
   if (!data) throw { status: 400, message: 'No data found' }
   try {
     // Perform AES encryption using the SECRET_KEY from environment variables
-    const encrAppId = cryptoJs.AES.encrypt(data, process.env.SECRET_KEY).toString();
+    const  encryptedData = cryptoJs.AES.encrypt(data, process.env.SECRET_KEY).toString();
     
-    return encrAppId;
+    return  encryptedData;
   } catch (err) {
     throw { status: 500, message: 'Failed to encrypt the data' }
   }
@@ -29,12 +29,12 @@ const valueDecrypt = async (data) => {
     const parsedId = data.trim().replace(/ /g, '+');
 
     // Perform AES decryption using the SECRET_KEY from environment variables
-    const decryptByte = cryptoJs.AES.decrypt(parsedId, process.env.SECRET_KEY);
+    const decryptedByte = cryptoJs.AES.decrypt(parsedId, process.env.SECRET_KEY);
   
     // Convert the decrypted data from bytes to a UTF-8 string
-    const actualData = decryptByte.toString(cryptoJs.enc.Utf8);
+    const decryptedStr = decryptedByte.toString(cryptoJs.enc.Utf8);
     
-    return actualData;
+    return decryptedStr;
   } catch (err) {
       throw { status: 500, message: 'Failed to encrypt the data' }
   }

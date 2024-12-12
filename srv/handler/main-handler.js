@@ -3,6 +3,7 @@ const cds = require('@sap/cds');
 const createEnrollmentFormDetail = require('./create-enrollment-form-action');
 const createConsentFormDetail = require('./create-consent-form-action');
 const { valueEncrypt, valueDecrypt } = require('./encrypt-and-decrypt-id');
+const validateApplicationId = require('./validate-app-id');
 
 module.exports = cds.service.impl(async function (srv) {
 	srv.on('CreateEnrollmentFormDetail', async (req) => {
@@ -19,21 +20,18 @@ module.exports = cds.service.impl(async function (srv) {
 	}),
 
 		// Validate the Application Id
-		srv.on('Application', async (req) => {
-			const { ApplicationDetail } = this.entities;
-			// Get the encrypted app reference id
-			const encrAppId = req?._.req?.query?.encrAppId;
-
-			// Decrypt the AppId
-			const decryptedData = await valueDecrypt(encrAppId);
-
-			// Fetch the application details by AppId and select only the AppId column
-			const applicationDetail = await SELECT.from(ApplicationDetail).where({ 'AppId': decryptedData }).columns(['AppId']);
-
-			// If applicationDetail result is empty
-			if (applicationDetail?.length === 0) throw { status: 404, message: 'Application Detail not found for the Id' }
-			else return { status: 200, message: 'Application Details are available.' }
-
+		srv.on('validateApplicationId', async (req) => {
+			try {
+				// Method to validate the app id.
+				const validationStatus = validateApplicationId(req, this.entities);
+				
+				return validationStatus;
+			} catch (e) {
+				if (e.status) {
+					return { status: e.status, message: e.message }
+				}
+				return { status: 500, 'error': 'Failed to validate the app id.' }
+			}
 		}),
 
 		srv.on('CreateConsentFormDetail', async (req) => {

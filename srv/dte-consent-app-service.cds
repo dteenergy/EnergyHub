@@ -21,7 +21,7 @@ service DTEConsentAppPortal {
     ) returns String;
 
     // Validate the Application Id
-    function Application () returns String;
+    function validateApplicationId () returns String;
     
     // Testing AppId Encrypt Function
     function AppIdEncrypt() returns String;
