@@ -12,7 +12,7 @@ const createConsentFormDetail = async (req, entity, tx) => {
     const { ConsentDetail } = req?.data;
 
     // Parse the String Payload
-    let consentDetailParsedData = JSON.parse(ConsentDetail);
+    const consentDetailParsedData = JSON.parse(ConsentDetail);
 
     // Check the Consent details fields contains the empty value.
     const consentDetailFieldCheck = Object.values(consentDetailParsedData).some(value => value === '');
@@ -35,27 +35,27 @@ const createConsentFormDetail = async (req, entity, tx) => {
     // Return 404 if no ApplicationDetail found
     if (applicationDetailResult?.length === 0)
       throw { status: 404, message: "Enrollment details not available for this AppId." }
-    else {
-      // Assign AppId to ApplicationConsent
-      consentDetailParsedData.AppRefId_AppId = applicationDetailResult[0].AppId;
 
-      // Remove the AppId from the Payload
-      delete consentDetailParsedData.AppId;
+    // Assign AppId to ApplicationConsent
+    consentDetailParsedData.AppRefId_AppId = applicationDetailResult[0].AppId;
 
-      // Insert Consent Form details to database
-      const consentDetailResponse = await tx.run(INSERT.into(entity.ApplicationConsent).entries(consentDetailParsedData));
+    // Remove the AppId from the Payload
+    delete consentDetailParsedData.AppId;
 
-      // Check Consent Form Details inserted successfully
-      if (consentDetailResponse?.results?.length > 0) 
-        return { status: 200, message: 'Consent Form Created successfully' }
-    }
+    // Insert Consent Form details to database
+    const consentDetailResponse = await tx.run(INSERT.into(entity.ApplicationConsent).entries(consentDetailParsedData));
+
+    // Check Consent Form Details inserted successfully
+    if (consentDetailResponse?.results?.length > 0)
+      return { status: 200, message: 'Consent Form Created successfully' }
+
   } catch (error) {
-      if (error.status) {
-        return { status: error.status, message: error.message };
-      } else
-          return {
-            status: 500, error: error.message
-          }
+    if (error.status) {
+      return { status: error.status, message: error.message };
+    } else
+      return {
+        status: 500, error: error.message
+      }
   }
 }
 
