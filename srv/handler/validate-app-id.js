@@ -1,5 +1,11 @@
 const { valueDecrypt } = require("./encrypt-and-decrypt-id");
 
+/**
+ * Validate the Application Id
+ * @param {object} req 
+ * @param {entity} entity 
+ * @returns {object} props => status and message
+ */
 const validateApplicationId = async(req, entity) => {
     // Get the encrypted app id
 	const encrAppId = req?._.req?.query?.encrAppId;
