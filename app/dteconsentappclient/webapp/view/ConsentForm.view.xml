@@ -1,0 +1,51 @@
+<mvc:View
+	controllerName="dteconsentappclient.controller.ConsentForm"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m"
+	xmlns:c="sap.ui.core"
+	displayBlock="true"
+	height="100%"
+	busyIndicatorDelay="0"
+>
+    <Page
+        backgroundDesign="Standard"
+        contentOnlyBusy="false"
+        enableScrolling="true"
+        floatingFooter="false"
+        navButtonTooltip=""
+        showFooter="true"
+        showHeader="true"
+        showNavButton="false"
+        showSubHeader="true"
+        title=""
+        titleAlignment="Auto"
+        titleLevel="Auto"
+    >
+        <content>
+            <Label id="idStillInContructionLabel"
+                design="Standard"
+                displayOnly="false"
+                required="false"
+                showColon="false"
+                text="empty string"
+                textAlign="Begin"
+                textDirection="Inherit"
+                vAlign="Inherit"
+                wrapping="false"
+                wrappingType="Normal"
+            >
+                
+            </Label>
+        </content>
+        <customHeader>
+        </customHeader>
+        <footer>
+        </footer>
+        <headerContent>
+        </headerContent>
+        <landmarkInfo>
+        </landmarkInfo>
+        <subHeader>
+        </subHeader>
+    </Page>
+</mvc:View>
