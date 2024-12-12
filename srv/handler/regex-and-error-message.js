@@ -11,7 +11,6 @@ const regexAndMessage = {
     }
 }
 
-
 const emptyField = {
     "message": "Please fill the empty fields."
 }
