@@ -97,10 +97,10 @@
       },
       "routes": [
         {
-          "name": "RouteView1",
-          "pattern": ":?query:",
+          "name": "ConsentForm",
+          "pattern": "consent-from/{appId}",
           "target": [
-            "TargetView1"
+            "TargetConsentForm"
           ]
         },
         {
@@ -110,9 +110,12 @@
         }
       ],
       "targets": {
-        "TargetView1": {
-          "id": "View1",
-          "name": "View1"
+        "TargetConsentForm": {
+          "viewType": "XML",
+          "transition":"slide",
+          "clearControlAggregation": false,
+          "viewId": "ConsentFormEntryPoint",
+          "viewName": "ConsentFormEntryPoint"
         },
         "LandlordForm": {
           "viewType": "XML",
