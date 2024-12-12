@@ -5,17 +5,17 @@
 	<VBox class="auth-and-release-container" width="100%">
 		<l:VerticalLayout class="vertical-layout">
 			<Label text="Name of Authorized Person" required="true"></Label>
-			<Input class="inputBox" type="Text" value="o{AuthAndReleaseModel>/AuthPersonName}"></Input>
+			<Input class="inputBox" type="Text" liveChange="onLiveChange" required="true" value="{oEnrollModel>/ConsentDetail/AuthPersonName}"></Input>
 		</l:VerticalLayout>
 
 		<l:VerticalLayout class="vertical-layout">
-			<Label text="Date"></Label>
-			<MaskInput mask="99/99/9999" width="100%" value="{oAuthAndReleaseModel>/AuthDate}"/>
+			<Label text="Date" required="true"></Label>
+			<MaskInput mask="99/99/9999" width="100%" liveChange="onLiveChange" required="true" value="{oEnrollModel>/ConsentDetail/AuthDate}"/>
 		</l:VerticalLayout>
 
 		<l:VerticalLayout class="vertical-layout">
 			<Label text="Title"></Label>
-			<Input class="inputBox" type="Text" value="{oAuthAndReleaseModel>/AuthTitle}"></Input>
+			<Input class="inputBox" type="Text" value="{oEnrollModel>/ConsentDetail/AuthTitle}"></Input>
 		</l:VerticalLayout>
 
 		<Text text="I understand that by reason of this Authorization, the named Authorized Third Party
