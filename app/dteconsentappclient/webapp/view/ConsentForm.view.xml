@@ -24,7 +24,9 @@
         titleLevel="Auto"
     >
         <content>
-
+            <!-- <HBox > -->
+                <core:Fragment fragmentName="dteconsentappclient.fragment.Header" type="XML"></core:Fragment>
+            <!-- </HBox> -->
             <FlexBox id="tenant-consent-form-main-container" class="landloard-form-main-container" >
                 <FlexBox id="tenant-consent-form-sub-container" class="landloard-form-sub-container">
                 <items>
@@ -134,6 +136,8 @@
                 </items>
                 </FlexBox>
             </FlexBox>
+
+            <core:Fragment fragmentName="dteconsentappclient.fragment.Footer" type="XML"></core:Fragment>
         </content>
     </Page>
 </mvc:View>

@@ -1,5 +1,5 @@
 sap.ui.define([
-    "sap/ui/core/mvc/Controller",
+    "dteconsentappclient/controller/BaseController",
     "sap/ui/core/mvc/XMLView"
 ], (BaseController, XMlView) => {
     "use strict";
@@ -8,7 +8,11 @@ sap.ui.define([
         onInit () {
             // Get param from router path
             const oRouter = this.getOwnerComponent().getRouter();
-			oRouter.getRoute("ConsentForm").attachPatternMatched(this.getRouteParams, this)     
+			oRouter.getRoute("ConsentForm").attachPatternMatched(this.getRouteParams, this);     
+
+            // Get the url
+            const { url } = this.getApiConfig();
+            this.SERVERHOST = url;
         },
         /**
          * Get router params from router
@@ -23,19 +27,25 @@ sap.ui.define([
          * Validate Application Id 
          * @param {string} appId 
          */
-        validateAppId(appId){
-            const isValidAppId = appId == "4322";
+        validateAppId: async function(appId){
+
+            const validationUrl = this.SERVERHOST + `service/validateApplicationId?encrAppId=${appId}`
+
+            // Post request to create a tenant consent.
+			const {data} = await axios.get(validationUrl);
 
             /**
              * Check requested Application ID is valid
              * If true, then render Consent Form View 
              * Else navigate to 404 page.
              */
-            if(isValidAppId){
+            // const data = {value:{status: 200}};
+            if(data.value.status === 200){
                 XMlView.create({
                     viewName: "dteconsentappclient.view.ConsentForm",
+                    viewData: {applicationId: appId, url: this.SERVERHOST},
                 }).then(function(oView) {
-                    
+
                     oView.placeAt("content")
                 });
             }else{

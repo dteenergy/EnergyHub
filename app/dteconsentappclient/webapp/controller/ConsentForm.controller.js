@@ -1,5 +1,5 @@
 sap.ui.define([
-	"sap/ui/core/mvc/Controller",
+	"dteconsentappclient/controller/BaseController",
 	"sap/ui/core/Fragment",
   "sap/ui/model/json/JSONModel",
 	"dteconsentappclient/variable/GlobalInputValues"
@@ -14,10 +14,20 @@ sap.ui.define([
 	let validationFlags = {
 		tenantInformationValidation: true,
 		consentAuthDetailValidation: true
-	}
+	};
+	const validationProperties = [
+		{sContainerId: "tenant-consent-form-container-id", isShowError: true, model: "oConsentModel", validationStatus: "tenantInformationValidation"},
+		{sContainerId: "tenant-auth-and-release-container-id", isShowError: true, model: "oConsentModel", validationStatus: "consentAuthDetailValidation"}
+	]
 
 	return BaseController.extend("dteconsentappclient.controller.ConsentForm", {
         onInit () {
+
+					const {applicationId, url} = this.getView().getViewData();
+					console.log(url);
+					
+					this.applicationId = applicationId;
+					this.SERVERHOST = url;
 
 					let oConsentData = {
 						ConsentDetail: {
@@ -187,21 +197,50 @@ sap.ui.define([
 			}
 		},
 
-			submitTenantConsentForm: function(){
+			submitTenantConsentForm: async function(){
 				const oErrorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
-          const oErrorVisibilityModelData = oErrorVisibilityModel.getData();
+        const oErrorVisibilityModelData = oErrorVisibilityModel.getData();
+					
+				consentDetails = this.getView().getModel("oConsentModel").getData()?.ConsentDetail;
+					console.log(consentDetails);
 					
 					if(!oErrorVisibilityModelData?.isInputInValid && !oErrorVisibilityModelData?.isTermsAndConditionVerifiedStatus){
 
 						// Url to create the enrollment application
-						const enrollmentCreateUrl = this.SERVERHOST + 'service/CreateEnrollmentFormDetail';
-					}
+						const tenantConsentCreateUrl = this.SERVERHOST + `service/CreateConsentFormDetail?${this.applicationId}`;
 
-			},
+						const tenantConsentFormDetails = {
+							ConsentDetail: JSON.stringify({
+								"FirstName": consentDetails['ConsentFirstName'],
+								"LastName": consentDetails['ConsentLastName'],
+								"Address": consentDetails['ConsentAddress'],
+								"City": consentDetails['ConsentCity'],
+								"State": consentDetails['ConsentState'],
+								"Zipcode": consentDetails['ConsentZipcode'],
+								"AccountNumber": consentDetails['ConsentAccountNumber'],
+								"EmailAddr": consentDetails['ConsentEmailAddr'],
+								"AuthPersonName": consentDetails['AuthPersonName'],
+								"AuthDate": this.convertDateFormat(consentDetails['AuthDate']),
+								"AuthTitle": consentDetails['AuthTitle'],
+							})
+						}
+					
+					// Post request to create a tenant consent.
+					const {data} = await axios.post(tenantConsentCreateUrl, tenantConsentFormDetails);
+						
+					if(data.value.statusCode === 200){
+						this.getOwnerComponent().getRouter().navTo("Confirmation", {
+							StatusCode: data.value.statusCode,
+							Message: data.value.Message
+						});
+					}
+			}
+		},
 
 			onSubmit: function(){
-				this.validateFormDetails("tenant-consent-form-container-id", true, "oConsentModel", "tenantInformationValidation");
-				this.validateFormDetails("tenant-auth-and-release-container-id", true, "oConsentModel", "consentAuthDetailValidation");
+				validationProperties.map(({sContainerId, isShowError, model, validationStatus}) => {
+					this.validateFormDetails(sContainerId, isShowError, model, validationStatus);
+				});
 				this.validateTermsAndConditionIsVerified("tenant-auth-and-release-container-id");
 				this.setErrorMessageTripVisibility();
 
