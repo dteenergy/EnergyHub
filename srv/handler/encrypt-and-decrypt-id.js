@@ -7,10 +7,8 @@ const { emptyField } = require('./regex-and-error-message');
  * @returns string
  */
 const valueEncrypt = async (data) => {
-  if (!data) throw { status: 400, message: 'No data found' }
-  try { 
-    if((data === '""')) throw {status : 400, message: "Please send the Reference Id"} 
-    
+  if ((!data) || (data === '""')) throw { status: 400, message: 'No data found' }
+  try {     
     // Perform AES encryption using the ENCRYPT_APPID_SECRET_KEY from environment variables
     const encryptedData = cryptoJs.AES.encrypt(data, process.env.ENCRYPT_APPID_SECRET_KEY).toString();
 

@@ -42,6 +42,7 @@ module.exports = cds.service.impl(async function (srv) {
 				
 				if ((validationStatus.status === 400) || (validationStatus.status === 500)) return { validationStatus }
 
+				// Store the Encrypted Application Id
 				const encryptedAppId = req?._.req?.query?.encrAppId;
 
 				// Method to create the Consent Form details
