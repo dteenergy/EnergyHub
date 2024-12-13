@@ -24,7 +24,7 @@ module.exports = cds.service.impl(async function (srv) {
 			try {
 				// Method to validate the app id.
 				const validationStatus = validateApplicationId(req, this.entities);
-				
+
 				return validationStatus;
 			} catch (e) {
 				if (e.status) {
@@ -37,8 +37,15 @@ module.exports = cds.service.impl(async function (srv) {
 		srv.on('CreateConsentFormDetail', async (req) => {
 			const tx = cds.tx(req);
 			try {
+				// Method to validate the app id.
+				const validationStatus = await validateApplicationId(req, this.entities);
+				
+				if ((validationStatus.status === 400) || (validationStatus.status === 500)) return { validationStatus }
+
+				const encryptedAppId = req?._.req?.query?.encrAppId;
+
 				// Method to create the Consent Form details
-				const consentResponse = await createConsentFormDetail(req, this.entities, tx);
+				const consentResponse = await createConsentFormDetail(req, this.entities, tx, encryptedAppId);
 
 				return consentResponse;
 			} catch (e) {

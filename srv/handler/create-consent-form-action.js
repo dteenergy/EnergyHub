@@ -6,7 +6,7 @@ const { validateWithRegex } = require("./regex-and-error-message");
  * entity => function
  * tx => function
  */
-const createConsentFormDetail = async (req, entity, tx) => {
+const createConsentFormDetail = async (req, entity, tx, encryptedAppId) => {
 
   try {
     const { ConsentDetail } = req?.data;
@@ -24,7 +24,7 @@ const createConsentFormDetail = async (req, entity, tx) => {
     validateWithRegex(consentDetailParsedData?.PhoneNumber, 'phoneNumber');
 
     // Assign AppId to ApplicationConsent
-    consentDetailParsedData.AppRefId_AppId = appId;
+    consentDetailParsedData.AppRefId_AppId = encryptedAppId;
 
     // Insert Consent Form details to database
     const consentDetailResponse = await tx.run(INSERT.into(entity.ApplicationConsent).entries(consentDetailParsedData));
