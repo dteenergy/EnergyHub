@@ -56,7 +56,7 @@ module.exports = cds.service.impl(async function (srv) {
 						return consentResponse;
 					}
 
-					return decryptedData;
+					return decryptedAppId;
 
 				}
 				return validationStatus;
