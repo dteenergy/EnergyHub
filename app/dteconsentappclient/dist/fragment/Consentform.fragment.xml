@@ -1,0 +1,61 @@
+<core:FragmentDefinition xmlns:layout="sap.ui.layout"
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core"
+>
+    <VBox fitContainer="true" width="100%" class="consent-form-container">
+
+        <layout:VerticalLayout class="vertical-layout">
+            <Label text="FirstName" required="true"></Label>
+            <Input class="inputBox" liveChange="onLiveChange" type="Text" required="true" placeholder="Filled out by user" value="{oConsentModel>/ConsentDetail/ConsentFirstName}"/>
+        </layout:VerticalLayout>
+
+        <layout:VerticalLayout class="vertical-layout">
+            <Label text="LastName"  required="true"></Label>
+            <Input class="inputBox" liveChange="onLiveChange" type="Text" required="true" placeholder="Filled out by user"  value="{oConsentModel>/ConsentDetail/ConsentLastName}"/>
+        </layout:VerticalLayout>
+        
+        <layout:VerticalLayout class="vertical-layout">
+            <Label text="Site Contact Title"  required="true"></Label>
+            <Input class="inputBox" liveChange="onLiveChange" type="Text" required="true" placeholder="Filled out by user" value="{oConsentModel>/ConsentDetail/ConsentContactTitle}"/>
+        </layout:VerticalLayout>
+        
+        <layout:VerticalLayout class="vertical-layout">
+            <Label text="Site Address" required="true"></Label>
+            <Input class="inputBox" liveChange="onLiveChange" type="Text" required="true" placeholder="Filled out by user" value="{oConsentModel>/ConsentDetail/ConsentAddress}"/>
+            <Text class="address-helper-text" text="123 Main st." ></Text>
+        </layout:VerticalLayout>
+        
+        <layout:VerticalLayout  class="vertical-layout">
+            <Label text="City"  required="true"></Label>
+            <Input class="inputBox" liveChange="onLiveChange" type="Text" required="true" placeholder="Filled out by user" value="{oConsentModel>/ConsentDetail/ConsentCity}"/>
+        </layout:VerticalLayout>
+        
+        <layout:VerticalLayout class="vertical-layout">
+            <Label labelFor="consent-form-state-list" text="State"  required="true"></Label>
+            <ComboBox required="true" items="{ostateValuesModel>/}" change="onLiveChange" width="100%" placeholder="Make a Selection" selectedKey="{oConsentModel>/ConsentDetail/ConsentState}">
+                <core:Item text="{ostateValuesModel>text}" key="{ostateValuesModel>text}"></core:Item>
+            </ComboBox>
+        </layout:VerticalLayout>
+
+        <layout:VerticalLayout class="vertical-layout">
+            <Label text="Zipcode"  required="true"></Label>
+            <Input class="inputBox" liveChange="onLiveChange" type="Number" required="true" placeholder="Filled out by user" value="{oConsentModel>/ConsentDetail/ConsentZipcode}"/>
+        </layout:VerticalLayout>  
+
+         <layout:VerticalLayout class="vertical-layout">
+            <Label text="Account Number"  required="true"></Label>
+            <Input class="inputBox" liveChange="onLiveChange" type="Text" required="true" placeholder="Filled out by user" value="{oConsentModel>/ConsentDetail/ConsentAccountNumber}"></Input>
+        </layout:VerticalLayout>      
+    
+        <layout:VerticalLayout class="vertical-layout">
+            <Label text="Phone Number"  required="true"></Label>
+            <Input class="inputBox" liveChange="onLiveChange" type="Number" required="true" placeholder="Filled out by user" value="{oConsentModel>/ConsentDetail/ConsentPhoneNumber}"></Input>
+        </layout:VerticalLayout>
+
+        <layout:VerticalLayout class="vertical-layout">
+            <Label text="Email Address"  required="true"></Label>
+            <Input
+             class="inputBox" liveChange="onLiveChange" type="Email" required="true" placeholder="Filled out by user" value="{oConsentModel>/ConsentDetail/ConsentEmailAddr}"></Input>
+        </layout:VerticalLayout>
+    </VBox>
+</core:FragmentDefinition>

@@ -1,0 +1,2 @@
+sap.ui.define(["sap/ui/core/mvc/Controller","sap/ui/model/json/JSONModel"],(e,t)=>{"use strict";return e.extend("dteconsentappclient.controller.Confirmation",{onInit(){const e=this.getOwnerComponent().getRouter();e.getRoute("Confirmation").attachPatternMatched(this.getParams,this)},getParams:function(e){const{StatusCode:o,Message:n}=e.getParameter("arguments");console.log(o,n);const s=new t({Message:n});this.getView().setModel(s,"oConfirmationMessageModel")}})});
+//# sourceMappingURL=Confirmation.controller.js.map

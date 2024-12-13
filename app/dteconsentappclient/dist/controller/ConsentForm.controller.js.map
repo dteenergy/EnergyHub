@@ -1,0 +1,1 @@
+{"version":3,"file":"ConsentForm.controller.js","names":["sap","ui","define","Controller","extend","onInit","this","byId","setText"],"sources":["ConsentForm-dbg.controller.js"],"mappings":"AAAAA,IAAIC,GAAGC,OAAO,CACb,8BACE,SACFC,GAEA,aAEA,OAAOA,EAAWC,OAAO,6CAA8C,CAChE,MAAAC,GACKC,KAAKC,KAAK,6BAA6BC,QAAQ,wCACpD,GAER","ignoreList":[]}

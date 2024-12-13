@@ -1,0 +1,1 @@
+{"version":3,"file":"Consent.controller.js","names":["sap","ui","define","Controller","extend","onInit"],"sources":["Consent-dbg.controller.js"],"mappings":"AAAAA,IAAIC,GAAGC,OAAO,CACV,8BACAC,IACA,aAEA,OAAOA,EAAWC,OAAO,yCAA0C,CAC/D,MAAAC,GACA,GACF","ignoreList":[]}

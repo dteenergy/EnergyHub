@@ -1,0 +1,2 @@
+sap.ui.define(["sap/ui/core/mvc/Controller"],function(n){"use strict";return n.extend("dteconsentappclient.controller.ConsentForm",{onInit(){this.byId("idStillInContructionLabel").setText("Consent Form Contruction Ongoing.....")}})});
+//# sourceMappingURL=ConsentForm.controller.js.map
