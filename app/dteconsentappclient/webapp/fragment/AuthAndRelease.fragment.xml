@@ -1,0 +1,42 @@
+<core:FragmentDefinition xmlns:l="sap.ui.layout"
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core"
+>
+	<VBox class="auth-and-release-container" width="100%">
+		<l:VerticalLayout class="vertical-layout">
+			<Label text="Name of Authorized Person" required="true"></Label>
+			<Input class="inputBox" type="Text" liveChange="onLiveChange" required="true" value="{oConsentModel>/ConsentDetail/AuthPersonName}"></Input>
+		</l:VerticalLayout>
+
+		<l:VerticalLayout class="vertical-layout">
+			<Label text="Date" required="true"></Label>
+			<MaskInput mask="99/99/9999" width="100%" liveChange="onLiveChange" required="true" value="{oConsentModel>/ConsentDetail/AuthDate}"/>
+		</l:VerticalLayout>
+
+		<l:VerticalLayout class="vertical-layout">
+			<Label text="Title"></Label>
+			<Input class="inputBox" type="Text" value="{oConsentModel>/ConsentDetail/AuthTitle}"></Input>
+		</l:VerticalLayout>
+
+		<Text text="I understand that by reason of this Authorization, the named Authorized Third Party
+		 may conduct the designated activity and transactions on the account(s) that I as a customer of
+		record may direct or perform even though I remain responsible for all payments and other 
+		service obligations."></Text>
+
+		<Text text="I (Customer) hereby release, hold harmless, and indemnify DTE Energy from any liability,
+		 claims, demands, and cause of action, damages, or expenses resulting from any release of information
+		or transaction of business pursuant to this Authorization; the unauthorized use of this information or 
+		transaction of business by the Authorized Third Party; and any actions taken by the Authorized Third Party 
+		pursuant to this Authorization."></Text>
+
+		<FlexBox class="required-instruction">
+			<Text class="required-instruction-indicator" text="*" />
+			<Text text="Terms and Conditions" />
+		</FlexBox>
+
+		<HBox>
+        	<CheckBox select="handleTermsAndConditionVerified" text="I have read and understand the terms and conditions of this form." wrapping="true"/>
+		</HBox>
+
+	</VBox>
+</core:FragmentDefinition>

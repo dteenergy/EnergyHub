@@ -1,7 +1,0 @@
-<mvc:View xmlns:core="sap.ui.core" xmlns:form="sap.ui.layout.form" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:l="sap.ui.layout" controllerName="dteconsentappclient.controller.Landlord">
-    <Page id="landloard-form">
-        <content>
-            <Button id="sumit-button-1" press="handleSubmit" text="Submit"></Button>
-        </content>
-    </Page>
-</mvc:View>
