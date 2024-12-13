@@ -17,23 +17,20 @@
 .sapFShellBarTitleHidden{
   display: none;
 }
-.footerAlignment {
+.custom-footer {
     display: flex;
     justify-content: center;
     background-color: #1E3575 !important; 
+    height: 11.5rem !important;
   }
   .footerText {
     font-size: 11px;
     text-align: center;
   }
-
   .footer-container{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-  }
-  .sapMIBar.footerAlignment {
-    height: 11.5rem !important;
   }
   .legal-info-links{
     padding: 3px;
@@ -80,7 +77,7 @@
     .sapMLnk.dte-web-site{
       display: none;
     }
-    .sapMIBar.footerAlignment {
+    .custom-footer {
       height: 14.5rem !important;
     }
   }

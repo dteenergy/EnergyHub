@@ -17,6 +17,7 @@
                         </FlexBox>
                     </FlexBox>
                     
+                    <VBox class= "enroll-form-container">
                     <!-- Landlord Enrollment form -->
                     <form:SimpleForm id="enrollment-form"  class="landlord-enrollment-form" layout="ResponsiveGridLayout">
                         <form:content>
@@ -160,7 +161,7 @@
                     <!-- Enrollment form customer consent release -->
                     <VBox id="customer-release-header" class="customer-release-header">
                         <CheckBox id="consent-and-site-same" select="onConsentAndSiteSameSelected" text="Information is the same as Enrollment information" wrapping="true"/>
-                        <Title id="consent-relese-title" titleStyle="H4" text="Customer Consent Release" />
+                        <Title id="consent-relese-title" titleStyle="H4" text="Customer Consent Release" wrapping="true"/>
                         <Text id="consent-release-instruction" text="Please fill out all required fields below to give your 
                         consent to share your building’s information."></Text>
                     </VBox>
@@ -199,9 +200,12 @@
                     
                         </form:content>
                     </form:SimpleForm>
+                </VBox>
                  </items>
                 </FlexBox>
             </FlexBox>
+
+            <core:Fragment fragmentName="dteconsentappclient.fragment.Footer" type="XML"></core:Fragment>
         </content>
     </Page>
 </mvc:View>
