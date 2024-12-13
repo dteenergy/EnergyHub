@@ -1,0 +1,211 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:form="sap.ui.layout.form" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:l="sap.ui.layout" controllerName="dteconsentappclient.controller.Enrollment">
+    <Page id="landloard-form" showHeader="false">
+        <content>
+            <FlexBox id="landloard-form-main-container" class="landloard-form-main-container" >
+                <FlexBox id="landloard-form-sub-container" class="landloard-form-sub-container">
+                <items>
+
+                    <!-- Landlord Enrollment form Header -->
+                    <FlexBox id="enrollment-form-header" class="enrollment-form-header">
+                        <Title xmlns="sap.m" titleStyle="H5" text="DTE Energy Data Hub Enrollment Form" id="title" class="mainTitle"/>
+                        <Text id ="istruction" class="sub-content" wrapping="true" 
+                                text="Complete the information below to enroll for no fee to DTE’s Building Energy Usage Data Hub. In order for us to process your enrollment, you must complete all required fields on this form.">
+                        </Text>
+                        <FlexBox id="required-instruction" class="required-instruction">
+                            <Text id="required-instruction-indicator" class="required-instruction-indicator" text="*" />
+                            <Text id="required-instruction-content" text="Indicates a required field" />
+                        </FlexBox>
+                    </FlexBox>
+                    
+                    <VBox class= "enroll-form-container">
+                    <!-- Landlord Enrollment form -->
+                    <form:SimpleForm id="enrollment-form"  class="landlord-enrollment-form" layout="ResponsiveGridLayout">
+                        <form:content>
+
+                        <!-- Account Information -->
+                        <VBox id="account-info-container" fitContainer="true" class="account-info-container">
+                            <Title id="account-info-title" titleStyle="H6" class="form-segment-heading" text="Account Information"></Title>
+                            <Text text="(as it appears on customer’s monthly DTE Energy bill)" />
+
+                            <l:VerticalLayout class="vertical-layout">
+                                <Label id="company-name-label" labelFor="company-name" text="Company Name"></Label>
+                                <Input id="company-name" class="inputBox" required="true" liveChange="onLiveChange" type="Text" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/CompanyName}"/>
+                            </l:VerticalLayout>
+
+                            <l:VerticalLayout class="vertical-layout">
+                                <Label id="company-address-label" labelFor="company-address" text="Company Address"></Label>
+                                <Input id="company-address" class="inputBox" required="true" type="Text" liveChange="onLiveChange" placeholder="Filled out by user"  value="{oEnrollModel>/AccountDetail/CompanyAddress}"/>
+                                <Text id="company-address-helper-text" class="address-helper-text" text="123 Main st."></Text>
+                            </l:VerticalLayout>
+
+                            <l:VerticalLayout class="vertical-layout">
+                                <Label id="company-city" labelFor="city"  text="City"></Label>
+                                <Input id="city" class="inputBox" type="Text" required="true" placeholder="Filled out by user" liveChange="onLiveChange"  value="{oEnrollModel>/AccountDetail/City}"/>
+                            </l:VerticalLayout>
+
+                            <l:VerticalLayout class="vertical-layout">
+                            <Label id="company-state" labelFor="state-list" text="State"></Label>
+                            <ComboBox id="state-list" required="true" change="onLiveChange" width="100%" items="{path: 'ostateValuesModel>/'}" placeholder="Make a Selection" selectedKey="{oEnrollModel>/AccountDetail/State}">
+                                <core:Item text="{ostateValuesModel>text}" key="{ostateValuesModel>text}"></core:Item>
+                            </ComboBox>
+                            </l:VerticalLayout>
+
+                            <l:VerticalLayout id="zip-code" class="vertical-layout">
+                                <Label id="company-zipcode" labelFor="zipcode" text="Zipcode"></Label>
+                                <Input id="zipcode" class="inputBox" type="Number" required="true" liveChange="onLiveChange" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/Zipcode}"/>
+                            </l:VerticalLayout>
+
+                            <l:VerticalLayout id="acc-manager-name" class="vertical-layout">
+                                <Label id="company-account-manager-name" labelFor="account-manager-name" text="DTE Energy Account Manager Name (if applicable)"></Label>
+                                <Input id="account-manager-name" class="inputBox" type="Text" value="{oEnrollModel>/AccountDetail/AcctMgrName}"></Input>
+                            </l:VerticalLayout>
+
+                            <l:VerticalLayout id="acc-manager-ph" class="vertical-layout">
+                                <Label id="company-account-manager-ph" labelFor="account-manager-ph" text="DTE Energy Account Manager Phone Number (if applicable)"></Label>
+                                <Input id="account-manager-ph" class="inputBox" type="Number" value="{oEnrollModel>/AccountDetail/AcctMgrPhNo}"></Input>
+                            </l:VerticalLayout>
+
+                            <Label id="has-participate" text="Do you already participate in the DTE Energy Data Hub Program?"></Label>
+                            <RadioButtonGroup id="radio-group" select="onRadioButtonSelect">
+                                <RadioButton id="yes" text="Yes"></RadioButton>
+                                <RadioButton id="no" text="No" selected="true"></RadioButton>
+                            </RadioButtonGroup>
+                        </VBox>
+
+                        <Toolbar class="hr-line" height="1px" width="100%"></Toolbar>
+
+                    <!-- Site Contact Information -->
+                    <VBox id="site-contact-info-container" fitContainer="true" width="100%" class="site-contact-info-container">
+                        <Title id="site-contact-heading" titleStyle="H6" class="form-segment-heading" text="Site Contact Information"></Title>
+
+                        <l:VerticalLayout id="site-contact-fst-name" class="vertical-layout">
+                            <Label id="site-contact-fst-name-label" labelFor="site-contact-fst-name-value" text="FirstName"></Label>
+                            <Input id="site-contact-fst-name-value" class="inputBox" liveChange="onLiveChange" type="Text" required="true" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/SiteFirstName}"/>
+                        </l:VerticalLayout>
+
+                        <l:VerticalLayout id="site-contact-lst-name" class="vertical-layout">
+                            <Label id="site-contact-lst-name-label" labelFor="site-contact-lst-name-value" text="LastName"></Label>
+                            <Input id="site-contact-lst-name-value" class="inputBox" liveChange="onLiveChange" type="Text" required="true" placeholder="Filled out by user"  value="{oEnrollModel>/AccountDetail/SiteLastName}"/>
+                        </l:VerticalLayout>
+                        
+                        <l:VerticalLayout id="site-contact-title" class="vertical-layout">
+                            <Label id="site-contact-title-label" labelFor="site-contact-title-value" text="Site Contact Title"></Label>
+                            <Input id="site-contact-title-value" class="inputBox" liveChange="onLiveChange" type="Text" required="true" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/SiteContactTitle}"/>
+                        </l:VerticalLayout>
+                        
+                        <l:VerticalLayout id="site-contact-address" class="vertical-layout">
+                            <Label id="site-contact-address-label" labelFor="site-contact-address-value" text="Site Address"></Label>
+                            <Input id="site-contact-address-value" class="inputBox" liveChange="onLiveChange" type="Text" required="true" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/SiteAddress}"/>
+                            <Text id="site-contact-address-helper-text" class="address-helper-text" text="123 Main st."></Text>
+                        </l:VerticalLayout>
+                        
+                        <l:VerticalLayout id="site-contact-city" class="vertical-layout">
+                            <Label id="site-contact-city-label" labelFor="site-contact-city-value"  text="City"></Label>
+                            <Input id="site-contact-city-value" class="inputBox" liveChange="onLiveChange" type="Text" required="true" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/SiteCity}"/>
+                        </l:VerticalLayout>
+                        
+                        <l:VerticalLayout id="site-contact-state" class="vertical-layout">
+                            <Label id="site-contact-state-label" labelFor="site-contact-state-list" text="State"></Label>
+                            <ComboBox id="site-contact-state-list" required="true" change="onLiveChange" items="{path: 'ostateValuesModel>/'}"  width="100%" placeholder="Make a Selection" selectedKey="{oEnrollModel>/AccountDetail/SiteState}">
+                                <core:Item text="{ostateValuesModel>text}" key="{ostateValuesModel>text}"></core:Item>
+                            </ComboBox>
+                        </l:VerticalLayout>
+
+                        <l:VerticalLayout id="site-contact-zipcode" class="vertical-layout">
+                            <Label id="site-contact-zipcode-label" labelFor="site-contact-zipcode-value" text="Zipcode"></Label>
+                            <Input id="site-contact-zipcode-value" class="inputBox" liveChange="onLiveChange" type="Number" required="true" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/SiteZipcode}"/>
+                        </l:VerticalLayout>        
+                    
+                        <l:VerticalLayout id="site-contact-ph" class="vertical-layout">
+                            <Label id="site-contact-ph-label" labelFor="site-contact-ph-value" text="Phone Number"></Label>
+                            <Input id="site-contact-ph-value" class="inputBox" liveChange="onLiveChange" type="Number" required="true" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/SitePhoneNumber}"></Input>
+                        </l:VerticalLayout>
+
+                        <l:VerticalLayout id="site-contact-email" class="vertical-layout">
+                            <Label id="site-contact-email-label" labelFor="site-contact-email-value" text="Email Address"></Label>
+                            <Input id="site-contact-email-value" class="inputBox" liveChange="onLiveChange" type="Email" required="true" placeholder="Filled out by user" value="{oEnrollModel>/AccountDetail/SiteEmailAddr}"></Input>
+                        </l:VerticalLayout>
+                    </VBox>
+
+                    <Toolbar class="hr-line" height="1px" width="100%"></Toolbar>
+
+                    <!-- Location Information -->
+                    <VBox id="location-info-container" fitContainer="true" width="100%" class="location-info-container">
+                        <Title id="location-info-title" titleStyle="H6" class="form-segment-heading" text="Location Information"></Title>
+                        
+                        <!-- This container renders the building information fragment, which is loaded and managed by the landlord controller -->
+                        <VBox id="building-detail-main-container" width="100%">
+                        </VBox>
+                    </VBox>
+
+                    <Button id="add-building-detail" text=" + ADD Another Location" press="onAddAnotherLocation" class="button-customize" ></Button>
+
+                    <!-- Enrollment form customer authorization -->
+                    <VBox id="auth-info-container" fitContainer="true" width="100%" class="auth-contact-info-container">
+                         <Title id="location-info-customer" titleStyle="H6" class="form-segment-heading" text="Customer Signature"></Title>
+                         <l:VerticalLayout id="auth-customer-name" class="vertical-layout">
+                            <Label id="auth-customer-name-label" labelFor="auth-customer-name-value" text="Customer Name"></Label>
+                            <Input id="auth-customer-name-value" class="inputBox" type="Text" liveChange="onLiveChange" required="true" value="{oEnrollModel>/SignatureSignedBy}"></Input>
+                        </l:VerticalLayout>
+
+                        <Text id="auth-instruction" text="The DTE Building Energy Usage Data Hub tool is for exclusive use to building owners 
+                        (and/or their authorized management company) to benchmark their building’s energy usage. 
+                        I verify that I am an authorized building owner or management company representative."></Text>
+
+                         <l:VerticalLayout id="auth-date" class="vertical-layout">
+                            <Label id="auth-date-label" labelFor="auth-date-value" required="true" text="Date"></Label>
+                            <MaskInput mask="99/99/9999" width="100%" liveChange="onLiveChange" required="true" value="{oEnrollModel>/SignatureSignedDate}"/>
+                        </l:VerticalLayout>
+                    </VBox>
+
+                    <!-- Enrollment form customer consent release -->
+                    <VBox id="customer-release-header" class="customer-release-header">
+                        <CheckBox id="consent-and-site-same" select="onConsentAndSiteSameSelected" text="Information is the same as Enrollment information" wrapping="true"/>
+                        <Title id="consent-relese-title" titleStyle="H4" text="Customer Consent Release" wrapping="true"/>
+                        <Text id="consent-release-instruction" text="Please fill out all required fields below to give your 
+                        consent to share your building’s information."></Text>
+                    </VBox>
+                    
+                    <!-- This container renders the consent section in the enrollment from the consent form fragment, which is loaded and managed by the landlord controller -->
+                    <VBox id="enrollment-consent-section" class="consent-form-container">
+                    </VBox>
+
+                    <Toolbar class="hr-line" height="1px" width="100%"></Toolbar>
+
+                    <!-- This container renders the customer auth and release section from the AuthAndRelease fragment, which is loaded and managed by the landlord controller -->
+                    <VBox id="customer-auth-and-release-container" class="customer-auth-and-release">
+                        <Title id="auth-and-release-title" text="Tenant Authorization and Release" class="form-segment-heading" titleStyle="H6" />
+                    </VBox>
+
+                    <VBox id="message-strip-container" class="message-strip-container">
+                        <MessageStrip
+                            text="Complete these fields to continue."
+                            type="Error"
+                            showIcon="true"
+                            visible="{oErrorVisibilityModel>/isInputInValid}"
+                            class="error-message-strip"
+                        >
+                        </MessageStrip>
+                        <MessageStrip
+                            text="Confirm you have read the terms and conditions."
+                            type="Error"
+                            showIcon="true"
+                            visible="{oErrorVisibilityModel>/isTermsAndConditionVerifiedStatus}"
+                            class="error-message-strip"
+                        >
+                        </MessageStrip>
+                    </VBox>
+
+                    <Button id="submit-landlord-form" text="Submit" type="Emphasized" press="handleSubmit" class="button-customize"></Button>
+                    
+                        </form:content>
+                    </form:SimpleForm>
+                </VBox>
+                 </items>
+                </FlexBox>
+            </FlexBox>
+
+            <core:Fragment fragmentName="dteconsentappclient.fragment.Footer" type="XML"></core:Fragment>
+        </content>
+    </Page>
+</mvc:View>

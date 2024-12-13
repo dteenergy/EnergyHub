@@ -43,8 +43,8 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
     // Check Enrollment Form Details inserted successfully.
     if ((applicationDetailResult?.results?.length > 0) && (buildingDetailResult?.results?.length > 0)
       && (accountDetailResult?.results?.length > 0) && (consentDetailResult?.results?.length > 0))
-      return { statusCode: 200, Message: "Enrollment form created successfully." };
-
+      return { statusCode: 200, Message: "Thank you! Your DTE Energy Data Hub enrollment is confirmed. " };
+      
   } catch (error) {
       console.log("Enrollment Form Creation Error :", error);
       return {

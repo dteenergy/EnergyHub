@@ -5,8 +5,9 @@ const { validateWithRegex } = require("./regex-and-error-message");
  * req => Object 
  * entity => function
  * tx => function
+ * decrAppId => string
  */
-const createConsentFormDetail = async (req, entity, tx) => {
+const createConsentFormDetail = async (req, entity, tx, decrAppId) => {
 
   try {
     const { ConsentDetail } = req?.data;
@@ -18,44 +19,27 @@ const createConsentFormDetail = async (req, entity, tx) => {
     const consentDetailFieldCheck = Object.values(consentDetailParsedData).some(value => value === '');
     if (consentDetailFieldCheck)
       throw { status: 400, message: 'Kindly fill all the required fields.' }
-    if (!consentDetailParsedData.hasOwnProperty("AppId"))
-      throw { status: 400, message: 'The AppId field is required. Please enter the required value.' }
 
     // Validate the Sensitive field information from consentDetailParsedData.
     validateWithRegex(consentDetailParsedData?.EmailAddr, 'email');
     validateWithRegex(consentDetailParsedData?.PhoneNumber, 'phoneNumber');
 
-    // Verify if the ApplicationDetail entity exists with the AppId from the ConsentParsedData.
-    const applicationDetailResult = await tx.run(
-      SELECT.from(entity.ApplicationDetail)
-        .where({ AppId: consentDetailParsedData?.AppId })
-        .columns(['AppId'])
-    );
-
-    // Return 404 if no ApplicationDetail found
-    if (applicationDetailResult?.length === 0)
-      throw { status: 404, message: "Enrollment details not available for this AppId." }
-
     // Assign AppId to ApplicationConsent
-    consentDetailParsedData.AppRefId_AppId = applicationDetailResult[0].AppId;
-
-    // Remove the AppId from the Payload
-    delete consentDetailParsedData.AppId;
+    consentDetailParsedData.AppRefId_AppId = decrAppId;
 
     // Insert Consent Form details to database
     const consentDetailResponse = await tx.run(INSERT.into(entity.ApplicationConsent).entries(consentDetailParsedData));
 
     // Check Consent Form Details inserted successfully
     if (consentDetailResponse?.results?.length > 0)
-      return { status: 200, message: 'Consent Form Created successfully' }
-
-  } catch (error) {
+      return { status: 200, message: 'Thank you! Your DTE Energy Data Hub consent is confirmed.'}
+    } catch (error) {
     if (error.status) {
       return { status: error.status, message: error.message };
     } else
-      return {
-        status: 500, error: error.message
-      }
+        return {
+          status: 500, error: error.message
+        }
   }
 }
 

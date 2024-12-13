@@ -1,0 +1,22 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns= "sap.m" xmlns:tnt="sap.tnt" >
+
+    <VBox id="custom-footer" class="custom-footer">
+			<FlexBox id="footer-container" class="footer-container">
+
+					<Image id="footer-logo-image" alt="DTE-logo" src="images/DTE-logo.png"></Image>
+					<FlexBox id="social-media-container" class="social-media-container" items="{socialMediaModel>/sMediaDetails}">
+					<items>
+							<Image src="{socialMediaModel>path}" alt="{socialMediaModel>alt}" press="onSocialMedia"></Image>
+							</items>
+					</FlexBox>
+
+					<FlexBox id="legal-info" class="legal-info-details">
+							<Link id="terms" class="legal-info-links" href="https://www.dteenergy.com/us/en/quicklinks/terms-conditions.html" text="Terms &amp; Conditions"></Link>
+							<Link id="privacy-policy" class="legal-info-links" href="https://www.dteenergy.com/us/en/quicklinks/online-privacy-policy.html" text="Online Privacy Policy" target=""></Link>
+							<Link id="contact" class="legal-info-links" href="https://www.dteenergy.com/us/en/quicklinks/contact-us.html" text="Contact Us" target=""></Link>
+					</FlexBox>
+					<Text id="idUserFooterText" class="footerText" text="© 2024 DTE Energy. All rights reserved" />
+			</FlexBox>
+    </VBox>
+
+</core:FragmentDefinition>

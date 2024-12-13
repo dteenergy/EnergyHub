@@ -1,0 +1,7 @@
+<mvc:View controllerName="dteconsentappclient.controller.Confirmation"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <Page title="Confirmation Page" showHeader="false">
+        <Text id="confirmation-message" text="{oConfirmationMessageModel>/Message}"></Text>
+    </Page>
+</mvc:View>

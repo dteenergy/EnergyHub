@@ -19,4 +19,10 @@ service DTEConsentAppPortal {
     action CreateConsentFormDetail(
         ConsentDetail : String
     ) returns String;
+
+    // Validate the Application Id
+    function validateApplicationId () returns String;
+    
+    // Testing AppId Encrypt Function
+    function AppIdEncrypt() returns String;
 };
