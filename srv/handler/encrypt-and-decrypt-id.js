@@ -8,8 +8,8 @@ const cryptoJs = require('crypto-js');
 const valueEncrypt = async (data) => {
   if (!data) throw { status: 400, message: 'No data found' }
   try {
-    // Perform AES encryption using the SECRET_KEY from environment variables
-    const  encryptedData = cryptoJs.AES.encrypt(data, process.env.SECRET_KEY).toString();
+    // Perform AES encryption using the ENCRYPT_APPID_SECRET_KEY from environment variables
+    const  encryptedData = cryptoJs.AES.encrypt(data, process.env.ENCRYPT_APPID_SECRET_KEY).toString();
     
     return  encryptedData;
   } catch (err) {
@@ -28,8 +28,8 @@ const valueDecrypt = async (data) => {
     // Replace and trim the data
     const parsedId = data.trim().replace(/ /g, '+');
 
-    // Perform AES decryption using the SECRET_KEY from environment variables
-    const decryptedByte = cryptoJs.AES.decrypt(parsedId, process.env.SECRET_KEY);
+    // Perform AES decryption using the ENCRYPT_APPID_SECRET_KEY from environment variables
+    const decryptedByte = cryptoJs.AES.decrypt(parsedId, process.env.ENCRYPT_APPID_SECRET_KEY);
   
     // Convert the decrypted data from bytes to a UTF-8 string
     const decryptedStr = decryptedByte.toString(cryptoJs.enc.Utf8);
