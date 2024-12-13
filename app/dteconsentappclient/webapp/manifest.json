@@ -105,12 +105,26 @@
           "target": ["EnrollmentForm"]
         },
         {
+          "name": "ConsentForm",
+          "pattern": "consent-from/{appId}",
+          "target": [
+            "TargetConsentForm"
+          ]
+        },
+        {
           "name": "Confirmation",
           "pattern": "confirmation/{StatusCode}/{Message}",
           "target": ["Confirmation"]
         }
       ],
       "targets": {
+        "TargetConsentForm": {
+          "viewType": "XML",
+          "transition":"slide",
+          "clearControlAggregation": false,
+          "viewId": "ConsentFormEntryPoint",
+          "viewName": "ConsentFormEntryPoint"
+        },
         "EnrollmentForm": {
           "viewType": "XML",
           "transition":"slide",
