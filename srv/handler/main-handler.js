@@ -40,7 +40,7 @@ module.exports = cds.service.impl(async function (srv) {
 				// Method to validate the app id.
 				const validationStatus = await validateApplicationId(req, this.entities);
 				
-				if ((validationStatus.status === 400) || (validationStatus.status === 500)) return { validationStatus }
+				if (validationStatus) return { validationStatus }
 
 				// Store the Encrypted Application Id
 				const encryptedAppId = req?._.req?.query?.encrAppId;

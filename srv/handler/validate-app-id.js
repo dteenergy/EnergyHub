@@ -14,6 +14,8 @@ const validateApplicationId = async (req, entity) => {
 		// Decrypt the AppId
 		const decryptedAppId = await valueDecrypt(encrAppId);
 
+		if(!decryptedAppId) return decryptedAppId;
+		
 		// Fetch the application details by AppId and select only the AppId column
 		const applicationDetail = await SELECT.from(entity.ApplicationDetail).where({ 'AppId': decryptedAppId }).columns(['AppId']);
 
