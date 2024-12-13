@@ -24,7 +24,6 @@ sap.ui.define([
         onInit () {
 
 					const {applicationId, url} = this.getView().getViewData();
-					console.log(url);
 					
 					this.applicationId = applicationId;
 					this.SERVERHOST = url;
@@ -60,6 +59,18 @@ sap.ui.define([
 					});
 
 					this.getView().setModel(oErrorVisibilityModel, "oErrorVisibilityModel");
+
+					const oSocialMediaModel = new JSONModel({
+						sMediaDetails: [
+						  {'path': 'images/Facebook.png', 'alt':'Facebook', 'src':'https://www.facebook.com/dteenergy'},
+						  {'path': 'images/X-Twitter.png', 'alt':'X-Twitter', 'src':'https://x.com/dte_energy'},
+						  {'path': 'images/Instagram.png', 'alt':'Instagram', 'src':'https://www.instagram.com/dte_energy_official/'},
+						  {'path': 'images/YouTube.png', 'alt':'Youtube', 'src':'https://www.youtube.com/user/DTEEnergyCompany'},
+						  {'path': 'images/LinkedIn.png', 'alt':'LinkedIn', 'src':'https://www.linkedin.com/company/dte-energy'}
+						]
+					  });
+			  
+					  this.getView().setModel(oSocialMediaModel, 'socialMediaModel')
 					
 					this.loadAuthAndRelease();
 			},
@@ -147,7 +158,6 @@ sap.ui.define([
 					// Filtered the input and combobox controls
 					if (control instanceof sap.m.CheckBox) {
 						const inputvalue = control.getSelected();
-						console.log(inputvalue);
 						
 						const innerDiv = control.$().find(".sapMCbBg");
 						
@@ -173,7 +183,6 @@ sap.ui.define([
 
 		setErrorMessageTripVisibility: function(){
 			const oErrorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
-			console.log(Object.values(validationFlags));
 
 			if(Object.values(validationFlags).includes(false)) 
 				oErrorVisibilityModel.setProperty('/isInputInValid', true);
@@ -202,7 +211,6 @@ sap.ui.define([
         const oErrorVisibilityModelData = oErrorVisibilityModel.getData();
 					
 				const consentDetails = this.getView().getModel("oConsentModel").getData()?.ConsentDetail;
-					console.log(consentDetails);
 					
 					if(!oErrorVisibilityModelData?.isInputInValid && !oErrorVisibilityModelData?.isTermsAndConditionVerifiedStatus){
 
@@ -245,6 +253,16 @@ sap.ui.define([
 				this.setErrorMessageTripVisibility();
 
 				this.submitTenantConsentForm();
-			}
+			},
+			onImageSocialMediaPress: function(oEvent){
+				console.log(oEvent);
+				
+				const mediaDetails = this.getView().getModel('socialMediaModel').getData();
+				
+				const salt = oEvent.getSource().getAlt();
+				const filteredData = mediaDetails?.sMediaDetails.filter((mediaDetail)=> mediaDetail.alt === salt);
+				
+				window.open(filteredData[0]['src'], '_blank');
+			  }
 	});
 });

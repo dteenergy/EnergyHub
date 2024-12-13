@@ -19,7 +19,6 @@ sap.ui.define([
          getParams: function (oEvent) {
           
          const { StatusCode, Message } = oEvent.getParameter("arguments");
-            console.log(StatusCode, Message);
             
         // Set the JSONModel with the correct name
         const oConfirmationMessageModel = new JSONModel({Message});

@@ -468,5 +468,16 @@ sap.ui.define([
 					this.submitAction();
         },
 
+		onImageSocialMediaPress: function(oEvent){
+			console.log(oEvent);
+			
+			const mediaDetails = this.getView().getModel('socialMediaModel').getData();
+			
+			const salt = oEvent.getSource().getAlt();
+			const filteredData = mediaDetails?.sMediaDetails.filter((mediaDetail)=> mediaDetail.alt === salt);
+			
+			window.open(filteredData[0]['src'], '_blank');
+		  }
+
     });
 });
