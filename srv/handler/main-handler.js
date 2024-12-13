@@ -13,8 +13,10 @@ module.exports = cds.service.impl(async function (srv) {
 			// Method to create the Enrollment Form details
 			const res = createEnrollmentFormDetail(req, this.entities, tx)
 
+			tx.commit();
 			return res;
 		} catch (e) {
+			tx.rollback();
 			return { 'error': 'Failed to create Enrollment Form' }
 		}
 	}),
@@ -53,6 +55,7 @@ module.exports = cds.service.impl(async function (srv) {
 						// Method to create the Consent Form details
 						const consentResponse = await createConsentFormDetail(req, this.entities, tx, decryptedAppId);
 
+						tx.commit();
 						return consentResponse;
 					}
 
@@ -62,6 +65,7 @@ module.exports = cds.service.impl(async function (srv) {
 				return validationStatus;
 
 			} catch (e) {
+				tx.rollback();
 				if (e.status) {
 					return { status: e.status, message: e.message };
 				} else
