@@ -1,10 +1,10 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/core/mvc/XMLView"
-], (Controller, XMlView) => {
+], (BaseController, XMlView) => {
     "use strict";
 
-    return Controller.extend("dteconsentappclient.controller.ConsentFormEntryPoint", {
+    return BaseController.extend("dteconsentappclient.controller.ConsentFormEntryPoint", {
         onInit () {
             // Get param from router path
             const oRouter = this.getOwnerComponent().getRouter();
@@ -35,6 +35,7 @@ sap.ui.define([
                 XMlView.create({
                     viewName: "dteconsentappclient.view.ConsentForm",
                 }).then(function(oView) {
+                    
                     oView.placeAt("content")
                 });
             }else{

@@ -79,6 +79,9 @@
         },
         {
           "uri": "css/landlord-enrollment-form.css"
+        },
+        {
+          "uri": "css/tenant-consent-form.css"
         }
       ],
       "js":[
