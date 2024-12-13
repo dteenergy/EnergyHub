@@ -48,18 +48,13 @@ module.exports = cds.service.impl(async function (srv) {
 					// Decrypt the AppId
 					const decryptedAppId = await valueDecrypt(encryptedAppId);
 
-					// AppId decrypted successfully.
-					if (decryptedAppId) {
-						// Method to create the Consent Form details
-						const consentResponse = await createConsentFormDetail(req, this.entities, tx, decryptedAppId);
+					// Method to create the Consent Form details
+					const consentResponse = await createConsentFormDetail(req, this.entities, tx, decryptedAppId);
 
-						return consentResponse;
-					}
-
-					return decryptedAppId;
+					return consentResponse;
 
 				}
-				return validationStatus;
+				throw validationStatus;
 
 			} catch (e) {
 				if (e.status) {
