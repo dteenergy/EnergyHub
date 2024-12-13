@@ -39,18 +39,28 @@ module.exports = cds.service.impl(async function (srv) {
 			try {
 				// Method to validate the app id.
 				const validationStatus = await validateApplicationId(req, this.entities);
-				
-				if (validationStatus?.status === 200) 
-				{						
+
+				// If the Validation status => 200
+				if (validationStatus.status === 200) {
 					// Store the Encrypted Application Id
 					const encryptedAppId = req?._.req?.query?.encrAppId;
 
-					// Method to create the Consent Form details
-					const consentResponse = await createConsentFormDetail(req, this.entities, tx, encryptedAppId);
-					return consentResponse;					
-				} 
-				
+					// Decrypt the AppId
+					const decryptedAppId = await valueDecrypt(encryptedAppId);
+
+					// AppId decrypted successfully.
+					if (decryptedAppId) {
+						// Method to create the Consent Form details
+						const consentResponse = await createConsentFormDetail(req, this.entities, tx, decryptedAppId);
+
+						return consentResponse;
+					}
+
+					return decryptedData;
+
+				}
 				return validationStatus;
+
 			} catch (e) {
 				if (e.status) {
 					return { status: e.status, message: e.message };
