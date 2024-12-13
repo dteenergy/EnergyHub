@@ -48,10 +48,9 @@ module.exports = cds.service.impl(async function (srv) {
 					// Method to create the Consent Form details
 					const consentResponse = await createConsentFormDetail(req, this.entities, tx, encryptedAppId);
 					return consentResponse;					
-				} else {
-					return validationStatus;
-				}
-
+				} 
+				
+				return validationStatus;
 			} catch (e) {
 				if (e.status) {
 					return { status: e.status, message: e.message };
