@@ -19,21 +19,26 @@ sap.ui.define([
          * @param {Event} oEvent 
          */
         getRouteParams (oEvent) {
-            const routeParam = oEvent.getParameter("arguments").appId;
-
-            this.validateAppId(routeParam);
+            console.log(oEvent);
+            
+            const routeParam = oEvent.getParameter("arguments")['?appId'];
+            console.log(routeParam);
+            
+            this.validateAppId(routeParam.appId);
         },
         /**
          * Validate Application Id 
          * @param {string} appId 
          */
         validateAppId: async function(appId){
-
+            console.log(appId);
+            
             const validationUrl = this.SERVERHOST + `service/validateApplicationId?encrAppId=${appId}`
 
             // Post request to create a tenant consent.
 			const {data} = await axios.get(validationUrl);
-
+            console.log(data);
+            
             /**
              * Check requested Application ID is valid
              * If true, then render Consent Form View 

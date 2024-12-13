@@ -201,13 +201,13 @@ sap.ui.define([
 				const oErrorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
         const oErrorVisibilityModelData = oErrorVisibilityModel.getData();
 					
-				consentDetails = this.getView().getModel("oConsentModel").getData()?.ConsentDetail;
+				const consentDetails = this.getView().getModel("oConsentModel").getData()?.ConsentDetail;
 					console.log(consentDetails);
 					
 					if(!oErrorVisibilityModelData?.isInputInValid && !oErrorVisibilityModelData?.isTermsAndConditionVerifiedStatus){
 
 						// Url to create the enrollment application
-						const tenantConsentCreateUrl = this.SERVERHOST + `service/CreateConsentFormDetail?${this.applicationId}`;
+						const tenantConsentCreateUrl = this.SERVERHOST + `service/CreateConsentFormDetail?encrAppId=${this.applicationId}`;
 
 						const tenantConsentFormDetails = {
 							ConsentDetail: JSON.stringify({
