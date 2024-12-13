@@ -13,7 +13,7 @@ const createConsentFormDetail = async (req, entity, tx, decrAppId) => {
     const { ConsentDetail } = req?.data;
 
     // Parse the String Payload
-    let consentDetailParsedData = JSON.parse(ConsentDetail);
+    const consentDetailParsedData = JSON.parse(ConsentDetail);
 
     // Check the Consent details fields contains the empty value.
     const consentDetailFieldCheck = Object.values(consentDetailParsedData).some(value => value === '');
