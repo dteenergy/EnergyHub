@@ -2,8 +2,10 @@ sap.ui.define([
     "dteconsentappclient/controller/BaseController",
     "sap/ui/core/Fragment",
     "sap/ui/model/json/JSONModel",
-		"dteconsentappclient/variable/GlobalInputValues"
-], (BaseController, Fragment, JSONModel, GlobalInputValues) => {
+	"dteconsentappclient/variable/GlobalInputValues",
+	"sap/ui/model/Filter",
+	"sap/ui/model/FilterOperator",
+], (BaseController, Fragment, JSONModel, GlobalInputValues, Filter, FilterOperator) => {
     "use strict";
 
     let enrollmentDetails, 
@@ -316,6 +318,32 @@ sap.ui.define([
 					}else{
 						oControl.setValueState("Error");
 					}
+				},
+
+				/**
+				 * Show Address Input Suggestion from DTE address Validation
+				 * @param {Event} oEvent 
+				 */
+				onAddressInputSuggest: async function (oEvent) {
+					const suggestValue = new String(oEvent.getParameter("suggestValue"));
+					let addressCollection = [
+						"test address 1",
+						"test address 2"
+					];
+
+					// const oModel = new JSONModel ({addressCollection});
+					// this.getView().setModel(oModel);
+					console.log();
+					
+
+					// if(suggestValue.length > 3){
+					// 	const {data} = await axios.get(`https://test.api.customer.sites.dteenergy.com/public/qa/premises/?address=${suggestValue}&maxResults=10`);
+					// 	addressCollection.push(data)
+					// }
+
+
+					// console.log(addressCollection);
+					
 				},
 
 				// Validate the building information
