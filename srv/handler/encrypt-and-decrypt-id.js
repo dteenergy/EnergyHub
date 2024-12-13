@@ -8,8 +8,8 @@ const cryptoJs = require('crypto-js');
 const valueEncrypt = async (data) => {
   if ((!data) || (data === '""')) throw { status: 400, message: 'Cannot proceed with an empty AppId' }
   try {     
-    // Perform AES encryption using the ENCRYPT_APPID_SECRET_KEY from environment variables
-    const encryptedData = cryptoJs.AES.encrypt(data, process.env.ENCRYPT_APPID_SECRET_KEY).toString();
+    // Perform AES encryption using the CRYPTOJS_SECRET_KEY from environment variables
+    const encryptedData = cryptoJs.AES.encrypt(data, process.env.CRYPTOJS_SECRET_KEY).toString();
 
     return encryptedData;
   } catch (e) {
@@ -31,8 +31,8 @@ const valueDecrypt = async (data) => {
     // Replace and trim the data
     const formattedEncrData = data.trim().replace(/ /g, '+');
 
-    // Perform AES decryption using the ENCRYPT_APPID_SECRET_KEY from environment variables
-    const decryptedByte = cryptoJs.AES.decrypt(formattedEncrData, process.env.ENCRYPT_APPID_SECRET_KEY);
+    // Perform AES decryption using the CRYPTOJS_SECRET_KEY from environment variables
+    const decryptedByte = cryptoJs.AES.decrypt(formattedEncrData, process.env.CRYPTOJS_SECRET_KEY);
 
     // Convert the decrypted data from bytes to a UTF-8 string
     const decryptedStr = decryptedByte.toString(cryptoJs.enc.Utf8);
