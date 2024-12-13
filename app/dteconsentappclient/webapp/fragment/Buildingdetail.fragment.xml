@@ -1,0 +1,43 @@
+<core:FragmentDefinition xmlns:layout="sap.ui.layout"
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core"
+>	
+	<VBox fitContainer="true"  width="100%" class="building-container" >
+		
+		<layout:VerticalLayout class="vertical-layout">
+			<Label text="Building Name" required="true"></Label>
+			<Input class="inputBox" value="{locationModel>BuildingName}" liveChange="onLiveChange" required="true" placeholder="Filled out by user">
+			</Input>
+		</layout:VerticalLayout>
+
+		<layout:VerticalLayout class="vertical-layout">
+			<Label text="Account Number" required="true"></Label>
+			<Input class="inputBox" value="{locationModel>AccountNumber}" liveChange="onLiveChange" required="true" placeholder="Filled out by user"></Input>
+		</layout:VerticalLayout>
+
+		<layout:VerticalLayout class="vertical-layout">
+			<Label text="Location Address" required="true"></Label>
+			<Input class="inputBox" liveChange="onLiveChange" value="{locationModel>Address}"  required="true" placeholder="Filled out by user">
+			</Input>
+		</layout:VerticalLayout>
+
+		<layout:VerticalLayout class="vertical-layout">
+			<Label text="City" required="true"></Label>
+			<Input class="inputBox" value="{locationModel>City}" liveChange="onLiveChange" required="true" placeholder="Filled out by user"></Input>
+		</layout:VerticalLayout>
+
+
+		<layout:VerticalLayout class="vertical-layout">
+			<Label text="State" required="true"></Label>
+			<ComboBox change="onLiveChange" required="true" selectedKey="{locationModel>State}" width="100%">
+				<core:Item text="Michigan" key="{locationModel>State}"></core:Item>
+			</ComboBox>
+		</layout:VerticalLayout>
+		
+		<layout:VerticalLayout class="vertical-layout">
+			<Label text="Zipcode" required="true"></Label>
+			<Input class="inputBox" value="{locationModel>Zipcode}" type="Number" liveChange="onLiveChange" required="true" placeholder="Filled out by user"/>
+		</layout:VerticalLayout>
+	
+	</VBox>
+</core:FragmentDefinition>
