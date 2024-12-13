@@ -30,7 +30,7 @@ module.exports = cds.service.impl(async function (srv) {
 				if (e.status) {
 					return { status: e.status, message: e.message }
 				}
-				return { status: 500, 'error': 'Failed to validate the app id.' }
+				return { status: 500, 'error': 'Failed to verify the App ID.' }
 			}
 		}),
 

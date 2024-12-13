@@ -1,5 +1,4 @@
 const cryptoJs = require('crypto-js');
-const { emptyField } = require('./regex-and-error-message');
 
 /**
  * Encrypt the given data using AES encryption.
@@ -7,7 +6,7 @@ const { emptyField } = require('./regex-and-error-message');
  * @returns string
  */
 const valueEncrypt = async (data) => {
-  if ((!data) || (data === '""')) throw { status: 400, message: 'No data found' }
+  if ((!data) || (data === '""')) throw { status: 400, message: 'Cannot proceed with an empty AppId' }
   try {     
     // Perform AES encryption using the ENCRYPT_APPID_SECRET_KEY from environment variables
     const encryptedData = cryptoJs.AES.encrypt(data, process.env.ENCRYPT_APPID_SECRET_KEY).toString();
@@ -17,7 +16,7 @@ const valueEncrypt = async (data) => {
     if(e){
       throw {status : e.status, message: e.message};
     }
-    throw { status: 500, message: 'Failed to encrypt the data' }
+    throw { status: 500, message: 'Failed to encrypt the AppId' }
   }
 }
 
@@ -27,7 +26,7 @@ const valueEncrypt = async (data) => {
  * @returns string
  */
 const valueDecrypt = async (data) => {
-  if (!data) throw { status: 400, message: 'No data found' };
+  if (!data) throw { status: 400, message: 'Cannot proceed with an empty AppId' };
   try {
     // Replace and trim the data
     const formattedEncrData = data.trim().replace(/ /g, '+');
@@ -39,7 +38,7 @@ const valueDecrypt = async (data) => {
     const decryptedStr = decryptedByte.toString(cryptoJs.enc.Utf8);
 
     // If the decryptedStr is Empty
-    if (decryptedStr === "") throw { status: 400, message: 'Failed to decrypt the data incorrect signed key' };
+    if (decryptedStr === "") throw { status: 400, message: 'Data decryption failed due to an incorrect signed key.' };
 
     return decryptedStr;
   } catch (e) {
@@ -47,7 +46,7 @@ const valueDecrypt = async (data) => {
       throw { status: e.status, message: e.message };
     }
     else {
-      throw { status: 500, message: 'Failed to encrypt the data' }
+      throw { status: 500, message: 'Failed to Decrypt the AppId' }
     }
   }
 }

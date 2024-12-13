@@ -5,6 +5,7 @@ const { validateWithRegex } = require("./regex-and-error-message");
  * req => Object 
  * entity => function
  * tx => function
+ * decrAppId => string
  */
 const createConsentFormDetail = async (req, entity, tx, decrAppId) => {
 
@@ -32,8 +33,7 @@ const createConsentFormDetail = async (req, entity, tx, decrAppId) => {
     // Check Consent Form Details inserted successfully
     if (consentDetailResponse?.results?.length > 0)
       return { status: 200, message: 'Consent Form Created successfully' }
-    // }
-  } catch (error) {
+    } catch (error) {
     if (error.status) {
       return { status: error.status, message: error.message };
     } else
