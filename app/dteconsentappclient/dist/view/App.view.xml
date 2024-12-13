@@ -1,7 +1,30 @@
-<mvc:View controllerName="dteconsentappclient.controller.App"
+<mvc:View xmlns:tnt="sap.tnt" 
+    controllerName="dteconsentappclient.controller.App"
     displayBlock="true"
     xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m">
-    <App id="app">
-    </App>
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:core="sap.ui.core"
+    xmlns:uxap="sap.uxap"
+    >
+
+    <VBox id="mainContainer" fitContainer="true">
+    <!-- Header -->
+    <tnt:ToolHeader id="header" class="app-header">
+        <Text id="header-title" class="header-title" text="DTE Energy Data Hub"></Text>
+        <Image id="dte-logo" src="images/DTE-logo.png" alt="DTE-Logo"></Image>
+        <Link id="dte-web-site" class="dte-web-site" href="https://www.dteenergy.com/us/en.html" text="Visit DTEEnergy.com" icon="sap-icon://arrow-top"></Link>
+    </tnt:ToolHeader>
+
+    <!-- Content -->
+    <Page id="idMainPage" showHeader="false">
+        <content>
+            <App id="app" />
+        </content>
+    </Page>
+
+    <!-- Footer -->
+    
+</VBox>
+
 </mvc:View>

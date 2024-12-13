@@ -43,7 +43,7 @@
         }
     },
     "sap.ui5": {
-        "flexEnabled": true,
+        "flexEnabled": false,
         "dependencies": {
             "minUI5Version": "1.131.1",
             "libs": {
@@ -76,6 +76,9 @@
             "css": [
                 {
                     "uri": "css/style.css"
+                },
+                {
+                    "uri": "css/landlord-enrollment-form.css"
                 }
             ],
             "js": [
@@ -97,31 +100,48 @@
             },
             "routes": [
                 {
-                    "name": "RouteView1",
-                    "pattern": ":?query:",
+                    "name": "Enrollment",
+                    "pattern": "landlord/enrollment",
                     "target": [
-                        "TargetView1"
+                        "EnrollmentForm"
                     ]
                 },
                 {
-                    "name": "Landlord",
-                    "pattern": "landlord",
+                    "name": "ConsentForm",
+                    "pattern": "consent-from/{appId}",
                     "target": [
-                        "LandlordForm"
+                        "TargetConsentForm"
+                    ]
+                },
+                {
+                    "name": "Confirmation",
+                    "pattern": "confirmation/{StatusCode}/{Message}",
+                    "target": [
+                        "Confirmation"
                     ]
                 }
             ],
             "targets": {
-                "TargetView1": {
-                    "id": "View1",
-                    "name": "View1"
-                },
-                "LandlordForm": {
+                "TargetConsentForm": {
                     "viewType": "XML",
                     "transition": "slide",
                     "clearControlAggregation": false,
-                    "viewId": "Landlord",
-                    "viewName": "Landlord"
+                    "viewId": "ConsentFormEntryPoint",
+                    "viewName": "ConsentFormEntryPoint"
+                },
+                "EnrollmentForm": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "Enrollment",
+                    "viewName": "Enrollment"
+                },
+                "Confirmation": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "Confirmation",
+                    "viewName": "Confirmation"
                 }
             }
         },
@@ -133,7 +153,7 @@
         "config": {
             "routerConfig": {
                 "localApi": {
-                    "uri": "https://port4004-workspaces-ws-h7r7s.us10.applicationstudio.cloud.sap/"
+                    "uri": "https://port4004-workspaces-ws-mjfnp.us20.applicationstudio.cloud.sap/"
                 },
                 "productionApi": {
                     "uri": ""
