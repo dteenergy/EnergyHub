@@ -19,7 +19,6 @@ sap.ui.define([
          * @param {Event} oEvent 
          */
         getRouteParams (oEvent) {
-            console.log(oEvent);
             
             const routeParam = oEvent.getParameter("arguments")['?appId'];
             console.log(routeParam);
@@ -31,28 +30,29 @@ sap.ui.define([
          * @param {string} appId 
          */
         validateAppId: async function(appId){
-            console.log(appId);
             
             const validationUrl = this.SERVERHOST + `service/validateApplicationId?encrAppId=${appId}`
 
             // Post request to create a tenant consent.
 			const {data} = await axios.get(validationUrl);
-            console.log(data);
             
             /**
              * Check requested Application ID is valid
              * If true, then render Consent Form View 
              * Else navigate to 404 page.
              */
-            // const data = {value:{status: 200}};
             if(data.value.status === 200){
                 XMlView.create({
                     viewName: "dteconsentappclient.view.ConsentForm",
                     viewData: {applicationId: appId, url: this.SERVERHOST, router: this.getOwnerComponent().getRouter()},
                 }).then(function(oView) {
+                    const oRootView = this.getOwnerComponent().getRootControl();
+                    const oApp = oRootView.byId("app");
 
-                    oView.placeAt("content")
-                });
+                    oApp.addPage(oView); // Add new view as a page
+                    oApp.to(oView);
+                    
+                }.bind(this));
             }else{
                 alert("Not permitted")
             }
