@@ -48,7 +48,7 @@ sap.ui.define([
             if(data.value.status === 200){
                 XMlView.create({
                     viewName: "dteconsentappclient.view.ConsentForm",
-                    viewData: {applicationId: appId, url: this.SERVERHOST},
+                    viewData: {applicationId: appId, url: this.SERVERHOST, router: this.getOwnerComponent().getRouter()},
                 }).then(function(oView) {
 
                     oView.placeAt("content")
