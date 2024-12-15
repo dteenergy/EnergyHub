@@ -1,7 +1,7 @@
 sap.ui.define([
     "dteconsentappclient/controller/BaseController",
-    "sap/ui/core/mvc/XMLView"
-], (BaseController, XMlView) => {
+    "sap/ui/core/mvc/View"
+], (BaseController, View) => {
     "use strict";
 
     return BaseController.extend("dteconsentappclient.controller.ConsentFormEntryPoint", {
@@ -33,26 +33,22 @@ sap.ui.define([
             
             const validationUrl = this.SERVERHOST + `service/validateApplicationId?encrAppId=${appId}`
 
-            // Post request to create a tenant consent.
-			const {data} = await axios.get(validationUrl);
-            
-            /**
-             * Check requested Application ID is valid
-             * If true, then render Consent Form View 
-             * Else navigate to 404 page.
-             */
-            // const data = {value:{status: 200}};
-            if(data.value.status === 200){
-                XMlView.create({
-                    viewName: "dteconsentappclient.view.ConsentForm",
-                    viewData: {applicationId: appId, url: this.SERVERHOST},
-                }).then(function(oView) {
+           try {
+                // Post request to create a tenant consent.
+			    const {data} = await axios.get(validationUrl);
 
+                // Create consent form view
+                View.create({
+                    type: 'XML',
+                    definition: data.value,
+                    viewData: {applicationId: appId, url: this.SERVERHOST}
+                }).then(function(oView) {
                     oView.placeAt("content")
-                });
-            }else{
-                alert("Not permitted")
-            }
+                }); 
+           } catch (error) {
+                console.error(error);
+                
+           }
         }
 
     });

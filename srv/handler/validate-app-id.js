@@ -25,9 +25,9 @@ const validateApplicationId = async (req, entity) => {
 		return { status: 200, message: 'Application Details are available.' }
 	} catch(e){
 		if(e.status) {
-			return {status : e.status, message: e.message}
+			throw {status : e.status, message: e.message}
 		} else {
-			return {status: 500, message: e.message}
+			throw {status: 500, message: e.message}
 		}
 	}
     
