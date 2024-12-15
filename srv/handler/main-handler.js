@@ -25,11 +25,10 @@ module.exports = cds.service.impl(async function (srv) {
 
 		// Validate the Application Id
 		srv.on('validateApplicationId', async (req) => {
+			const res = req._.res;
 			try {
 				// Method to validate the app id.
 				const validationRes = await validateApplicationId(req, this.entities);
-				console.log(validationRes);
-				
 
 				if(validationRes.status != 200) {
 					throw {status: 500, error: 'Unexcept error happended'}
@@ -40,19 +39,21 @@ module.exports = cds.service.impl(async function (srv) {
 				const filePath = path.join(__dirname, '../view', fileName);
 				const consentFormViewBuffer = fs.readFileSync(filePath).toString();
 	
+				// Templating
 				const template = handlebars.compile(consentFormViewBuffer);
 				const result = template();
 
-				const res = req._.res;
 				res.setHeader('Content-disposition', `attachment; filename=${fileName}`);
 				res.setHeader('Content-type', 'application/xml');
 
 				return result;
 			} catch (e) {
 				if (e.status) {
-					return { status: e.status, message: e.message }
+					res.status(e.status)
+					return e.message 
 				}
-				return { status: 500, 'error': e.message }
+				res.status(500);
+				return e.message;
 			}
 		}),
 
