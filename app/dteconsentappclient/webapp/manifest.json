@@ -79,6 +79,9 @@
         },
         {
           "uri": "css/landlord-enrollment-form.css"
+        },
+        {
+          "uri": "css/tenant-consent-form.css"
         }
       ],
       "js":[
@@ -106,7 +109,7 @@
         },
         {
           "name": "ConsentForm",
-          "pattern": "consent-from/{appId}",
+          "pattern": "tenant/consent/{?appId}",
           "target": [
             "TargetConsentForm"
           ]
@@ -149,7 +152,7 @@
     "config": {
       "routerConfig": {
         "localApi": {
-          "uri": "https://port4004-workspaces-ws-b66tw.us20.applicationstudio.cloud.sap/"
+          "uri": "https://port4004-workspaces-ws-mjfnp.us20.applicationstudio.cloud.sap/"
         },
         "productionApi": {
           "uri": ""

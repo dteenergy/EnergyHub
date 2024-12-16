@@ -57,5 +57,6 @@
             <Input
              class="inputBox" liveChange="onLiveChange" type="Email" required="true" placeholder="Filled out by user" value="{oConsentModel>/ConsentDetail/ConsentEmailAddr}"></Input>
         </layout:VerticalLayout>
+
     </VBox>
 </core:FragmentDefinition>
