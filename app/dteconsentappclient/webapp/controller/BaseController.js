@@ -64,7 +64,7 @@ sap.ui.define([
           MessageBox.error(`${errorCode}, ${errorMessage}`);
       },
 
-      // Handle social media image pressed
+      // Handle navigation based on social media image pressed
       onSocialMediaPress: function(oEvent){
         // Retrieve the data from the model
         const mediaDetails = this.getView().getModel('socialMediaModel').getData();
