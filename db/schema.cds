@@ -3,7 +3,7 @@ namespace dteConsentApp;
 entity ApplicationDetail{
     key AppId: UUID;
     ApplicationStatus : appStatus default 'New';
-    NumberOfTenants : Decimal default 0;
+    NumberOfTenants : Integer;
     SignatureSignedBy : String not null;
     SignatureSignedDate : Date not null;
     CreatedAt: Timestamp @cds.on.insert: $now;

@@ -79,6 +79,9 @@
         },
         {
           "uri": "css/landlord-enrollment-form.css"
+        },
+        {
+          "uri": "css/tenant-consent-form.css"
         }
       ],
       "js":[
@@ -106,7 +109,7 @@
         },
         {
           "name": "ConsentForm",
-          "pattern": "consent-from/{appId}",
+          "pattern": "tenant/consent/{?appId}",
           "target": [
             "TargetConsentForm"
           ]
