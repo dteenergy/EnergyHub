@@ -2,7 +2,7 @@ sap.ui.define([
     "dteconsentappclient/controller/BaseController",
     "sap/ui/core/Fragment",
     "sap/ui/model/json/JSONModel",
-		"dteconsentappclient/variable/GlobalInputValues"
+	"dteconsentappclient/variable/GlobalInputValues"
 ], (BaseController, Fragment, JSONModel, GlobalInputValues) => {
     "use strict";
 
@@ -10,12 +10,12 @@ sap.ui.define([
 				consentDetails, 
 				locationDetails, 
 				validationFlags = {
-				accountDetailsValidation: true, 
-				siteDetailsValidation: true,
-				customerAuthDetailValidation: true,
-				locationDetailsValidation: true,
-				consentDetailValidation: true,
-				consentAuthDetailValidation: true
+					accountDetailsValidation: true, 
+					siteDetailsValidation: true,
+					customerAuthDetailValidation: true,
+					locationDetailsValidation: true,
+					consentDetailValidation: true,
+					consentAuthDetailValidation: true
 				}
 
 
@@ -35,9 +35,9 @@ sap.ui.define([
                 "City":"",
                 "State": "",
                 "Zipcode":"",
-								"EnergyPrgmParticipated": false,
-								"AcctMgrName":"",
-								"AcctMgrPhNo":"",
+				"EnergyPrgmParticipated": false,
+				"AcctMgrName":"",
+				"AcctMgrPhNo":"",
                 "SiteFirstName": "",
                 "SiteLastName": "",
                 "SiteContactTitle":"",
@@ -380,12 +380,10 @@ sap.ui.define([
 							if(inputvalue) {
 								oErrorVisibilityModel.setProperty('/isTermsAndConditionVerifiedStatus', false);
 								innerDiv.removeClass("checkbox-error-view");
-								console.log('checked');
 							}
 							else {
 								oErrorVisibilityModel.setProperty('/isTermsAndConditionVerifiedStatus', true);	
-								innerDiv.addClass("checkbox-error-view");
-								console.log('unchecked');	
+								innerDiv.addClass("checkbox-error-view");	
 							}		
 						}
             });
@@ -406,13 +404,11 @@ sap.ui.define([
 			
 					// Rearrange to 'YYYY-MM-DD' and return
 					return `${year}-${month}-${day}`;
-			},
+				},
 
 				submitAction: async function(){
 					const oErrorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
           const oErrorVisibilityModelData = oErrorVisibilityModel.getData();
-
-					console.log('axios call');
 					
 					if(!oErrorVisibilityModelData?.isInputInValid && !oErrorVisibilityModelData?.isTermsAndConditionVerifiedStatus){
 						
@@ -459,7 +455,7 @@ sap.ui.define([
 					}
 				},
 
-        handleSubmit: async function () {
+        handleSubmit: function () {
 					this.validateFormDetails("account-info-container", true, "oEnrollModel", "accountDetailsValidation");
 					this.validateFormDetails("site-contact-info-container", true, "oEnrollModel", "siteDetailsValidation");
 					this.validateBuildingDetails("building-detail-main-container");

@@ -13,16 +13,16 @@ const createConsentFormDetail = async (req, entity, tx, decrAppId) => {
     const { ConsentDetail } = req?.data;
 
     // Parse the String Payload
-    let consentDetailParsedData = JSON.parse(ConsentDetail);
+    const consentDetailParsedData = JSON.parse(ConsentDetail);
 
     // Check the Consent details fields contains the empty value.
-    const consentDetailFieldCheck = Object.values(consentDetailParsedData).some(value => value === '');
+    const excludedFields = ['AuthTitle'];
+    const consentDetailFieldCheck = Object.keys(consentDetailParsedData).filter((key=> !excludedFields.includes(key))).some(key => consentDetailParsedData[key] === '');
     if (consentDetailFieldCheck)
       throw { status: 400, message: 'Kindly fill all the required fields.' }
 
     // Validate the Sensitive field information from consentDetailParsedData.
     validateWithRegex(consentDetailParsedData?.EmailAddr, 'email');
-    validateWithRegex(consentDetailParsedData?.PhoneNumber, 'phoneNumber');
 
     // Assign AppId to ApplicationConsent
     consentDetailParsedData.AppRefId_AppId = decrAppId;

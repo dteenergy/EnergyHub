@@ -1,0 +1,9 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns= "sap.m" xmlns:tnt="sap.tnt" >
+
+     <tnt:ToolHeader id="header" class="app-header">
+        <Text id="header-title" class="header-title" text="DTE Energy Data Hub"></Text>
+        <Image id="dte-logo" src="images/DTE-logo.png" alt="DTE-Logo"></Image>
+        <Link id="dte-web-site" class="dte-web-site" href="https://www.dteenergy.com/us/en.html" text="Visit DTEEnergy.com" icon="sap-icon://arrow-top" target="_blank"></Link>
+    </tnt:ToolHeader>
+
+</core:FragmentDefinition>
