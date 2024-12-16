@@ -105,7 +105,6 @@ sap.ui.define([
 					const oModel = oView.getModel("locationModel");
 					const buildingMainContainer = this.byId("building-detail-main-container");
 					let locations = oModel.getProperty("/locations");
-					console.log(locations);
 					
 					const newLocation = {
 						BuildingName: "",
@@ -122,7 +121,6 @@ sap.ui.define([
 					const index = buildingMainContainer.getItems().length;
 					
 					locations = {...locations, [id]: newLocation}
-					console.log(locations);
 					
 					oModel.setProperty("/locations", locations);
 
@@ -183,7 +181,6 @@ sap.ui.define([
 					oFlexWrapper.destroy();
 
 					delete locations[flexWrapperId];
-					console.log(buildingDetailMainContainer.getItems());
 					
 					if(buildingDetailMainContainer.getItems().length > 1){
 
@@ -378,7 +375,6 @@ sap.ui.define([
 					 */
 					container.getItems().forEach((wrapper, index)=>{
 						let id = wrapper.getId().split('--')[2];
-						console.log(id);
 						
 						wrapper.findAggregatedObjects(true, (control)=>{
 							
@@ -403,13 +399,10 @@ sap.ui.define([
 				// Retrieve the all input data
 				retrieveAllInputBindings: function(){
 					enrollmentDetails = this.getView().getModel("oEnrollModel").getData();
-					console.log(enrollmentDetails);
 
 					consentDetails = this.getView().getModel("oConsentModel").getData()?.ConsentDetail;
-					console.log(consentDetails);
 
 					locationDetails = this.getView().getModel("locationModel").getData();
-					console.log(locationDetails);
 				},
 
 				validateTermsAndConditionIsVerified: function(sContainerId){
@@ -423,19 +416,16 @@ sap.ui.define([
 							// Filtered the input and combobox controls
 							if (control instanceof sap.m.CheckBox) {
 								const inputvalue = control.getSelected();
-								console.log(inputvalue);
 								
 								const innerDiv = control.$().find(".sapMCbBg");
 								
 							if(inputvalue) {
 								oErrorVisibilityModel.setProperty('/isTermsAndConditionVerifiedStatus', false);
 								innerDiv.removeClass("checkbox-error-view");
-								console.log('checked');
 							}
 							else {
 								oErrorVisibilityModel.setProperty('/isTermsAndConditionVerifiedStatus', true);	
 								innerDiv.addClass("checkbox-error-view");
-								console.log('unchecked');	
 							}		
 						}
             });
@@ -443,7 +433,6 @@ sap.ui.define([
 
 				setErrorMessageTripVisibility: function(){
 					const oErrorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
-					console.log(Object.values(validationFlags));
 
 					if(Object.values(validationFlags).includes(false)) 
 						oErrorVisibilityModel.setProperty('/isInputInValid', true);
@@ -510,7 +499,6 @@ sap.ui.define([
 				},
 
         handleSubmit: async function () {
-					this.retrieveAllInputBindings()
 					this.validateFormDetails("account-info-container", true, "oEnrollModel", "accountDetailsValidation");
 					this.validateFormDetails("site-contact-info-container", true, "oEnrollModel", "siteDetailsValidation");
 					this.validateBuildingDetails("building-detail-main-container");
