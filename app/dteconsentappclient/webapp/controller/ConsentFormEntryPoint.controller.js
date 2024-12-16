@@ -21,7 +21,6 @@ sap.ui.define([
         getRouteParams (oEvent) {
             
             const routeParam = oEvent.getParameter("arguments")['?appId'];
-            console.log(routeParam);
             
             this.validateAppId(routeParam.appId);
         },
@@ -46,11 +45,12 @@ sap.ui.define([
                     viewName: "dteconsentappclient.view.ConsentForm",
                     viewData: {applicationId: appId, url: this.SERVERHOST, router: this.getOwnerComponent().getRouter()},
                 }).then(function(oView) {
+                    // Render the created view into the App view
                     const oRootView = this.getOwnerComponent().getRootControl();
                     const oApp = oRootView.byId("app");
 
                     oApp.addPage(oView); // Add new view as a page
-                    oApp.to(oView);
+                    oApp.to(oView); // Navigate to that page
                     
                 }.bind(this));
             }else{
