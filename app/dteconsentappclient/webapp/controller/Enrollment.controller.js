@@ -2,8 +2,9 @@ sap.ui.define([
     "dteconsentappclient/controller/BaseController",
     "sap/ui/core/Fragment",
     "sap/ui/model/json/JSONModel",
-	"dteconsentappclient/variable/GlobalInputValues"
-], (BaseController, Fragment, JSONModel, GlobalInputValues) => {
+	  "dteconsentappclient/variable/GlobalInputValues",
+		"sap/m/Dialog"
+], (BaseController, Fragment, JSONModel, GlobalInputValues, Dialog) => {
     "use strict";
 
     let enrollmentDetails, 
@@ -17,7 +18,6 @@ sap.ui.define([
 					consentDetailValidation: true,
 					consentAuthDetailValidation: true
 				}
-
 
     return BaseController.extend("dteconsentappclient.controller.Enrollment", {
         onInit() {
@@ -171,6 +171,21 @@ sap.ui.define([
 							// Add the fragment to the according container
 							buildingMainContainer.addItem(wrapper);
 							that.buildingCount += 1;
+
+							
+							if(count > 1){
+							const fullId = that.createId(id);
+							
+							// Execute the scroll of newly added location container after rendering the fragment 
+							setTimeout(() => {
+								// Get the DOM reference
+								const newElement = that.byId(fullId)?.getDomRef(); 
+								if (newElement) {
+										newElement.scrollIntoView({ behavior: "smooth", block: "center" });
+								}
+						}, 0);
+					}
+
 					}).catch(function (err) {
 							console.log(`Failed to load fragment: ${err}`)
 					});
@@ -185,6 +200,8 @@ sap.ui.define([
 					// Get the Id of the container, which holds the additional building that the user clicked remove button
 					const oButton = oEvent.getSource();
 					const oFlexWrapper = oButton.getParent();
+					console.log(oFlexWrapper.getId());
+					
 					const flexWrapperId = oFlexWrapper.getId().split('--')[2];
 
 					// Remove the particular location from the whole container
@@ -461,52 +478,112 @@ sap.ui.define([
 					return `${year}-${month}-${day}`;
 				},
 
-				submitAction: async function(){
+				// To open the additional location alert dialog
+				additionalLocationAlert: function(){
 					const oErrorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
           const oErrorVisibilityModelData = oErrorVisibilityModel.getData();
 					
+					/**
+					 * Here checks if the error message strip was in inVisible state
+					 * If it is all inputs are valid, then open the additional location alert dialog
+					 */
 					if(!oErrorVisibilityModelData?.isInputInValid && !oErrorVisibilityModelData?.isTermsAndConditionVerifiedStatus){
-						
-						// Retrieve the data from binded models
-						this.retrieveAllInputBindings();
 
-						// Url to create the enrollment application
-						const enrollmentCreateUrl = this.SERVERHOST + 'service/CreateEnrollmentFormDetail';
+					const that = this;
 
-						const enrollmentFormDetails = {
-							AccountDetail: JSON.stringify({
-								...enrollmentDetails['AccountDetail'], 
-								FirstName: enrollmentDetails['AccountDetail']['SiteFirstName'], 
-								LastName: enrollmentDetails['AccountDetail']['SiteLastName'],
-								EmailAddr: enrollmentDetails['AccountDetail']['SiteEmailAddr']}),
+					// Customize content of the dialog, design the VBox container
+          const dialogContent = new sap.m.FlexBox({
+            items: [
+              new sap.m.Text({text: 'NOTE: If you want to add another location, you must do so before submitting this form. Adding another location after submitting will require filling out a new form.'}),
+              new sap.m.Button({
+                text: '+ Add Another Location',
+                press: function(){
+                  that.onAddAnotherLocation(),
+                  that.oConfirmationDialog.close()
+                }
+              }),
+              new sap.m.Text({text: 'I don’t have another location.'}),
+              new sap.m.Button({
+                text: 'Continue Submission',
+                press: function(){
+									// To call the backend service and store the data
+                  that.submitAction(),
+                  that.oConfirmationDialog.close()
+                },
+                type: sap.m.ButtonType.Emphasized
+              })
+            ],
+          });
+
+					// Add the class for the dialog content
+          dialogContent.addStyleClass("confirmation-dialog-content");
+
+					// Custom header for the dialog
+					const dialogTitle = new sap.m.Bar({
+						contentMiddle: [new sap.m.Text({ text: 'Additional Location Alert' })],
+						contentRight: [
+								new sap.ui.core.Icon({
+										src: 'sap-icon://decline',
+										decorative: false,
+										press: function () {
+												that.oConfirmationDialog.close();
+										}
+								})
+						]
+				});
+
+				// Open the additional location alert dialog while submit pressed
+          if(!this.oConfirmationDialog){
+            this.oConfirmationDialog = new Dialog({
+							customHeader: dialogTitle,
+              content: dialogContent
+            })
+          }
+          this.oConfirmationDialog.open();
+        	}
+				},
+
+				submitAction: async function(){
+					// Retrieve the data from bound models
+					this.retrieveAllInputBindings();
+
+					// Url to create the enrollment application
+					const enrollmentCreateUrl = this.SERVERHOST + 'service/CreateEnrollmentFormDetail';
+
+					const enrollmentFormDetails = {
+						AccountDetail: JSON.stringify({
+							...enrollmentDetails['AccountDetail'], 
+							FirstName: enrollmentDetails['AccountDetail']['SiteFirstName'], 
+							LastName: enrollmentDetails['AccountDetail']['SiteLastName'],
+							EmailAddr: enrollmentDetails['AccountDetail']['SiteEmailAddr']}),
 							BuildingDetail: JSON.stringify(Object.values(locationDetails['locations'])),
 							ApplicationDetail: JSON.stringify({'SignatureSignedBy': enrollmentDetails['SignatureSignedBy'], 'SignatureSignedDate': this.convertDateFormat(enrollmentDetails['SignatureSignedDate'])}),
 							ConsentDetail: JSON.stringify([{
-								"FirstName": consentDetails['ConsentFirstName'],
-								"LastName": consentDetails['ConsentLastName'],
-								"SiteContactTitle": consentDetails['ConsentContactTitle'],
-								"Address": consentDetails['ConsentAddress'],
-								"City": consentDetails['ConsentCity'],
-								"State": consentDetails['ConsentState'],
-								"Zipcode": consentDetails['ConsentZipcode'],
-								"AccountNumber": consentDetails['ConsentAccountNumber'],
-								"PhoneNumber": consentDetails['ConsentPhoneNumber'],
-								"EmailAddr": consentDetails['ConsentEmailAddr'],
-								"AuthPersonName": consentDetails['AuthPersonName'],
-								"AuthDate": this.convertDateFormat(consentDetails['AuthDate']),
-								"AuthTitle": consentDetails['AuthTitle'],
-							}])
-						};
-						
-						// Post request to create a enrollment application
-						const {data} = await axios.post(enrollmentCreateUrl, enrollmentFormDetails);
-						
-						if(data.value.statusCode === 200){
-							this.getOwnerComponent().getRouter().navTo("Confirmation", {
-								StatusCode: data.value.statusCode,
-								Message: data.value.Message
-							});
-						}
+							"FirstName": consentDetails['ConsentFirstName'],
+							"LastName": consentDetails['ConsentLastName'],
+							"SiteContactTitle": consentDetails['ConsentContactTitle'],
+							"Address": consentDetails['ConsentAddress'],
+							"City": consentDetails['ConsentCity'],
+							"State": consentDetails['ConsentState'],
+							"Zipcode": consentDetails['ConsentZipcode'],
+							"AccountNumber": consentDetails['ConsentAccountNumber'],
+							"PhoneNumber": consentDetails['ConsentPhoneNumber'],
+							"EmailAddr": consentDetails['ConsentEmailAddr'],
+							"AuthPersonName": consentDetails['AuthPersonName'],
+							"AuthDate": this.convertDateFormat(consentDetails['AuthDate']),
+							"AuthTitle": consentDetails['AuthTitle'],
+						}])
+					};
+					
+					// Post request to create a enrollment application
+					const {data} = await axios.post(enrollmentCreateUrl, enrollmentFormDetails);
+					
+					// If get the success(200) response then navigate to the confirmation page
+					if(data.value.statusCode === 200){
+						this.getOwnerComponent().getRouter().navTo("Confirmation", {
+							StatusCode: data.value.statusCode,
+							Message: data.value.Message
+						});
 					}
 				},
 
@@ -523,8 +600,8 @@ sap.ui.define([
 					// Update the error message trip visibility status once validation is done
 					this.setErrorMessageTripVisibility();
 
-					// To call the backend service and store the data
-					this.submitAction();
+					// Dialog to additional location alert
+					this.additionalLocationAlert();
         },
 
     });
