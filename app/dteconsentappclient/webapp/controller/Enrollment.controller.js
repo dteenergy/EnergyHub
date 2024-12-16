@@ -35,9 +35,9 @@ sap.ui.define([
                 "City":"",
                 "State": "",
                 "Zipcode":"",
-				"EnergyPrgmParticipated": false,
-				"AcctMgrName":"",
-				"AcctMgrPhNo":"",
+								"EnergyPrgmParticipated": false,
+								"AcctMgrName":"",
+								"AcctMgrPhNo":"",
                 "SiteFirstName": "",
                 "SiteLastName": "",
                 "SiteContactTitle":"",
@@ -456,6 +456,7 @@ sap.ui.define([
 				},
 
         handleSubmit: function () {
+					// While submit button is pressed, validate all the fields in the form
 					this.validateFormDetails("account-info-container", true, "oEnrollModel", "accountDetailsValidation");
 					this.validateFormDetails("site-contact-info-container", true, "oEnrollModel", "siteDetailsValidation");
 					this.validateBuildingDetails("building-detail-main-container");
@@ -463,8 +464,11 @@ sap.ui.define([
 					this.validateFormDetails("enrollment-consent-section", true, "oConsentModel", "consentDetailValidation");
 					this.validateFormDetails("customer-auth-and-release-container", true, "oConsentModel", "consentAuthDetailValidation");
 					this.validateTermsAndConditionIsVerified("customer-auth-and-release-container");
+
+					// Update the error message trip visibility status once validation is done
 					this.setErrorMessageTripVisibility();
 
+					// To call the bacckend service and store the data
 					this.submitAction();
         },
 
