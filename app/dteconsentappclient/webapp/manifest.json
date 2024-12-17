@@ -24,6 +24,19 @@
           "odataVersion": "4.0"
         }
       }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "DTE_ENERGY_HUB_FORM-display": {
+          "semanticObject": "DTE_ENERGY_HUB_FORM",
+          "action": "display",
+          "title": "{{flpTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
     }
   },
   "sap.ui": {
@@ -84,7 +97,7 @@
           "uri": "css/tenant-consent-form.css"
         }
       ],
-      "js":[
+      "js": [
         {
           "uri": "libs/axios.min.js"
         }
@@ -105,7 +118,9 @@
         {
           "name": "Enrollment",
           "pattern": "landlord/enrollment",
-          "target": ["EnrollmentForm"]
+          "target": [
+            "EnrollmentForm"
+          ]
         },
         {
           "name": "ConsentForm",
@@ -117,27 +132,29 @@
         {
           "name": "Confirmation",
           "pattern": "confirmation/{StatusCode}/{Message}",
-          "target": ["Confirmation"]
+          "target": [
+            "Confirmation"
+          ]
         }
       ],
       "targets": {
         "TargetConsentForm": {
           "viewType": "XML",
-          "transition":"slide",
+          "transition": "slide",
           "clearControlAggregation": false,
           "viewId": "ConsentFormEntryPoint",
           "viewName": "ConsentFormEntryPoint"
         },
         "EnrollmentForm": {
           "viewType": "XML",
-          "transition":"slide",
+          "transition": "slide",
           "clearControlAggregation": false,
           "viewId": "Enrollment",
           "viewName": "Enrollment"
         },
         "Confirmation": {
           "viewType": "XML",
-          "transition":"slide",
+          "transition": "slide",
           "clearControlAggregation": false,
           "viewId": "Confirmation",
           "viewName": "Confirmation"
