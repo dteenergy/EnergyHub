@@ -91,8 +91,12 @@ sap.ui.define([
 				this.getView().setModel(oErrorVisibilityModel, "oErrorVisibilityModel");
 
 				// Model to set the list of US states
-				const ostateValuesModel = new JSONModel(GlobalInputValues);
+				const ostateValuesModel = new JSONModel(GlobalInputValues.usStates);
 				this.getView().setModel(ostateValuesModel, "ostateValuesModel");
+
+				// Model to set the location available state list 
+				const oLocationStateModel = new JSONModel(GlobalInputValues.locationStates);
+				this.getView().setModel(oLocationStateModel, "oLocationStateModel");
 
         this.onAddAnotherLocation();
         this.loadConsentForm();
