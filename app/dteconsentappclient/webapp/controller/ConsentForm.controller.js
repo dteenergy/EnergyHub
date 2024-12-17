@@ -23,11 +23,21 @@ sap.ui.define([
 	return BaseController.extend("dteconsentappclient.controller.ConsentForm", {
         onInit () {
 
-					const {applicationId, url} = this.getView().getViewData();
+					const {applicationId, url, router} = this.getView().getViewData();
 					
+					// Get the required properties from the parent view
 					this.applicationId = applicationId;
 					this.SERVERHOST = url;
+					this.router = router;
+					
+					//Initialize Model for this view
+					this.initializeModel();
+					// Load the AuthAndRelease fragement
+					this.loadAuthAndRelease();
+			},
 
+				initializeModel: function(){
+					
 					let oConsentData = {
 						ConsentDetail: {
 							"ConsentFirstName": "",
@@ -57,23 +67,8 @@ sap.ui.define([
 						"isInputInValid":false,
 						"isTermsAndConditionVerifiedStatus":false
 					});
-
 					this.getView().setModel(oErrorVisibilityModel, "oErrorVisibilityModel");
-
-					const oSocialMediaModel = new JSONModel({
-						sMediaDetails: [
-						  {'path': 'images/Facebook.png', 'alt':'Facebook', 'src':'https://www.facebook.com/dteenergy'},
-						  {'path': 'images/X-Twitter.png', 'alt':'X-Twitter', 'src':'https://x.com/dte_energy'},
-						  {'path': 'images/Instagram.png', 'alt':'Instagram', 'src':'https://www.instagram.com/dte_energy_official/'},
-						  {'path': 'images/YouTube.png', 'alt':'Youtube', 'src':'https://www.youtube.com/user/DTEEnergyCompany'},
-						  {'path': 'images/LinkedIn.png', 'alt':'LinkedIn', 'src':'https://www.linkedin.com/company/dte-energy'}
-						]
-					  });
-			  
-					  this.getView().setModel(oSocialMediaModel, 'socialMediaModel')
-					
-					this.loadAuthAndRelease();
-			},
+				},
 
         // Define model and load the Customer Auth and Release section fragment to the enrollment form
         loadAuthAndRelease: function(){
@@ -97,13 +92,29 @@ sap.ui.define([
 			onLiveChange: function(oEvent){
 				const oControl = oEvent.getSource();
 				
+				// Get the parent container's Id
+				let oParent = oControl.getParent();
+				let id;
+
+				while(!id){
+					id = oParent.getId().split('--')[1];
+					oParent = oParent.getParent();
+				}
 				const userInput = oEvent.getParameter("value") || oEvent.getParameter("selectedKey");
 
+				// Checks the containers all input are get valid
+				if(Object.values(validationFlags).includes(false)){
+					const needToBeUpdate = validationProperties.filter((validationItem => validationItem.sContainerId == id));
+					
+					const {sContainerId, isShowError, validationStatus} = needToBeUpdate[0];
+					this.validateFormDetails(sContainerId, isShowError, validationStatus);
+				}
+				
 				// Validates if a field has value, if it is remove the error state
-				if(userInput?.trim() !== "" && oControl?.mProperties['required']) {
-					oControl.setValueState("None");
-				}else{
+				if(userInput?.trim() === "" || !userInput && oControl?.mProperties['required']) {
 					oControl.setValueState("Error");
+				}else{
+					oControl.setValueState("None");
 				}
 			},
 
@@ -111,13 +122,11 @@ sap.ui.define([
 	 		* Validate tenant form details
 			* @param {String} sContainerId Container Id
 			* @param {Boolean} isShowError Have to add value state or not
-			* @param {Object} model model with bind with the container
-			* @param {String} validationStatus
+			* @param {String} validationStatus 
 			*/
-		 validateFormDetails: function(sContainerId, isShowError, model, validationStatus){
-			const oModel = this.getView().getModel(model);
-			const container = this.byId(sContainerId);
+		 validateFormDetails: function(sContainerId, isShowError, validationStatus){
 
+			const container = this.byId(sContainerId);
 			validationFlags[validationStatus] = true;
 			 
 			// To get the aggregated objects from the given container
@@ -131,7 +140,7 @@ sap.ui.define([
 						
 						if(bindingPath){
 							 
-							const userInput = oModel.getProperty(bindingPath);
+							const userInput = control.getValue();
 							
 							// Validates that all required fields are filled; if a field is empty, marks it with an error state to indicate validation failure.
 							if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) {
@@ -145,8 +154,14 @@ sap.ui.define([
 						 }		
 					 }		
 				 });
+				 // To update the error message visility status
+				 this.setErrorMessageTripVisibility();
 		 },
 
+		 /**
+			* Update the error message visibility for terms and condition verified status while click the submit button.
+			* @param {String} sContainerId 
+			*/
 		 validateTermsAndConditionIsVerified: function(sContainerId){
 			const oErrorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
 
@@ -173,6 +188,11 @@ sap.ui.define([
 				});
 		},
 
+		/**
+		 * To convert the date format
+		 * @param {String} dateString 11/12/2024
+		 * @returns {String} date 2024-12-11
+		 */
 		convertDateFormat: function(dateString) {
 			// Split the input date by '/'
 			const [day, month, year] = dateString.split('/');
@@ -181,6 +201,7 @@ sap.ui.define([
 			return `${year}-${month}-${day}`;
 		},
 
+		// To update the error message visibility status
 		setErrorMessageTripVisibility: function(){
 			const oErrorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
 
@@ -189,6 +210,7 @@ sap.ui.define([
 			else oErrorVisibilityModel.setProperty('/isInputInValid', false);
 		},
 
+		 // Update the error message visibility for terms and condition verified status while on change.
 		 handleTermsAndConditionVerified: function(oEvent){
 			const oControl = oEvent.getSource();
 			
@@ -236,18 +258,19 @@ sap.ui.define([
 					// Post request to create a tenant consent.
 					const {data} = await axios.post(tenantConsentCreateUrl, tenantConsentFormDetails);
 						
-					if(data.value.statusCode === 200){
-						this.getOwnerComponent().getRouter().navTo("Confirmation", {
-							StatusCode: data.value.statusCode,
-							Message: data.value.Message
+					if(data.value.status === 200){
+						this.initializeModel();
+						this.router.navTo("Confirmation", {
+							StatusCode: data.value.status,
+							Message: data.value.message
 						});
 					}
 			}
 		},
 
 			onSubmit: function(){
-				validationProperties.map(({sContainerId, isShowError, model, validationStatus}) => {
-					this.validateFormDetails(sContainerId, isShowError, model, validationStatus);
+				validationProperties.map(({sContainerId, isShowError, validationStatus}) => {
+					this.validateFormDetails(sContainerId, isShowError, validationStatus);
 				});
 				this.validateTermsAndConditionIsVerified("tenant-auth-and-release-container-id");
 				this.setErrorMessageTripVisibility();

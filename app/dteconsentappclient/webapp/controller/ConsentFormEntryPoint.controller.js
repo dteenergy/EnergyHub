@@ -41,7 +41,7 @@ sap.ui.define([
                 View.create({
                     type: 'XML',
                     definition: data.value,
-                    viewData: {applicationId: appId, url: this.SERVERHOST}
+                    viewData: {applicationId: appId, url: this.SERVERHOST, router: this.getOwnerComponent().getRouter()},
                 }).then(function(oView) {
                     oView.placeAt("content")
                 }); 
