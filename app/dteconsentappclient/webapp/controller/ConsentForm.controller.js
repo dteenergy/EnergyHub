@@ -101,7 +101,7 @@ sap.ui.define([
 					oParent = oParent.getParent();
 				}
 				const userInput = oEvent.getParameter("value") || oEvent.getParameter("selectedKey");
-
+				
 				// Checks the containers all input are get valid
 				if(Object.values(validationFlags).includes(false)){
 					const needToBeUpdate = validationProperties.filter((validationItem => validationItem.sContainerId == id));

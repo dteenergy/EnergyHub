@@ -43,12 +43,17 @@ sap.ui.define([
                     definition: data.value,
                     viewData: {applicationId: appId, url: this.SERVERHOST, router: this.getOwnerComponent().getRouter()},
                 }).then(function(oView) {
-                    oView.placeAt("content")
-                }); 
-           } catch (error) {
-                console.error(error);
-                
-           }
+                    // Render the created view into the App view
+                    const oRootView = this.getOwnerComponent().getRootControl();
+                    const oApp = oRootView.byId("app");
+
+                    oApp.addPage(oView); // Add new view as a page
+                    oApp.to(oView); // Navigate to that page
+                    
+                }.bind(this));
+            } catch(error){
+                alert("Not permitted")
+            }
         }
 
     });
