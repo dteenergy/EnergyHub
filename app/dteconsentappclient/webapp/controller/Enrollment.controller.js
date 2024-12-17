@@ -77,7 +77,7 @@ sap.ui.define([
 			this.getView().setModel(oConsentModel, "oConsentModel");
 
         const oModel = new JSONModel({
-            locations: [], // Array to hold all building location data
+            locations: {}, // Array to hold all building location data
         });
         this.getView().setModel(oModel, "locationModel");
 
@@ -100,55 +100,84 @@ sap.ui.define([
 
         // Add additional location(Building) container
         onAddAnotherLocation: function(){
-            const oView = this.getView();
-            const oModel = oView.getModel("locationModel");
-            const buildingmainContainer = this.byId("building-detail-main-container");
-            const locations = oModel.getProperty("/locations");
+					const oView = this.getView();
+					const oModel = oView.getModel("locationModel");
+					const buildingMainContainer = this.byId("building-detail-main-container");
+					let locations = oModel.getProperty("/locations");
+					console.log(locations);
+					
+					const newLocation = {
+						BuildingName: "",
+						AccountNumber: "",
+						Address: "",
+						City: "",
+						State: "Michigan",
+						Zipcode: ""
+					}
 
-            locations.push({
-                BuildingName: "",
-                AccountNumber: "",
-                Address: "",
-                City: "",
-                State: "Michigan",
-                Zipcode: ""
-            });
+					const index = buildingMainContainer.getItems().length;
+					
+					const id = `Building${index}`;
+					console.log(id);
+					
+					locations = {...locations, [id]: newLocation}
+					console.log(locations);
+					
+					oModel.setProperty("/locations", locations);
 
-            oModel.setProperty("/locations", locations);
+					let that = this;
 
-            const index = locations.length - 1;
+					// Load the location(Building) fragment in the enrollment form 
+					Fragment.load({
+							name: "dteconsentappclient.fragment.Buildingdetail",
+							controller: this,
+					}).then(function (oFragment) {
+							let flexItems = []
+							 
+							// Add the label for additional buildings
+								if(index > 0){
+								const buildingInfoLabel = new sap.m.Title({
+										text:  `Location ${index + 1}`,
+										titleStyle: 'H6'
+								});
+							buildingInfoLabel.addStyleClass("location-inner-title");
+								const removeButton = new sap.m.Button({
+									text: 'Remove Building',
+									press: function (oEvent) { that.removeBuilding(oEvent)}
+								});
+								
+								flexItems = [buildingInfoLabel, removeButton];
+							}
 
-            // Load the location(Building) fragment in the enrollment form 
-            Fragment.load({
-                name: "dteconsentappclient.fragment.Buildingdetail",
-                controller: this
-            }).then(function (oFragment) {
-                let flexItems = []
-                 
-                // Add the label for additional buildings
-                if(index > 0){
-                const buildingInfoLabel = new sap.m.Title({
-                    text:  `Location ${index + 1}`,
-                    titleStyle: 'H6'
-                });
-                buildingInfoLabel.addStyleClass("location-inner-title");
-                    flexItems = [buildingInfoLabel]
-                }
+							// Set and bind the model with the fragment
+							oFragment.setModel(oModel, "locationModel");
+							oFragment.bindElement(`locationModel>/locations/${id}`);
+							const wrapper = new sap.m.FlexBox(that.createId(id),{
+									items: [...flexItems, oFragment],
+									direction: 'Column',
+							});
 
-                // Set and bind the model with the fragment
-                oFragment.setModel(oModel, "locationMoel");
-                oFragment.bindElement(`locationModel>/locations/${index}`);
-                const wrapper = new sap.m.FlexBox({
-                    items: [...flexItems, oFragment],
-                    direction: 'Column',
-                });
+							// Add the fragment to the according container
+							buildingMainContainer.addItem(wrapper);
+					}).catch(function (err) {
+							console.log(`Failed to load fragment: ${err}`)
+					});
+			},
 
-                // Add the fragment to the according container
-                buildingmainContainer.addItem(wrapper);
-            }).catch(function (err) {
-                console.log(`Failed to load fragment: ${err}`)
-            });
-        },
+				removeBuilding: function (oEvent) {
+					const oModel = this.getView().getModel("locationModel");
+					let locations = oModel.getProperty("/locations");
+					
+					const oButton = oEvent.getSource();
+					const oFlexWrapper = oButton.getParent();
+					const flexWrapperId = oFlexWrapper.getId().split('--')[2];
+
+					const buildingDetailMainContainer = this.byId("building-detail-main-container");
+					buildingDetailMainContainer.removeItem(oFlexWrapper);
+					oFlexWrapper.destroy();
+
+					delete locations[flexWrapperId]
+			},
 
           // Define the event handler in your controller
           onRadioButtonSelect: function (oEvent) {
@@ -351,7 +380,7 @@ sap.ui.define([
 				},
 
 				// Retrieve the all input data
-				retrieveAllInputbindings: function(){
+				retrieveAllInputBindings: function(){
 					enrollmentDetails = this.getView().getModel("oEnrollModel").getData();
 					console.log(enrollmentDetails);
 
@@ -413,7 +442,7 @@ sap.ui.define([
 					if(!oErrorVisibilityModelData?.isInputInValid && !oErrorVisibilityModelData?.isTermsAndConditionVerifiedStatus){
 						
 						// Retrieve the data from binded models
-						this.retrieveAllInputbindings();
+						this.retrieveAllInputBindings();
 
 						// Url to create the enrollment application
 						const enrollmentCreateUrl = this.SERVERHOST + 'service/CreateEnrollmentFormDetail';
@@ -455,11 +484,11 @@ sap.ui.define([
 					}
 				},
 
-        handleSubmit: function () {
-					// While submit button is pressed, validate all the fields in the form
+        handleSubmit: async function () {
+					this.retrieveAllInputBindings()
 					this.validateFormDetails("account-info-container", true, "oEnrollModel", "accountDetailsValidation");
 					this.validateFormDetails("site-contact-info-container", true, "oEnrollModel", "siteDetailsValidation");
-					this.validateBuildingDetails("building-detail-main-container");
+					// this.validateBuildingDetails("building-detail-main-container");
 					this.validateFormDetails("auth-info-container", true, "oEnrollModel", "customerAuthDetailValidation");
 					this.validateFormDetails("enrollment-consent-section", true, "oConsentModel", "consentDetailValidation");
 					this.validateFormDetails("customer-auth-and-release-container", true, "oConsentModel", "consentAuthDetailValidation");
