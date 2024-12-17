@@ -57,7 +57,8 @@
 .customer-auth-and-release > *,
 .enrollment-consent-section > *,
 .auth-and-release-container > *,
-.message-strip-container > *{
+.message-strip-container > *,
+.confirmation-dialog-content > *{
     padding-bottom: 15px;
 }
 .vertical-layout{
@@ -91,10 +92,18 @@
 .checkbox-selected{
     background: #1E3575;
 }
-.enroll-form-container{
+.enroll-form-container, .consent-form-container{
     padding: 0 15px 0 15px;
 }
-
+.addition-building-container{
+    padding: 15px;
+    margin-top: 10px;
+    background: rgba(141, 200, 232, 0.1);
+}
+.confirmation-dialog-content{
+    flex-direction: column;
+    padding: 15px;
+}
 @media only screen and (max-width: 600px) {
     .state-and-code{
         flex-direction: column;
