@@ -6,7 +6,7 @@
 					<Image id="footer-logo-image" alt="DTE-logo" src="images/DTE-logo.png"></Image>
 					<FlexBox id="social-media-container" class="social-media-container" items="{socialMediaModel>/sMediaDetails}">
 					<items>
-							<Image class="social-media-img" src="{socialMediaModel>path}" alt="{socialMediaModel>alt}" press="onImageSocialMediaPress"></Image>
+							<Image src="{socialMediaModel>path}" alt="{socialMediaModel>alt}" press="onSocialMediaPress"></Image>
 							</items>
 					</FlexBox>
 
