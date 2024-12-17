@@ -1,7 +1,7 @@
 sap.ui.define([], function(){
     "use strict";
 
-    let usStates = [
+    const usStates = [
         { "key": "AL", "text": "Alabama" },
         { "key": "AK", "text": "Alaska" },
         { "key": "AZ", "text": "Arizona" },
@@ -54,6 +54,8 @@ sap.ui.define([], function(){
         { "key": "WY", "text": "Wyoming" }
     ];
     
-    
-    return usStates;
+    const locationStates = [
+        { "key": "MI", "text": "Michigan" },
+    ]
+    return {usStates, locationStates};
 })
