@@ -29,8 +29,8 @@
 
 		<layout:VerticalLayout class="vertical-layout">
 			<Label text="State" required="true"></Label>
-			<ComboBox change="onLiveChange" required="true" selectedKey="{locationModel>State}" width="100%">
-				<core:Item text="{locationModel>State}" key="{locationModel>State}"></core:Item>
+			<ComboBox change="onLiveChange" required="true" selectedKey="{locationModel>State}" items="{path: 'oLocationStateModel>/'}" width="100%">
+				<core:Item text="{oLocationStateModel>text}" key="{oLocationStateModel>text}"></core:Item>
 			</ComboBox>
 		</layout:VerticalLayout>
 		
