@@ -25,6 +25,7 @@ sap.ui.define([
         // Assign url and headers into this controller global scope
           const { url } = this.getApiConfig();
           this.SERVERHOST = url;
+					this.buildingCount = 1;
 
           let oEnrollFormData = {
             SignatureSignedBy: "",
@@ -115,10 +116,10 @@ sap.ui.define([
 						Zipcode: ""
 					}
 
-					const index = buildingMainContainer.getItems().length;
+					const count = this.buildingCount;
 					
-					const id = `Building${index}`;
-					console.log(id);
+					const id = `Building${count}`;
+					const index = buildingMainContainer.getItems().length;
 					
 					locations = {...locations, [id]: newLocation}
 					console.log(locations);
@@ -135,7 +136,7 @@ sap.ui.define([
 							let flexItems = []
 							 
 							// Add the label for additional buildings
-								if(index > 0){
+								if(count > 1){
 								const buildingInfoLabel = new sap.m.Title({
 										text:  `Location ${index + 1}`,
 										titleStyle: 'H6'
@@ -149,16 +150,21 @@ sap.ui.define([
 								flexItems = [buildingInfoLabel, removeButton];
 							}
 
+							const [firstElement, ...rest] = flexItems;
+
 							// Set and bind the model with the fragment
 							oFragment.setModel(oModel, "locationModel");
 							oFragment.bindElement(`locationModel>/locations/${id}`);
+
 							const wrapper = new sap.m.FlexBox(that.createId(id),{
-									items: [...flexItems, oFragment],
+									items: [firstElement, oFragment, ...rest],
 									direction: 'Column',
 							});
+							if(count > 1) wrapper.addStyleClass("addition-building-container");
 
 							// Add the fragment to the according container
 							buildingMainContainer.addItem(wrapper);
+							that.buildingCount += 1;
 					}).catch(function (err) {
 							console.log(`Failed to load fragment: ${err}`)
 					});
@@ -176,7 +182,20 @@ sap.ui.define([
 					buildingDetailMainContainer.removeItem(oFlexWrapper);
 					oFlexWrapper.destroy();
 
-					delete locations[flexWrapperId]
+					delete locations[flexWrapperId];
+					console.log(buildingDetailMainContainer.getItems());
+					
+					if(buildingDetailMainContainer.getItems().length > 1){
+
+						buildingDetailMainContainer.getItems().map((wrapper, index)=>{
+							
+							wrapper.getItems().forEach(item =>{
+								if(item instanceof sap.m.Title){
+									item.setText(`Location ${index + 1}`)
+								}
+							})
+						})
+					}
 			},
 
           // Define the event handler in your controller
@@ -358,6 +377,8 @@ sap.ui.define([
 					 * So, get the all items from the container 
 					 */
 					container.getItems().forEach((wrapper, index)=>{
+						let id = wrapper.getId().split('--')[2];
+						console.log(id);
 						
 						wrapper.findAggregatedObjects(true, (control)=>{
 							
@@ -367,7 +388,7 @@ sap.ui.define([
 								const bindingPath = control.getBinding('value')?.getPath() || control.getBinding("selectedKey")?.getPath();
 								
 								if(bindingPath){
-									const userInput = olocationModel.getProperty(`/locations/${index}/${bindingPath}`);
+									const userInput = olocationModel.getProperty(`/locations/${id}/${bindingPath}`);
 									
 									if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) {
 										control.setValueState("Error");
@@ -453,7 +474,7 @@ sap.ui.define([
 								FirstName: enrollmentDetails['AccountDetail']['SiteFirstName'], 
 								LastName: enrollmentDetails['AccountDetail']['SiteLastName'],
 								EmailAddr: enrollmentDetails['AccountDetail']['SiteEmailAddr']}),
-							BuildingDetail: JSON.stringify(locationDetails['locations']),
+							BuildingDetail: JSON.stringify(Object.values(locationDetails['locations'])),
 							ApplicationDetail: JSON.stringify({'SignatureSignedBy': enrollmentDetails['SignatureSignedBy'], 'SignatureSignedDate': this.convertDateFormat(enrollmentDetails['SignatureSignedDate'])}),
 							ConsentDetail: JSON.stringify([{
 								"FirstName": consentDetails['ConsentFirstName'],
@@ -488,7 +509,7 @@ sap.ui.define([
 					this.retrieveAllInputBindings()
 					this.validateFormDetails("account-info-container", true, "oEnrollModel", "accountDetailsValidation");
 					this.validateFormDetails("site-contact-info-container", true, "oEnrollModel", "siteDetailsValidation");
-					// this.validateBuildingDetails("building-detail-main-container");
+					this.validateBuildingDetails("building-detail-main-container");
 					this.validateFormDetails("auth-info-container", true, "oEnrollModel", "customerAuthDetailValidation");
 					this.validateFormDetails("enrollment-consent-section", true, "oConsentModel", "consentDetailValidation");
 					this.validateFormDetails("customer-auth-and-release-container", true, "oConsentModel", "consentAuthDetailValidation");

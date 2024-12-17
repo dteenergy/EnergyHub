@@ -94,6 +94,11 @@
 .enroll-form-container{
     padding: 0 15px 0 15px;
 }
+.addition-building-container{
+    padding: 15px;
+    margin-top: 10px;
+    background: rgba(141, 200, 232, 0.1);
+}
 
 @media only screen and (max-width: 600px) {
     .state-and-code{
