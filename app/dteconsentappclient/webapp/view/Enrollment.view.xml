@@ -22,8 +22,9 @@
 
                         <!-- Account Information -->
                         <VBox id="account-info-container" fitContainer="true" class="account-info-container">
-                            <Title id="account-info-title" titleStyle="H6" class="form-segment-heading" text="Account Information"></Title>
-                            <Text text="(as it appears on customer’s monthly DTE Energy bill)" />
+                            <FormattedText 
+                                htmlText="&lt;p style='letter-spacing: .7px; margin-top: 15px;'&gt; &lt;span style='font-weight: 600'&gt;Account Information&lt;/span&gt; (as it appears on customer’s monthly DTE Energy bill)&lt;/p&gt;"  
+                            ></FormattedText>
 
                             <l:VerticalLayout class="vertical-layout">
                                 <Label id="company-name-label" labelFor="company-name" text="Company Name"></Label>
