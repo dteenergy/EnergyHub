@@ -47,8 +47,8 @@
                         </FlexBox>
                     </FlexBox>
 
-                    <VBox class= "enroll-form-container">
-                    <!-- Landlord Enrollment form -->
+                    <VBox class= "consent-form-container">
+                    <!--Tenant Consent Form -->
                     
 										<form:SimpleForm >
 											<form:content>
