@@ -153,7 +153,7 @@ sap.ui.define([
 							// Add the remove button
 							buildingInfoLabel.addStyleClass("location-inner-title");
 								const removeButton = new sap.m.Button({
-									text: 'Remove Building',
+									text: 'Remove This Location',
 									press: function (oEvent) { that.removeBuilding(oEvent)}
 								});
 								
