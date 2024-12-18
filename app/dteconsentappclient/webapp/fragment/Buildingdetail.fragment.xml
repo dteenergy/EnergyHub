@@ -20,7 +20,7 @@
 			<Input
 				value="{locationModel>Address}"
 				showSuggestion="true"
-				placeholder="Enter location address"
+				placeholder="Filled out by user"
 				suggestionItemSelected="onSuggestionSelect"
 				suggest="onSuggest"
 				suggestionItems="{/suggestions}">
@@ -28,6 +28,7 @@
 					<core:Item text="{fullAddress}" key="{id}" />
 				</suggestionItems>
     		</Input>
+      <Text class="address-helper-text" text="123 Main st."></Text>
 		</layout:VerticalLayout>
 
 		<layout:VerticalLayout class="vertical-layout">
