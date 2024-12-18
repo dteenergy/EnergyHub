@@ -1,10 +1,21 @@
 .tenant-consent-form-container > *,
 .tenant-auth-and-release-container > *{
-    padding-bottom: 15px;
+    padding-bottom: 17px;
+}
+.tenant-consent-form-main-container{
+    padding: 0 30px 0 30px;
+    width: 95%;
 }
 .customer-policy-link{
     .sapMLnkText{
         color: #0072CE;
         font-weight: 500;
     }
+}
+
+@media only screen and (max-width: 600px) {
+	.tenant-consent-form-main-container{
+			padding: 0 !important;
+			width: 100%;
+	}
 }
