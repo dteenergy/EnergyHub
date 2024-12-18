@@ -17,8 +17,17 @@
 
 		<layout:VerticalLayout class="vertical-layout">
 			<Label text="Location Address" required="true"></Label>
-			<Input class="inputBox" liveChange="onLiveChange" value="{locationModel>Address}"  required="true" placeholder="Filled out by user">
-			</Input>
+			<Input
+				value="{locationModel>/shortAddress}"
+				showSuggestion="true"
+				placeholder="Enter location address"
+				suggestionItemSelected="onSuggestionSelect"
+				suggest="onSuggest"
+				suggestionItems="{/suggestions}">
+				<suggestionItems>
+					<core:Item text="{fullAddress}" key="{id}" />
+				</suggestionItems>
+    		</Input>
 		</layout:VerticalLayout>
 
 		<layout:VerticalLayout class="vertical-layout">
@@ -29,8 +38,8 @@
 
 		<layout:VerticalLayout class="vertical-layout">
 			<Label text="State" required="true"></Label>
-			<ComboBox change="onLiveChange" required="true" selectedKey="{locationModel>State}" width="100%">
-				<core:Item text="Michigan" key="{locationModel>State}"></core:Item>
+			<ComboBox change="onLiveChange" required="true" selectedKey="{locationModel>State}" items="{path: 'oLocationStateModel>/'}" width="100%">
+				<core:Item text="{oLocationStateModel>text}" key="{oLocationStateModel>text}"></core:Item>
 			</ComboBox>
 		</layout:VerticalLayout>
 		
