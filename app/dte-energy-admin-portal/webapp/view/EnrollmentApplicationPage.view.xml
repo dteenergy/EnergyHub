@@ -1,0 +1,5 @@
+<mvc:View xmlns:tnt="sap.tnt" controllerName="dteenergyadminportal.controller.EnrollmentApplicationPage"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <Text text="Enrollment Application Page"></Text>
+</mvc:View>

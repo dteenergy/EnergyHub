@@ -96,17 +96,53 @@
       },
       "routes": [
         {
-          "name": "RouteView1",
+          "name": "RouteWelcomePage",
           "pattern": ":?query:",
           "target": [
-            "TargetView1"
+            "TargetWelcomePage"
+          ]
+        },
+        {
+          "name": "HomePage",
+          "pattern": "",
+          "target": [
+            "TargetHomePage"
+          ]
+        },
+        {
+          "name": "EnrollmentApplicationPage",
+          "pattern": "",
+          "target": [
+            "TargetEnrollmentApplication"
+          ]
+        },
+        {
+          "name": "ConsentsPage",
+          "pattern": "",
+          "target": [
+            "TargetConsents"
           ]
         }
       ],
       "targets": {
-        "TargetView1": {
-          "id": "View1",
-          "name": "View1"
+        "TargetWelcomePage": {
+          "id": "WelcomePage",
+          "name": "WelcomePage"
+        },
+        "TargetHomePage": {
+          "id": "HomePage",
+          "name": "HomePage",
+          "level": 1
+        },
+        "TargetEnrollmentApplication": {
+          "id": "EnrollmentApplicationPage",
+          "name": "EnrollmentApplicationPage",
+          "level": 2
+        },
+        "TargetConsents": {
+          "id": "ConsentsPage",
+          "name": "ConsentsPage",
+          "level": 3
         }
       }
     },
