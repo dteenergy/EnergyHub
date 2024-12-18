@@ -27,7 +27,7 @@
     "start": "cds-serve",
     "undeploy": "cf undeploy dteConsentAppPortal --delete-services --delete-service-keys --delete-service-brokers",
     "build": "rimraf resources mta_archives && mbt build --mtar archive",
-    "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
+    "deploy": "cf deploy mta_archives/archive.mtar --delete-services --retries 1",
     "watch-dteconsentappclient": "cds watch --open dteconsentappclient/webapp/index.html?sap-ui-xx-viewCache=false",
     "watch-dte-energy-admin-portal": "cds watch --open dte-energy-admin-portal/webapp/index.html?sap-ui-xx-viewCache=false"
   },

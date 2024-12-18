@@ -144,7 +144,7 @@ resources:
   parameters:
     config:
       tenant-mode: dedicated
-      xsappname: dteConsentAppPortal-${org}-${space}
+      xsappname: dteConsentAppPortal
     path: ./xs-security.json
     service: xsuaa
     service-name: dteConsentAppPortal-xsuaa-service
