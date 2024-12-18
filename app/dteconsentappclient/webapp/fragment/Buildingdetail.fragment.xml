@@ -23,9 +23,12 @@
 				placeholder="Filled out by user"
 				suggestionItemSelected="onSuggestionSelect"
 				suggest="onSuggest"
-				suggestionItems="{/suggestions}">
+				suggestionItems="{
+				path: 'locationModel>suggestions',
+				templateShareable: false}"
+				required="true">
 				<suggestionItems>
-					<core:Item text="{fullAddress}" key="{id}" />
+					<core:Item text="{locationModel>fullAddress}" key="{locationModel>id}" />
 				</suggestionItems>
     		</Input>
       <Text class="address-helper-text" text="123 Main st."></Text>
