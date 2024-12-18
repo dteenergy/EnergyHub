@@ -19,6 +19,7 @@
 			<Label text="Location Address" required="true"></Label>
 			<Input class="inputBox" liveChange="onLiveChange" value="{locationModel>Address}"  required="true" placeholder="Filled out by user">
 			</Input>
+      <Text class="address-helper-text" text="123 Main st."></Text>
 		</layout:VerticalLayout>
 
 		<layout:VerticalLayout class="vertical-layout">
