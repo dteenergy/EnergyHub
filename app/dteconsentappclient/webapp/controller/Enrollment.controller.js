@@ -114,9 +114,9 @@ sap.ui.define([
 				 */
         onAddAnotherLocation: function(){
 					const oView = this.getView();
-					const oModel = oView.getModel("locationModel");
+					const oLocationModel = oView.getModel("locationModel");
 					const buildingMainContainer = this.byId("building-detail-main-container");
-					let locations = oModel.getProperty("/locations");
+					let locations = oLocationModel.getProperty("/locations");
 					
 					const newLocation = {
 						BuildingName: "",
@@ -135,7 +135,7 @@ sap.ui.define([
 					const lengthOfLocations = buildingMainContainer.getItems().length;
 					
 					locations = {...locations, [id]: newLocation}
-					oModel.setProperty("/locations", locations);
+					oLocationModel.setProperty("/locations", locations);
 
 					let that = this;
 
@@ -166,7 +166,7 @@ sap.ui.define([
 							const [firstElement, ...rest] = flexItems;
 
 							// Set and bind the model with the fragment
-							oFragment.setModel(oModel, "locationModel");
+							oFragment.setModel(oLocationModel, "locationModel");
 							oFragment.bindElement(`locationModel>/locations/${id}`);
 
 							const wrapper = new sap.m.FlexBox(that.createId(id),{
@@ -201,8 +201,8 @@ sap.ui.define([
 			 // Remove the additional location 
 				removeBuilding: function (oEvent) {
 					// Load the location model
-					const oModel = this.getView().getModel("locationModel");
-					let locations = oModel.getProperty("/locations");
+					const oLocationModel = this.getView().getModel("locationModel");
+					let locations = oLocationModel.getProperty("/locations");
 					
 					// Get the Id of the container, which holds the additional building that the user clicked remove button
 					const oButton = oEvent.getSource();
@@ -413,11 +413,10 @@ sap.ui.define([
 				fetchAddressSuggestions: async function (sQuery) {
 					const that = this;
 
-					await axios.get(`https://test.api.customer.sites.dteenergy.com/public/qa/premises/?address=${sQuery}&maxResults=10`).then(function (response) {						
+					await axios.get(`https://test.api.customer.sites.dteenergy.com/public/qa/premises/?address=${sQuery}&maxResults=10`).then(function (response) {		
+										
 						const aSuggestions = response.data.results.map(function (item) {
 							const addr = item.serviceAddress;
-							const locationModel = that.getView().getModel("locationModel");
-							console.log(locationModel.getProperty("/locations"));
 
 							return {
 								id: item.premiseId, // Unique identifier
@@ -438,6 +437,7 @@ sap.ui.define([
 
 				onSuggestionSelect: function (oEvent) {
 					// Handle item selection
+					
 					const oSelectedItem = oEvent.getParameter("selectedItem");
 					if (oSelectedItem) {
 						const sKey = oSelectedItem.getKey(); // Unique ID (premiseId) of the selected address
@@ -451,38 +451,27 @@ sap.ui.define([
 						
 						// Find the selected address using the key
 						const oSelectedAddress = aSuggestions.find(function (item, index) {
-							console.log(index);
-							
 							return item.id === sKey; // Match the key (premiseId)
-						});
-						console.log(oSelectedAddress);
-						
+						});						
 
 						if (oSelectedAddress) {
 							// Extract the relevant address parts
 							const oAddressParts = oSelectedAddress.fullAddress.split(",");
 
 							const sShortAddress = oAddressParts[0].trim()+ ", " + oAddressParts[1].trim();
-							console.log(oAddressParts);
 
 							const oInputControl = oEvent.getSource();
-							const sBuildingPath = oInputControl.data("Building1"); // e.g., 'building1'
 
 							// Construct the dynamic path
-							const sBasePath = `/locations/${sBuildingPath}`;
+							const sBasePath = oInputControl.getBinding('value')?.getContext()?.getPath();
 							console.log(sBasePath);
 							
-							
-							// oInputField.setValue(sShortAddress);
-
 							// Set properties to the 'locationModel'
 							const oLocationModel = this.getView().getModel("locationModel");
-							console.log(oLocationModel);
 							
-							oLocationModel.setProperty("/locations/shortAddress", sShortAddress);
-							oLocationModel.setProperty("/locations/City", oAddressParts[2].trim());
-							oLocationModel.setProperty("/locations/State", oAddressParts[3].trim());
-							oLocationModel.setProperty("/locations/Zipcode", +oAddressParts[4]);
+							oLocationModel.setProperty(`${sBasePath}/Address`, sShortAddress);
+							oLocationModel.setProperty(`${sBasePath}/City`, oAddressParts[2].trim());
+							oLocationModel.setProperty(`${sBasePath}/Zipcode`, +oAddressParts[4]);
 						}
 					}
 				},

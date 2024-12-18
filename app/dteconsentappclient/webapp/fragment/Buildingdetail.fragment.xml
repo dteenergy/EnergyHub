@@ -18,7 +18,7 @@
 		<layout:VerticalLayout class="vertical-layout">
 			<Label text="Location Address" required="true"></Label>
 			<Input
-				value="{locationModel>/shortAddress}"
+				value="{locationModel>Address}"
 				showSuggestion="true"
 				placeholder="Enter location address"
 				suggestionItemSelected="onSuggestionSelect"
