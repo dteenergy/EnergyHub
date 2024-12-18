@@ -2,10 +2,12 @@
 	controllerName="dteconsentappclient.controller.ConsentForm"
 	xmlns:mvc="sap.ui.core.mvc"
 	xmlns="sap.m"
-	xmlns:c="sap.ui.core"
+	xmlns:core="sap.ui.core"
 	displayBlock="true"
 	height="100%"
 	busyIndicatorDelay="0"
+	xmlns:form="sap.ui.layout.form"
+	xmlns:layout="sap.ui.layout"
 >
     <Page
         backgroundDesign="Standard"
@@ -14,7 +16,7 @@
         floatingFooter="false"
         navButtonTooltip=""
         showFooter="true"
-        showHeader="true"
+        showHeader="false"
         showNavButton="false"
         showSubHeader="true"
         title=""
@@ -22,30 +24,118 @@
         titleLevel="Auto"
     >
         <content>
-            <Label id="idStillInContructionLabel"
-                design="Standard"
-                displayOnly="false"
-                required="false"
-                showColon="false"
-                text="empty string"
-                textAlign="Begin"
-                textDirection="Inherit"
-                vAlign="Inherit"
-                wrapping="false"
-                wrappingType="Normal"
-            >
-                
-            </Label>
+        
+            <FlexBox id="tenant-consent-form-main-container" class="landloard-form-main-container" >
+                <FlexBox id="tenant-consent-form-sub-container" class="landloard-form-sub-container">
+                <items>
+
+                    <!-- Landlord Enrollment form Header -->
+                    <FlexBox id="tenant-consent-form-header" class="enrollment-form-header">
+                        <Title xmlns="sap.m" titleStyle="H5" text="DTE Energy Data Hub Tenant Consent Form" wrapping="true" class="mainTitle"/>
+                        <Text id ="instruction-one" class="sub-content" wrapping="true" 
+                                text="This Customer Consent Release Form permits DTE customers of record to delegate 
+                                certain rights to Authorized third parties concerning DTE Electric and DTE Gas account(s) 
+                                service(s). The customer of record may permit an Authorized third party to receive information 
+                                on its behalf and must specify what information the third party is entitled to receive. 
+                                Please insure that you only request release of your information to Authorized third parties 
+                                in which you trust." />
+                        <Text id ="instruction-two" class="sub-content" text="This form must be completed in its entirety and signed by the customer 
+                                        of record. " />
+                        <FlexBox class="required-instruction">
+                            <Text class="required-instruction-indicator" text="*" />
+                            <Text  text="Indicates a required field" />
+                        </FlexBox>
+                    </FlexBox>
+
+                    <VBox class= "consent-form-container">
+                    <!--Tenant Consent Form -->
+                    
+										<form:SimpleForm >
+											<form:content>
+												<VBox id="tenant-consent-form-container-id" class="tenant-consent-form-container">
+													<Title id="tenant-info-title" titleStyle="H6" class="form-segment-heading" text="Tenant Information"></Title>
+
+													 <layout:VerticalLayout class="vertical-layout">
+															<Label text="FirstName" required="true"></Label>
+															<Input class="inputBox" liveChange="onLiveChange" type="Text" required="true" placeholder="Filled out by user" value="{oConsentModel>/ConsentDetail/ConsentFirstName}"/>
+													 </layout:VerticalLayout>
+
+													<layout:VerticalLayout class="vertical-layout">
+															<Label text="LastName"  required="true"></Label>
+															<Input class="inputBox" liveChange="onLiveChange" type="Text" required="true" placeholder="Filled out by user"  value="{oConsentModel>/ConsentDetail/ConsentLastName}"/>
+													</layout:VerticalLayout>
+													
+													 <layout:VerticalLayout class="vertical-layout">
+														<Label text="Site Address" required="true"></Label>
+														<Input class="inputBox" liveChange="onLiveChange" type="Text" required="true" placeholder="Filled out by user" value="{oConsentModel>/ConsentDetail/ConsentAddress}"/>
+														<Text class="address-helper-text" text="123 Main st." ></Text>
+													</layout:VerticalLayout>
+												
+													<layout:VerticalLayout  class="vertical-layout">
+															<Label text="City"  required="true"></Label>
+															<Input class="inputBox" liveChange="onLiveChange" type="Text" required="true" placeholder="Filled out by user" value="{oConsentModel>/ConsentDetail/ConsentCity}"/>
+													</layout:VerticalLayout>
+        
+												<layout:VerticalLayout class="vertical-layout">
+														<Label labelFor="consent-form-state-list" text="State"  required="true"></Label>
+														<ComboBox required="true" items="{ostateValuesModel>/}" change="onLiveChange" width="100%" placeholder="Make a Selection" selectedKey="{oConsentModel>/ConsentDetail/ConsentState}">
+																<core:Item text="{ostateValuesModel>text}" key="{ostateValuesModel>text}"></core:Item>
+														</ComboBox>
+												</layout:VerticalLayout>
+
+													<layout:VerticalLayout class="vertical-layout">
+															<Label text="Zipcode"  required="true"></Label>
+															<Input class="inputBox" liveChange="onLiveChange" type="Number" required="true" placeholder="Filled out by user" value="{oConsentModel>/ConsentDetail/ConsentZipcode}"/>
+													</layout:VerticalLayout>  
+
+													<layout:VerticalLayout class="vertical-layout">
+															<Label text="Account Number"  required="true"></Label>
+															<Input class="inputBox" liveChange="onLiveChange" type="Text" required="true" placeholder="Filled out by user" value="{oConsentModel>/ConsentDetail/ConsentAccountNumber}"></Input>
+													</layout:VerticalLayout>      
+
+													<layout:VerticalLayout class="vertical-layout">
+															<Label text="Email Address"  required="true"></Label>
+															<Input
+															class="inputBox" liveChange="onLiveChange" type="Email" required="true" placeholder="Filled out by user" value="{oConsentModel>/ConsentDetail/ConsentEmailAddr}"></Input>
+													</layout:VerticalLayout>
+												</VBox>
+
+                        <Toolbar class="hr-line" height="1px" width="100%"></Toolbar>
+
+												<!-- Container to render the tenant auth and release section -->
+												<VBox id="tenant-auth-and-release-container-id" class="tenant-auth-and-release-container">
+                        	<Title text="Tenant Authorization and Release" class="form-segment-heading" titleStyle="H6" />
+												</VBox>
+
+												<VBox class="message-strip-container">
+                        <MessageStrip
+                            text="Complete these fields to continue."
+                            type="Error"
+                            showIcon="true"
+                            visible="{oErrorVisibilityModel>/isInputInValid}"
+                            class="error-message-strip"
+                        >
+                        </MessageStrip>
+                        <MessageStrip
+                            text="Confirm you have read the terms and conditions."
+                            type="Error"
+                            showIcon="true"
+                            visible="{oErrorVisibilityModel>/isTermsAndConditionVerifiedStatus}"
+                            class="error-message-strip"
+                        >
+                        </MessageStrip>
+                    </VBox>
+
+		                    <Button text="Submit" type="Emphasized" press="onSubmit" class="button-customize"></Button>
+
+											</form:content>
+										</form:SimpleForm>
+                    </VBox>
+                </items>
+                </FlexBox>
+            </FlexBox>
+
+            <core:Fragment fragmentName="dteconsentappclient.fragment.Footer" type="XML"></core:Fragment>
         </content>
-        <customHeader>
-        </customHeader>
-        <footer>
-        </footer>
-        <headerContent>
-        </headerContent>
-        <landmarkInfo>
-        </landmarkInfo>
-        <subHeader>
-        </subHeader>
     </Page>
 </mvc:View>

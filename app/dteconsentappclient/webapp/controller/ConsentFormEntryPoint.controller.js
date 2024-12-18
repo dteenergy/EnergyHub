@@ -1,42 +1,58 @@
 sap.ui.define([
-    "sap/ui/core/mvc/Controller",
+    "dteconsentappclient/controller/BaseController",
     "sap/ui/core/mvc/XMLView"
-], (Controller, XMlView) => {
+], (BaseController, XMlView) => {
     "use strict";
 
-    return Controller.extend("dteconsentappclient.controller.ConsentFormEntryPoint", {
+    return BaseController.extend("dteconsentappclient.controller.ConsentFormEntryPoint", {
         onInit () {
             // Get param from router path
             const oRouter = this.getOwnerComponent().getRouter();
-			oRouter.getRoute("ConsentForm").attachPatternMatched(this.getRouteParams, this)     
+			oRouter.getRoute("ConsentForm").attachPatternMatched(this.getRouteParams, this);     
+
+            // Get the url
+            const { url } = this.getApiConfig();
+            this.SERVERHOST = url;
         },
         /**
          * Get router params from router
          * @param {Event} oEvent 
          */
         getRouteParams (oEvent) {
-            const routeParam = oEvent.getParameter("arguments").appId;
-
-            this.validateAppId(routeParam);
+            
+            const routeParam = oEvent.getParameter("arguments")['?appId'];
+            
+            this.validateAppId(routeParam.appId);
         },
         /**
          * Validate Application Id 
          * @param {string} appId 
          */
-        validateAppId(appId){
-            const isValidAppId = appId == "4322";
+        validateAppId: async function(appId){
+            
+            const validationUrl = this.SERVERHOST + `service/validateApplicationId?encrAppId=${appId}`
 
+            // Post request to create a tenant consent.
+			const {data} = await axios.get(validationUrl);
+            
             /**
              * Check requested Application ID is valid
              * If true, then render Consent Form View 
              * Else navigate to 404 page.
              */
-            if(isValidAppId){
+            if(data.value.status === 200){
                 XMlView.create({
                     viewName: "dteconsentappclient.view.ConsentForm",
+                    viewData: {applicationId: appId, url: this.SERVERHOST, router: this.getOwnerComponent().getRouter()},
                 }).then(function(oView) {
-                    oView.placeAt("content")
-                });
+                    // Render the created view into the App view
+                    const oRootView = this.getOwnerComponent().getRootControl();
+                    const oApp = oRootView.byId("app");
+
+                    oApp.addPage(oView); // Add new view as a page
+                    oApp.to(oView); // Navigate to that page
+                    
+                }.bind(this));
             }else{
                 alert("Not permitted")
             }

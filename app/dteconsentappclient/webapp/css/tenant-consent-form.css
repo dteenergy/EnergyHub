@@ -1,0 +1,10 @@
+.tenant-consent-form-container > *,
+.tenant-auth-and-release-container > *{
+    padding-bottom: 15px;
+}
+.customer-policy-link{
+    .sapMLnkText{
+        color: #0072CE;
+        font-weight: 500;
+    }
+}

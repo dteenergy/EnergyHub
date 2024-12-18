@@ -24,6 +24,19 @@
           "odataVersion": "4.0"
         }
       }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "DTE_ENERGY_HUB_FORM-display": {
+          "semanticObject": "DTE_ENERGY_HUB_FORM",
+          "action": "display",
+          "title": "{{flpTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
     }
   },
   "sap.ui": {
@@ -79,9 +92,12 @@
         },
         {
           "uri": "css/landlord-enrollment-form.css"
+        },
+        {
+          "uri": "css/tenant-consent-form.css"
         }
       ],
-      "js":[
+      "js": [
         {
           "uri": "libs/axios.min.js"
         }
@@ -102,11 +118,13 @@
         {
           "name": "Enrollment",
           "pattern": "landlord/enrollment",
-          "target": ["EnrollmentForm"]
+          "target": [
+            "EnrollmentForm"
+          ]
         },
         {
           "name": "ConsentForm",
-          "pattern": "consent-from/{appId}",
+          "pattern": "tenant/consent/{?appId}",
           "target": [
             "TargetConsentForm"
           ]
@@ -114,27 +132,29 @@
         {
           "name": "Confirmation",
           "pattern": "confirmation/{StatusCode}/{Message}",
-          "target": ["Confirmation"]
+          "target": [
+            "Confirmation"
+          ]
         }
       ],
       "targets": {
         "TargetConsentForm": {
           "viewType": "XML",
-          "transition":"slide",
+          "transition": "slide",
           "clearControlAggregation": false,
           "viewId": "ConsentFormEntryPoint",
           "viewName": "ConsentFormEntryPoint"
         },
         "EnrollmentForm": {
           "viewType": "XML",
-          "transition":"slide",
+          "transition": "slide",
           "clearControlAggregation": false,
           "viewId": "Enrollment",
           "viewName": "Enrollment"
         },
         "Confirmation": {
           "viewType": "XML",
-          "transition":"slide",
+          "transition": "slide",
           "clearControlAggregation": false,
           "viewId": "Confirmation",
           "viewName": "Confirmation"
@@ -149,7 +169,7 @@
     "config": {
       "routerConfig": {
         "localApi": {
-          "uri": "https://port4004-workspaces-ws-b66tw.us20.applicationstudio.cloud.sap/"
+          "uri": "http://localhost:4004/"
         },
         "productionApi": {
           "uri": ""

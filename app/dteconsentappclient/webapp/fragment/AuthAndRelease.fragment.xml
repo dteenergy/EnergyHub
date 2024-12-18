@@ -38,5 +38,8 @@
         	<CheckBox select="handleTermsAndConditionVerified" text="I have read and understand the terms and conditions of this form." wrapping="true"/>
 		</HBox>
 
+		<HBox id="policy">
+            <Link class="customer-policy-link" href="https://www.dteenergy.com/us/en/quicklinks/customer-data-privacy-policy.html" text="View our Customer Data Privacy Policy" target=""></Link>
+        </HBox>
 	</VBox>
 </core:FragmentDefinition>
