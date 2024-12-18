@@ -169,7 +169,7 @@
     "config": {
       "routerConfig": {
         "localApi": {
-          "uri": "http://localhost:4004/"
+          "uri": "https://port4004-workspaces-ws-mjfnp.us20.applicationstudio.cloud.sap/"
         },
         "productionApi": {
           "uri": ""
