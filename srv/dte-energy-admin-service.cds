@@ -4,7 +4,8 @@ using {dteConsentApp as db} from '../db/schema';
 @impl : './handler/admin-handler.js'
 service DTEEnergyAdminPortal {
 
-   entity ApplicationDetail as projection on db.ApplicationDetail;
+// entity Foo as projection on db.BuildingDetail;
+   entity Enrollment as projection on db.ApplicationDetail;
    entity BuildingDetail as projection on db.BuildingDetail;
    entity AccountDetail as projection on db.AccountDetail;
 }
