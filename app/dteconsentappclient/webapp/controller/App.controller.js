@@ -1,5 +1,5 @@
 sap.ui.define([
-  "sap/ui/core/mvc/Controller",
+  "dteconsentappclient/controller/BaseController",
   "sap/ui/model/json/JSONModel",
 ], (BaseController, JSONModel) => {
   "use strict";
@@ -19,14 +19,5 @@ sap.ui.define([
         this.getView().setModel(oSocialMediaModel, 'socialMediaModel')
         
       },
-
-      onSocialMedia: function(oEvent){
-        const mediaDetails = this.getView().getModel('socialMediaModel').getData();
-        
-        const salt = oEvent.getSource().getAlt();
-        const filteredData = mediaDetails?.sMediaDetails.filter((mediaDetail)=> mediaDetail.alt === salt);
-        
-        window.open(filteredData[0]['src'], '_blank');
-      }
   });
 });
