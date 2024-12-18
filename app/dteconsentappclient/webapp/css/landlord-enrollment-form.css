@@ -14,15 +14,14 @@
 .required-instruction-indicator{
     color: red;
 }
-.button-customize{
+.customize-button{
     width: 50% !important;
+}
+.customize-button.submit-action{
+    margin-bottom: 30px;
 }
 .enrollment-form-header{
     flex-direction: column;
-}
-.landlord-enrollment-form.sapUiSimpleForm {
-    padding: 0 !important;
-    /* width: 90%; */
 }
 .account-info{
     flex-direction: column;
@@ -59,13 +58,13 @@
 .auth-and-release-container > *,
 .message-strip-container > *,
 .confirmation-dialog-content > *{
-    padding-bottom: 15px;
+    padding-bottom: 17px;
 }
 .vertical-layout{
     width: 100%;
 }
 .form-segment-heading{
-    margin-top: 10px;
+    margin-top: 15px;
 }
 .location-inner-title{
     padding-bottom: 15px;
@@ -76,6 +75,7 @@
 .customer-release-header{
     background: rgba(141, 200, 232, 0.1);
     padding: 20px;
+    margin-bottom: 15px;
 }
 .address-helper-text{
     font-size: 12px;
@@ -92,8 +92,9 @@
 .checkbox-selected{
     background: #1E3575;
 }
-.enroll-form-container, .consent-form-container{
-    padding: 0 15px 0 15px;
+.enroll-form-container{
+    padding: 0 30px 0 30px;
+    width: 95%;
 }
 .addition-building-container{
     padding: 15px;
@@ -112,7 +113,14 @@
         width: 90%;
         flex-direction: column;
     }
-    .button-customize{
+    .enroll-form-container{
+        padding: 0 !important;
+        width: 100%;
+    }
+    .customize-button{
         width: 100% !important;
     }
+    .enrollment-form-header > *{
+        padding: 10px 0 10px 0 !important;
+     }
 }
