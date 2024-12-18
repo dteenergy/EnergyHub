@@ -1,11 +1,11 @@
 const cds = require('@sap/cds');
 
 module.exports = cds.service.impl(async function (srv) {
-    // Require the service entities
+    // Destructuring the 'ApplicationDetail' property.
     const { ApplicationDetail } = this.entities;
 
     /**
-     * Method to send the EnrollmentApplication Detail
+     * Function to send the EnrollmentApplication Detail
      * returns EnrollmentApplicationDetail Array<Object> 
      * */ 
     srv.on('EnrollmentApplication', async(req)=>{
