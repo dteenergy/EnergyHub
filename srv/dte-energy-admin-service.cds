@@ -4,6 +4,11 @@ using {dteConsentApp as db} from '../db/schema';
 service DTEEnergyAdminPortal {
 
    entity ApplicationDetail as projection on db.ApplicationDetail;
+   
+    entity ApplicationWithBuilding as select from db.ApplicationDetail{
+        *,
+        BuildingDetailRefId.BuildingName, BuildingDetailRefId.BuildingId
+    };
 
 }
 
