@@ -6,9 +6,9 @@
             <tnt:sideContent>
                 <tnt:SideNavigation>
                     <tnt:NavigationList itemSelect="selectedItem" selectedKey="HomePage">
-                        <tnt:NavigationListItem text="Home" key="HomePage"></tnt:NavigationListItem>
-                        <tnt:NavigationListItem text="Enrollment Application" key="EnrollmentApplicationPage"></tnt:NavigationListItem>
-                        <tnt:NavigationListItem text="Consents" key="ConsentsPage"></tnt:NavigationListItem>
+                        <tnt:NavigationListItem text="Home" key="HomePage" icon="sap-icon://home"></tnt:NavigationListItem>
+                        <tnt:NavigationListItem text="Enrollment Application" key="EnrollmentApplicationPage" icon="sap-icon://request"></tnt:NavigationListItem>
+                        <tnt:NavigationListItem text="Consents" key="ConsentsPage" icon="sap-icon://approvals"></tnt:NavigationListItem>
                     </tnt:NavigationList>
                 </tnt:SideNavigation>
             </tnt:sideContent>
