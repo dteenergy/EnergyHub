@@ -1,4 +1,4 @@
-# Getting Started
+# DTE Energy Hub
 
 Welcome to your new project.
 
