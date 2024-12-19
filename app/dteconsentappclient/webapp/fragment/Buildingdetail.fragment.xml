@@ -24,8 +24,7 @@
 				suggestionItemSelected="onSuggestionSelect"
 				suggest="onSuggest"
 				suggestionItems="{
-				path: 'locationModel>suggestions',
-				templateShareable: false}"
+				path: 'locationModel>suggestions'}"
 				required="true">
 				<suggestionItems>
 					<core:Item text="{locationModel>fullAddress}" key="{locationModel>id}" />
