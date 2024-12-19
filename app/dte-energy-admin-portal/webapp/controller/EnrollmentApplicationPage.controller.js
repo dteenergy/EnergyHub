@@ -3,9 +3,7 @@ sap.ui.define([
 ], (BaseController) => {
     "use strict";
 
-    return BaseController.extend("dteenergyadminportal.controller.View1", {
-        onInit() {
-          
-        },
+    return BaseController.extend("dteenergyadminportal.controller.EnrollmentApplicationPage", {
+        onInit() {},
     });
 });
