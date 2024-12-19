@@ -2,7 +2,7 @@ const cds = require('@sap/cds');
 const { generateConsentUrl } = require('./generate-consent-url');
 
 module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
-    const {ApplicationConsent} = this.entities;
+    const {ApplicationConsent, ApplicationDetail} = this.entities;
     // Method to Generate the Consent URL
     srv.on('GenerateUrl', 'ApplicationDetail', async ({ params: [id] }) => {
         // Get the AppId
@@ -10,7 +10,7 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
 
         try{
             // Generate the URL
-            const generatedUrl = await generateConsentUrl(appId);
+            const generatedUrl = await generateConsentUrl(appId, ApplicationDetail);
             
             // Return the ConsentURL with the encryptedid.
             return generatedUrl;
