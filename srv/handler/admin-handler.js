@@ -1,23 +1,17 @@
 const cds = require('@sap/cds');
+const { generateConsentUrl } = require('./generate-consent-url');
 
-module.exports = cds.service.impl(async function (srv) {
-    // Destructuring the 'ApplicationDetail' property.
-    const { ApplicationDetail } = this.entities;
+module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
+    // Method to Generate the URL
+    srv.on('GenerateUrl', 'ApplicationDetail', async ({ params: [id] }) => {
+        // Get the AppId
+        const appId = id.AppId;
 
-    /**
-     * Function to send the EnrollmentApplication Detail
-     * returns EnrollmentApplicationDetail Array<Object> 
-     * */ 
-    srv.on('EnrollmentApplication', async(req)=>{
-        // Query to get the ApplicationDetail, SiteDetail and BuildingDetail
-        const appDetails = await SELECT.from(ApplicationDetail, appDetail => {
-            appDetail`.*`, appDetail.BuildingDetailRefId(buildDetail => {
-                buildDetail`.*`
-            }), appDetail.AccountDetailRefId(siteDetail => {
-                siteDetail`.*`
-            })
-        })
+        // Generate the URL
+        const generatedUrl = await generateConsentUrl(appId);
 
-        return appDetails;
+        // Return the ConsentURL with the encryptedid.
+        return generatedUrl;
     })
+
 })
