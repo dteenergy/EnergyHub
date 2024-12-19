@@ -21,6 +21,59 @@ modules:
     ignore:
     - node_modules
     - package-lock.json
+- name: dteConsentAppPortal-approuter
+  type: approuter.nodejs
+  path: approuter
+  parameters:
+    memory: 256M
+    disk-quota: 1024M
+    stack: cflinuxfs4
+  properties:
+    CJ_PROTECT_WHITELIST: >
+      [
+        {
+          "protocol": "https",
+          "host": "*.ondemand.com"
+        },
+        {
+          "protocol": "https",
+          "host": "*.hcs.cloud.sap"
+        }
+      ]
+    COOKIES: >
+      { "SameSite":"None" }
+    httpHeaders: >
+      [
+        {
+          "X-Frame-Options": "DENY"
+        },
+        {
+          "Content-Security-Policy": "frame-ancestors iframe frame object embed 'self' https://*.hcs.cloud.sap;"
+        },
+        {
+          "Access-Control-Allow-Origin": "https://localhost:3000"
+        },
+        {
+          "Access-Control-Allow-Credentials": "true"
+        },
+        {
+          "Access-Control-Allow-Headers": "Authorization,Content-Type"
+        }
+      ]
+
+  build-parameters:
+    ignore: ["node_modules/"]
+  requires:
+    - name: dteConsentAppPortal-destination-service
+    - name: dteConsentAppPortal-auth
+    - name: dteConsentAppPortal_html5-app-repo-runtime
+    - name: srv-api
+      group: destinations
+      properties:
+        forwardAuthToken: true
+        strictSSL: false
+        name: dteConsentAppPortal-srv
+        url: ~{srv-url}
 - name: dteConsentAppPortal-destination-content
   type: com.sap.application.content
   requires:
@@ -139,6 +192,11 @@ resources:
   parameters:
     service: postgresql-db
     service-plan: reference
+- name: dteConsentAppPortal_html5-app-repo-runtime
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service-plan: app-runtime
+    service: html5-apps-repo
 - name: dteConsentAppPortal-auth
   type: org.cloudfoundry.managed-service
   parameters:
