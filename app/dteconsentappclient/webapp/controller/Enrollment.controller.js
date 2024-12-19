@@ -19,6 +19,7 @@ sap.ui.define([
 					consentAuthDetailValidation: true
 				}
 		const emailRegex = /^(?=.{1,255}$)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+		const dateRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
 
     return BaseController.extend("dteconsentappclient.controller.Enrollment", {
         onInit() {
@@ -311,7 +312,7 @@ sap.ui.define([
 								oConsentModel.setProperty(`/ConsentDetail/${consentkey}`, enrollmentData['AccountDetail'][key]);
 							}
 						});
-						this.validateFormDetails("enrollment-consent-section", false, "oConsentModel", "consentDetailValidation");		
+						this.validateFormDetails("enrollment-consent-section", false, "consentDetailValidation");		
 					}else{
 						oConsentModel.setProperty('/ConsentDetail', {
 								"FirstName": "",
@@ -355,7 +356,7 @@ sap.ui.define([
 				 * @param {Object} model model with bind with the container
 				 * @param {String} validationStatus
 				 */
-        validateFormDetails: function(sContainerId, isShowError, model, validationStatus){
+        validateFormDetails: function(sContainerId, isShowError, validationStatus){
 					const container = this.byId(sContainerId);
 
 					validationFlags[validationStatus] = true;
@@ -384,8 +385,13 @@ sap.ui.define([
 											/** If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
 											 *  If the email is invalid, set the corresponding validation flag to `false`.
 											 * */
-											if(control?.mProperties["type"] === "Email") { 
+											if(control?.mProperties["type"] === "Email") {
 												if(!this.isValidEmail(control, userInput)) validationFlags[validationStatus] = false;
+											}
+											if(control instanceof sap.m.MaskInput){
+												console.log(userInput);
+												
+												if(!this.isValidDate(control, userInput)) validationFlags[validationStatus] = false;
 											}
 										}
 								}		
@@ -405,30 +411,49 @@ sap.ui.define([
 						return true;
 					}else{
 						oControl.setValueState("Error");
-						oControl.setValueStateText("Please provide proper Email")
+						oControl.setValueStateText("Please provide proper Email");
+						return false;
+					}
+				},
+
+				/**
+				 * Checks the date is valid
+				 * @param {Object} oControl 
+				 * @param {String} sValue
+				 */
+				isValidDate: function(oControl, sValue){
+					console.log(sValue);
+					
+					if(dateRegex.test(sValue)) {
+						oControl.setValueState("None");
+						return true;
+					}else{
+						oControl.setValueState("Error");
+						oControl.setValueStateText("Please provide valid date");
+						return false;
 					}
 				},
 
 				// Checks the input value on live change and remove the error state
 				onLiveChange: function(oEvent){
 					const oControl = oEvent.getSource();
-					
+		
 					const userInput = oEvent.getParameter("value") || oEvent.getParameter("selectedKey");
+					console.log(userInput);
+					
 
 					// Validates if a field has value, if it is remove the error state
 					if(userInput?.trim() !== "" && oControl?.mProperties['required']) {
 						oControl.setValueState("None");
-						if(oControl?.mProperties["type"] === "Email") this.isValidEmail(oControl, userInput);
 					}else{						
 						oControl.setValueState("Error");
 					}
 
-					console.log(Object.values(validationFlags));
+					if(oControl?.mProperties["type"] === "Email") this.isValidEmail(oControl, userInput);
+					if(oControl instanceof sap.m.MaskInput) this.isValidDate(oControl, userInput)
 					
 					if(Object.values(validationFlags).includes(false)){
 					// Re-validate the form fields
-					console.log("is enter");
-					
 					this.validate();
 
 					// Update the error message trip visibility status once validation is done
@@ -727,12 +752,12 @@ sap.ui.define([
 				},
 
 				validate: function(){
-					this.validateFormDetails("account-info-container", true, "oEnrollModel", "accountDetailsValidation");
-					this.validateFormDetails("site-contact-info-container", true, "oEnrollModel", "siteDetailsValidation");
+					this.validateFormDetails("account-info-container", true, "accountDetailsValidation");
+					this.validateFormDetails("site-contact-info-container", true, "siteDetailsValidation");
 					this.validateBuildingDetails("building-detail-main-container");
-					this.validateFormDetails("auth-info-container", true, "oEnrollModel", "customerAuthDetailValidation");
-					this.validateFormDetails("enrollment-consent-section", true, "oConsentModel", "consentDetailValidation");
-					this.validateFormDetails("customer-auth-and-release-container", true, "oConsentModel", "consentAuthDetailValidation");
+					this.validateFormDetails("auth-info-container", true, "customerAuthDetailValidation");
+					this.validateFormDetails("enrollment-consent-section", true, "consentDetailValidation");
+					this.validateFormDetails("customer-auth-and-release-container", true, "consentAuthDetailValidation");
 					this.validateTermsAndConditionIsVerified("customer-auth-and-release-container");
 				},
 
