@@ -8,11 +8,21 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
         // Get the AppId
         const appId = id.AppId;
 
-        // Generate the URL
-        const generatedUrl = await generateConsentUrl(appId);
-
-        // Return the ConsentURL with the encryptedid.
-        return generatedUrl;
+        try{
+            // Generate the URL
+            const generatedUrl = await generateConsentUrl(appId);
+            
+            // Return the ConsentURL with the encryptedid.
+            return generatedUrl;
+        } catch(e){
+            
+            if(e.status){
+                return {'message':e.message, 'status':e.status}
+            } else {
+                return {'message':e.message, 'status':'500'}
+            }
+        }
+        
     }),
 
     // Method to add the NoOfConsentReceived Field.

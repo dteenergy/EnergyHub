@@ -1,2 +1,2 @@
-BuildingId,BuildingName,AccountNumber,Address,City,State,Zipcode,CreatedAt,UpdatedAt, AppRefId_AppId
-117b7889-f223-4f20-89af-0560d08f57f9,A Building,7858757,Sample,A city, Newyork,123,2024-12-13T16:06:35.151Z, 2024-12-13T16:06:35.151Z,34ae189a-ae09-4563-815e-5aea94dd0cb4  
+BuildingId,BuildingName,AccountNumber,Address,City,State,Zipcode,CreatedAt,UpdatedAt,AppRefId_AppId
+34ae189a-ae09-4563-815e-5aea94dd0cb7,A building,15678,A Address,Y city,S state,15378,2024-12-13T16:06:35.151Z,2024-12-13T16:06:35.151Z,34ae189a-ae09-4563-815e-5aea94dd0cb5
