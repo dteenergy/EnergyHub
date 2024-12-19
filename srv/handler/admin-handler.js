@@ -2,7 +2,7 @@ const cds = require('@sap/cds');
 const { generateConsentUrl } = require('./generate-consent-url');
 
 module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
-    // Method to Generate the URL
+    // Method to Generate the Consent URL
     srv.on('GenerateUrl', 'ApplicationDetail', async ({ params: [id] }) => {
         // Get the AppId
         const appId = id.AppId;
