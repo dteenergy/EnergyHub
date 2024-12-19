@@ -8,6 +8,9 @@ default-*.json
 gen/
 node_modules/
 target/
+db/data/
+mta_archives/
+dist/
 
 # Web IDE, App Studio
 .che/
@@ -17,12 +20,13 @@ target/
 *_mta_build_tmp
 *.mtar
 mta_archives/
-resources
+resources/
 
 # Other
 .DS_Store
 *.orig
 *.log
+*.zip
 
 *.iml
 *.flattened-pom.xml
