@@ -104,6 +104,16 @@
 .confirmation-dialog-content{
     flex-direction: column;
     padding: 15px;
+    border-radius: 0 !important;
+}
+.confirmation-dialog-title, .sapMDialogSection{
+    border-radius: 0 !important;
+}
+.alert-title{
+    font-size: 1rem;
+}
+.alert-close-icon{
+    color: #0072CE;
 }
 @media only screen and (max-width: 600px) {
     .state-and-code{

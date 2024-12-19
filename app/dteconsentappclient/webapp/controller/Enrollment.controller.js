@@ -18,6 +18,7 @@ sap.ui.define([
 					consentDetailValidation: true,
 					consentAuthDetailValidation: true
 				}
+		const emailRegex = /^(?=.{1,255}$)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     return BaseController.extend("dteconsentappclient.controller.Enrollment", {
         onInit() {
@@ -355,7 +356,6 @@ sap.ui.define([
 				 * @param {String} validationStatus
 				 */
         validateFormDetails: function(sContainerId, isShowError, model, validationStatus){
-					const oModel = this.getView().getModel(model);
 					const container = this.byId(sContainerId);
 
 					validationFlags[validationStatus] = true;
@@ -371,21 +371,43 @@ sap.ui.define([
 								
 								if(bindingPath){
 									
-										const userInput = oModel.getProperty(bindingPath);
+										const userInput = control.getValue();
 										
 										// Validates that all required fields are filled; if a field is empty, marks it with an error state to indicate validation failure.
 										if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) {
 											if(isShowError){
 												control.setValueState("Error");
+												validationFlags[validationStatus] = false
 											}
-											validationFlags[validationStatus] = false
 										}else{
 											control.setValueState("None");
+											/** If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
+											 *  If the email is invalid, set the corresponding validation flag to `false`.
+											 * */
+											if(control?.mProperties["type"] === "Email") { 
+												if(!this.isValidEmail(control, userInput)) validationFlags[validationStatus] = false;
+											}
 										}
 								}		
 							}		
             });
         },
+
+				/**
+				 * Checks the given email is proper emailId
+				 * @param {Object} oControl 
+				 * @param {String} sValue 
+				 * @returns {Boolean}
+				 */
+				isValidEmail: function(oControl, sValue){
+					if(emailRegex.test(sValue)) {
+						oControl.setValueState("None");
+						return true;
+					}else{
+						oControl.setValueState("Error");
+						oControl.setValueStateText("Please provide proper Email")
+					}
+				},
 
 				// Checks the input value on live change and remove the error state
 				onLiveChange: function(oEvent){
@@ -396,8 +418,21 @@ sap.ui.define([
 					// Validates if a field has value, if it is remove the error state
 					if(userInput?.trim() !== "" && oControl?.mProperties['required']) {
 						oControl.setValueState("None");
-					}else{
+						if(oControl?.mProperties["type"] === "Email") this.isValidEmail(oControl, userInput);
+					}else{						
 						oControl.setValueState("Error");
+					}
+
+					console.log(Object.values(validationFlags));
+					
+					if(Object.values(validationFlags).includes(false)){
+					// Re-validate the form fields
+					console.log("is enter");
+					
+					this.validate();
+
+					// Update the error message trip visibility status once validation is done
+					this.setErrorMessageTripVisibility();
 					}
 				},
 
@@ -446,7 +481,7 @@ sap.ui.define([
 
 				},
 
-				onSuggestionSelect: function (oEvent) {
+				onSuggestionSelect: function (oEvent) {	
 					const oInputControl = oEvent.getSource();
 
 					// Retrieve the bound path
@@ -480,12 +515,14 @@ sap.ui.define([
 							oLocationModel.setProperty(`${sBasePath}/City`, oAddressParts[2].trim());
 							oLocationModel.setProperty(`${sBasePath}/Zipcode`, +oAddressParts[4]);
 						}
+
+						if(!validationFlags["locationDetailsValidation"]) this.validateBuildingDetails("building-detail-main-container");
 					}
 				},
 
 				// Validate the building information
 				validateBuildingDetails: function(sContainerId){
-
+					
 					const container = this.byId(sContainerId);
 					validationFlags["locationDetailsValidation"] = true;
 
@@ -509,6 +546,8 @@ sap.ui.define([
 									if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) {
 										control.setValueState("Error");
 										validationFlags["locationDetailsValidation"] = false;
+									}else{
+										control.setValueState("None");
 									}
 								}		
 							}
@@ -609,7 +648,11 @@ sap.ui.define([
 
 					// Custom header for the dialog
 					const dialogTitle = new sap.m.Bar({
-						contentMiddle: [new sap.m.Text({ text: 'Additional Location Alert' })],
+						contentMiddle: [
+							new sap.m.Text({ 
+								text: 'Additional Location Alert'
+							}).addStyleClass("alert-title")
+						],
 						contentRight: [
 								new sap.ui.core.Icon({
 										src: 'sap-icon://decline',
@@ -617,9 +660,12 @@ sap.ui.define([
 										press: function () {
 												that.oConfirmationDialog.close();
 										}
-								})
+								}).addStyleClass("alert-close-icon")
 						]
 				});
+
+				// Add the class for the dialog content
+				dialogTitle.addStyleClass("confirmation-dialog-title");
 
 				// Open the additional location alert dialog while submit pressed
           if(!this.oConfirmationDialog){
@@ -680,8 +726,7 @@ sap.ui.define([
 					}
 				},
 
-        handleSubmit: function () {
-					// While submit button is pressed, validate all the fields in the form
+				validate: function(){
 					this.validateFormDetails("account-info-container", true, "oEnrollModel", "accountDetailsValidation");
 					this.validateFormDetails("site-contact-info-container", true, "oEnrollModel", "siteDetailsValidation");
 					this.validateBuildingDetails("building-detail-main-container");
@@ -689,6 +734,11 @@ sap.ui.define([
 					this.validateFormDetails("enrollment-consent-section", true, "oConsentModel", "consentDetailValidation");
 					this.validateFormDetails("customer-auth-and-release-container", true, "oConsentModel", "consentAuthDetailValidation");
 					this.validateTermsAndConditionIsVerified("customer-auth-and-release-container");
+				},
+
+        handleSubmit: function () {
+					// While submit button is pressed, validate all the fields in the form
+					this.validate();
 
 					// Update the error message trip visibility status once validation is done
 					this.setErrorMessageTripVisibility();
