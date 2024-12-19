@@ -101,48 +101,12 @@
           "target": [
             "TargetWelcomePage"
           ]
-        },
-        {
-          "name": "HomePage",
-          "pattern": "",
-          "target": [
-            "TargetHomePage"
-          ]
-        },
-        {
-          "name": "EnrollmentApplicationPage",
-          "pattern": "",
-          "target": [
-            "TargetEnrollmentApplication"
-          ]
-        },
-        {
-          "name": "ConsentsPage",
-          "pattern": "",
-          "target": [
-            "TargetConsents"
-          ]
         }
       ],
       "targets": {
         "TargetWelcomePage": {
           "id": "WelcomePage",
           "name": "WelcomePage"
-        },
-        "TargetHomePage": {
-          "id": "HomePage",
-          "name": "HomePage",
-          "level": 1
-        },
-        "TargetEnrollmentApplication": {
-          "id": "EnrollmentApplicationPage",
-          "name": "EnrollmentApplicationPage",
-          "level": 2
-        },
-        "TargetConsents": {
-          "id": "ConsentsPage",
-          "name": "ConsentsPage",
-          "level": 3
         }
       }
     },
