@@ -21,12 +21,16 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
     const accountParsedData = JSON.parse(AccountDetail);
     const consentParsedData = JSON.parse(ConsentDetail);
 
-    // Check the build details fields contains the empty value
-    const buildingDetailFieldCheck = buildingParsedData?.some(e =>Object.values(e).includes(""));    
+    const excludedFields = ['AddrLineTwo'];
 
+    // Check the building details fields contains the empty value
+    const buildingDetailFieldCheck = buildingParsedData?.map(buildingDetail => {     
+      return Object.keys(buildingDetail).filter(key => !excludedFields.includes(key)).some(key => buildingDetail[key] === "");
+    }); 
+    
     if ((Object.keys(applicationParsedData)?.length === 0) || (buildingParsedData?.length === 0) ||
-      (buildingDetailFieldCheck) || (Object.keys(accountParsedData)?.length === 0) || (consentParsedData?.length === 0))
-      return { 'status': 400, 'message': emptyField?.message}
+      (buildingDetailFieldCheck.includes(true)) || (Object.keys(accountParsedData)?.length === 0) || (consentParsedData?.length === 0))
+      return { 'status': 400, 'message': 'Required fields must not be empty.'}
 
     // Assign AppId to Application Detail, Building Detail, Account Detail and Application Consent 
     applicationParsedData.AppId = AppId
