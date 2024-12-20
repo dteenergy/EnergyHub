@@ -55,39 +55,38 @@ sap.ui.define([
         const oEnrollModel = new JSONModel(oEnrollFormData);
         this.getView().setModel(oEnrollModel, "oEnrollModel");
 
-			let oConsentData = {
-				ConsentDetail: {
-					"ConsentFirstName": "",
-					"ConsentLastName": "",
-					"ConsentContactTitle":"",
-					"ConsentAddress": "",
-					"ConsentCity":"",
-					"ConsentState": "",
-					"ConsentZipcode": null,
-					"ConsentAccountNumber":"",
-					"ConsentPhoneNumber":"",
-					"ConsentEmailAddr":"",
-					"AuthPersonName":"",
-					"AuthDate":"",
-					"AuthTitle":""
-        }
-			};
+				let oConsentData = {
+					ConsentDetail: {
+						"ConsentFirstName": "",
+						"ConsentLastName": "",
+						"ConsentContactTitle":"",
+						"ConsentAddress": "",
+						"ConsentCity":"",
+						"ConsentState": "",
+						"ConsentZipcode": null,
+						"ConsentAccountNumber":"",
+						"ConsentPhoneNumber":"",
+						"ConsentEmailAddr":"",
+						"AuthPersonName":"",
+						"AuthDate":"",
+						"AuthTitle":""
+					}
+				};
 
-			// Set the JSONModel with the correct name
-			const oConsentModel = new JSONModel(oConsentData);
-			this.getView().setModel(oConsentModel, "oConsentModel");
+				// Set the JSONModel with the correct name
+				const oConsentModel = new JSONModel(oConsentData);
+				this.getView().setModel(oConsentModel, "oConsentModel");
 
-        const oModel = new JSONModel({
-            locations: {}, // Array to hold all building location data
-        });
-        this.getView().setModel(oModel, "locationModel");
+				const oModel = new JSONModel({
+						locations: {}, // Array to hold all building location data
+				});
+				this.getView().setModel(oModel, "locationModel");
 
 				// Model to hold the visibility status of error message
 				const oErrorVisibilityModel = new JSONModel({
 					"isInputInValid":false,
 					"isTermsAndConditionVerifiedStatus":false
 				});
-
 				this.getView().setModel(oErrorVisibilityModel, "oErrorVisibilityModel");
 
 				// Model to set the list of US states
@@ -98,10 +97,11 @@ sap.ui.define([
 				const oLocationStateModel = new JSONModel(GlobalInputValues.locationStates);
 				this.getView().setModel(oLocationStateModel, "oLocationStateModel");
 
+				// Load the initial fragment
         this.onAddAnotherLocation();
         this.loadConsentForm();
         this.loadAuthAndRelease();
-        },
+      },
 
         /**
 				 * Add additional location(Building) container
@@ -111,9 +111,12 @@ sap.ui.define([
 				 */
         onAddAnotherLocation: function(){
 					const oView = this.getView();
-					const oModel = oView.getModel("locationModel");
+
+					const oLocationModel = oView.getModel("locationModel");
+					let locations = oLocationModel.getProperty("/locations");
+
+					// Get the container Id which holds the building details fragments
 					const buildingMainContainer = this.byId("building-detail-main-container");
-					let locations = oModel.getProperty("/locations");
 					
 					const newLocation = {
 						BuildingName: "",
@@ -121,18 +124,21 @@ sap.ui.define([
 						Address: "",
 						City: "",
 						State: "Michigan",
-						Zipcode: ""
+						Zipcode: "",
+						AddrLineTwo: "",
+						suggestions: []
 					}
 
+					// Get the added building count
 					const count = this.buildingCount;
-					
+					// Using the count value structure the id
 					const id = `Building${count}`;
 
 					// Find the length to show it in the label
 					const lengthOfLocations = buildingMainContainer.getItems().length;
 					
 					locations = {...locations, [id]: newLocation}
-					oModel.setProperty("/locations", locations);
+					oLocationModel.setProperty("/locations", locations);
 
 					let that = this;
 
@@ -163,7 +169,7 @@ sap.ui.define([
 							const [firstElement, ...rest] = flexItems;
 
 							// Set and bind the model with the fragment
-							oFragment.setModel(oModel, "locationModel");
+							oFragment.setModel(oLocationModel, "locationModel");
 							oFragment.bindElement(`locationModel>/locations/${id}`);
 
 							const wrapper = new sap.m.FlexBox(that.createId(id),{
@@ -175,8 +181,7 @@ sap.ui.define([
 							// Add the fragment to the according container
 							buildingMainContainer.addItem(wrapper);
 							that.buildingCount += 1;
-
-							
+		
 							if(count > 1){
 							const fullId = that.createId(id);
 							
@@ -195,16 +200,15 @@ sap.ui.define([
 					});
 			},
 
-			 // Remove the additional location 
+			  // Remove the additional location 
 				removeBuilding: function (oEvent) {
 					// Load the location model
-					const oModel = this.getView().getModel("locationModel");
-					let locations = oModel.getProperty("/locations");
+					const oLocationModel = this.getView().getModel("locationModel");
+					let locations = oLocationModel.getProperty("/locations");
 					
 					// Get the Id of the container, which holds the additional building that the user clicked remove button
 					const oButton = oEvent.getSource();
 					const oFlexWrapper = oButton.getParent();
-					console.log(oFlexWrapper.getId());
 					
 					const flexWrapperId = oFlexWrapper.getId().split('--')[2];
 
@@ -267,20 +271,20 @@ sap.ui.define([
 
         // Define model and load the Customer Auth and Release section fragment to the enrollment form
         loadAuthAndRelease: function(){
-            const oConsentModel = this.getView().getModel("oConsentModel");
+					const oConsentModel = this.getView().getModel("oConsentModel");
 
-            const customerAuthAndReleaseContainer = this.byId("customer-auth-and-release-container");
-            Fragment.load({
-                name: "dteconsentappclient.fragment.AuthAndRelease",
-                controller: this
-            }).then(function (oFragment) {
-                oFragment.setModel(oConsentModel, "oConsentModel");
-                oFragment.bindElement('oConsentModel');
-                
-                customerAuthAndReleaseContainer.addItem(oFragment);
-            }).catch(function (err) {
-                console.log(`Failed to load fragment: ${err}`)
-            });
+					const customerAuthAndReleaseContainer = this.byId("customer-auth-and-release-container");
+					Fragment.load({
+							name: "dteconsentappclient.fragment.AuthAndRelease",
+							controller: this
+					}).then(function (oFragment) {
+							oFragment.setModel(oConsentModel, "oConsentModel");
+							oFragment.bindElement('oConsentModel');
+							
+							customerAuthAndReleaseContainer.addItem(oFragment);
+					}).catch(function (err) {
+							console.log(`Failed to load fragment: ${err}`)
+					});
         },
 
 				// Bind or unbind the data based on the checbox checked
@@ -384,7 +388,7 @@ sap.ui.define([
             });
         },
 
-				// Check the input on live change and remove the error state
+				// Checks the input value on live change and remove the error state
 				onLiveChange: function(oEvent){
 					const oControl = oEvent.getSource();
 					
@@ -398,9 +402,91 @@ sap.ui.define([
 					}
 				},
 
+				onSuggest: function(oEvent) {
+					const sPath = oEvent.getSource().getBinding('value')?.getContext()?.getPath();
+					const id = sPath.split("/")[2];
+
+					// Get the entered value from input
+					const sValue = oEvent.getParameter("suggestValue");
+		
+					if (sValue.length > 3) {
+						 // Trigger API call after 3 characters
+						this.fetchAddressSuggestions(sValue, id);
+					}
+				},
+
+				/**
+				 * To call the DTE Address validation api and bind the result with accoording model
+				 * @param {String} sQuery userInput
+				 * @param {String} id particular fragment bound id
+				 */
+				fetchAddressSuggestions: async function (sQuery, id) {
+					const oLocationModel = this.getView().getModel("locationModel");
+
+					// DTE address validation api
+					await axios.get(`https://test.api.customer.sites.dteenergy.com/public/qa/premises/?address=${sQuery}&maxResults=10`).then(function (response) {		
+						
+						// Construct the response as needed format 
+						const aSuggestions = response.data.results.map(function (item) {
+							const addr = item.serviceAddress;
+
+							return {
+								id: item.premiseId, // Unique identifier
+								address: addr.houseNumber + ", " + addr.streetName,
+								fullAddress: addr.houseNumber + ", " + addr.streetName + 
+											", " + addr.city + ", " + addr.state + ", " + addr.zipCode
+							};
+						});
+
+						// Set the suggestions array to the model
+						oLocationModel.setProperty(`/locations/${id}/suggestions`, aSuggestions);
+					})
+					.catch(function (error) {
+						console.error("Error fetching suggestions : ", error);
+					});
+
+				},
+
+				onSuggestionSelect: function (oEvent) {
+					const oInputControl = oEvent.getSource();
+
+					// Retrieve the bound path
+					const sBasePath = oInputControl.getBinding('value')?.getContext()?.getPath();
+					const id = sBasePath.split("/")[2];
+
+					// Handle item selection
+					const oSelectedItem = oEvent.getParameter("selectedItem");
+					if (oSelectedItem) {
+						const sKey = oSelectedItem.getKey(); // Unique ID (premiseId) of the selected address	
+
+						// Access the suggestions array from the default model
+						const oLocationModel = this.getView().getModel("locationModel");
+						const aSuggestions = oLocationModel.getProperty(`/locations/${id}/suggestions`);
+
+						// Find the selected address using the key
+						const oSelectedAddress = aSuggestions.find(function (item, index) {
+							return item.id === sKey; // Match the key (premiseId)
+						});						
+
+						if (oSelectedAddress) {
+							// Extract the relevant address parts
+							const oAddressParts = oSelectedAddress.fullAddress.split(",");
+
+							const sShortAddress = oAddressParts[0].trim()+ ", " + oAddressParts[1].trim();
+	
+							// Set properties to the 'locationModel'
+							const oLocationModel = this.getView().getModel("locationModel");
+							
+							oLocationModel.setProperty(`${sBasePath}/Address`, sShortAddress);
+							oLocationModel.setProperty(`${sBasePath}/City`, oAddressParts[2].trim());
+							oLocationModel.setProperty(`${sBasePath}/Zipcode`, +oAddressParts[4]);
+						}
+					}
+				},
+
 				// Validate the building information
 				validateBuildingDetails: function(sContainerId){
-					const olocationModel = this.getView().getModel("locationModel");
+
 					const container = this.byId(sContainerId);
 					validationFlags["locationDetailsValidation"] = true;
 
@@ -409,7 +495,6 @@ sap.ui.define([
 					 * So, get the all items from the container 
 					 */
 					container.getItems().forEach((wrapper, index)=>{
-						let id = wrapper.getId().split('--')[2];
 						
 						wrapper.findAggregatedObjects(true, (control)=>{
 							
@@ -419,7 +504,7 @@ sap.ui.define([
 								const bindingPath = control.getBinding('value')?.getPath() || control.getBinding("selectedKey")?.getPath();
 								
 								if(bindingPath){
-									const userInput = olocationModel.getProperty(`/locations/${id}/${bindingPath}`);
+									const userInput = control.getValue();
 									
 									if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) {
 										control.setValueState("Error");
@@ -449,10 +534,10 @@ sap.ui.define([
 					container.findAggregatedObjects(true, (control) => {
 							
 							// Filtered the input and combobox controls
-							if (control instanceof sap.m.CheckBox) {
-								const inputvalue = control.getSelected();
-								
-								const innerDiv = control.$().find(".sapMCbBg");
+						if (control instanceof sap.m.CheckBox) {
+							const inputvalue = control.getSelected();
+							
+							const innerDiv = control.$().find(".sapMCbBg");
 								
 							if(inputvalue) {
 								oErrorVisibilityModel.setProperty('/isTermsAndConditionVerifiedStatus', false);
@@ -463,7 +548,7 @@ sap.ui.define([
 								innerDiv.addClass("checkbox-error-view");
 							}		
 						}
-            });
+          });
 				},
 
 				setErrorMessageTripVisibility: function(){
@@ -553,14 +638,18 @@ sap.ui.define([
 
 					// Url to create the enrollment application
 					const enrollmentCreateUrl = this.SERVERHOST + 'service/CreateEnrollmentFormDetail';
-
+					
+					// Format the location details
+					const formattedLocationDetails = Object.values(locationDetails['locations']);
+					formattedLocationDetails.forEach((item)=> delete item.suggestions);
+					
 					const enrollmentFormDetails = {
 						AccountDetail: JSON.stringify({
 							...enrollmentDetails['AccountDetail'], 
 							FirstName: enrollmentDetails['AccountDetail']['SiteFirstName'], 
 							LastName: enrollmentDetails['AccountDetail']['SiteLastName'],
 							EmailAddr: enrollmentDetails['AccountDetail']['SiteEmailAddr']}),
-							BuildingDetail: JSON.stringify(Object.values(locationDetails['locations'])),
+							BuildingDetail: JSON.stringify(formattedLocationDetails),
 							ApplicationDetail: JSON.stringify({'SignatureSignedBy': enrollmentDetails['SignatureSignedBy'], 'SignatureSignedDate': this.convertDateFormat(enrollmentDetails['SignatureSignedDate'])}),
 							ConsentDetail: JSON.stringify([{
 							"FirstName": consentDetails['ConsentFirstName'],

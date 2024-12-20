@@ -16,8 +16,8 @@ sap.ui.define([
 		consentAuthDetailValidation: true
 	};
 	const validationProperties = [
-		{sContainerId: "tenant-consent-form-container-id", isShowError: true, model: "oConsentModel", validationStatus: "tenantInformationValidation"},
-		{sContainerId: "tenant-auth-and-release-container-id", isShowError: true, model: "oConsentModel", validationStatus: "consentAuthDetailValidation"}
+		{sContainerId: "tenant-consent-form-container-id", isShowError: true, validationStatus: "tenantInformationValidation"},
+		{sContainerId: "tenant-auth-and-release-container-id", isShowError: true, validationStatus: "consentAuthDetailValidation"}
 	]
 
 	return BaseController.extend("dteconsentappclient.controller.ConsentForm", {
@@ -59,7 +59,7 @@ sap.ui.define([
 					this.getView().setModel(oConsentModel, "oConsentModel");
 
 					// Model to set the list of US states
-					const ostateValuesModel = new JSONModel(GlobalInputValues);
+					const ostateValuesModel = new JSONModel(GlobalInputValues.usStates);
 					this.getView().setModel(ostateValuesModel, "ostateValuesModel");
 
 					// Model to hold the visibility status of error message

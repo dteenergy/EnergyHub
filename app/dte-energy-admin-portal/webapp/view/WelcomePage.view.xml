@@ -1,0 +1,20 @@
+<mvc:View xmlns:tnt="sap.tnt" controllerName="dteenergyadminportal.controller.WelcomePage"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <Page id="page" title="{i18n>title}">
+        <tnt:ToolPage>
+            <tnt:sideContent>
+                <tnt:SideNavigation>
+                    <tnt:NavigationList itemSelect="selectedItem" selectedKey="HomePage">
+                        <tnt:NavigationListItem text="Home" key="HomePage" icon="sap-icon://home"></tnt:NavigationListItem>
+                        <tnt:NavigationListItem text="Enrollment Application" key="EnrollmentApplicationPage" icon="sap-icon://request"></tnt:NavigationListItem>
+                        <tnt:NavigationListItem text="Consents" key="ConsentsPage" icon="sap-icon://approvals"></tnt:NavigationListItem>
+                    </tnt:NavigationList>
+                </tnt:SideNavigation>
+            </tnt:sideContent>
+            <tnt:mainContents>
+                <VBox id="mainContent" width="100%" />
+            </tnt:mainContents>
+        </tnt:ToolPage>
+    </Page>
+</mvc:View>
