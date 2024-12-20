@@ -135,13 +135,6 @@
           "target": [
             "TargetConsentForm"
           ]
-        },
-        {
-          "name": "Confirmation",
-          "pattern": "confirmation/{StatusCode}/{Message}",
-          "target": [
-            "Confirmation"
-          ]
         }
       ],
       "targets": {
@@ -158,13 +151,6 @@
           "clearControlAggregation": false,
           "viewId": "Enrollment",
           "viewName": "Enrollment"
-        },
-        "Confirmation": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "Confirmation",
-          "viewName": "Confirmation"
         }
       }
     },
