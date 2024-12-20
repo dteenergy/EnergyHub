@@ -31,7 +31,7 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
     
     if ((Object.keys(applicationParsedData)?.length === 0) || (buildingParsedData?.length === 0) ||
       (buildingDetailFieldCheck.includes(true)) || (Object.keys(accountParsedData)?.length === 0) || (consentParsedData?.length === 0))
-      return { 'status': 400, 'message': emptyField?.message}
+      return { 'statusCode': 400, 'message': emptyField?.message}
 
     // Assign AppId to Application Detail, Building Detail, Account Detail and Application Consent 
     applicationParsedData.AppId = AppId
@@ -48,13 +48,13 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
     // Check Enrollment Form Details inserted successfully.
     if ((applicationDetailResult?.results?.length > 0) && (buildingDetailResult?.results?.length > 0)
       && (accountDetailResult?.results?.length > 0) && (consentDetailResult?.results?.length > 0))
-      return { statusCode: 200, Message: "Thank you! Your DTE Energy Data Hub enrollment is confirmed. " };
+      return { statusCode: 200, message: "Thank you! Your DTE Energy Data Hub enrollment is confirmed. " };
       
   } catch (error) {
       console.log("Enrollment Form Creation Error :", error);
       return {
         statusCode: 500,
-        error: error.message
+        message: error.message
       };  
   }
 };
