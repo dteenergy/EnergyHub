@@ -1,5 +1,6 @@
 const cds = require('@sap/cds');
 const { v4: uuidv4 } = require('uuid');
+const {emptyField} = require("./regex-and-error-message");
 
 /**
  * Function: Create the Enrollment form details
@@ -22,7 +23,6 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
     const consentParsedData = JSON.parse(ConsentDetail);
 
     const excludedFields = ['AddrLineTwo'];
-    const validationError = 'Required fields must not be empty.';
 
     // Check the building details fields contains the empty value
     const buildingDetailFieldCheck = buildingParsedData?.map(buildingDetail => {     
@@ -31,7 +31,7 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
     
     if ((Object.keys(applicationParsedData)?.length === 0) || (buildingParsedData?.length === 0) ||
       (buildingDetailFieldCheck.includes(true)) || (Object.keys(accountParsedData)?.length === 0) || (consentParsedData?.length === 0))
-      return { 'status': 400, 'message': validationError}
+      return { 'status': 400, 'message': emptyField?.message}
 
     // Assign AppId to Application Detail, Building Detail, Account Detail and Application Consent 
     applicationParsedData.AppId = AppId
