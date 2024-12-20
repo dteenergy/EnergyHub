@@ -22,6 +22,7 @@ entity BuildingDetail {
     City : String not null;
     State : String not null;
     Zipcode: String not null;
+    AddrLineTwo: String;
     CreatedAt: Timestamp @cds.on.insert: $now;
     UpdatedAt: Timestamp @cds.on.insert: $now  @cds.on.update: $now;
 
