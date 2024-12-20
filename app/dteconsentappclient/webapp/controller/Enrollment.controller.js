@@ -352,7 +352,6 @@ sap.ui.define([
 				 * Validate account details site and auth details
 				 * @param {String} sContainerId Container Id
 				 * @param {Boolean} isShowError Have to add value state or not
-				 * @param {Object} model model with bind with the container
 				 * @param {String} validationStatus
 				 */
         validateFormDetails: function(sContainerId, isShowError, validationStatus){
@@ -389,16 +388,19 @@ sap.ui.define([
         },
 
 				/**
-				 * Checks the given email is proper emailId
+				 * Checks the given email is valid
 				 * @param {Object} oControl 
 				 * @param {String} sValue 
 				 * @returns {Boolean}
 				 */
 				isValidEmail: function(oControl, sValue){
+
+					// If emailId is valid set the value state to "None"
 					if(emailRegex.test(sValue)) {
 						oControl.setValueState("None");
 						return true;
 					}else{
+						// If emailId is Invalid , set the value state to "Error" with an error message
 						oControl.setValueState("Error");
 						oControl.setValueStateText("Please provide proper Email");
 						return false;
@@ -418,15 +420,8 @@ sap.ui.define([
 						oControl.setValueState("Error");
 					}
 
+					// If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
 					if(oControl?.mProperties["type"] === "Email") this.isValidEmail(oControl, userInput);
-					
-					if(Object.values(validationFlags).includes(false)){
-					// Re-validate the form fields
-					this.validate();
-
-					// Update the error message trip visibility status once validation is done
-					this.setErrorMessageTripVisibility();
-					}
 				},
 
 				onSuggest: function(oEvent) {

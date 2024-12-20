@@ -121,16 +121,19 @@ sap.ui.define([
 			},
 
 			/**
-			 * Checks the given email is proper emailId
+			 * Checks the given email is valid
 			 * @param {Object} oControl 
 			 * @param {String} sValue 
 			 * @returns {Boolean}
 			 */
 			isValidEmail: function(oControl, sValue){
+
+				// If emailId is valid set the value state to "None"
 				if(emailRegex.test(sValue)) {
 					oControl.setValueState("None");
 					return true;
 				}else{
+					// If emailId is Invalid , set the value state to "Error" with an error message
 					oControl.setValueState("Error");
 					oControl.setValueStateText("Please provide proper Email");
 					return false;
@@ -169,11 +172,17 @@ sap.ui.define([
 								}
 							}else{
 								control.setValueState("None");
-								if(control?.mProperties["type"] === "Email") this.isValidEmail(control, userInput);
+								/** If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
+								 *  If the email is invalid, set the corresponding validation flag to `false`.
+								 * */
+								if(control?.mProperties["type"] === "Email") {
+									if(!this.isValidEmail(control, userInput)) validationFlags[validationStatus] = false;
+								}
 							}
 						 }		
 					 }		
 				 });
+
 				 // To update the error message visility status
 				 this.setErrorMessageTripVisibility();
 		 },
