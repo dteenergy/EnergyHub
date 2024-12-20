@@ -19,7 +19,6 @@ sap.ui.define([
 					consentAuthDetailValidation: true
 				}
 		const emailRegex = /^(?=.{1,255}$)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-		const dateRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
 
     return BaseController.extend("dteconsentappclient.controller.Enrollment", {
         onInit() {
@@ -366,13 +365,8 @@ sap.ui.define([
 							
 						// Filtered the input and combobox controls
 						if (control instanceof sap.m.Input && !control.getId().includes("-popup-input") || control instanceof sap.m.ComboBox || control instanceof sap.m.MaskInput) {
-		
-								// Get the binding path from the control
-								const bindingPath = control.getBinding('value')?.getPath() || control.getBinding("selectedKey")?.getPath();
-								
-								if(bindingPath){
-									
-										const userInput = control.getValue();
+							
+										const userInput = control.getValue()
 										
 										// Validates that all required fields are filled; if a field is empty, marks it with an error state to indicate validation failure.
 										if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) {
@@ -388,13 +382,8 @@ sap.ui.define([
 											if(control?.mProperties["type"] === "Email") {
 												if(!this.isValidEmail(control, userInput)) validationFlags[validationStatus] = false;
 											}
-											if(control instanceof sap.m.MaskInput){
-												console.log(userInput);
-												
-												if(!this.isValidDate(control, userInput)) validationFlags[validationStatus] = false;
-											}
-										}
-								}		
+											
+										}	
 							}		
             });
         },
@@ -416,31 +405,11 @@ sap.ui.define([
 					}
 				},
 
-				/**
-				 * Checks the date is valid
-				 * @param {Object} oControl 
-				 * @param {String} sValue
-				 */
-				isValidDate: function(oControl, sValue){
-					console.log(sValue);
-					
-					if(dateRegex.test(sValue)) {
-						oControl.setValueState("None");
-						return true;
-					}else{
-						oControl.setValueState("Error");
-						oControl.setValueStateText("Please provide valid date");
-						return false;
-					}
-				},
-
 				// Checks the input value on live change and remove the error state
 				onLiveChange: function(oEvent){
 					const oControl = oEvent.getSource();
 		
 					const userInput = oEvent.getParameter("value") || oEvent.getParameter("selectedKey");
-					console.log(userInput);
-					
 
 					// Validates if a field has value, if it is remove the error state
 					if(userInput?.trim() !== "" && oControl?.mProperties['required']) {
@@ -450,7 +419,6 @@ sap.ui.define([
 					}
 
 					if(oControl?.mProperties["type"] === "Email") this.isValidEmail(oControl, userInput);
-					if(oControl instanceof sap.m.MaskInput) this.isValidDate(oControl, userInput)
 					
 					if(Object.values(validationFlags).includes(false)){
 					// Re-validate the form fields

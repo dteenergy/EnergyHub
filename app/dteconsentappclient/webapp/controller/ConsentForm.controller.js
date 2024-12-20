@@ -18,7 +18,8 @@ sap.ui.define([
 	const validationProperties = [
 		{sContainerId: "tenant-consent-form-container-id", isShowError: true, validationStatus: "tenantInformationValidation"},
 		{sContainerId: "tenant-auth-and-release-container-id", isShowError: true, validationStatus: "consentAuthDetailValidation"}
-	]
+	];
+	const emailRegex = /^(?=.{1,255}$)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 	return BaseController.extend("dteconsentappclient.controller.ConsentForm", {
         onInit () {
@@ -115,6 +116,24 @@ sap.ui.define([
 					oControl.setValueState("Error");
 				}else{
 					oControl.setValueState("None");
+					if(oControl?.mProperties["type"] === "Email") this.isValidEmail(oControl, userInput);
+				}
+			},
+
+			/**
+			 * Checks the given email is proper emailId
+			 * @param {Object} oControl 
+			 * @param {String} sValue 
+			 * @returns {Boolean}
+			 */
+			isValidEmail: function(oControl, sValue){
+				if(emailRegex.test(sValue)) {
+					oControl.setValueState("None");
+					return true;
+				}else{
+					oControl.setValueState("Error");
+					oControl.setValueStateText("Please provide proper Email");
+					return false;
 				}
 			},
 
@@ -146,10 +165,11 @@ sap.ui.define([
 							if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) {
 								if(isShowError){
 									control.setValueState("Error");
+									validationFlags[validationStatus] = false;
 								}
-								validationFlags[validationStatus] = false
 							}else{
 								control.setValueState("None");
+								if(control?.mProperties["type"] === "Email") this.isValidEmail(control, userInput);
 							}
 						 }		
 					 }		
