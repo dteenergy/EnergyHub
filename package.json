@@ -14,14 +14,15 @@
     "cors": "^2.8.5",
     "crypto-js": "^4.2.0",
     "express": "^4",
+    "jsonwebtoken": "^9.0.2",
     "uuid": "^11.0.3"
   },
   "devDependencies": {
     "@cap-js/cds-types": "^0.7.0",
     "@cap-js/sqlite": "^1",
     "@sap/cds-dk": "^8",
-    "rimraf": "^5.0.5",
-    "mbt": "^1.2.29"
+    "mbt": "^1.2.29",
+    "rimraf": "^5.0.5"
   },
   "scripts": {
     "start": "cds-serve",
@@ -46,12 +47,12 @@
           "restrict_all_services": false
         }
       },
-      "[development]":{
-        "auth":{
+      "[development]": {
+        "auth": {
           "kind": "basic",
           "restrict_all_services": false,
           "users": {
-            "test@gmail.com":{
+            "test@gmail.com": {
               "password": "test@123"
             }
           }
