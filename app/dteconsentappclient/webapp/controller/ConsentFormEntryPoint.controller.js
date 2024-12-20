@@ -30,7 +30,6 @@ sap.ui.define([
         // Get the env data (Navigation page url)
         getEnv:  async function(){
             const {TenantConfirmationPageUrl, ErrorPageUrl} = await this.getEnvironmentVariables();
-            console.log(TenantConfirmationPageUrl);
             
             this.TenantConfirmationPageUrl = TenantConfirmationPageUrl;
             this.ErrorPageUrl = ErrorPageUrl;
