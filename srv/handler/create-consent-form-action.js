@@ -35,8 +35,8 @@ const createConsentFormDetail = async (req, entity, tx, decrAppId) => {
     if (consentDetailResponse?.results?.length > 0)
       return { statusCode: 200, message: 'Thank you! Your DTE Energy Data Hub consent is confirmed.'}
     } catch (error) {
-    if (error.status) {
-      return { statusCode: error.status, message: error.message };
+    if (error.statusCode) {
+      return { statusCode: error.statusCode, message: error.message };
     } else
         return {
           statusCode: 500, message: error.message

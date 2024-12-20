@@ -29,8 +29,10 @@ sap.ui.define([
 
         // Get the error page url
         getEnv:  async function(){
-            const {ErrorPageUrl} = await this.getEnvironmentVariables();
-
+            const {TenantConfirmationPageUrl, ErrorPageUrl} = await this.getEnvironmentVariables();
+            console.log(TenantConfirmationPageUrl);
+            
+            this.TenantConfirmationPageUrl = TenantConfirmationPageUrl;
             this.ErrorPageUrl = ErrorPageUrl;
         },
 
@@ -50,10 +52,15 @@ sap.ui.define([
                  * If true, then render Consent Form View 
                  * Else navigate to 404 page.
                  */
-                if(data.value.status === 200){
+                if(data.value.statusCode === 200){
                     XMlView.create({
                         viewName: "dteconsentappclient.view.ConsentForm",
-                        viewData: {applicationId: appId, url: this.SERVERHOST, router: this.getOwnerComponent().getRouter()},
+                        viewData: {
+                            applicationId: appId,
+                            url: this.SERVERHOST,
+                            TenantConfirmationPageUrl: this.TenantConfirmationPageUrl,
+                            ErrorPageUrl: this.ErrorPageUrl
+                        },
                     }).then(function(oView) {
                         // Render the created view into the App view
                         const oRootView = this.getOwnerComponent().getRootControl();
