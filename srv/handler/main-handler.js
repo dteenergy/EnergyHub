@@ -76,5 +76,15 @@ module.exports = cds.service.impl(async function (srv) {
 			const decryptedData = await valueDecrypt(encryptedData);
 
 			return { "Encrypted": encryptedData, "Decrypted": decryptedData }
-		})
+		});
+
+    // Get environment variable (Navigation page url and address validation url)
+		srv.on('getEnvironmentVariables', (req) => {
+			return {
+				DTEAddressValidationUrl: process.env.DTE_ADDRESS_VALIDATION_URL,
+				LandlordConfirmationPageUrl: process.env.LANDLORD_CONFIRMATION_PAGE_URL,
+				TenantConfirmationPageUrl: process.env.TENANT_CONFIRMATION_PAGE_URL,
+				ErrorPageUrl: process.env.ERROR_PAGE_URL
+			}
+		});
 })

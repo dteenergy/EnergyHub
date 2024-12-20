@@ -32,8 +32,11 @@ sap.ui.define([
 					
 					//Initialize Model for this view
 					this.initializeModel();
+
 					// Load the AuthAndRelease fragement
 					this.loadAuthAndRelease();
+
+					this.getEnv();
 			},
 
 				initializeModel: function(){
@@ -68,6 +71,14 @@ sap.ui.define([
 						"isTermsAndConditionVerifiedStatus":false
 					});
 					this.getView().setModel(oErrorVisibilityModel, "oErrorVisibilityModel");
+				},
+
+				 // Get the navigation page url and address validation url
+				 getEnv:  async function(){
+					const {TenantConfirmationPageUrl, ErrorPageUrl} = await this.getEnvironmentVariables();
+				
+					this.TenantConfirmationPageUrl = TenantConfirmationPageUrl;
+					this.ErrorPageUrl = ErrorPageUrl;
 				},
 
         // Define model and load the Customer Auth and Release section fragment to the enrollment form
@@ -254,17 +265,22 @@ sap.ui.define([
 								"AuthTitle": consentDetails['AuthTitle'],
 							})
 						}
-					
+				
+				try{		
 					// Post request to create a tenant consent.
 					const {data} = await axios.post(tenantConsentCreateUrl, tenantConsentFormDetails);
 						
 					if(data.value.status === 200){
-						this.initializeModel();
-						this.router.navTo("Confirmation", {
-							StatusCode: data.value.status,
-							Message: data.value.message
-						});
+						// Navigate to the tenant confirmation page
+						window.open(this.TenantConfirmationPageUrl, '_self');
+					}else{
+						// Navigate to the error page
+						window.open(this.ErrorPageUrl, '_self');
 					}
+				}catch(err){
+					// Navigate to the error page
+					window.open(this.ErrorPageUrl, '_self');
+				}	
 			}
 		},
 

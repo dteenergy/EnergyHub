@@ -1,4 +1,5 @@
 const { validateWithRegex } = require("./regex-and-error-message");
+const {emptyField} = require('./regex-and-error-message');
 
 /**
  * Function: Create the Consent form details
@@ -19,7 +20,7 @@ const createConsentFormDetail = async (req, entity, tx, decrAppId) => {
     const excludedFields = ['AuthTitle'];
     const consentDetailFieldCheck = Object.keys(consentDetailParsedData).filter((key=> !excludedFields.includes(key))).some(key => consentDetailParsedData[key] === '');
     if (consentDetailFieldCheck)
-      throw { status: 400, message: 'Kindly fill all the required fields.' }
+      throw { statusCode: 400, message: emptyField?.message}
 
     // Validate the Sensitive field information from consentDetailParsedData.
     validateWithRegex(consentDetailParsedData?.EmailAddr, 'email');
@@ -32,13 +33,13 @@ const createConsentFormDetail = async (req, entity, tx, decrAppId) => {
 
     // Check Consent Form Details inserted successfully
     if (consentDetailResponse?.results?.length > 0)
-      return { status: 200, message: 'Thank you! Your DTE Energy Data Hub consent is confirmed.'}
+      return { statusCode: 200, message: 'Thank you! Your DTE Energy Data Hub consent is confirmed.'}
     } catch (error) {
     if (error.status) {
-      return { status: error.status, message: error.message };
+      return { statusCode: error.status, message: error.message };
     } else
         return {
-          status: 500, error: error.message
+          statusCode: 500, message: error.message
         }
   }
 }
