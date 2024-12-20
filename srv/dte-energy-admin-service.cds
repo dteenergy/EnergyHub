@@ -5,6 +5,8 @@ using {dteConsentApp as db} from '../db/schema';
 service DTEEnergyAdminPortal {
 
   entity ApplicationDetail as projection on db.ApplicationDetail;
+  entity AccountDetail as projection on db.AccountDetail;
+  entity BuildingDetail as projection on db.BuildingDetail;
 
   // Get the EnrollmentApplication Detail
   function EnrollmentApplication() returns String;

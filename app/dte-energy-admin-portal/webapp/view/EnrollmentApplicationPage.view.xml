@@ -1,5 +1,89 @@
 <mvc:View xmlns:tnt="sap.tnt" controllerName="dteenergyadminportal.controller.EnrollmentApplicationPage"
-    xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m">
-    <Text text="Enrollment Application Page"></Text>
+  xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
+  xmlns="sap.m">
+  <VBox id="idVbox">
+    <FlexBox id="idToolBar" justifyContent="End">
+      <SearchField id="idFirstNameFilter" placeholder="Search for First Name..." liveChange="onFilterChange"></SearchField>
+      <SearchField id="idLastNameFilter" placeholder="Search for Last Name..." liveChange="onFilterChange"></SearchField>
+      <ComboBox id="idApplicationStatusFilter" selectedKey="" placeholder="Select Application Status" selectionChange="onFilterChange">
+        <items>
+            <core:Item key="" text="All"/>
+            <core:Item key="New" text="New"/>
+            <core:Item key="Accepted" text="Accepted"/>
+            <core:Item key="Rejected" text="Rejected"/>
+        </items>
+      </ComboBox>
+      <Button id="idP13nButton" icon="sap-icon://action-settings" press="setupPersonalization" tooltip="Settings"/>
+    </FlexBox>
+    <ScrollContainer id="_idScrollContainer" horizontal="true" vertical="false" width="100%" height="auto">
+      <Table id="idApplicationTable" items="{MainModel>/ApplicationDetail}" sticky="ColumnHeaders" width="100%">
+        <columns>
+          <Column width="150px"><header><Label text="Application Id"></Label></header></Column>
+          <Column width="150px"><header><Label text="First Name"></Label></header></Column>
+          <Column width="150px"><header><Label text="Last Name"></Label></header></Column>
+          <Column width="150px"><header><Label text="Company Name"></Label></header></Column>
+          <Column width="150px"><header><Label text="Number of Tenants"></Label></header></Column>
+          <Column width="150px"><header><Label text="Application Status"></Label></header></Column>
+          <Column width="150px"><header><Label text="Number of Consents Recieved"></Label></header></Column>
+          <Column width="150px"><header><Label text=""></Label></header></Column>
+        </columns>
+          <items>
+            <ColumnListItem id="idColumnListItem" press="navToSourceSystemObjectPage">
+              <Text text="{MainModel>AppId}"></Text>
+              <Text text="{MainModel>AccountDetailRefId/FirstName}"></Text>
+              <Text text="{MainModel>AccountDetailRefId/LastName}"></Text>
+              <Text text="{MainModel>AccountDetailRefId/CompanyName}"></Text>
+              <!-- <Text text="{MainModel>NumberOfTenants}"></Text> -->
+              <Input value="{MainModel>NumberOfTenants}" ></Input>
+              <ComboBox
+                selectedKey="{MainModel>ApplicationStatus}"
+                selectionChange="onApplicationStatusChange">
+                <items>
+                  <core:Item key="New" text="New" />
+                  <core:Item key="Accepted" text="Accepted" />
+                  <core:Item key="Rejected" text="Rejected" />
+                </items>
+              </ComboBox>
+              <Text text="5"></Text>
+              <Button text="Generate"></Button>
+            </ColumnListItem>
+            
+          </items>
+      </Table>
+    </ScrollContainer>
+      <!-- <OverflowToolbar id="idGenOverflowToolbar" >
+        <ToolbarSpacer id="idToolbarSpacerForPagination" />
+        <Button id="idBtnFirstPress" icon="sap-icon://close-command-field" press="onLoadFirstPage" tooltip="First" enabled="{/oNavModel/firstPageBtnEnable}" />
+        <Button id="idBtnPreviousPress" icon="sap-icon://navigation-left-arrow" press="onLoadPreviousPage" tooltip="Previous" enabled="{/oNavModel/firstPageBtnEnable}"/>
+        <Text id="idPaginationText"  text="Page {/pagination/page} of {/pagination/totalPages}"/>
+        <Button id="idBtnNextPress" icon="sap-icon://navigation-right-arrow" press="onLoadNextPage" tooltip="Next" enabled="{/oNavModel/nextPageBtnEnable}" />
+        <Button id="idBtnLastPress" icon="sap-icon://open-command-field" press="onLoadLastPage" tooltip="Last" enabled="{/oNavModel/nextPageBtnEnable}"/>
+      </OverflowToolbar> -->
+    </VBox>
+  <!-- <Table items="{MainModel>/ApplicationDetail}">
+      <items>
+          <ColumnListItem type="Active" id="item0">
+              <cells>
+
+                  <Text text="{MainModel>NumberOfTenants}" id="text2"/>
+                  <Text text="{MainModel>AccountDetailRefId/CompanyName}" id="text3"/>
+                  
+              </cells>
+          </ColumnListItem>
+      </items>
+      <columns>
+
+                  <Column id="column0">
+                      <header>
+                          <Label text="Number of tenants" id="Label0"/>
+                      </header>
+                  </Column>
+
+                  <Column id="column1">
+                      <header>
+                          <Label text="Company Name" id="Label1"/>
+                      </header>
+                  </Column>
+      </columns>
+  </Table> -->
 </mvc:View>
