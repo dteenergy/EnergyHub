@@ -7,22 +7,22 @@ const { valueEncrypt } = require("./encrypt-and-decrypt-id");
  */
 const generateConsentUrl = async(appId, ApplicationDetail) =>{
     // Get the Consent Service URL
-    const url = process.env.CONSENT_APP_URL;
-    if(appId === "") throw {message: 'AppId is empty', status: 400};
+    const url = process.env.TENANT_CONSENT_FORM_URL;
+    if(appId === "") throw {message: 'Application ID is required', status: 400};
         
     // Get the application detail
     const appDetail = await SELECT.from(ApplicationDetail).columns('AppId').where({'AppId': appId});
     
     // If the length is empty
-    if(appDetail.length === 0) throw {'message':'Application Details for this Id is not found'}
+    if(appDetail.length === 0) throw {'message':'Application Details for this Id is not found. Invalid Application ID'}
 
     // Encrypt the appid
     const encrAppId = await valueEncrypt(appId);
 
     // Update the consent url with the encrypted id.
-    const consentEncrLink = url+encrAppId;
+    const consentFormLink = url+encrAppId;
 
-    return consentEncrLink;    
+    return consentFormLink;    
 }
 
 module.exports = {
