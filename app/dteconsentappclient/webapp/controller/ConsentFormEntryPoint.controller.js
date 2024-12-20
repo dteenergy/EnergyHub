@@ -27,7 +27,7 @@ sap.ui.define([
             this.validateAppId(routeParam.appId);
         },
 
-        // Get the error page url
+        // Get the env data (Navigation page url)
         getEnv:  async function(){
             const {TenantConfirmationPageUrl, ErrorPageUrl} = await this.getEnvironmentVariables();
             console.log(TenantConfirmationPageUrl);
@@ -50,7 +50,7 @@ sap.ui.define([
                 /**
                  * Check requested Application ID is valid
                  * If true, then render Consent Form View 
-                 * Else navigate to 404 page.
+                 * Else navigate to AEM error page
                  */
                 if(data.value.statusCode === 200){
                     XMlView.create({

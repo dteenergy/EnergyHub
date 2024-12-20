@@ -682,7 +682,6 @@ sap.ui.define([
 						
 						// Post request to create a enrollment application
 						const {data} = await axios.post(enrollmentCreateUrl, enrollmentFormDetails);
-						console.log(data);
 						
 						// If get the success(200) response then navigate to the confirmation page
 						if(data.value.statusCode === 200){

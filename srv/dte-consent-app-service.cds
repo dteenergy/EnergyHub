@@ -26,6 +26,6 @@ service DTEConsentAppPortal {
     // Testing AppId Encrypt Function
     function AppIdEncrypt() returns String;
 
-    // Get environment variable (Navigation page url and address validation url)
+    // Get environment variable (AEM Navigation page url and address validation url)
     function getEnvironmentVariables () returns String;
 };

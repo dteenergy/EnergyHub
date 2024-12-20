@@ -24,16 +24,12 @@ sap.ui.define([
         onInit () {
 
 					const {applicationId, url, TenantConfirmationPageUrl, ErrorPageUrl} = this.getView().getViewData();
-
-					this.TenantConfirmationPageUrl = TenantConfirmationPageUrl;
-					this.ErrorPageUrl = ErrorPageUrl;
-
-					console.log(this.TenantConfirmationPageUrl);
-					
 					
 					// Get the required properties from the parent view
 					this.applicationId = applicationId;
 					this.SERVERHOST = url;
+					this.TenantConfirmationPageUrl = TenantConfirmationPageUrl;
+					this.ErrorPageUrl = ErrorPageUrl;	
 					
 					//Initialize Model for this view
 					this.initializeModel();
@@ -265,7 +261,6 @@ sap.ui.define([
 				try{		
 					// Post request to create a tenant consent.
 					const {data} = await axios.post(tenantConsentCreateUrl, tenantConsentFormDetails);
-						console.log(data);
 						
 					if(data.value.statusCode === 200){
 						// Navigate to the tenant confirmation page
