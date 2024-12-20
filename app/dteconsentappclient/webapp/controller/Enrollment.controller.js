@@ -125,6 +125,7 @@ sap.ui.define([
 						City: "",
 						State: "Michigan",
 						Zipcode: "",
+						AddrLineTwo: "",
 						suggestions: []
 					}
 
@@ -494,7 +495,6 @@ sap.ui.define([
 					 * So, get the all items from the container 
 					 */
 					container.getItems().forEach((wrapper, index)=>{
-						let id = wrapper.getId().split('--')[2];
 						
 						wrapper.findAggregatedObjects(true, (control)=>{
 							

@@ -3,154 +3,210 @@ ID: dteConsentAppPortal
 description: DTE consent app portal project.
 version: 1.0.0
 modules:
-  - name: dteConsentAppPortal-srv
-    type: nodejs
-    path: gen/srv
-    requires:
-      - name: PostgreSQL-Reference
-      - name: dteConsentAppPortal-auth
-      - name: dteConsentAppPortal-destination-service
-    provides:
-      - name: srv-api
-        properties:
-          srv-url: ${default-url}
+- name: dteConsentAppPortal-srv
+  type: nodejs
+  path: gen/srv
+  requires:
+  - name: PostgreSQL-Reference
+  - name: dteConsentAppPortal-auth
+  - name: dteConsentAppPortal-destination-service
+  provides:
+  - name: srv-api
+    properties:
+      srv-url: ${default-url}
+  parameters:
+    memory: 256MB
+  build-parameters:
+    builder: npm
+    ignore:
+    - node_modules
+    - package-lock.json
+- name: dteConsentAppPortal-approuter
+  type: approuter.nodejs
+  path: approuter
+  parameters:
+    memory: 256M
+    disk-quota: 1024M
+    stack: cflinuxfs4
+  properties:
+    CJ_PROTECT_WHITELIST: >
+      [
+        {
+          "protocol": "https",
+          "host": "*.ondemand.com"
+        },
+        {
+          "protocol": "https",
+          "host": "*.hcs.cloud.sap"
+        }
+      ]
+    COOKIES: >
+      { "SameSite":"None" }
+    httpHeaders: >
+      [
+        {
+          "X-Frame-Options": "DENY"
+        },
+        {
+          "Content-Security-Policy": "frame-ancestors iframe frame object embed 'self' https://*.hcs.cloud.sap;"
+        },
+        {
+          "Access-Control-Allow-Origin": "https://localhost:3000"
+        },
+        {
+          "Access-Control-Allow-Credentials": "true"
+        },
+        {
+          "Access-Control-Allow-Headers": "Authorization,Content-Type"
+        }
+      ]
+
+  build-parameters:
+    ignore: ["node_modules/"]
+  requires:
+    - name: dteConsentAppPortal-destination-service
+    - name: dteConsentAppPortal-auth
+    - name: dteConsentAppPortal_html5-app-repo-runtime
+    - name: srv-api
+      group: destinations
+      properties:
+        forwardAuthToken: true
+        strictSSL: false
+        name: dteConsentAppPortal-srv
+        url: ~{srv-url}
+- name: dteConsentAppPortal-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: dteConsentAppPortal-destination-service
     parameters:
-      memory: 256MB
-    build-parameters:
-      builder: npm
-      ignore:
-        - node_modules
-        - package-lock.json
-  - name: dteConsentAppPortal-destination-content
-    type: com.sap.application.content
-    requires:
-      - name: dteConsentAppPortal-destination-service
-        parameters:
-          content-target: true
-      - name: dteConsentAppPortal_html_repo_host
-        parameters:
-          service-key:
-            name: dteConsentAppPortal_html_repo_host-key
-      - name: srv-api
-      - name: dteConsentAppPortal-auth
-        parameters:
-          service-key:
-            name: dteConsentAppPortal-auth-key
+      content-target: true
+  - name: dteConsentAppPortal_html_repo_host
     parameters:
-      content:
+      service-key:
+        name: dteConsentAppPortal_html_repo_host-key
+  - name: srv-api
+  - name: dteConsentAppPortal-auth
+    parameters:
+      service-key:
+        name: dteConsentAppPortal-auth-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: dteconsentapp_dteConsentAppPortal_html_repo_host
+          ServiceInstanceName: dteConsentAppPortal-html5-app-host-service
+          ServiceKeyName: dteConsentAppPortal_html_repo_host-key
+          sap.cloud.service: dteConsentAppPortal
+        - Authentication: OAuth2UserTokenExchange
+          Name: dteConsentAppPortal_auth_dteConsentAppPortal
+          ServiceInstanceName: dteConsentAppPortal-xsuaa-service
+          ServiceKeyName: dteConsentAppPortal-auth-key
+          URL: ~{srv-api/srv-url}
+          sap.cloud.service: dteConsentAppPortal
+        - Name: dteConsentAppPortal_No_auth_dteConsentAppPortal
+          ServiceInstanceName: dteConsentAppPortal-xsuaa-service
+          ServiceKeyName: dteConsentAppPortal-auth-key
+          URL: ~{srv-api/srv-url}
+          forwardAuthToken: false
+          sap.cloud.service: dteConsentAppPortal
+        existing_destinations_policy: ignore
+  build-parameters:
+    no-source: true
+- name: dteConsentAppPortal-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: dteConsentAppPortal_html_repo_host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - dteconsentappclient.zip
+      name: dteconsentappclient
+      target-path: resources/
+    - artifacts:
+      - dteenergyadminportal.zip
+      name: dteenergyadminportal
+      target-path: resources/
+- name: dteConsentAppPortal-db-deployer
+  type: nodejs
+  path: gen/pg
+  requires:
+  - name: PostgreSQL-Reference
+  parameters:
+    buildpack: nodejs_buildpack
+    no-route: true
+    no-start: true
+    tasks:
+    - command: npm start
+      name: deploy-to-postgresql
+- name: dteconsentappclient
+  type: html5
+  path: app/dteconsentappclient
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: dteenergyadminportal
+  type: html5
+  path: app/dte-energy-admin-portal
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: dteConsentAppPortal-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      init_data:
         instance:
           destinations:
-            - Name: dteconsentapp_dteConsentAppPortal_html_repo_host
-              ServiceInstanceName: dteConsentAppPortal-html5-app-host-service
-              ServiceKeyName: dteConsentAppPortal_html_repo_host-key
-              sap.cloud.service: dteConsentAppPortal
-            - Authentication: OAuth2UserTokenExchange
-              Name: dteConsentAppPortal_auth_dteConsentAppPortal
-              ServiceInstanceName: dteConsentAppPortal-xsuaa-service
-              ServiceKeyName: dteConsentAppPortal-auth-key
-              URL: ~{srv-api/srv-url}
-              sap.cloud.service: dteConsentAppPortal
-            - Name: dteConsentAppPortal_No_auth_dteConsentAppPortal
-              ServiceInstanceName: dteConsentAppPortal-xsuaa-service
-              ServiceKeyName: dteConsentAppPortal-auth-key
-              URL: ~{srv-api/srv-url}
-              forwardAuthToken: false
-              sap.cloud.service: dteConsentAppPortal
-          existing_destinations_policy: ignore
-    build-parameters:
-      no-source: true
-  - name: dteConsentAppPortal-app-content
-    type: com.sap.application.content
-    path: .
-    requires:
-      - name: dteConsentAppPortal_html_repo_host
-        parameters:
-          content-target: true
-    build-parameters:
-      build-result: resources
-      requires:
-        - artifacts:
-            - dteconsentappclient.zip
-          name: dteconsentappclient
-          target-path: resources/
-        - artifacts:
-            - dteenergyadminportal.zip
-          name: dteenergyadminportal
-          target-path: resources/
-  - name: dteConsentAppPortal-db-deployer
-    type: nodejs
-    path: gen/pg
-    requires:
-      - name: PostgreSQL-Reference
-    parameters:
-      buildpack: nodejs_buildpack
-      no-route: true
-      no-start: true
-      tasks:
-        - command: npm start
-          name: deploy-to-postgresql
-  - name: dteconsentappclient
-    type: html5
-    path: app/dteconsentappclient
-    build-parameters:
-      build-result: dist
-      builder: custom
-      commands:
-        - npm install
-        - npm run build:cf
-      supported-platforms:
-        []
-  - name: dteenergyadminportal
-    type: html5
-    path: app/dte-energy-admin-portal
-    build-parameters:
-      build-result: dist
-      builder: custom
-      commands:
-        - npm install
-        - npm run build:cf
-      supported-platforms:
-        []
-resources:
-  - name: dteConsentAppPortal-destination-service
-    type: org.cloudfoundry.managed-service
-    parameters:
-      config:
-        HTML5Runtime_enabled: true
-        init_data:
-          instance:
-            destinations:
-              - Authentication: NoAuthentication
-                Name: ui5
-                ProxyType: Internet
-                Type: HTTP
-                URL: https://ui5.sap.com
-            existing_destinations_policy: update
-        version: 1.0.0
-      service: destination
-      service-name: dteConsentAppPortal-destination-service
-      service-plan: lite
-  - name: dteConsentAppPortal_html_repo_host
-    type: org.cloudfoundry.managed-service
-    parameters:
-      service: html5-apps-repo
-      service-name: dteConsentAppPortal-html5-app-host-service
-      service-plan: app-host
-  - name: PostgreSQL-Reference
-    type: org.cloudfoundry.managed-service
-    parameters:
-      service: postgresql-db
-      service-plan: reference
-  - name: dteConsentAppPortal-auth
-    type: org.cloudfoundry.managed-service
-    parameters:
-      config:
-        tenant-mode: dedicated
-        xsappname: dteConsentAppPortal
-      path: ./xs-security.json
-      service: xsuaa
-      service-name: dteConsentAppPortal-xsuaa-service
-      service-plan: application
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: dteConsentAppPortal-destination-service
+    service-plan: lite
+- name: dteConsentAppPortal_html_repo_host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: dteConsentAppPortal-html5-app-host-service
+    service-plan: app-host
+- name: PostgreSQL-Reference
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: postgresql-db
+    service-plan: reference
+- name: dteConsentAppPortal_html5-app-repo-runtime
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service-plan: app-runtime
+    service: html5-apps-repo
+- name: dteConsentAppPortal-auth
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      tenant-mode: dedicated
+      xsappname: dteConsentAppPortal
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: dteConsentAppPortal-xsuaa-service
+    service-plan: application
 parameters:
   deploy-mode: html5-repo
   enable-parallel-deployments: true
