@@ -27,10 +27,10 @@ module.exports = cds.service.impl(async function (srv) {
 
 				return validationStatus;
 			} catch (e) {
-				if (e.status) {
-					return { status: e.status, message: e.message }
+				if (e.statusCode) {
+					return { statusCode: e.statusCode, message: e.message }
 				}
-				return { status: 500, 'error': 'Failed to verify the App ID.' }
+				return { statusCode: 500, 'error': 'Failed to verify the App ID.' }
 			}
 		}),
 
@@ -40,8 +40,8 @@ module.exports = cds.service.impl(async function (srv) {
 				// Method to validate the app id.
 				const validationStatus = await validateApplicationId(req, this.entities);
 
-				// If the Validation status => 200
-				if (validationStatus.status === 200) {
+				// If the Validation statusCode => 200
+				if (validationStatus.statusCode === 200) {
 					// Store the Encrypted Application Id
 					const encryptedAppId = req?._.req?.query?.encrAppId;
 
@@ -57,11 +57,11 @@ module.exports = cds.service.impl(async function (srv) {
 				throw validationStatus;
 
 			} catch (e) {
-				if (e.status) {
-					return { status: e.status, message: e.message };
+				if (e.statusCode) {
+					return { statusCode: e.statusCode, message: e.message };
 				} else
 					return {
-						status: 500, error: e.message
+						statusCode: 500, message: e.message
 					}
 			}
 		}),
@@ -76,5 +76,15 @@ module.exports = cds.service.impl(async function (srv) {
 			const decryptedData = await valueDecrypt(encryptedData);
 
 			return { "Encrypted": encryptedData, "Decrypted": decryptedData }
-		})
+		});
+
+    // Get environment variable (Navigation page url and address validation url)
+		srv.on('getEnvironmentVariables', (req) => {
+			return {
+				DTEAddressValidationUrl: process.env.DTE_ADDRESS_VALIDATION_URL,
+				LandlordConfirmationPageUrl: process.env.LANDLORD_CONFIRMATION_PAGE_URL,
+				TenantConfirmationPageUrl: process.env.TENANT_CONFIRMATION_PAGE_URL,
+				ErrorPageUrl: process.env.ERROR_PAGE_URL
+			}
+		});
 })

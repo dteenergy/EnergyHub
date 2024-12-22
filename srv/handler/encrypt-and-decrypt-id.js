@@ -26,7 +26,7 @@ const valueEncrypt = async (data) => {
  * @returns string
  */
 const valueDecrypt = async (data) => {
-  if (!data) throw { status: 400, message: 'Cannot proceed with an empty AppId' };
+  if (!data) throw { statusCode: 400, message: 'Cannot proceed with an empty AppId' };
   try {
     // Replace and trim the data
     const formattedEncrData = data.trim().replace(/ /g, '+');
@@ -38,15 +38,15 @@ const valueDecrypt = async (data) => {
     const decryptedStr = decryptedByte.toString(cryptoJs.enc.Utf8);
 
     // If the decryptedStr is Empty
-    if (decryptedStr === "") throw { status: 400, message: 'Data decryption failed due to an incorrect signed key.' };
+    if (decryptedStr === "") throw { statusCode: 400, message: 'Data decryption failed due to an incorrect signed key.' };
 
     return decryptedStr;
   } catch (e) {
     if (e) {
-      throw { status: e.status, message: e.message };
+      throw { statusCode: e.statusCode, message: e.message };
     }
     else {
-      throw { status: 500, message: 'Failed to Decrypt the AppId' }
+      throw { statusCode: 500, message: 'Failed to Decrypt the AppId' }
     }
   }
 }

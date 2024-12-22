@@ -1,4 +1,11 @@
 /* Enter your custom styles here */
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Prevent double scrolling */
+  font-family: 'Open Sans';
+}
+
 .sapUiBody{
   font-family: 'Open Sans';
 }

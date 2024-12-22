@@ -75,6 +75,22 @@ sap.ui.define([
         
         // Open the link in the new tab
         window.open(filteredData[0]['src'], '_blank');
+      },
+
+      // Get environment variable (Navigation page url and address validation url)
+      getEnvironmentVariables: async function(){
+        try{
+          const {url} = this.getApiConfig();
+
+          // construct the url to get the environment variables
+          const urlToGetEnvironmentVariables = url + 'service/getEnvironmentVariables';
+
+          const response = await axios.get(urlToGetEnvironmentVariables);
+          
+          return response?.data?.value;
+        }catch(err){
+          this.errorHandler(err);
+        }
       }
     });
   });

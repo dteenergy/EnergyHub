@@ -1,2 +1,0 @@
-AccountDetailId,CompanyName,CompanyAddress,City,State,Zipcode,AcctMgrName,AcctMgrPhNo,EnergyPrgmParticipated,FirstName,LastName,SiteContactTitle,SiteAddress,SiteCity,SiteState,SiteZipcode,SitePhoneNumber,EmailAddr,CreatedAt,
-34ae189a-ae09-4563-815e-5aea94dd0cb4,ACompany,A company name, A city, Newyork, 576756, samsu,687687, yes, Tony, Soprano, test SiteContactTitle, Test SiteAddress, Test siteCity, Test SiteState, Test Zipcode, Test SitePhoneNumber,Test@gmail.com, 2024-12-13T15:33:43.702Z 
