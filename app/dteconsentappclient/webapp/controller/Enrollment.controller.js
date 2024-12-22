@@ -483,10 +483,13 @@ sap.ui.define([
 
 				onSuggestionSelect: function (oEvent) {	
 					const oInputControl = oEvent.getSource();
-
+					console.log(oEvent);
+					
 					// Retrieve the bound path
 					const sBasePath = oInputControl.getBinding('value')?.getContext()?.getPath();
 					const id = sBasePath.split("/")[2];
+					console.log(sBasePath);
+					
 
 					// Handle item selection
 					const oSelectedItem = oEvent.getParameter("selectedItem");

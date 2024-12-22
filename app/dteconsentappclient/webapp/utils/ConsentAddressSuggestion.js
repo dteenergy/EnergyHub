@@ -4,7 +4,7 @@ sap.ui.define([], function(){
   return {
 
     /**
-     * 
+     * Get the input value while suggest
      * @param {String} sValue user input
      * @param {Object} oConsentModel consent model
      * @param {String} sDTEAddressValidationUrl address validation url
@@ -12,13 +12,13 @@ sap.ui.define([], function(){
     onConsentAddrSuggestion: function(sValue, oConsentModel, sDTEAddressValidationUrl){
       if (sValue.length > 3) {
         // Trigger API call after 3 characters
-       fetchAddressSuggestions(sValue, oConsentModel, sDTEAddressValidationUrl);
+       this.fetchAddressSuggestions(sValue, oConsentModel, sDTEAddressValidationUrl);
      }
 
     },
 
     /**
-     * 
+     * To call the DTE Address validation api and bind the result with accoording model
      * @param {String} sQuery user input
      * @param {Object} oConsentModel consent model
      * @param {String} sDTEAddressValidationUrl address validation url
@@ -48,13 +48,12 @@ sap.ui.define([], function(){
 
     },
 
+    /**
+     * Get the selected item from the suggestion list and binding with accoring field in the model
+     * @param {Object} oEvent 
+     * @param {Object} oConsentModel 
+     */
     onConsentAddrSugSelected: function(oEvent, oConsentModel){
-      const oInputControl = oEvent.getSource();
-      console.log(oEvent);
-      
-        // Retrieve the bound path
-        const sBasePath = oInputControl.getBinding('value')?.getContext()?.getPath();
-        console.log(sBasePath);
         
         // Handle item selection
         const oSelectedItem = oEvent.getParameter("selectedItem");
@@ -62,7 +61,7 @@ sap.ui.define([], function(){
           const sKey = oSelectedItem.getKey(); // Unique ID (premiseId) of the selected address	
 
           // Access the suggestions array from the default model
-          const aSuggestions = oModel.getProperty(`/ConsentDetail/suggestions`);
+          const aSuggestions = oConsentModel.getProperty(`/ConsentDetail/suggestions`);
 
           // Find the selected address using the key
           const oSelectedAddress = aSuggestions.find(function (item, index) {
@@ -75,9 +74,9 @@ sap.ui.define([], function(){
 
             const sShortAddress = oAddressParts[0].trim()+ ", " + oAddressParts[1].trim();
             
-            oConsentModel.setProperty(`${sBasePath}/ConsentAddress`, sShortAddress);
-            oConsentModel.setProperty(`${sBasePath}/ConsentCity`, oAddressParts[2].trim());
-            oConsentModel.setProperty(`${sBasePath}/ConsentZipcode`, +oAddressParts[4]);
+            oConsentModel.setProperty(`/ConsentDetail/ConsentAddress`, sShortAddress);
+            oConsentModel.setProperty(`/ConsentDetail/ConsentCity`, oAddressParts[2].trim());
+            oConsentModel.setProperty(`/ConsentDetail/ConsentZipcode`, +oAddressParts[4]);
           }
         }
     }

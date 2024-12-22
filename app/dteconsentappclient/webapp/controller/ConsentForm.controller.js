@@ -89,6 +89,7 @@ sap.ui.define([
 					const oConsentModel = this.getView().getModel("oConsentModel");
 
 					const customerAuthAndReleaseContainer = this.byId("tenant-auth-and-release-container-id");
+					
 					Fragment.load({
 							name: "dteconsentappclient.fragment.AuthAndRelease",
 							controller: this
@@ -102,6 +103,7 @@ sap.ui.define([
 					});
 			},
 
+			// Get the value while suggest
 			onConsentAddrSuggest: function(oEvent){
 				// Get the entered value from input
 				const sValue = oEvent.getParameter("suggestValue");
@@ -112,13 +114,16 @@ sap.ui.define([
 				ConsentAddressSuggestion.onConsentAddrSuggestion(sValue, oConsentModel, this.DTEAddressValidationUrl);
 			},
 
+			// To get the selected item from the suggestion list
 			onConsentAddrSugSelected: function(oEvent){
 			// Get the bound model
 			const oConsentModel = this.getView().getModel("oConsentModel");
-
+			
+			// To get the selected item from the suggestion list and binding with accoring field in the model
 			ConsentAddressSuggestion.onConsentAddrSugSelected(oEvent, oConsentModel);
-
-			if(!this.validationFlags["tenantInformationValidation"]) this.validateFormDetails()
+			
+			// Validate the form fields 
+			if(!validationFlags["tenantInformationValidation"]) this.validateFormDetails("tenant-consent-form-container-id", true, "tenantInformationValidation")
 			},
 
 			// Check the input on live change and remove the error state
@@ -322,8 +327,8 @@ sap.ui.define([
 		},
 
 		validate: function(){
-			this.validateFormDetails(tenant-consent-form-container-id, true, "tenantInformationValidation");
-			this.validateFormDetails(tenant-auth-and-release-container-id,true,"consentAuthDetailValidation");
+			this.validateFormDetails("tenant-consent-form-container-id", true, "tenantInformationValidation");
+			this.validateFormDetails("tenant-auth-and-release-container-id",true,"consentAuthDetailValidation");
 			this.validateTermsAndConditionIsVerified("tenant-auth-and-release-container-id");
 		},
 
