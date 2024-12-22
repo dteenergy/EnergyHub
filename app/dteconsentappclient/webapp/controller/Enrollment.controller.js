@@ -587,7 +587,7 @@ sap.ui.define([
 					 * Here checks if the error message strip was in inVisible state
 					 * If it is all inputs are valid, then open the additional location alert dialog
 					 */
-					// if(!oErrorVisibilityModelData?.isInputInValid && !oErrorVisibilityModelData?.isTermsAndConditionVerifiedStatus){
+					if(!oErrorVisibilityModelData?.isInputInValid && !oErrorVisibilityModelData?.isTermsAndConditionVerifiedStatus){
 
 					const that = this;
 
@@ -647,7 +647,7 @@ sap.ui.define([
             })
           }
           this.oConfirmationDialog.open();
-        	// }
+        	}
 				},
 
 				submitAction: async function(){
@@ -705,17 +705,17 @@ sap.ui.define([
 				},
 
         handleSubmit: function () {
-					// // While submit button is pressed, validate all the fields in the form
-					// this.validateFormDetails("account-info-container", true, "oEnrollModel", "accountDetailsValidation");
-					// this.validateFormDetails("site-contact-info-container", true, "oEnrollModel", "siteDetailsValidation");
-					// this.validateBuildingDetails("building-detail-main-container");
-					// this.validateFormDetails("auth-info-container", true, "oEnrollModel", "customerAuthDetailValidation");
-					// this.validateFormDetails("enrollment-consent-section", true, "oConsentModel", "consentDetailValidation");
-					// this.validateFormDetails("customer-auth-and-release-container", true, "oConsentModel", "consentAuthDetailValidation");
-					// this.validateTermsAndConditionIsVerified("customer-auth-and-release-container");
+					// While submit button is pressed, validate all the fields in the form
+					this.validateFormDetails("account-info-container", true, "oEnrollModel", "accountDetailsValidation");
+					this.validateFormDetails("site-contact-info-container", true, "oEnrollModel", "siteDetailsValidation");
+					this.validateBuildingDetails("building-detail-main-container");
+					this.validateFormDetails("auth-info-container", true, "oEnrollModel", "customerAuthDetailValidation");
+					this.validateFormDetails("enrollment-consent-section", true, "oConsentModel", "consentDetailValidation");
+					this.validateFormDetails("customer-auth-and-release-container", true, "oConsentModel", "consentAuthDetailValidation");
+					this.validateTermsAndConditionIsVerified("customer-auth-and-release-container");
 
-					// // Update the error message trip visibility status once validation is done
-					// this.setErrorMessageTripVisibility();
+					// Update the error message trip visibility status once validation is done
+					this.setErrorMessageTripVisibility();
 
 					// Dialog to additional location alert
 					this.additionalLocationAlert();

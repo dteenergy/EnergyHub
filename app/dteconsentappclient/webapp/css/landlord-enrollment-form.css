@@ -113,6 +113,7 @@
     border-radius: 5px;
     border: 2px solid #f53232;
     background-color: transparent;
+    padding: 15px !important;
 }
 .checkbox-error-view{
     border: 1px solid #f53232;
