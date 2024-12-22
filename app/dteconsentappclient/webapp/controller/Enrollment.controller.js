@@ -587,7 +587,7 @@ sap.ui.define([
 					 * Here checks if the error message strip was in inVisible state
 					 * If it is all inputs are valid, then open the additional location alert dialog
 					 */
-					if(!oErrorVisibilityModelData?.isInputInValid && !oErrorVisibilityModelData?.isTermsAndConditionVerifiedStatus){
+					// if(!oErrorVisibilityModelData?.isInputInValid && !oErrorVisibilityModelData?.isTermsAndConditionVerifiedStatus){
 
 					const that = this;
 
@@ -601,7 +601,7 @@ sap.ui.define([
                   that.onAddAnotherLocation(),
                   that.oConfirmationDialog.close()
                 }
-              }),
+              }).addStyleClass("dialog-add-loc"),
               new sap.m.Text({text: 'I don’t have another location.'}),
               new sap.m.Button({
                 text: 'Continue Submission',
@@ -611,7 +611,7 @@ sap.ui.define([
                   that.oConfirmationDialog.close()
                 },
                 type: sap.m.ButtonType.Emphasized
-              })
+              }).addStyleClass("dialog-submit-action")
             ],
           });
 
@@ -620,7 +620,11 @@ sap.ui.define([
 
 					// Custom header for the dialog
 					const dialogTitle = new sap.m.Bar({
-						contentMiddle: [new sap.m.Text({ text: 'Additional Location Alert' })],
+						contentMiddle: [
+							new sap.m.Text({ 
+								text: 'Additional Location Alert' 
+							}).addStyleClass("alert-title")
+						],
 						contentRight: [
 								new sap.ui.core.Icon({
 										src: 'sap-icon://decline',
@@ -628,9 +632,12 @@ sap.ui.define([
 										press: function () {
 												that.oConfirmationDialog.close();
 										}
-								})
+								}).addStyleClass("alert-close-icon")
 						]
 				});
+
+				// Add the class for the dialog content
+				dialogTitle.addStyleClass("confirmation-dialog-title");
 
 				// Open the additional location alert dialog while submit pressed
           if(!this.oConfirmationDialog){
@@ -640,7 +647,7 @@ sap.ui.define([
             })
           }
           this.oConfirmationDialog.open();
-        	}
+        	// }
 				},
 
 				submitAction: async function(){
@@ -698,17 +705,17 @@ sap.ui.define([
 				},
 
         handleSubmit: function () {
-					// While submit button is pressed, validate all the fields in the form
-					this.validateFormDetails("account-info-container", true, "oEnrollModel", "accountDetailsValidation");
-					this.validateFormDetails("site-contact-info-container", true, "oEnrollModel", "siteDetailsValidation");
-					this.validateBuildingDetails("building-detail-main-container");
-					this.validateFormDetails("auth-info-container", true, "oEnrollModel", "customerAuthDetailValidation");
-					this.validateFormDetails("enrollment-consent-section", true, "oConsentModel", "consentDetailValidation");
-					this.validateFormDetails("customer-auth-and-release-container", true, "oConsentModel", "consentAuthDetailValidation");
-					this.validateTermsAndConditionIsVerified("customer-auth-and-release-container");
+					// // While submit button is pressed, validate all the fields in the form
+					// this.validateFormDetails("account-info-container", true, "oEnrollModel", "accountDetailsValidation");
+					// this.validateFormDetails("site-contact-info-container", true, "oEnrollModel", "siteDetailsValidation");
+					// this.validateBuildingDetails("building-detail-main-container");
+					// this.validateFormDetails("auth-info-container", true, "oEnrollModel", "customerAuthDetailValidation");
+					// this.validateFormDetails("enrollment-consent-section", true, "oConsentModel", "consentDetailValidation");
+					// this.validateFormDetails("customer-auth-and-release-container", true, "oConsentModel", "consentAuthDetailValidation");
+					// this.validateTermsAndConditionIsVerified("customer-auth-and-release-container");
 
-					// Update the error message trip visibility status once validation is done
-					this.setErrorMessageTripVisibility();
+					// // Update the error message trip visibility status once validation is done
+					// this.setErrorMessageTripVisibility();
 
 					// Dialog to additional location alert
 					this.additionalLocationAlert();

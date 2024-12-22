@@ -31,7 +31,7 @@
 
                     <!-- Landlord Enrollment form Header -->
                     <FlexBox id="tenant-consent-form-header" class="enrollment-form-header">
-                        <Title xmlns="sap.m" titleStyle="H5" text="DTE Energy Data Hub Tenant Consent Form" wrapping="true" class="mainTitle"/>
+                        <Title xmlns="sap.m" titleStyle="H5" text="DTE Energy Data Hub Tenant Consent Form" wrapping="true" class="main-title"/>
                         <Text id ="instruction-one" class="sub-content" wrapping="true" 
                                 text="This Customer Consent Release Form permits DTE customers of record to delegate 
                                 certain rights to Authorized third parties concerning DTE Electric and DTE Gas account(s) 

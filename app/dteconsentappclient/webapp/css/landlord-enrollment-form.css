@@ -15,14 +15,35 @@
     color: red;
 }
 .customize-button{
-    width: 50% !important;
+    width: 50%;
 }
 .customize-button.submit-action{
     margin-bottom: 30px;
+    background: #0072ce !important;
+    border: none;
+    width: 30%;
+}
+.customize-button.add-loc{
+    border: 1px solid #0072ce;
+}
+.dialog-add-loc{
+    border: 1px solid #0072ce;
+}
+.dialog-submit-action{
+    background: #0072ce !important;
+    border: none; 
+}
+.sapMBtnEmphasized{
+    background: #0072ce !important;
 }
 .enrollment-form-header{
+    margin-top: 30px;
     flex-direction: column;
 }
+.main-title{
+    letter-spacing: .3px;
+    font-size: 20px;
+ }
 .account-info{
     flex-direction: column;
 }
@@ -42,6 +63,12 @@
 }
 .sapMBtnInner{
     border-radius: 0 !important;
+    border: none;
+    outline: none;
+}
+.sapMBtnInner::before{
+    border: none !important;
+    outline: none !important;
 }
 .state-and-code{
     justify-content: space-between;
@@ -65,6 +92,7 @@
 }
 .form-segment-heading{
     margin-top: 15px;
+    font-size: 16px;
 }
 .location-inner-title{
     padding-bottom: 15px;
@@ -104,7 +132,21 @@
 .confirmation-dialog-content{
     flex-direction: column;
     padding: 15px;
+    border-radius: 0 !important;
 }
+.confirmation-dialog-title, .sapMDialogSection{
+    border-radius: 0 !important;
+}
+.alert-title{
+    font-size: 1rem;
+}
+.alert-close-icon{
+    color: #0072CE;
+}
+.sapMDialog{
+    border-radius: 0 !important;
+}
+
 @media only screen and (max-width: 600px) {
     .state-and-code{
         flex-direction: column;

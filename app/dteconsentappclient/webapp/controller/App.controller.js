@@ -19,5 +19,10 @@ sap.ui.define([
         this.getView().setModel(oSocialMediaModel, 'socialMediaModel')
         
       },
+
+      onLogoPress: function(){
+        // Open the link in the new tab
+        window.open("https://www.dteenergy.com/", '_blank');
+      }
   });
 });
