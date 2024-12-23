@@ -9,7 +9,7 @@
     justify-content: center;
 }
  .enrollment-form-header > *{
-    padding: 10px;
+    padding: 7px;
  }
 .required-instruction-indicator{
     color: red;
@@ -23,10 +23,10 @@
     border: none;
     width: 30%;
 }
-.customize-button.add-loc{
+.customize-button.outline-button{
     border: 1px solid #0072ce;
 }
-.dialog-add-loc{
+.outline-button{
     border: 1px solid #0072ce;
 }
 .dialog-submit-action{
@@ -42,7 +42,7 @@
 }
 .main-title{
     letter-spacing: .3px;
-    font-size: 20px;
+    font-size: 25px;
  }
 .account-info{
     flex-direction: column;
@@ -86,7 +86,7 @@
 .auth-and-release-container > *,
 .message-strip-container > *,
 .confirmation-dialog-content > *{
-    padding-bottom: 17px;
+    padding-bottom: 15px;
 }
 .vertical-layout{
     width: 100%;
@@ -97,6 +97,7 @@
 }
 .location-inner-title{
     padding-bottom: 15px;
+    font-size: 18px !important;
 }
 .sapUiFormResGridCont{
     padding-bottom: 10px !important;
@@ -107,7 +108,7 @@
     margin-bottom: 15px;
 }
 .address-helper-text{
-    font-size: 12px;
+    font-size: 14px;
     padding: 3px;
 }
 .error-message-strip{
