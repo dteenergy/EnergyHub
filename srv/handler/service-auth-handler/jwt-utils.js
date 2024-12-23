@@ -7,7 +7,8 @@ const secretKey = process.env.JWT_SECRET_KEY || '@dteEneHub*123*ServiceAuth';
 // Generate JWT token
 async function generateToken(payload) {
   // Generate the Token with the payload, secretkey
-  const token = jwt.sign(payload, secretKey, { expiresIn: '2m' });
+  const token = jwt.sign(payload, secretKey, { expiresIn: '1d' });
+  
   return token;
 }
 

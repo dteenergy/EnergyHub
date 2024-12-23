@@ -5,18 +5,20 @@ const cors = require('cors');
 
 cds.on('bootstrap', async (app) => {
   app.use(cors({ origin: "*" }));
-  // Define the /api/gettoken route to return a token
+  // Service Path to return a token
   app.get('/api/gettoken', async (req, res) => {
     console.log('Token request received');
     try {
-      // Generate the token
+      // Generate the token : currentDate and the name
       const token = await generateToken({ sub: `token-${Date.now()}`, name: 'DTESERVICE' });
 
       // Send the token as the response
-      res.status(200).json({ token: token });
+      // res.status(200).json({ token: token });
+      return res.json({'code':200, token : token})
     } catch (err) {
       console.error('Error fetching token:', err);
-      res.status(500).json({ error: 'Unable to generate token' });
+      // res.status(500).json({ error: 'Unable to generate token' });
+      return res.json({'code':500, 'message': 'Unable to generate token'})
     }
   });
 
