@@ -631,7 +631,7 @@ sap.ui.define([
                   that.onAddAnotherLocation(),
                   that.oConfirmationDialog.close()
                 }
-              }),
+              }).addStyleClass("dialog-add-loc"),
               new sap.m.Text({text: 'I don’t have another location.'}),
               new sap.m.Button({
                 text: 'Continue Submission',
@@ -641,7 +641,7 @@ sap.ui.define([
                   that.oConfirmationDialog.close()
                 },
                 type: sap.m.ButtonType.Emphasized
-              })
+              }).addStyleClass("dialog-submit-action")
             ],
           });
 
@@ -652,7 +652,7 @@ sap.ui.define([
 					const dialogTitle = new sap.m.Bar({
 						contentMiddle: [
 							new sap.m.Text({ 
-								text: 'Additional Location Alert'
+								text: 'Additional Location Alert' 
 							}).addStyleClass("alert-title")
 						],
 						contentRight: [
