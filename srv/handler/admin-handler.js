@@ -13,10 +13,10 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
       const generatedUrl = await generateConsentUrl(appId, ApplicationDetail);
 
       // Return the ConsentURL with the encryptedid.
-      return { generatedUrl: generatedUrl };
+      return { generatedUrl };
     } catch (e) {
 
-      if (e?.code) {
+      if (e?.code) {        
         return { message: e?.message, code: e?.code }
       } else {
         return { message: e?.message, code: '500' }
@@ -32,15 +32,15 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
         if (Array.isArray(data)) {
           for (const e of data) {
             // Check the ReferenceId with the AppId
-            const ConsentDetailCount = await cds.run(
+            const ConsentDetail = await cds.run(
               SELECT.from(ApplicationConsent)
                 .where({ AppRefId_AppId: e.AppId })
             )
-            e.NoOfConsentReceived = ConsentDetailCount?.length;
+            e.NoOfConsentReceived = ConsentDetail?.length;
           }
         }
-      } catch (err) {
-        return {message:err?.message, code:500}
+      } catch (e) {
+        return {message:e?.message, code:500}
       }
     })
 
