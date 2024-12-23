@@ -4,12 +4,15 @@ using {dteConsentApp as db} from '../db/schema';
 @impl : './handler/admin-handler.js'
 service DTEEnergyAdminPortal {
 
-  entity ApplicationDetail as projection on db.ApplicationDetail;
-  entity AccountDetail as projection on db.AccountDetail;
+  entity ApplicationDetail as projection on db.ApplicationDetail actions{
+    function GenerateUrl() returns String;
+    action UpdateAppDetail(AppId: String, NoOfTenants: Integer, AppStatus: String) returns String;
+  };
+  
+  entity ApplicationConsent as projection on db.ApplicationConsent;
   entity BuildingDetail as projection on db.BuildingDetail;
-
-  // Get the EnrollmentApplication Detail
-  function EnrollmentApplication() returns String;
+  entity AccountDetail as projection on db.AccountDetail;
+  
 }
 
 annotate DTEEnergyAdminPortal with @requires: [

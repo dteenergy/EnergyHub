@@ -1,6 +1,22 @@
 <mvc:View xmlns:tnt="sap.tnt" controllerName="dteenergyadminportal.controller.EnrollmentApplicationPage"
   xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
   xmlns="sap.m">
+  <Dialog id="linkDialog" title="Generated Link">
+        <VBox>
+            <Text text="Your Generated Link:" />
+            <HBox>
+                <Text id="linkInput" text="" width="100%" />
+                <Button
+                    icon="sap-icon://copy"
+                    press="onCopyLink"
+                    tooltip="Copy Link"
+                    />
+            </HBox>
+        </VBox>
+        <endButton>
+            <Button text="Close" press="onCloseDialog" />
+        </endButton>
+    </Dialog>
   <VBox id="idVbox">
     <FlexBox id="idToolBar" justifyContent="End">
       <SearchField id="idFirstNameFilter" placeholder="Search for First Name..." liveChange="onFilterChange"></SearchField>
@@ -33,11 +49,10 @@
               <Text text="{MainModel>AccountDetailRefId/FirstName}"></Text>
               <Text text="{MainModel>AccountDetailRefId/LastName}"></Text>
               <Text text="{MainModel>AccountDetailRefId/CompanyName}"></Text>
-              <!-- <Text text="{MainModel>NumberOfTenants}"></Text> -->
-              <Input value="{MainModel>NumberOfTenants}" ></Input>
+              <Input value="{MainModel>NumberOfTenants}" type="Number" placeholder="Number of tenants"></Input>
               <ComboBox
                 selectedKey="{MainModel>ApplicationStatus}"
-                selectionChange="onApplicationStatusChange">
+                selectionChange="">
                 <items>
                   <core:Item key="New" text="New" />
                   <core:Item key="Accepted" text="Accepted" />
@@ -45,7 +60,7 @@
                 </items>
               </ComboBox>
               <Text text="5"></Text>
-              <Button text="Generate"></Button>
+              <Button text="Generate URL" press="onGenerateUrlPress"></Button>
             </ColumnListItem>
             
           </items>

@@ -8,6 +8,13 @@ sap.ui.define([
 
   return BaseController.extend("dteenergyadminportal.controller.EnrollmentApplicationPage", {
     onInit() {
+      const { baseUrl } = this.getView().getViewData();
+      console.log(this.getView().getViewData());
+      
+      this.baseUrl = baseUrl;
+      console.log(this.baseUrl);
+      
+
       this.getView().setModel("MainModel");
 
       // Initialize the Personalization Controller
@@ -54,70 +61,74 @@ sap.ui.define([
       // Apply combined filter to the table
       oBinding.filter(aFilters.length > 0 ? oCombinedFilter : []);
     },
-    onApplicationStatusChange(oEvent) {
-      // const sSelectedKey = oEvent.getParameter("selectedItem").getKey();
-      // const oContext = oEvent.getSource().getBindingContext("MainModel");
-      // const oModel = oContext.getModel("MainModel");
-      // const sPath = oContext.getPath(); // Relative path to the item in the model
+    onGenerateUrlPress: async function(oEvent) {
+      var oButton = oEvent.getSource(); // Get the button
+      var oListItem = oButton.getParent(); // Get the parent ColumnListItem
 
-      // // Perform the OData update
-      // oModel.update(sPath, { ApplicationStatus: sSelectedKey }, {
-      // 		success: () => {
-      // 				sap.m.MessageToast.show("Application status updated successfully.");
-      // 		},
-      // 		error: (oError) => {
-      // 				sap.m.MessageBox.error("Failed to update application status.");
-      // 				console.error("Update Error:", oError);
-      // 		}
-      // });
-
-
-
-      // const sSelectedKey = oEvent.getParameter("selectedItem").getKey();
-      // const oContext = oEvent.getSource().getBindingContext("MainModel");
-
-      // console.log(sSelectedKey);
-      // console.log(oContext);
-      // console.log(oContext.getPath().slice(1) + "/ApplicationStatus");
-
-
-      // // Update the model with the new status
-      // oContext.getModel("MainModel").setProperty(oContext.getPath().slice(1) + "/ApplicationStatus", sSelectedKey);
-
-      // // Log or perform additional actions if necessary
-      // console.log("Application Status updated to:", sSelectedKey);
-
-
-
-      // Get the selected value from the ComboBox
-      const sSelectedKey = oEvent.getParameter("selectedItem").getKey();
-
-      // Get the context of the row where the change occurred
-      const oContext = oEvent.getSource().getBindingContext("MainModel");
-      const sPath = oContext.getPath(); // Relative path to the item in the model
-
-      // Get the OData model
-      const oModel = oContext.getModel("MainModel");
-
-      console.log(oModel instanceof sap.ui.model.odata.v2.ODataModel);
-      
-      if (oModel instanceof sap.ui.model.odata.v2.ODataModel) {
-        // Create an object to update the ApplicationStatus
-        const oUpdatedData = {
-          ApplicationStatus: sSelectedKey
-        };
-
-        // Perform the OData update
-        oModel.update(sPath, oUpdatedData, {
-          success: () => {
-            sap.m.MessageToast.show("Application Status updated successfully.");
-          },
-          error: (oError) => {
-            sap.m.MessageBox.error("Failed to update application status.");
-            console.error("Update Error:", oError);
-          }
-        });
+      if (!oListItem) {
+        sap.m.MessageBox.error("Parent List Item is missing for this button.");
+        return;
       }
+
+      var oBindingContext = oListItem.getBindingContext("MainModel"); // Get the binding context
+
+      if (!oBindingContext) {
+        sap.m.MessageBox.error("Binding context is missing for this row.");
+        return;
+      }
+
+      var sAppId = oBindingContext.getProperty("AppId"); // Fetch AppId
+      console.log("AppId: ", sAppId);
+      console.log(this.baseUrl+`admin/service/ApplicationDetail(${sAppId})/GenerateUrl`);
+      
+
+      const {data} = await axios.get(this.baseUrl+`admin/service/ApplicationDetail(${sAppId})/GenerateUrl`)
+      console.log(data.value);
+      const oInput = this.byId("linkInput");
+      oInput.setText(data.value);
+
+      // Open the dialog
+      this.byId("linkDialog").open();
+      
+
+      // // Get the button's parent row binding context
+      // var oButton = oEvent.getSource();
+      // var oRowContext = oButton.getBindingContext("MainModel"); // Assuming "MainModel" is the model name
+
+      // // Extract AppId from the row
+      // var sAppId = oRowContext.getProperty("AppId");
+
+      // // Check if AppId exists
+      // if (!sAppId) {
+      //   sap.m.MessageBox.error("AppId is missing for this row.");
+      //   return;
+      // }
+
+      // // Bind the function with parameters
+      // var oModel = this.getView().getModel("MainModel");
+      
     },
+    onCloseDialog: function() {
+      // Close the dialog
+      this.byId("linkDialog").close();
+    },
+    onCopyLink: function() {
+      var oInput = this.byId("linkInput");
+      var sLink = oInput.getValue();
+  
+      // Copy the link to clipboard
+      navigator.clipboard.writeText(sLink).then(function() {
+          sap.m.MessageToast.show("Link copied to clipboard!");
+      }).catch(function(err) {
+          sap.m.MessageToast.show("Failed to copy link.");
+      });
+    },
+    onAfterRendering: function() {
+      // Listen for any changes to the model and show success
+      var oModel = this.getView().getModel("MainModel");
+      oModel.attachRequestCompleted(function() {
+          sap.m.MessageToast.show("Changes have been successfully saved.");
+      });
+    }
   });
 });
