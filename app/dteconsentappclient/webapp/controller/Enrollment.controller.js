@@ -449,7 +449,6 @@ sap.ui.define([
 											", " + addr.city + ", " + addr.state + ", " + addr.zipCode
 							};
 						});
-						console.log(id);
 						
 						// Set the suggestions array to the model
 						oLocationModel.setProperty(`/locations/${id}/suggestions`, aSuggestions);
