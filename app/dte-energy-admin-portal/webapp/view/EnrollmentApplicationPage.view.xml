@@ -2,20 +2,20 @@
   xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
   xmlns="sap.m">
   <Dialog id="linkDialog" title="Generated Link">
-        <VBox>
-            <Text text="Your Generated Link:" />
-            <HBox>
-                <Text id="linkInput" text="" width="100%" />
-                <Button
-                    icon="sap-icon://copy"
-                    press="onCopyLink"
-                    tooltip="Copy Link"
-                    />
-            </HBox>
-        </VBox>
-        <endButton>
-            <Button text="Close" press="onCloseDialog" />
-        </endButton>
+    <HBox justifyContent="SpaceAround" alignItems="Center" width="500px" class="linkHBox">
+      <FlexBox width="70%">
+        <Text id="linkInput" text="" width="100%" />
+      </FlexBox>
+      <Button
+        width="30%"
+        icon="sap-icon://copy"
+        press="onCopyLink"
+        tooltip="Copy Link"
+        />
+    </HBox>
+    <endButton>
+        <Button text="Close" press="onCloseDialog" />
+    </endButton>
     </Dialog>
   <VBox id="idVbox">
     <FlexBox id="idToolBar" justifyContent="End">
@@ -49,10 +49,10 @@
               <Text text="{MainModel>AccountDetailRefId/FirstName}"></Text>
               <Text text="{MainModel>AccountDetailRefId/LastName}"></Text>
               <Text text="{MainModel>AccountDetailRefId/CompanyName}"></Text>
-              <Input value="{MainModel>NumberOfTenants}" type="Number" placeholder="Number of tenants"></Input>
+              <Input value="{MainModel>NumberOfTenants}" change="onUpdateField" type="Number" placeholder="Number of tenants"></Input>
               <ComboBox
                 selectedKey="{MainModel>ApplicationStatus}"
-                selectionChange="">
+                selectionChange="" change="onUpdateField">
                 <items>
                   <core:Item key="New" text="New" />
                   <core:Item key="Accepted" text="Accepted" />

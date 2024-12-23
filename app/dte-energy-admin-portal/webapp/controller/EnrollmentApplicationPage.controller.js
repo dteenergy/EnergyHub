@@ -3,47 +3,65 @@ sap.ui.define([
   "sap/ui/comp/personalization/Controller",
   "sap/ui/model/Filter",
   "sap/ui/model/FilterOperator",
-], (BaseController, PersonalizationController, Filter, FilterOperator) => {
+  "sap/m/MessageBox"
+], (BaseController, PersonalizationController, Filter, FilterOperator, MessageBox) => {
   "use strict";
 
   return BaseController.extend("dteenergyadminportal.controller.EnrollmentApplicationPage", {
+    /**
+     * Initializes the controller and
+     * sets up the personalization controller for the table.
+     * Sets the base URL and initializes the MainModel.
+     *
+     * @public
+     */
     onInit() {
+      // Retrieve the base URL from the view data
       const { baseUrl } = this.getView().getViewData();
-      console.log(this.getView().getViewData());
-      
       this.baseUrl = baseUrl;
-      console.log(this.baseUrl);
-      
 
+      // Set the MainModel for the view
       this.getView().setModel("MainModel");
 
-      // Initialize the Personalization Controller
-      this._oPersonalizationController = new PersonalizationController({
-        table: this.byId("idApplicationTable"), // Your table ID
-        // afterP13nModelDataChange: this.onPersonalizationChange.bind(this),
+      // Initialize the Personalization Controller for the application table
+      this.oPersonalizationController = new PersonalizationController({
+        table: this.byId("idApplicationTable")
       });
     },
+    /**
+     * Opens the personalization dialog for the application table.
+     *
+     * @public
+     */
     setupPersonalization: function () {
-      this._oPersonalizationController.openDialog();
+      this.oPersonalizationController.openDialog();
     },
+    /**
+     * Handles filter changes for the application table and
+     * applies the corresponding filters.
+     *
+     * @public
+     */
     onFilterChange: function () {
-      const oTable = this.byId("idApplicationTable");
-      const oBinding = oTable.getBinding("items");
+      // Retrieve the application table and its binding
+      const oApplicationTable = this.byId("idApplicationTable");
+      const oBinding = oApplicationTable.getBinding("items");
 
+      // Validate the binding
       if (!oBinding) {
-        console.error("Table binding not found!");
+        MessageBox.error("Table binding not found!")
         return;
       }
 
-      // Get values from the filters
-      const sFirstName = this.byId("idFirstNameFilter").getValue(); // Assuming an Input field
-      const sLastName = this.byId("idLastNameFilter").getValue(); // Assuming an Input field
-      const sApplicationStatus = this.byId("idApplicationStatusFilter").getSelectedKey(); // Assuming a ComboBox
+      // Get values from the filters inputs
+      const sFirstName = this.byId("idFirstNameFilter").getValue(); // First Name Filter
+      const sLastName = this.byId("idLastNameFilter").getValue(); // Last Name Filter
+      const sApplicationStatus = this.byId("idApplicationStatusFilter").getSelectedKey(); // Application Status Filter
 
-      // Create filter array
+      // Create an array for filters
       const aFilters = [];
 
-      // Add filters if the values are not empty
+      // Add filters if values are not empty
       if (sFirstName)
         aFilters.push(new Filter({path: "AccountDetailRefId/FirstName", operator: FilterOperator.Contains, value1: sFirstName, caseSensitive: false}));
 
@@ -55,80 +73,92 @@ sap.ui.define([
       // Combine filters with AND logic
       const oCombinedFilter = new Filter({
         filters: aFilters,
-        and: true // Both conditions must be met
+        and: true
       });
 
-      // Apply combined filter to the table
+      // Apply the combined filter or clear filters
       oBinding.filter(aFilters.length > 0 ? oCombinedFilter : []);
     },
+    /**
+     * Generates a URL for the selected application and displays it in a dialog.
+     *
+     * @param {sap.ui.base.Event} oEvent - The event triggered by button press.
+     * @public
+     */
     onGenerateUrlPress: async function(oEvent) {
-      var oButton = oEvent.getSource(); // Get the button
-      var oListItem = oButton.getParent(); // Get the parent ColumnListItem
+      // Get the button and its parent list item
+      const oButton = oEvent.getSource();
+      const oListItem = oButton.getParent();
 
+      // Validate the list item
       if (!oListItem) {
-        sap.m.MessageBox.error("Parent List Item is missing for this button.");
+        MessageBox.error("Parent List Item is missing for this button.");
         return;
       }
 
-      var oBindingContext = oListItem.getBindingContext("MainModel"); // Get the binding context
+      // Retrieve the binding context for the selected row
+      const oBindingContext = oListItem.getBindingContext("MainModel"); // Get the binding context
 
       if (!oBindingContext) {
-        sap.m.MessageBox.error("Binding context is missing for this row.");
+        MessageBox.error("Binding context is missing for this row.");
         return;
       }
 
-      var sAppId = oBindingContext.getProperty("AppId"); // Fetch AppId
-      console.log("AppId: ", sAppId);
-      console.log(this.baseUrl+`admin/service/ApplicationDetail(${sAppId})/GenerateUrl`);
-      
+      // Extract application ID from the binding context
+      const appId = oBindingContext.getProperty("AppId");
 
-      const {data} = await axios.get(this.baseUrl+`admin/service/ApplicationDetail(${sAppId})/GenerateUrl`)
-      console.log(data.value);
-      const oInput = this.byId("linkInput");
-      oInput.setText(data.value);
+      try {
+        // Call the API to generate the URL
+        const {data} = await axios.get(this.baseUrl+`admin/service/ApplicationDetail(${appId})/GenerateUrl`);
 
-      // Open the dialog
-      this.byId("linkDialog").open();
-      
+        // Set the generated URL to the input box
+        const linkInputBox = this.byId("linkInput");
+        linkInputBox.setText(data.value.generatedUrl);
 
-      // // Get the button's parent row binding context
-      // var oButton = oEvent.getSource();
-      // var oRowContext = oButton.getBindingContext("MainModel"); // Assuming "MainModel" is the model name
-
-      // // Extract AppId from the row
-      // var sAppId = oRowContext.getProperty("AppId");
-
-      // // Check if AppId exists
-      // if (!sAppId) {
-      //   sap.m.MessageBox.error("AppId is missing for this row.");
-      //   return;
-      // }
-
-      // // Bind the function with parameters
-      // var oModel = this.getView().getModel("MainModel");
-      
+        // Open the dialog to display the generated URL
+        this.byId("linkDialog").open();
+      } catch (error) {
+        MessageBox.error("Failed to generate the URL.");
+      }
     },
+    /**
+     * Closes the dialog - displaying the generated link.
+     *
+     * @public
+     */
     onCloseDialog: function() {
-      // Close the dialog
+      // Close the link dialog
       this.byId("linkDialog").close();
     },
+    /**
+     * Copies the generated link to the clipboard and displays a confirmation message.
+     *
+     * @public
+     */
     onCopyLink: function() {
-      var oInput = this.byId("linkInput");
-      var sLink = oInput.getValue();
+      // Get the link from the input box
+      var linkInputBox = this.byId("linkInput");
+      var sLink = linkInputBox.getText();
   
       // Copy the link to clipboard
       navigator.clipboard.writeText(sLink).then(function() {
-          sap.m.MessageToast.show("Link copied to clipboard!");
+          MessageBox.show("Link copied to clipboard!");
       }).catch(function(err) {
-          sap.m.MessageToast.show("Failed to copy link.");
+          MessageBox.show("Failed to copy link.");
       });
     },
-    onAfterRendering: function() {
-      // Listen for any changes to the model and show success
-      var oModel = this.getView().getModel("MainModel");
-      oModel.attachRequestCompleted(function() {
-          sap.m.MessageToast.show("Changes have been successfully saved.");
-      });
+    /**
+     * Submits batch updates to the backend for saving changes to the application fields.
+     * And display the message(success/error).
+     *
+     * @public
+     */
+    onUpdateField: async function() {
+      const updateModel = this.getView().getModel("MainModel");
+
+      updateModel.submitBatch('CustomGroupId')
+        .then(() => sap.m.MessageToast.show("Updated successfully!"))
+        .catch((err) => sap.m.MessageToast.show("Updation failed : ", err))
     }
   });
 });
