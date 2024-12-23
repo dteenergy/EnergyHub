@@ -27,6 +27,8 @@ sap.ui.define([
           this.SERVERHOST = url;
 					this.buildingCount = 1;
 
+					this.getEnv();
+
           let oEnrollFormData = {
             SignatureSignedBy: "",
             SignatureSignedDate: "",
@@ -103,6 +105,15 @@ sap.ui.define([
         this.loadAuthAndRelease();
       },
 
+			  // Get the navigation page url and address validation url
+				getEnv:  async function(){
+					const {DTEAddressValidationUrl, LandlordConfirmationPageUrl, ErrorPageUrl} = await this.getEnvironmentVariables();
+					
+					this.DTEAddressValidationUrl = DTEAddressValidationUrl;
+					this.LandlordConfirmationPageUrl = LandlordConfirmationPageUrl;
+					this.ErrorPageUrl = ErrorPageUrl;
+				},
+
         /**
 				 * Add additional location(Building) container
 				 * In a location model there was id, that hold the locationInfo object
@@ -125,6 +136,7 @@ sap.ui.define([
 						City: "",
 						State: "Michigan",
 						Zipcode: "",
+						AddrLineTwo: "",
 						suggestions: []
 					}
 
@@ -423,7 +435,7 @@ sap.ui.define([
 					const oLocationModel = this.getView().getModel("locationModel");
 
 					// DTE address validation api
-					await axios.get(`https://test.api.customer.sites.dteenergy.com/public/qa/premises/?address=${sQuery}&maxResults=10`).then(function (response) {		
+					await axios.get(`${this.DTEAddressValidationUrl}?address=${sQuery}&maxResults=10`).then(function (response) {		
 						
 						// Construct the response as needed format 
 						const aSuggestions = response.data.results.map(function (item) {
@@ -494,7 +506,6 @@ sap.ui.define([
 					 * So, get the all items from the container 
 					 */
 					container.getItems().forEach((wrapper, index)=>{
-						let id = wrapper.getId().split('--')[2];
 						
 						wrapper.findAggregatedObjects(true, (control)=>{
 							
@@ -633,50 +644,56 @@ sap.ui.define([
 				},
 
 				submitAction: async function(){
-					// Retrieve the data from bound models
-					this.retrieveAllInputBindings();
+					try{
+						// Retrieve the data from bound models
+						this.retrieveAllInputBindings();
 
-					// Url to create the enrollment application
-					const enrollmentCreateUrl = this.SERVERHOST + 'service/CreateEnrollmentFormDetail';
-					
-					// Format the location details
-					const formattedLocationDetails = Object.values(locationDetails['locations']);
-					formattedLocationDetails.forEach((item)=> delete item.suggestions);
-					
-					const enrollmentFormDetails = {
-						AccountDetail: JSON.stringify({
-							...enrollmentDetails['AccountDetail'], 
-							FirstName: enrollmentDetails['AccountDetail']['SiteFirstName'], 
-							LastName: enrollmentDetails['AccountDetail']['SiteLastName'],
-							EmailAddr: enrollmentDetails['AccountDetail']['SiteEmailAddr']}),
-							BuildingDetail: JSON.stringify(formattedLocationDetails),
-							ApplicationDetail: JSON.stringify({'SignatureSignedBy': enrollmentDetails['SignatureSignedBy'], 'SignatureSignedDate': this.convertDateFormat(enrollmentDetails['SignatureSignedDate'])}),
-							ConsentDetail: JSON.stringify([{
-							"FirstName": consentDetails['ConsentFirstName'],
-							"LastName": consentDetails['ConsentLastName'],
-							"SiteContactTitle": consentDetails['ConsentContactTitle'],
-							"Address": consentDetails['ConsentAddress'],
-							"City": consentDetails['ConsentCity'],
-							"State": consentDetails['ConsentState'],
-							"Zipcode": consentDetails['ConsentZipcode'],
-							"AccountNumber": consentDetails['ConsentAccountNumber'],
-							"PhoneNumber": consentDetails['ConsentPhoneNumber'],
-							"EmailAddr": consentDetails['ConsentEmailAddr'],
-							"AuthPersonName": consentDetails['AuthPersonName'],
-							"AuthDate": this.convertDateFormat(consentDetails['AuthDate']),
-							"AuthTitle": consentDetails['AuthTitle'],
-						}])
-					};
-					
-					// Post request to create a enrollment application
-					const {data} = await axios.post(enrollmentCreateUrl, enrollmentFormDetails);
-					
-					// If get the success(200) response then navigate to the confirmation page
-					if(data.value.statusCode === 200){
-						this.getOwnerComponent().getRouter().navTo("Confirmation", {
-							StatusCode: data.value.statusCode,
-							Message: data.value.Message
-						});
+						// Url to create the enrollment application
+						const enrollmentCreateUrl = this.SERVERHOST + 'service/CreateEnrollmentFormDetail';
+						
+						// Format the location details
+						const formattedLocationDetails = Object.values(locationDetails['locations']);
+						formattedLocationDetails.forEach((item)=> delete item.suggestions);
+						
+						const enrollmentFormDetails = {
+							AccountDetail: JSON.stringify({
+								...enrollmentDetails['AccountDetail'], 
+								FirstName: enrollmentDetails['AccountDetail']['SiteFirstName'], 
+								LastName: enrollmentDetails['AccountDetail']['SiteLastName'],
+								EmailAddr: enrollmentDetails['AccountDetail']['SiteEmailAddr']}),
+								BuildingDetail: JSON.stringify(formattedLocationDetails),
+								ApplicationDetail: JSON.stringify({'SignatureSignedBy': enrollmentDetails['SignatureSignedBy'], 'SignatureSignedDate': this.convertDateFormat(enrollmentDetails['SignatureSignedDate'])}),
+								ConsentDetail: JSON.stringify([{
+								"FirstName": consentDetails['ConsentFirstName'],
+								"LastName": consentDetails['ConsentLastName'],
+								"SiteContactTitle": consentDetails['ConsentContactTitle'],
+								"Address": consentDetails['ConsentAddress'],
+								"City": consentDetails['ConsentCity'],
+								"State": consentDetails['ConsentState'],
+								"Zipcode": consentDetails['ConsentZipcode'],
+								"AccountNumber": consentDetails['ConsentAccountNumber'],
+								"PhoneNumber": consentDetails['ConsentPhoneNumber'],
+								"EmailAddr": consentDetails['ConsentEmailAddr'],
+								"AuthPersonName": consentDetails['AuthPersonName'],
+								"AuthDate": this.convertDateFormat(consentDetails['AuthDate']),
+								"AuthTitle": consentDetails['AuthTitle'],
+							}])
+						};
+						
+						// Post request to create a enrollment application
+						const {data} = await axios.post(enrollmentCreateUrl, enrollmentFormDetails);
+						
+						// If get the success(200) response then navigate to the confirmation page
+						if(data.value.statusCode === 200){
+							// Navigate to the landlord confirmation page
+							window.open(this.LandlordConfirmationPageUrl, '_self');
+						}else{
+							// Navigate to the error page
+							window.open(this.ErrorPageUrl, '_self');
+						}
+					}catch(err){						
+						// Navigate to the error page
+						window.open(this.ErrorPageUrl, '_self');
 					}
 				},
 

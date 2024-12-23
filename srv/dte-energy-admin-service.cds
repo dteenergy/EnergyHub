@@ -6,7 +6,6 @@ service DTEEnergyAdminPortal {
 
   entity ApplicationDetail as projection on db.ApplicationDetail actions{
     function GenerateUrl() returns String;
-    action UpdateAppDetail(AppId: String, NoOfTenants: Integer, AppStatus: String) returns String;
   };
   
   entity ApplicationConsent as projection on db.ApplicationConsent;

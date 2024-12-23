@@ -34,6 +34,11 @@
 		</layout:VerticalLayout>
 
 		<layout:VerticalLayout class="vertical-layout">
+			<Label text="Address Line 2"></Label>
+			<Input class="inputBox" value="{locationModel>AddrLineTwo}" placeholder="Filled out by user"></Input>
+		</layout:VerticalLayout>
+
+		<layout:VerticalLayout class="vertical-layout">
 			<Label text="City" required="true"></Label>
 			<Input class="inputBox" value="{locationModel>City}" liveChange="onLiveChange" required="true" placeholder="Filled out by user"></Input>
 		</layout:VerticalLayout>

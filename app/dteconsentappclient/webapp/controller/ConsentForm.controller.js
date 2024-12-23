@@ -23,17 +23,20 @@ sap.ui.define([
 	return BaseController.extend("dteconsentappclient.controller.ConsentForm", {
         onInit () {
 
-					const {applicationId, url, router} = this.getView().getViewData();
+					const {applicationId, url, TenantConfirmationPageUrl, ErrorPageUrl} = this.getView().getViewData();
 					
 					// Get the required properties from the parent view
 					this.applicationId = applicationId;
 					this.SERVERHOST = url;
-					this.router = router;
+					this.TenantConfirmationPageUrl = TenantConfirmationPageUrl;
+					this.ErrorPageUrl = ErrorPageUrl;	
 					
 					//Initialize Model for this view
 					this.initializeModel();
+
 					// Load the AuthAndRelease fragement
 					this.loadAuthAndRelease();
+
 			},
 
 				initializeModel: function(){
@@ -254,17 +257,22 @@ sap.ui.define([
 								"AuthTitle": consentDetails['AuthTitle'],
 							})
 						}
-					
+				
+				try{		
 					// Post request to create a tenant consent.
 					const {data} = await axios.post(tenantConsentCreateUrl, tenantConsentFormDetails);
 						
-					if(data.value.status === 200){
-						this.initializeModel();
-						this.router.navTo("Confirmation", {
-							StatusCode: data.value.status,
-							Message: data.value.message
-						});
+					if(data.value.statusCode === 200){
+						// Navigate to the tenant confirmation page
+						window.open(this.TenantConfirmationPageUrl, '_self');
+					}else{
+						// Navigate to the error page
+						window.open(this.ErrorPageUrl, '_self');
 					}
+				}catch(err){
+					// Navigate to the error page
+					window.open(this.ErrorPageUrl, '_self');
+				}	
 			}
 		},
 

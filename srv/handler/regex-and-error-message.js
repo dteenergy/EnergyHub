@@ -27,7 +27,7 @@ const validateWithRegex = (value, fieldName) => {
     const fieldValidator = regexAndMessage[fieldName];
 
     // If the value is invalid, throw an error with the corresponding message
-    if (!fieldValidator?.regex?.test(value)) throw { status: 400, message: fieldValidator?.message }
+    if (!fieldValidator?.regex?.test(value)) throw { statusCode: 400, message: fieldValidator?.message }
     return null;
 }
 

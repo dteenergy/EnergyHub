@@ -4,7 +4,7 @@ const { valueDecrypt } = require("./encrypt-and-decrypt-id");
  * Validate the Application Id
  * @param {object} req 
  * @param {entity} entity 
- * @returns {object} props => status and message
+ * @returns {object} props => statusCode and message
  */
 const validateApplicationId = async (req, entity) => {
 	try {
@@ -20,14 +20,14 @@ const validateApplicationId = async (req, entity) => {
 		const applicationDetail = await SELECT.from(entity.ApplicationDetail).where({ 'AppId': decryptedAppId }).columns(['AppId']);
 
 		// If applicationDetail result is empty
-		if (applicationDetail?.length === 0) throw { status: 404, message: 'Application Detail not found for the Id' }
+		if (applicationDetail?.length === 0) throw { statusCode: 404, message: 'Application Detail not found for the Id' }
 
-		return { status: 200, message: 'Application Details are available.' }
+		return { statusCode: 200, message: 'Application Details are available.' }
 	} catch(e){
-		if(e.status) {
-			return {status : e.status, message: e.message}
+		if(e.statusCode) {
+			return {statusCode : e.statusCode, message: e.message}
 		} else {
-			return {status: 500, message: e.message}
+			return {statusCode: 500, message: e.message}
 		}
 	}
     
