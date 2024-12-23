@@ -601,7 +601,7 @@ sap.ui.define([
                   that.onAddAnotherLocation(),
                   that.oConfirmationDialog.close()
                 }
-              }),
+              }).addStyleClass("dialog-add-loc"),
               new sap.m.Text({text: 'I don’t have another location.'}),
               new sap.m.Button({
                 text: 'Continue Submission',
@@ -611,7 +611,7 @@ sap.ui.define([
                   that.oConfirmationDialog.close()
                 },
                 type: sap.m.ButtonType.Emphasized
-              })
+              }).addStyleClass("dialog-submit-action")
             ],
           });
 
@@ -620,7 +620,11 @@ sap.ui.define([
 
 					// Custom header for the dialog
 					const dialogTitle = new sap.m.Bar({
-						contentMiddle: [new sap.m.Text({ text: 'Additional Location Alert' })],
+						contentMiddle: [
+							new sap.m.Text({ 
+								text: 'Additional Location Alert' 
+							}).addStyleClass("alert-title")
+						],
 						contentRight: [
 								new sap.ui.core.Icon({
 										src: 'sap-icon://decline',
@@ -628,9 +632,12 @@ sap.ui.define([
 										press: function () {
 												that.oConfirmationDialog.close();
 										}
-								})
+								}).addStyleClass("alert-close-icon")
 						]
 				});
+
+				// Add the class for the dialog content
+				dialogTitle.addStyleClass("confirmation-dialog-title");
 
 				// Open the additional location alert dialog while submit pressed
           if(!this.oConfirmationDialog){

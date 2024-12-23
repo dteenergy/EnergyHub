@@ -15,7 +15,8 @@ body {
 .sapMIBar.app-header{
   height: 4.5rem !important;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
   background-color: #1E3575 !important;
 }
 .sapMText.header-title{
@@ -62,15 +63,6 @@ body {
   .social-media-container > *{
     padding-right: 10px;
   } 
-  .dte-web-site{
-    .sapMLnkText{
-      padding-left: 3px
-    }
-    .sapUiIcon{
-      rotate: 40deg;
-      color: #ffffff;
-    }
-  }
   .sapMLnk:hover {
     text-decoration: none;
   } 
@@ -80,15 +72,6 @@ body {
       flex-direction: column !important;
       justify-content: center;
       align-items: center;
-    }
-    .sapMIBar.app-header{
-      flex-direction: column-reverse;
-      justify-content: space-between;
-      background-color: #1E3575 !important;
-      padding-top: 16px !important;
-    }
-    .sapMLnk.dte-web-site{
-      display: none;
     }
     .custom-footer {
       height: 17.5rem !important;
