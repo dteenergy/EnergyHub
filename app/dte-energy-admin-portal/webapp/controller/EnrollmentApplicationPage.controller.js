@@ -3,8 +3,9 @@ sap.ui.define([
   "sap/ui/comp/personalization/Controller",
   "sap/ui/model/Filter",
   "sap/ui/model/FilterOperator",
-  "sap/m/MessageBox"
-], (BaseController, PersonalizationController, Filter, FilterOperator, MessageBox) => {
+  "sap/m/MessageBox",
+  "sap/m/MessageToast"
+], (BaseController, PersonalizationController, Filter, FilterOperator, MessageBox, MessageToast) => {
   "use strict";
 
   return BaseController.extend("dteenergyadminportal.controller.EnrollmentApplicationPage", {
@@ -142,9 +143,9 @@ sap.ui.define([
   
       // Copy the link to clipboard
       navigator.clipboard.writeText(sLink).then(function() {
-          MessageBox.show("Link copied to clipboard!");
+        MessageToast.show("Link copied to clipboard!");
       }).catch(function(err) {
-          MessageBox.show("Failed to copy link.");
+        MessageToast.show("Failed to copy link.");
       });
     },
     /**
@@ -157,8 +158,8 @@ sap.ui.define([
       const updateModel = this.getView().getModel("MainModel");
 
       updateModel.submitBatch('CustomGroupId')
-        .then(() => sap.m.MessageToast.show("Updated successfully!"))
-        .catch((err) => sap.m.MessageToast.show("Updation failed : ", err))
+        .then(() => MessageToast.show("Updated successfully!"))
+        .catch((err) => MessageToast.show("Updation failed : ", err))
     }
   });
 });

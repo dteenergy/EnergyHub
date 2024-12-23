@@ -2,3 +2,9 @@
 .linkHBox{
     padding: 10px 0;
 }
+.paddingAlignment{
+    padding-top: 10px;
+}
+.rightPaddingAlignment{
+    padding-right: 5px !important;
+}

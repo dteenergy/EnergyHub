@@ -16,12 +16,12 @@
     <endButton>
         <Button text="Close" press="onCloseDialog" />
     </endButton>
-    </Dialog>
+  </Dialog>
   <VBox id="idVbox">
-    <FlexBox id="idToolBar" justifyContent="End">
-      <SearchField id="idFirstNameFilter" placeholder="Search for First Name..." liveChange="onFilterChange"></SearchField>
-      <SearchField id="idLastNameFilter" placeholder="Search for Last Name..." liveChange="onFilterChange"></SearchField>
-      <ComboBox id="idApplicationStatusFilter" selectedKey="" placeholder="Select Application Status" selectionChange="onFilterChange">
+    <FlexBox id="idToolBar" wrap="Wrap" justifyContent="End" class="paddingAlignment">
+      <SearchField id="idFirstNameFilter" placeholder="Search for First Name..." liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
+      <SearchField id="idLastNameFilter" placeholder="Search for Last Name..." liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
+      <ComboBox id="idApplicationStatusFilter" selectedKey="" placeholder="Select Application Status" selectionChange="onFilterChange" class="rightPaddingAlignment">
         <items>
             <core:Item key="" text="All"/>
             <core:Item key="New" text="New"/>
@@ -32,7 +32,7 @@
       <Button id="idP13nButton" icon="sap-icon://action-settings" press="setupPersonalization" tooltip="Settings"/>
     </FlexBox>
     <ScrollContainer id="_idScrollContainer" horizontal="true" vertical="false" width="100%" height="auto">
-      <Table id="idApplicationTable" items="{MainModel>/ApplicationDetail}" sticky="ColumnHeaders" width="100%">
+      <Table id="idApplicationTable" items="{MainModel>/ApplicationDetail}" sticky="ColumnHeaders" width="100%" class="paddingAlignment">
         <columns>
           <Column width="150px"><header><Label text="Application Id"></Label></header></Column>
           <Column width="150px"><header><Label text="First Name"></Label></header></Column>
@@ -66,39 +66,5 @@
           </items>
       </Table>
     </ScrollContainer>
-      <!-- <OverflowToolbar id="idGenOverflowToolbar" >
-        <ToolbarSpacer id="idToolbarSpacerForPagination" />
-        <Button id="idBtnFirstPress" icon="sap-icon://close-command-field" press="onLoadFirstPage" tooltip="First" enabled="{/oNavModel/firstPageBtnEnable}" />
-        <Button id="idBtnPreviousPress" icon="sap-icon://navigation-left-arrow" press="onLoadPreviousPage" tooltip="Previous" enabled="{/oNavModel/firstPageBtnEnable}"/>
-        <Text id="idPaginationText"  text="Page {/pagination/page} of {/pagination/totalPages}"/>
-        <Button id="idBtnNextPress" icon="sap-icon://navigation-right-arrow" press="onLoadNextPage" tooltip="Next" enabled="{/oNavModel/nextPageBtnEnable}" />
-        <Button id="idBtnLastPress" icon="sap-icon://open-command-field" press="onLoadLastPage" tooltip="Last" enabled="{/oNavModel/nextPageBtnEnable}"/>
-      </OverflowToolbar> -->
-    </VBox>
-  <!-- <Table items="{MainModel>/ApplicationDetail}">
-      <items>
-          <ColumnListItem type="Active" id="item0">
-              <cells>
-
-                  <Text text="{MainModel>NumberOfTenants}" id="text2"/>
-                  <Text text="{MainModel>AccountDetailRefId/CompanyName}" id="text3"/>
-                  
-              </cells>
-          </ColumnListItem>
-      </items>
-      <columns>
-
-                  <Column id="column0">
-                      <header>
-                          <Label text="Number of tenants" id="Label0"/>
-                      </header>
-                  </Column>
-
-                  <Column id="column1">
-                      <header>
-                          <Label text="Company Name" id="Label1"/>
-                      </header>
-                  </Column>
-      </columns>
-  </Table> -->
+  </VBox>
 </mvc:View>
