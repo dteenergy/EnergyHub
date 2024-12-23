@@ -19,7 +19,7 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
       if (e?.code) {        
         return { message: e?.message, code: e?.code }
       } else {
-        return { message: e?.message, code: '500' }
+        return { message: e?.message, code: 500 }
       }
     }
 
@@ -30,13 +30,13 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
       try {
         // If data contains value
         if (Array.isArray(data)) {
-          for (const e of data) {
+          for (const el of data) {
             // Check the ReferenceId with the AppId
             const ConsentDetail = await cds.run(
               SELECT.from(ApplicationConsent)
-                .where({ AppRefId_AppId: e.AppId })
+                .where({ AppRefId_AppId: el.AppId })
             )
-            e.NoOfConsentReceived = ConsentDetail?.length;
+            el.NoOfConsentReceived = ConsentDetail?.length;
           }
         }
       } catch (e) {
