@@ -1,6 +1,7 @@
 const cds = require('@sap/cds');
 const { generateToken } = require('./handler/service-auth-handler/jwt-utils');
 const checkTokenExpiration = require('./handler/service-auth-handler/auth-middleware');
+const cors = require('cors');
 
 cds.on('bootstrap', async (app) => {
   app.use(cors({ origin: "*" }));
