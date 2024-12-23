@@ -17,9 +17,9 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
     } catch (e) {
 
       if (e?.code) {
-        return { 'message': e?.message, 'code': e?.code }
+        return { message: e?.message, code: e?.code }
       } else {
-        return { 'message': e?.message, 'code': '500' }
+        return { message: e?.message, code: '500' }
       }
     }
 
@@ -40,7 +40,7 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
           }
         }
       } catch (err) {
-        return {'code':500, 'message':err?.message}
+        return {message:err?.message, code:500}
       }
     })
 
