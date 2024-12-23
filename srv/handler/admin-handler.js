@@ -16,10 +16,10 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
             return generatedUrl;
         } catch(e){
             
-            if(e.status){
-                return {'message':e.message, 'status':e.status}
+            if(e.code){
+                return {'message':e.message, 'code':e.code}
             } else {
-                return {'message':e.message, 'status':'500'}
+                return {'message':e.message, 'code':'500'}
             }
         }
         

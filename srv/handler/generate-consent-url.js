@@ -8,7 +8,7 @@ const { valueEncrypt } = require("./encrypt-and-decrypt-id");
 const generateConsentUrl = async(appId, ApplicationDetail) =>{
     // Get the Consent Service URL
     const url = process.env.TENANT_CONSENT_FORM_URL;
-    if(appId === "") throw {message: 'Application ID is required', status: 400};
+    if(appId === "") throw {message: 'Application ID is required', code: 400};
         
     // Get the application detail
     const appDetail = await SELECT.from(ApplicationDetail).columns('AppId').where({'AppId': appId});
