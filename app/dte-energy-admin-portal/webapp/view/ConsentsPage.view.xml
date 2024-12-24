@@ -3,35 +3,44 @@
     xmlns="sap.m">
     <VBox id="idVbox">
         <FlexBox id="idToolbar" justifyContent="End">
-            <SearchField id="idFilterFirstName" placeholder="Search for the Firstname" liveChange="onFilterChange"></SearchField>
-            <SearchField id="idFilterLastName" placeholder="Search for the Lastname" liveChange="onFilterChange"></SearchField>
-            <ComboBox id="idFilterAppStatus" selectedKey="" placeholder="Select Application Status" selectionChange="onFilterChange" change="handleResponse">
-            <items>
-                <core:Item key="New" text="New"></core:Item>
-                <core:Item key="Approved" text="Approved"></core:Item>
-                <core:Item key="Rejected" text="Rejected"></core:Item>
-            </items>
+            <SearchField id="idFilterFirstName" placeholder="Firstname" liveChange="onFilterChange"></SearchField>
+            <SearchField id="idFilterLastName" placeholder="Lastname" liveChange="onFilterChange"></SearchField>
+            <ComboBox id="idConsentStatusFilter" selectedKey="" placeholder="Consent Status" selectionChange="onFilterChange" class="rightPaddingAlignment">
+                <items>
+                    <core:Item key="" text="All"/>
+                    <core:Item key="New" text="New"/>
+                    <core:Item key="Accepted" text="Accepted"/>
+                    <core:Item key="Rejected" text="Rejected"/>
+                </items>
             </ComboBox>
             <Button id="idP13nButton" icon="sap-icon://action-settings" press="setupPersonalization" tooltip="Settings"/>
         </FlexBox>
         <ScrollContainer id="_idScrollContainer" width="100%" height="auto">
-        <Table id="idApplicationConsentTable" items="{MainModel>/ApplicationDetail}">
+        <Table id="idApplicationConsentTable" items="{MainModel>/ApplicationConsent}">
         <columns>
             <Column width="150px"><header><Label text="First Name"></Label></header></Column>
             <Column width="150px"><header><Label text="Last Name"></Label></header></Column>
-            <Column width="150px"><header><Label text="Application Status"></Label></header></Column>
+            <Column width="150px"><header><Label text="Consent Email"></Label></header></Column>
+            <Column width="150px"><header><Label text="Consent Given Date"></Label></header></Column>
+            <Column width="150px"><header><Label text="Consent Auth Title"></Label></header></Column>
+            <Column width="150px"><header><Label text="Consent Status"></Label></header></Column>
+            <Column width="150px"><header><Label text="Application RefId"></Label></header></Column>
         </columns>
         <items>
             <ColumnListItem id="ColumnListItem">
-                <Text text="{MainModel>/ApplicationDetail/NoOfConsentReceived}"></Text>
-                <Text text="{MainModel>AccountDetailRefId/LastName}"></Text>
-                <ComboBox selectedKey="{MainModel>ApplicationStatus}" selectionChange="">
+                <Text text="{MainModel>FirstName}"></Text>
+                <Text text="{MainModel>LastName}"></Text>
+                <Text text="{MainModel>EmailAddr}"></Text>
+                <Text text="{MainModel>AuthDate}"></Text>
+                <Text text="{MainModel>AuthTitle}"></Text>
+                <ComboBox selectedKey="{MainModel>ConsentStatus}" selectionChange="" change="handleResponse">
                 <items>
                     <core:Item key="New" text="New" />
                     <core:Item key="Accepted" text="Accepted" />
                     <core:Item key="Rejected" text="Rejected" />
                 </items>
                 </ComboBox>
+                <Text text="{MainModel>AppRefId/AppId}"></Text>
             </ColumnListItem>
         </items>
         </Table>
