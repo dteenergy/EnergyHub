@@ -32,7 +32,13 @@
       <Button id="idP13nButton" icon="sap-icon://action-settings" press="setupPersonalization" tooltip="Settings"/>
     </FlexBox>
     <ScrollContainer id="_idScrollContainer" horizontal="true" vertical="false" width="100%" height="auto">
-      <Table id="idApplicationTable" items="{MainModel>/ApplicationDetail}" sticky="ColumnHeaders" width="100%" class="paddingAlignment">
+      <Table id="idApplicationTable" items="{
+        path: 'MainModel>/ApplicationDetail',
+        parameters: {
+          $expand: 'AccountDetailRefId',
+          $select: 'AppId,AccountDetailRefId/FirstName,AccountDetailRefId/LastName,AccountDetailRefId/CompanyName,NumberOfTenants'
+        }
+      }" sticky="ColumnHeaders" width="100%" class="paddingAlignment">
         <columns>
           <Column width="150px"><header><Label text="Application Id"></Label></header></Column>
           <Column width="150px"><header><Label text="First Name"></Label></header></Column>
