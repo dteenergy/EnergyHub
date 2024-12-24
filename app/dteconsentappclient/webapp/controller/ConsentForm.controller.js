@@ -204,9 +204,8 @@ sap.ui.define([
 								/** If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
 								 *  If the email is invalid, set the corresponding validation flag to `false`.
 								 * */
-								if(control?.mProperties["type"] === "Email") {
+								if(control?.mProperties["type"] === "Email")
 									if(!this.isValidEmail(control, userInput)) validationFlags[validationStatus] = false;
-								}
 							}
 						 }		
 					 }		
