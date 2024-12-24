@@ -20,9 +20,14 @@ sap.ui.define([
       // Retrieve the base URL from the view data
       const { baseUrl } = this.getView().getViewData();
       this.baseUrl = baseUrl;
+      
+      const model = new sap.ui.model.odata.v4.ODataModel({
+        serviceUrl: `${this.baseUrl}admin/service/`,
+        synchronizationMode: "None",
+        operationMode: "Server",
+      });
 
-      // Set the MainModel for the view
-      this.getView().setModel("MainModel");
+      this.getView().setModel(model, "MainModel");
 
       // Initialize the Personalization Controller for the application table
       this.oPersonalizationController = new PersonalizationController({

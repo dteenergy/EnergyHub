@@ -4,7 +4,14 @@ using {dteConsentApp as db} from '../db/schema';
 @impl : './handler/admin-handler.js'
 service DTEEnergyAdminPortal {
 
-  entity ApplicationDetail as projection on db.ApplicationDetail actions{
+  entity ApplicationDetail as projection on db.ApplicationDetail {
+    AppId,
+    AccountDetailRefId.FirstName,
+    AccountDetailRefId.LastName,
+    AccountDetailRefId.CompanyName,
+    NumberOfTenants,
+    ApplicationStatus
+  } actions{
     function GenerateUrl() returns String;
   };
   
