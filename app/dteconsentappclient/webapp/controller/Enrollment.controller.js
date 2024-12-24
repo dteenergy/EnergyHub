@@ -378,26 +378,29 @@ sap.ui.define([
 						// Filtered the input and combobox controls
 						if (control instanceof sap.m.Input && !control.getId().includes("-popup-input") || control instanceof sap.m.ComboBox || control instanceof sap.m.MaskInput) {
 							
-										const userInput = control.getValue()
-										
-										// Validates that all required fields are filled; if a field is empty, marks it with an error state to indicate validation failure.
-										if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) {
-											if(isShowError){
-												control.setValueState("Error");
-												validationFlags[validationStatus] = false
-											}
-										}else{
-											control.setValueState("None");
-											/** If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
-											 *  If the email is invalid, set the corresponding validation flag to `false`.
-											 * */
-											if(control?.mProperties["type"] === "Email") {
-												if(!this.isValidEmail(control, userInput)) validationFlags[validationStatus] = false;
-											}
-											
-										}	
-							}		
-            });
+							const userInput = control.getValue()
+							
+							// Validates that all required fields are filled; if a field is empty, marks it with an error state to indicate validation failure.
+							if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) {
+								if(isShowError){
+									control.setValueState("Error");
+									validationFlags[validationStatus] = false
+								}
+							}else{
+								control.setValueState("None");
+								/** If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
+								 *  If the email is invalid, set the corresponding validation flag to `false`.
+								 * */
+								if(control?.mProperties["type"] === "Email") {
+									if(!this.isValidEmail(control, userInput)) validationFlags[validationStatus] = false;
+								}
+								
+							}	
+						}		
+          });
+
+					// Update the error message visibility status
+					this.setErrorMessageTripVisibility();
         },
 
 				/**
@@ -435,6 +438,8 @@ sap.ui.define([
 
 					// If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
 					if(oControl?.mProperties["type"] === "Email") this.isValidEmail(oControl, userInput);
+
+					if(Object.values(validationFlags).includes(false)) this.validate();
 				},
 
 				onSuggest: function(oEvent) {
@@ -484,12 +489,10 @@ sap.ui.define([
 
 				onSuggestionSelect: function (oEvent) {	
 					const oInputControl = oEvent.getSource();
-					console.log(oEvent);
 					
 					// Retrieve the bound path
 					const sBasePath = oInputControl.getBinding('value')?.getContext()?.getPath();
 					const id = sBasePath.split("/")[2];
-					console.log(sBasePath);
 					
 
 					// Handle item selection
@@ -556,6 +559,9 @@ sap.ui.define([
 							}
 						})
 					});
+
+					// Update the error message visibility status
+					this.setErrorMessageTripVisibility();
 				},
 
 				// Retrieve the all input data
