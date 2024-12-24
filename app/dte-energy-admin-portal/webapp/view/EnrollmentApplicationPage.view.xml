@@ -1,5 +1,76 @@
 <mvc:View xmlns:tnt="sap.tnt" controllerName="dteenergyadminportal.controller.EnrollmentApplicationPage"
-    xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m">
-    <Text text="Enrollment Application Page"></Text>
+  xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
+  xmlns="sap.m">
+  <Dialog id="linkDialog" title="Generated Link">
+    <HBox justifyContent="SpaceAround" alignItems="Center" width="500px" class="linkHBox">
+      <FlexBox width="70%">
+        <Text id="linkInput" text="" width="100%" />
+      </FlexBox>
+      <Button
+        width="30%"
+        icon="sap-icon://copy"
+        press="onCopyLink"
+        tooltip="Copy Link"
+        />
+    </HBox>
+    <endButton>
+        <Button text="Close" press="onCloseDialog" />
+    </endButton>
+  </Dialog>
+  <VBox id="idVbox">
+    <FlexBox id="idToolBar" wrap="Wrap" justifyContent="End" class="paddingAlignment">
+      <SearchField id="idFirstNameFilter" placeholder="Search for First Name..." liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
+      <SearchField id="idLastNameFilter" placeholder="Search for Last Name..." liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
+      <ComboBox id="idApplicationStatusFilter" selectedKey="" placeholder="Select Application Status" selectionChange="onFilterChange" class="rightPaddingAlignment">
+        <items>
+            <core:Item key="" text="All"/>
+            <core:Item key="New" text="New"/>
+            <core:Item key="Accepted" text="Accepted"/>
+            <core:Item key="Rejected" text="Rejected"/>
+        </items>
+      </ComboBox>
+      <Button id="idP13nButton" icon="sap-icon://action-settings" press="setupPersonalization" tooltip="Settings"/>
+    </FlexBox>
+    <ScrollContainer id="_idScrollContainer" horizontal="true" vertical="false" width="100%" height="auto">
+      <Table id="idApplicationTable" items="{
+        path: 'MainModel>/ApplicationDetail',
+        parameters: {
+          $expand: 'AccountDetailRefId',
+          $select: 'AppId,AccountDetailRefId/FirstName,AccountDetailRefId/LastName,AccountDetailRefId/CompanyName,NumberOfTenants'
+        }
+      }" sticky="ColumnHeaders" width="100%" class="paddingAlignment">
+        <columns>
+          <Column width="150px"><header><Label text="Application Id"></Label></header></Column>
+          <Column width="150px"><header><Label text="First Name"></Label></header></Column>
+          <Column width="150px"><header><Label text="Last Name"></Label></header></Column>
+          <Column width="150px"><header><Label text="Company Name"></Label></header></Column>
+          <Column width="150px"><header><Label text="Number of Tenants"></Label></header></Column>
+          <Column width="150px"><header><Label text="Application Status"></Label></header></Column>
+          <Column width="150px"><header><Label text="Number of Consents Recieved"></Label></header></Column>
+          <Column width="150px"><header><Label text=""></Label></header></Column>
+        </columns>
+          <items>
+            <ColumnListItem id="idColumnListItem" press="navToSourceSystemObjectPage">
+              <Text text="{MainModel>AppId}"></Text>
+              <Text text="{MainModel>AccountDetailRefId/FirstName}"></Text>
+              <Text text="{MainModel>AccountDetailRefId/LastName}"></Text>
+              <Text text="{MainModel>AccountDetailRefId/CompanyName}"></Text>
+              <Input value="{MainModel>NumberOfTenants}" change="onUpdateField" type="Number" placeholder="Number of tenants"></Input>
+              <ComboBox
+                selectedKey="{MainModel>ApplicationStatus}"
+                selectionChange="" change="onUpdateField">
+                <items>
+                  <core:Item key="New" text="New" />
+                  <core:Item key="Accepted" text="Accepted" />
+                  <core:Item key="Rejected" text="Rejected" />
+                </items>
+              </ComboBox>
+              <Text text="5"></Text>
+              <Button text="Generate URL" press="onGenerateUrlPress"></Button>
+            </ColumnListItem>
+            
+          </items>
+      </Table>
+    </ScrollContainer>
+  </VBox>
 </mvc:View>

@@ -114,6 +114,16 @@
       "viewName": "dteenergyadminportal.view.App",
       "type": "XML",
       "id": "App"
+    },
+    "config": {
+      "routerConfig": {
+        "localApi": {
+          "uri": "https://port4004-workspaces-ws-v8ppn.us20.applicationstudio.cloud.sap/"
+        },
+        "productionApi": {
+          "uri": ""
+        }
+      }
     }
   },
   "sap.cloud": {

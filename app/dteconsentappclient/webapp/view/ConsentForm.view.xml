@@ -31,7 +31,7 @@
 
                     <!-- Landlord Enrollment form Header -->
                     <FlexBox id="tenant-consent-form-header" class="enrollment-form-header">
-                        <Title xmlns="sap.m" titleStyle="H5" text="DTE Energy Data Hub Tenant Consent Form" wrapping="true" class="mainTitle"/>
+                        <Title xmlns="sap.m" titleStyle="H5" text="DTE Energy Data Hub Tenant Consent Form" wrapping="true" class="main-title"/>
                         <Text id ="instruction-one" class="sub-content" wrapping="true" 
                                 text="This Customer Consent Release Form permits DTE customers of record to delegate 
                                 certain rights to Authorized third parties concerning DTE Electric and DTE Gas account(s) 
@@ -55,23 +55,23 @@
 
                                 <layout:VerticalLayout class="vertical-layout">
                                     <Label text="FirstName" required="true"></Label>
-                                    <Input class="inputBox" liveChange="onLiveChange" type="Text" required="true" placeholder="Filled out by user" value="{oConsentModel>/ConsentDetail/ConsentFirstName}"/>
+                                    <Input class="inputBox" liveChange="onLiveChange" type="Text" required="true" value="{oConsentModel>/ConsentDetail/ConsentFirstName}"/>
                                 </layout:VerticalLayout>
 
                             <layout:VerticalLayout class="vertical-layout">
                                     <Label text="LastName"  required="true"></Label>
-                                    <Input class="inputBox" liveChange="onLiveChange" type="Text" required="true" placeholder="Filled out by user"  value="{oConsentModel>/ConsentDetail/ConsentLastName}"/>
+                                    <Input class="inputBox" liveChange="onLiveChange" type="Text" required="true"  value="{oConsentModel>/ConsentDetail/ConsentLastName}"/>
                             </layout:VerticalLayout>
                             
                                 <layout:VerticalLayout class="vertical-layout">
                                 <Label text="Site Address" required="true"></Label>
-                                <Input class="inputBox" liveChange="onLiveChange" type="Text" required="true" placeholder="Filled out by user" value="{oConsentModel>/ConsentDetail/ConsentAddress}"/>
-                                <Text class="address-helper-text" text="123 Main st." ></Text>
+                                <Input class="inputBox" liveChange="onLiveChange" type="Text" required="true" value="{oConsentModel>/ConsentDetail/ConsentAddress}"/>
+                                <Text class="address-helper-text" text="123 Main St." ></Text>
                             </layout:VerticalLayout>
                         
                             <layout:VerticalLayout  class="vertical-layout">
                                     <Label text="City"  required="true"></Label>
-                                    <Input class="inputBox" liveChange="onLiveChange" type="Text" required="true" placeholder="Filled out by user" value="{oConsentModel>/ConsentDetail/ConsentCity}"/>
+                                    <Input class="inputBox" liveChange="onLiveChange" type="Text" required="true" value="{oConsentModel>/ConsentDetail/ConsentCity}"/>
                             </layout:VerticalLayout>
 
                         <layout:VerticalLayout class="vertical-layout">
@@ -83,18 +83,18 @@
 
                             <layout:VerticalLayout class="vertical-layout">
                                     <Label text="Zipcode"  required="true"></Label>
-                                    <Input class="inputBox" liveChange="onLiveChange" type="Number" required="true" placeholder="Filled out by user" value="{oConsentModel>/ConsentDetail/ConsentZipcode}"/>
+                                    <Input class="inputBox" liveChange="onLiveChange" type="Number" required="true" value="{oConsentModel>/ConsentDetail/ConsentZipcode}"/>
                             </layout:VerticalLayout>  
 
                             <layout:VerticalLayout class="vertical-layout">
                                     <Label text="Account Number"  required="true"></Label>
-                                    <Input class="inputBox" liveChange="onLiveChange" type="Text" required="true" placeholder="Filled out by user" value="{oConsentModel>/ConsentDetail/ConsentAccountNumber}"></Input>
+                                    <Input class="inputBox" liveChange="onLiveChange" type="Text" required="true" value="{oConsentModel>/ConsentDetail/ConsentAccountNumber}"></Input>
                             </layout:VerticalLayout>      
 
                             <layout:VerticalLayout class="vertical-layout">
                                     <Label text="Email Address"  required="true"></Label>
                                     <Input
-                                    class="inputBox" liveChange="onLiveChange" type="Email" required="true" placeholder="Filled out by user" value="{oConsentModel>/ConsentDetail/ConsentEmailAddr}"></Input>
+                                    class="inputBox" liveChange="onLiveChange" type="Email" required="true" value="{oConsentModel>/ConsentDetail/ConsentEmailAddr}"></Input>
                             </layout:VerticalLayout>
                         </VBox>
 
@@ -102,7 +102,7 @@
 
                         <!-- Container to render the tenant auth and release section -->
                         <VBox id="tenant-auth-and-release-container-id" class="tenant-auth-and-release-container">
-                            <Title text="Tenant Authorization and Release" class="form-segment-heading" titleStyle="H6" />
+                            <Title text="Tenant Authorization and Release" class="form-segment-heading" titleStyle="H6" wrapping="true"/>
                         </VBox>
 
                         <VBox class="message-strip-container">
