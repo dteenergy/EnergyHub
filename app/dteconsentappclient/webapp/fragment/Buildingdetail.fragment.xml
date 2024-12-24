@@ -6,13 +6,13 @@
 		
 		<layout:VerticalLayout class="vertical-layout">
 			<Label text="Building Name" required="true"></Label>
-			<Input class="inputBox" value="{locationModel>BuildingName}" liveChange="onLiveChange" required="true" placeholder="Filled out by user">
+			<Input class="inputBox" value="{locationModel>BuildingName}" liveChange="onLiveChange" required="true">
 			</Input>
 		</layout:VerticalLayout>
 
 		<layout:VerticalLayout class="vertical-layout">
 			<Label text="Account Number" required="true"></Label>
-			<Input class="inputBox" value="{locationModel>AccountNumber}" liveChange="onLiveChange" required="true" placeholder="Filled out by user"></Input>
+			<Input class="inputBox" value="{locationModel>AccountNumber}" liveChange="onLiveChange" required="true"></Input>
 		</layout:VerticalLayout>
 
 		<layout:VerticalLayout class="vertical-layout">
@@ -20,27 +20,27 @@
 			<Input
 				value="{locationModel>Address}"
 				showSuggestion="true"
-				placeholder="Filled out by user"
 				suggestionItemSelected="onSuggestionSelect"
 				suggest="onSuggest"
 				suggestionItems="{
 				path: 'locationModel>suggestions'}"
-				required="true">
+				required="true"
+				filterSuggests="false">
 				<suggestionItems>
 					<core:Item text="{locationModel>fullAddress}" key="{locationModel>id}" />
 				</suggestionItems>
     		</Input>
-      <Text class="address-helper-text" text="123 Main st."></Text>
+      <Text class="address-helper-text" text="123 Main St."></Text>
 		</layout:VerticalLayout>
 
 		<layout:VerticalLayout class="vertical-layout">
 			<Label text="Address Line 2"></Label>
-			<Input class="inputBox" value="{locationModel>AddrLineTwo}" placeholder="Filled out by user"></Input>
+			<Input class="inputBox" value="{locationModel>AddrLineTwo}"></Input>
 		</layout:VerticalLayout>
 
 		<layout:VerticalLayout class="vertical-layout">
 			<Label text="City" required="true"></Label>
-			<Input class="inputBox" value="{locationModel>City}" liveChange="onLiveChange" required="true" placeholder="Filled out by user"></Input>
+			<Input class="inputBox" value="{locationModel>City}" liveChange="onLiveChange" required="true"></Input>
 		</layout:VerticalLayout>
 
 
@@ -53,7 +53,7 @@
 		
 		<layout:VerticalLayout class="vertical-layout">
 			<Label text="Zipcode" required="true"></Label>
-			<Input class="inputBox" value="{locationModel>Zipcode}" type="Number" liveChange="onLiveChange" required="true" placeholder="Filled out by user"/>
+			<Input class="inputBox" value="{locationModel>Zipcode}" type="Number" liveChange="onLiveChange" required="true"/>
 		</layout:VerticalLayout>
 	
 	</VBox>

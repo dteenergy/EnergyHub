@@ -11,6 +11,9 @@ sap.ui.define([
          * @public
          */
         onInit() {
+            const { url } = this.getApiConfig();
+            this.SERVERHOST = url;
+
             // Get the VBox id (mainContent)
             const oVBox = this.byId("mainContent");
 
@@ -19,6 +22,7 @@ sap.ui.define([
 
             // Dynamically create and add the new view for default HomePage
             sap.ui.core.mvc.XMLView.create({
+                viewData: {baseUrl: this.SERVERHOST},
                 viewName: `dteenergyadminportal.view.HomePage`
             }).then(function (oView) {
                 oVBox.addItem(oView);
@@ -45,6 +49,7 @@ sap.ui.define([
 
             // Dynamically create and add the new view as per click the menu
             sap.ui.core.mvc.XMLView.create({
+                viewData: {baseUrl: this.SERVERHOST},
                 viewName: `dteenergyadminportal.view.${selectedKey}` // Example: Home, Profile, Preferences
             }).then(function (oView) {
                 oVBox.addItem(oView);
