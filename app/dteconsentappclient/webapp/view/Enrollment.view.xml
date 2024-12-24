@@ -23,7 +23,7 @@
                         <!-- Account Information -->
                         <VBox id="account-info-container" fitContainer="true" class="account-info-container">
                             <FormattedText 
-                                htmlText="&lt;p style='letter-spacing: .7px; margin-top: 15px;'&gt; &lt;span style='font-weight: 600; font-size: 16px;'&gt;Account Information&lt;/span&gt; (as it appears on customer’s monthly DTE Energy bill)&lt;/p&gt;"  
+                                htmlText="&lt;p style='letter-spacing: .7px; margin-top: 15px;'&gt; &lt;span style='font-weight: 600; font-size: 18px;'&gt;Account Information&lt;/span&gt; (as it appears on customer’s monthly DTE Energy bill)&lt;/p&gt;"  
                             ></FormattedText>
 
                             <l:VerticalLayout class="vertical-layout">
@@ -137,7 +137,7 @@
                         </VBox>
                     </VBox>
 
-                    <Button id="add-building-detail" text=" + Add Another Location" press="onAddAnotherLocation" class="customize-button add-loc" ></Button>
+                    <Button id="add-building-detail" text=" + Add Another Location" press="onAddAnotherLocation" class="customize-button outline-button" ></Button>
 
                     <!-- Enrollment form customer authorization -->
                     <VBox id="auth-info-container" fitContainer="true" width="100%" class="auth-contact-info-container">
