@@ -111,6 +111,7 @@ sap.ui.define([
 				// Get the bound model
 				const oConsentModel = this.getView().getModel("oConsentModel");
 
+				// To checks the condition and call the DTE address End point to get the suggestion list
 				ConsentAddressSuggestion.onConsentAddrSuggestion(sValue, oConsentModel, this.DTEAddressValidationUrl);
 			},
 
@@ -336,7 +337,7 @@ sap.ui.define([
 				// Validate form details 
 				this.validate();
 
-				// update the error message visibility status.
+				// Update the error message visibility status.
 				this.setErrorMessageTripVisibility();
 
 				// To call the backend service and store the consent data

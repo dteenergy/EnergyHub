@@ -432,7 +432,7 @@ sap.ui.define([
 					// Validates if a field has value, if it is remove the error state
 					if(userInput?.trim() !== "" && oControl?.mProperties['required']) {
 						oControl.setValueState("None");
-					}else{						
+					}else{
 						oControl.setValueState("Error");
 					}
 
@@ -489,7 +489,7 @@ sap.ui.define([
 
 				onSuggestionSelect: function (oEvent) {	
 					const oInputControl = oEvent.getSource();
-					
+
 					// Retrieve the bound path
 					const sBasePath = oInputControl.getBinding('value')?.getContext()?.getPath();
 					const id = sBasePath.split("/")[2];
@@ -523,6 +523,7 @@ sap.ui.define([
 							oLocationModel.setProperty(`${sBasePath}/Zipcode`, +oAddressParts[4]);
 						}
 
+						// After set the address property revalidate the whole container input data
 						if(!validationFlags["locationDetailsValidation"]) this.validateBuildingDetails("building-detail-main-container");
 					}
 				},
