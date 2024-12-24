@@ -1,11 +1,30 @@
-/* Enter your custom styles here */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap');
+
 body {
   margin: 0;
   padding: 0;
   overflow: hidden; /* Prevent double scrolling */
-  font-family: 'Open Sans';
 }
 
+:root {
+  --sapFontFamily: 'Open Sans', sans-serif;
+  --sapFontFamilyHeader: 'Open Sans', sans-serif; /* For Titles */
+  --sapFontFamilyMonospace: 'Open Sans', sans-serif; /* For Monospace Text */
+  --sapFontSemiboldDuplexFamily: 'Open Sans', sans-serif;
+  --sapFontBoldWeight: 600;
+}
+
+.sapMTitle, .sapMText{
+  font-family: 'Open Sans', sans-serif;
+}
+.sapMTitle{
+  font-weight: var(--sapFontBoldWeight);
+  font-size: 25px;
+}
+.sapMLabel{
+  font-weight: var(--sapFontBoldWeight);
+  font-size: 14px;
+}
 .sapUiBody{
   font-family: 'Open Sans';
 }

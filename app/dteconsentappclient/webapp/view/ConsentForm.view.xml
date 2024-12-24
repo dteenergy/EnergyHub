@@ -102,7 +102,7 @@
 
                         <!-- Container to render the tenant auth and release section -->
                         <VBox id="tenant-auth-and-release-container-id" class="tenant-auth-and-release-container">
-                            <Title text="Tenant Authorization and Release" class="form-segment-heading" titleStyle="H6" />
+                            <Title text="Tenant Authorization and Release" class="form-segment-heading" titleStyle="H6" wrapping="true"/>
                         </VBox>
 
                         <VBox class="message-strip-container">
