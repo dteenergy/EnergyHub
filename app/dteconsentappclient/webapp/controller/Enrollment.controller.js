@@ -170,10 +170,11 @@ sap.ui.define([
 
 							// Add the remove button
 							buildingInfoLabel.addStyleClass("location-inner-title");
+
 								const removeButton = new sap.m.Button({
 									text: 'Remove This Location',
 									press: function (oEvent) { that.removeBuilding(oEvent)}
-								});
+								}).addStyleClass("outline-button");
 								
 								flexItems = [buildingInfoLabel, removeButton];
 							}
@@ -471,7 +472,7 @@ sap.ui.define([
 											", " + addr.city + ", " + addr.state + ", " + addr.zipCode
 							};
 						});
-
+						
 						// Set the suggestions array to the model
 						oLocationModel.setProperty(`/locations/${id}/suggestions`, aSuggestions);
 					})
@@ -631,7 +632,7 @@ sap.ui.define([
                   that.onAddAnotherLocation(),
                   that.oConfirmationDialog.close()
                 }
-              }).addStyleClass("dialog-add-loc"),
+              }).addStyleClass("outline-button"),
               new sap.m.Text({text: 'I don’t have another location.'}),
               new sap.m.Button({
                 text: 'Continue Submission',
