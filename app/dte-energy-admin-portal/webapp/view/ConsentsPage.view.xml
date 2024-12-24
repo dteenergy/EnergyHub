@@ -1,5 +1,40 @@
-<mvc:View xmlns:tnt="sap.tnt" controllerName="dteenergyadminportal.controller.ConsentsPage"
+<mvc:View xmlns:core="sap.ui.core" xmlns:tnt="sap.tnt" controllerName="dteenergyadminportal.controller.ConsentsPage"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m">
-    <Text  text="Consents Page"></Text>
+    <VBox id="idVbox">
+        <FlexBox id="idToolbar" justifyContent="End">
+            <SearchField id="idFilterFirstName" placeholder="Search for the Firstname" liveChange="onFilterChange"></SearchField>
+            <SearchField id="idFilterLastName" placeholder="Search for the Lastname" liveChange="onFilterChange"></SearchField>
+            <ComboBox id="idFilterAppStatus" selectedKey="" placeholder="Select Application Status" selectionChange="onFilterChange" change="handleResponse">
+            <items>
+                <core:Item key="New" text="New"></core:Item>
+                <core:Item key="Approved" text="Approved"></core:Item>
+                <core:Item key="Rejected" text="Rejected"></core:Item>
+            </items>
+            </ComboBox>
+            <Button id="idP13nButton" icon="sap-icon://action-settings" press="setupPersonalization" tooltip="Settings"/>
+        </FlexBox>
+        <ScrollContainer id="_idScrollContainer" width="100%" height="auto">
+        <Table id="idApplicationConsentTable" items="{MainModel>/ApplicationDetail}">
+        <columns>
+            <Column width="150px"><header><Label text="First Name"></Label></header></Column>
+            <Column width="150px"><header><Label text="Last Name"></Label></header></Column>
+            <Column width="150px"><header><Label text="Application Status"></Label></header></Column>
+        </columns>
+        <items>
+            <ColumnListItem id="ColumnListItem">
+                <Text text="{MainModel>/ApplicationDetail/NoOfConsentReceived}"></Text>
+                <Text text="{MainModel>AccountDetailRefId/LastName}"></Text>
+                <ComboBox selectedKey="{MainModel>ApplicationStatus}" selectionChange="">
+                <items>
+                    <core:Item key="New" text="New" />
+                    <core:Item key="Accepted" text="Accepted" />
+                    <core:Item key="Rejected" text="Rejected" />
+                </items>
+                </ComboBox>
+            </ColumnListItem>
+        </items>
+        </Table>
+        </ScrollContainer>
+    </VBox>
 </mvc:View>
