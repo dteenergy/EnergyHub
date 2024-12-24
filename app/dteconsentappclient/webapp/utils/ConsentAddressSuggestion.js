@@ -10,12 +10,12 @@ sap.ui.define([], function(){
      * @param {String} sDTEAddressValidationUrl address validation url
      */
     onConsentAddrSuggestion: function(sAddrValue, oConsentModel, sDTEAddressValidationUrl){
-      // Trigger API call after 3 characters
+      /**
+       * Trigger API call after 3 characters
+       * To get the suggestion address from DTE Address validation api
+       */
       if (sAddrValue.length > 3) 
-       
-      // To get the suggestion address from DTE Address validation api
-       this.fetchAddressSuggestions(sAddrValue, oConsentModel, sDTEAddressValidationUrl);
-
+        this.fetchAddressSuggestions(sAddrValue, oConsentModel, sDTEAddressValidationUrl);
     },
 
     /**
