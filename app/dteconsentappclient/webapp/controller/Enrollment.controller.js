@@ -381,19 +381,18 @@ sap.ui.define([
 							const userInput = control.getValue()
 							
 							// Validates that all required fields are filled; if a field is empty, marks it with an error state to indicate validation failure.
-							if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) {
+							if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) 
 								if(isShowError){
 									control.setValueState("Error");
 									validationFlags[validationStatus] = false
 								}
-							}else{
+							else{
 								control.setValueState("None");
 								/** If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
 								 *  If the email is invalid, set the corresponding validation flag to `false`.
 								 * */
-								if(control?.mProperties["type"] === "Email") {
+								if(control?.mProperties["type"] === "Email") 
 									if(!this.isValidEmail(control, userInput)) validationFlags[validationStatus] = false;
-								}
 								
 							}	
 						}		
@@ -416,7 +415,7 @@ sap.ui.define([
 						oControl.setValueState("None");
 						return true;
 					}else{
-						// If emailId is Invalid , set the value state to "Error" with an error message
+						// If emailId is invalid , set the value state to "Error" with an error message
 						oControl.setValueState("Error");
 						oControl.setValueStateText("Please provide proper Email");
 						return false;
@@ -553,9 +552,7 @@ sap.ui.define([
 									if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) {
 										control.setValueState("Error");
 										validationFlags["locationDetailsValidation"] = false;
-									}else{
-										control.setValueState("None");
-									}
+									}else control.setValueState("None");
 								}		
 							}
 						})

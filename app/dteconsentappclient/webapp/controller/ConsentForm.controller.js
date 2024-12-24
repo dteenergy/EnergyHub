@@ -103,24 +103,28 @@ sap.ui.define([
 					});
 			},
 
-			// Get the value while suggest
+			/**
+			 * Get the value while suggest
+			 * @param {Object} oEvent 
+			 */
 			onConsentAddrSuggest: function(oEvent){
 				// Get the entered value from input
-				const sValue = oEvent.getParameter("suggestValue");
+				const sAddrValue = oEvent.getParameter("suggestValue");
 
 				// Get the bound model
 				const oConsentModel = this.getView().getModel("oConsentModel");
 
 				// To checks the condition and call the DTE address End point to get the suggestion list
-				ConsentAddressSuggestion.onConsentAddrSuggestion(sValue, oConsentModel, this.DTEAddressValidationUrl);
+				ConsentAddressSuggestion.onConsentAddrSuggestion(sAddrValue, oConsentModel, this.DTEAddressValidationUrl);
 			},
 
 			// To get the selected item from the suggestion list
 			onConsentAddrSugSelected: function(oEvent){
-			// Get the bound model
+			
+				// Get the bound model
 			const oConsentModel = this.getView().getModel("oConsentModel");
 			
-			// To get the selected item from the suggestion list and binding with accoring field in the model
+			// To get the selected item from the suggestion list and binding with according field in the model
 			ConsentAddressSuggestion.onConsentAddrSugSelected(oEvent, oConsentModel);
 			
 			// Validate the form fields 
@@ -158,7 +162,7 @@ sap.ui.define([
 					oControl.setValueState("None");
 					return true;
 				}else{
-					// If emailId is Invalid , set the value state to "Error" with an error message
+					// If emailId is invalid , set the value state to "Error" with an error message
 					oControl.setValueState("Error");
 					oControl.setValueStateText("Please provide proper Email");
 					return false;
@@ -327,6 +331,7 @@ sap.ui.define([
 			}
 		},
 
+		// To validate the all form fields 
 		validate: function(){
 			this.validateFormDetails("tenant-consent-form-container-id", true, "tenantInformationValidation");
 			this.validateFormDetails("tenant-auth-and-release-container-id",true,"consentAuthDetailValidation");

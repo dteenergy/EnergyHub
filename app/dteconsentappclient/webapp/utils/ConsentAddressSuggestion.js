@@ -5,14 +5,16 @@ sap.ui.define([], function(){
 
     /**
      * Get the input value while suggest
-     * @param {String} sValue user input
+     * @param {String} sAddrValue user input
      * @param {Object} oConsentModel consent model
      * @param {String} sDTEAddressValidationUrl address validation url
      */
-    onConsentAddrSuggestion: function(sValue, oConsentModel, sDTEAddressValidationUrl){
-      if (sValue.length > 3) {
-        // Trigger API call after 3 characters
-       this.fetchAddressSuggestions(sValue, oConsentModel, sDTEAddressValidationUrl);
+    onConsentAddrSuggestion: function(sAddrValue, oConsentModel, sDTEAddressValidationUrl){
+      // Trigger API call after 3 characters
+      if (sAddrValue.length > 3) {
+       
+      // To get the suggestion address from DTE Address validation api
+       this.fetchAddressSuggestions(sAddrValue, oConsentModel, sDTEAddressValidationUrl);
      }
 
     },
