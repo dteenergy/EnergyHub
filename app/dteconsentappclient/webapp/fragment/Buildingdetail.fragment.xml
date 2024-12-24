@@ -25,7 +25,7 @@
 				suggestionItems="{
 				path: 'locationModel>suggestions'}"
 				required="true"
-				>
+				filterSuggests="false">
 				<suggestionItems>
 					<core:Item text="{locationModel>fullAddress}" key="{locationModel>id}" />
 				</suggestionItems>

@@ -29,10 +29,11 @@ sap.ui.define([
 
         // Get the env data (Navigation page url)
         getEnv:  async function(){
-            const {TenantConfirmationPageUrl, ErrorPageUrl} = await this.getEnvironmentVariables();
+            const {TenantConfirmationPageUrl, ErrorPageUrl, DTEAddressValidationUrl} = await this.getEnvironmentVariables();
             
             this.TenantConfirmationPageUrl = TenantConfirmationPageUrl;
             this.ErrorPageUrl = ErrorPageUrl;
+            this.DTEAddressValidationUrl = DTEAddressValidationUrl;
         },
 
         /**
@@ -58,7 +59,8 @@ sap.ui.define([
                             applicationId: appId,
                             url: this.SERVERHOST,
                             TenantConfirmationPageUrl: this.TenantConfirmationPageUrl,
-                            ErrorPageUrl: this.ErrorPageUrl
+                            ErrorPageUrl: this.ErrorPageUrl,
+                            DTEAddressValidationUrl: this.DTEAddressValidationUrl
                         },
                     }).then(function(oView) {
                         // Render the created view into the App view
