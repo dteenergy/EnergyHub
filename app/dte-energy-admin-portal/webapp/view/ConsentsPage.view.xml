@@ -1,7 +1,7 @@
 <mvc:View xmlns:core="sap.ui.core" xmlns:tnt="sap.tnt" controllerName="dteenergyadminportal.controller.ConsentsPage"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m">
-    <VBox id="idVbox">
+    <VBox id="idVbox" justifyContent="Center">
         <FlexBox id="idToolbar" justifyContent="End">
             <SearchField id="idFilterFirstName" placeholder="Firstname" liveChange="onFilterChange"></SearchField>
             <SearchField id="idFilterLastName" placeholder="Lastname" liveChange="onFilterChange"></SearchField>
@@ -16,7 +16,7 @@
             <Button id="idP13nButton" icon="sap-icon://action-settings" press="setupPersonalization" tooltip="Settings"/>
         </FlexBox>
         <ScrollContainer id="_idScrollContainer" width="100%" height="auto">
-        <Table id="idApplicationConsentTable" items="{MainModel>/ApplicationConsent}">
+        <Table id="idApplicationConsentTable" items="{MainModel>/ApplicationConsent}" width="90%" class='consentPageTable'>
         <columns>
             <Column width="150px"><header><Label text="First Name"></Label></header></Column>
             <Column width="150px"><header><Label text="Last Name"></Label></header></Column>
