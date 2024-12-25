@@ -1,7 +1,6 @@
 const cds = require('@sap/cds');
 const { v4: uuidv4 } = require('uuid');
 const { emptyField } = require("./regex-and-error-message");
-const { string } = require('@sap/cds/lib/core/classes');
 
 /**
  * Function: Create the Enrollment form details
@@ -15,7 +14,7 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
     const { ApplicationDetail, BuildingDetail, AccountDetail, ConsentDetail } = req?.data;
     // Get the flag and prefix for the application number from environment variables
     const prefixFlag = process.env.APPNUM_PREFIX_ENABLED;
-    const envTag = process.env.APPNUM_PREFIX;
+    const appNumPrefix = process.env.APPNUM_PREFIX;
 
     // Fetch the last ApplicationNumber from ApplicationDetail entity
     const applicationDetail = await SELECT.from(entity.ApplicationDetail)
@@ -27,7 +26,7 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
     let applicationNumber;
 
     // Check the recent application number exists
-    if (applicationDetail.length > 0) {
+    if (applicationDetail?.length > 0) {
       const lastAppNumber = applicationDetail[0]?.ApplicationNumber;
 
       // Extract the numeric part and increment it
@@ -36,11 +35,11 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
 
       // Generate the new application number with or without prefix.
       const incrementedNumberStr = incrementedNumber.toString().padStart(9, '0');
-      applicationNumber = prefixFlag === 'Y' ? envTag.concat(incrementedNumberStr) : incrementedNumberStr;
+      applicationNumber = prefixFlag === 'Y' ? appNumPrefix.concat(incrementedNumberStr) : incrementedNumberStr;
     } else {
       // If no previous application number, start from 1 with or without the prefix
       const incrementedNumberStr = '000000001';
-      applicationNumber = prefixFlag === 'Y' ? envTag.concat(incrementedNumberStr) : incrementedNumberStr;
+      applicationNumber = prefixFlag === 'Y' ? appNumPrefix.concat(incrementedNumberStr) : incrementedNumberStr;
     }
 
     // Generate a unique AppId using uuid
