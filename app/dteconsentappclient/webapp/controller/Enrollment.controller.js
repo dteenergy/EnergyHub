@@ -109,6 +109,11 @@ sap.ui.define([
         this.loadAuthAndRelease();
       },
 
+				// After render the view then scroll to the top of the page
+				onAfterRendering: function(){
+					window.scrollTo(0, 0);
+				},
+
 			  // Get the navigation page url and address validation url
 				getEnv:  async function(){
 					const {DTEAddressValidationUrl, LandlordConfirmationPageUrl, ErrorPageUrl} = await this.getEnvironmentVariables();
