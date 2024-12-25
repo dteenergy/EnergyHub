@@ -111,7 +111,10 @@ sap.ui.define([
 
 				// After render the view then scroll to the top of the page
 				onAfterRendering: function(){
-					window.scrollTo(0, 0);
+					const newElement = that.byId("landloard-form-main-container")?.getDomRef(); 
+								if (newElement) {
+										newElement.scrollIntoView({ behavior: "smooth", block: "center" });
+								}
 				},
 
 			  // Get the navigation page url and address validation url
