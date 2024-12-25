@@ -71,10 +71,10 @@ sap.ui.define([
 
       // Add filters if values are not empty
       if (sFirstName)
-        aFilters.push(new Filter({path: "AccountDetailRefId/FirstName", operator: FilterOperator.Contains, value1: sFirstName, caseSensitive: false}));
+        aFilters.push(new Filter({path: "FirstName", operator: FilterOperator.Contains, value1: sFirstName, caseSensitive: false}));
 
       if (sLastName)
-        aFilters.push(new Filter({path: "AccountDetailRefId/LastName", operator: FilterOperator.Contains, value1: sLastName, caseSensitive: false}));
+        aFilters.push(new Filter({path: "LastName", operator: FilterOperator.Contains, value1: sLastName, caseSensitive: false}));
 
       if (sApplicationStatus) aFilters.push(new Filter("ApplicationStatus", FilterOperator.EQ, sApplicationStatus));
 
