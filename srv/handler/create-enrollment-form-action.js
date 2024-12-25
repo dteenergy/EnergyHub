@@ -13,7 +13,7 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
 
   try {
     const { ApplicationDetail, BuildingDetail, AccountDetail, ConsentDetail } = req?.data;
-    // Set the Application Number Env variable
+    // Get the flag and prefix for the application number from environment variables
     const prefixFlag = process.env.APPNUM_PREFIX_ENABLED;
     const envTag = process.env.APPNUM_PREFIX;
 
@@ -23,6 +23,7 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
       .orderBy('ApplicationNumber desc')
       .limit(1);
 
+    // Store the application number
     let applicationNumber;
 
     // Check the recent application number exists
