@@ -46,14 +46,6 @@
         </Table>
         </ScrollContainer>
         <Toolbar>
-         <OverflowToolbar >
-                <ToolbarSpacer />
-                <Button id="BtnFirstPressId" icon="sap-icon://close-command-field" press="onFirstPress" tooltip="First" enabled="{NavModel>/firstPageBtnEnable}" />
-                <Button id="BtnPreviousPressId" icon="sap-icon://navigation-left-arrow" press="onPreviousPress" tooltip="Previous" enabled="{NavModel>/firstPageBtnEnable}" />
-                <Text id="PageTextId" text="{i18n>page} {MainModel>/ApplicationConsent} {i18n>of} {MainModel>/totalPages}" />
-                <Button id="BtnNextPressId" icon="sap-icon://navigation-right-arrow" press="onNextPress" tooltip="Next" enabled="{NavModel>/nextPageBtnEnable}" />
-                <Button id="BtnLastPressId" icon="sap-icon://open-command-field" press="onLastPress" tooltip="Last" enabled="{NavModel>/nextPageBtnEnable}" />
-            </OverflowToolbar>
   </Toolbar>
     </VBox>
 </mvc:View>
