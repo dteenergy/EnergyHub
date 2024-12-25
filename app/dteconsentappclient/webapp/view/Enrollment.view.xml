@@ -38,15 +38,20 @@
                             </l:VerticalLayout>
 
                             <l:VerticalLayout class="vertical-layout">
+                                <Label text="Address Line 2"></Label>
+                                <Input class="inputBox" type="Text" value="{oEnrollModel>/AccountDetail/CompanyAddrLineTwo}"></Input>
+                            </l:VerticalLayout>
+
+                            <l:VerticalLayout class="vertical-layout">
                                 <Label id="company-city" labelFor="city"  text="City"></Label>
                                 <Input id="city" class="inputBox" type="Text" required="true" liveChange="onLiveChange"  value="{oEnrollModel>/AccountDetail/City}"/>
                             </l:VerticalLayout>
 
                             <l:VerticalLayout class="vertical-layout">
-                            <Label id="company-state" labelFor="state-list" text="State"></Label>
-                            <ComboBox id="state-list" required="true" change="onLiveChange" width="100%" items="{path: 'ostateValuesModel>/'}" placeholder="Make a Selection" selectedKey="{oEnrollModel>/AccountDetail/State}">
-                                <core:Item text="{ostateValuesModel>text}" key="{ostateValuesModel>text}"></core:Item>
-                            </ComboBox>
+                                <Label id="company-state" labelFor="state-list" text="State"></Label>
+                                <ComboBox id="state-list" required="true" change="onLiveChange" width="100%" items="{path: 'ostateValuesModel>/'}" placeholder="Make a Selection" selectedKey="{oEnrollModel>/AccountDetail/State}">
+                                    <core:Item text="{ostateValuesModel>text}" key="{ostateValuesModel>text}"></core:Item>
+                                </ComboBox>
                             </l:VerticalLayout>
 
                             <l:VerticalLayout id="zip-code" class="vertical-layout">
@@ -96,6 +101,11 @@
                             <Label id="site-contact-address-label" labelFor="site-contact-address-value" text="Site Address"></Label>
                             <Input id="site-contact-address-value" class="inputBox" liveChange="onLiveChange" type="Text" required="true" value="{oEnrollModel>/AccountDetail/SiteAddress}"/>
                             <Text id="site-contact-address-helper-text" class="address-helper-text" text="123 Main St."></Text>
+                        </l:VerticalLayout>
+
+                        <l:VerticalLayout class="vertical-layout">
+                            <Label text="Address Line 2"></Label>
+                            <Input class="inputBox" type="Text" value="{oEnrollModel>/AccountDetail/SiteAddrLineTwo}"></Input>
                         </l:VerticalLayout>
                         
                         <l:VerticalLayout id="site-contact-city" class="vertical-layout">
