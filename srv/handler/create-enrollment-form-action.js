@@ -1,6 +1,7 @@
 const cds = require('@sap/cds');
 const { v4: uuidv4 } = require('uuid');
 const {emptyField} = require("./regex-and-error-message");
+const { string } = require('@sap/cds/lib/core/classes');
 
 /**
  * Function: Create the Enrollment form details
@@ -12,7 +13,18 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
 
   try {
     const { ApplicationDetail, BuildingDetail, AccountDetail, ConsentDetail } = req?.data;
+    const prefixFlag = process.env.APPNUMBER_PREFIX;
+    const envTag = process.env.DEPLOYED_ENVIRONMENT;
 
+    const applicationDetail = await SELECT.from(entity.ApplicationDetail);
+
+    if(!applicationDetail) throw {statusCode:404, 'message':'Application details are not found'}
+    let applicationNumber;
+    const count = applicationDetail?.length + 1;
+    if(prefixFlag === 'Y') { applicationNumber = envTag.concat(count.toString().padStart(9, '0'));}
+    else applicationNumber = `${count.toString().padStart(9, '0')}`
+    console.log(applicationNumber, envTag);
+    
     // Generate a unique AppId using uuid
     const AppId = uuidv4();
 
@@ -34,11 +46,14 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
       return { 'statusCode': 400, 'message': emptyField?.message}
 
     // Assign AppId to Application Detail, Building Detail, Account Detail and Application Consent 
-    applicationParsedData.AppId = AppId
+    applicationParsedData.AppId = AppId;
+    applicationParsedData.ApplicationNumber = applicationNumber;
     buildingParsedData?.map(detail => detail.AppRefId_AppId = AppId);
     accountParsedData.AppRefId_AppId = AppId;
     consentParsedData.map(consent => consent.AppRefId_AppId = AppId);
 
+    console.log(applicationParsedData);
+    
     // Insert Enrollment Form details to database
     const applicationDetailResult = await tx.run(INSERT.into(entity?.ApplicationDetail).entries(applicationParsedData));
     const buildingDetailResult = await tx.run(INSERT.into(entity?.BuildingDetail).entries(buildingParsedData));
