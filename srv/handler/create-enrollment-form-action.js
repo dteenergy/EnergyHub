@@ -16,15 +16,22 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
     const prefixFlag = process.env.APPNUMBER_PREFIX;
     const envTag = process.env.DEPLOYED_ENVIRONMENT;
 
-    const applicationDetail = await SELECT.from(entity.ApplicationDetail);
+    const applicationDetail = await SELECT.from(entity.ApplicationDetail).columns('ApplicationNumber').orderBy('ApplicationNumber desc')
 
+    console.log(applicationDetail);
     
-    let applicationNumber;
-    const count = applicationDetail?.length + 1;
+
+    let appNumber;
+    if(applicationDetail.length){
+      let data = applicationDetail[0].ApplicationNumber;
+      if(data === '') appNumber = data.toString().padStart(9, '0');
+    }
+    // let applicationNumber;
+    // const count = applicationDetail?.length + 1;
     
-    if(prefixFlag === 'Y') { applicationNumber = envTag.concat(count.toString().padStart(9, '0'));}
-    else applicationNumber = `${count.toString().padStart(9, '0')}`
-    console.log(applicationNumber, envTag);
+    // if(prefixFlag === 'Y') { applicationNumber = envTag.concat(count.toString().padStart(9, '0'));}
+    // else applicationNumber = `${count.toString().padStart(9, '0')}`
+    // console.log(applicationNumber, envTag);
     
     // Generate a unique AppId using uuid
     const AppId = uuidv4();
@@ -48,7 +55,7 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
 
     // Assign AppId to Application Detail, Building Detail, Account Detail and Application Consent 
     applicationParsedData.AppId = AppId;
-    applicationParsedData.ApplicationNumber = applicationNumber;
+    // applicationParsedData.ApplicationNumber = applicationNumber;
     buildingParsedData?.map(detail => detail.AppRefId_AppId = AppId);
     accountParsedData.AppRefId_AppId = AppId;
     consentParsedData.map(consent => consent.AppRefId_AppId = AppId);

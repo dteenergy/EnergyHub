@@ -11,7 +11,6 @@ entity ApplicationDetail{
     CreatedAt: Timestamp @cds.on.insert: $now;
     UpdatedAt: Timestamp @cds.on.insert: $now  @cds.on.update: $now;
     ApplicationNumber : String;
-    virtual NoOfConsentReceived : Integer;
 
     AccountDetailRefId : Association to one AccountDetail on AccountDetailRefId.AppRefId = $self;
     BuildingDetailRefId : Association to many BuildingDetail on BuildingDetailRefId.AppRefId = $self;
