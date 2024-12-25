@@ -1,4 +1,8 @@
 const cds = require('@sap/cds');
+const path = require('path');
+const fs = require('fs');
+const handlebars = require('handlebars')
+const {Readable} = require ('stream');
 
 const createEnrollmentFormDetail = require('./create-enrollment-form-action');
 const createConsentFormDetail = require('./create-consent-form-action');
@@ -21,16 +25,35 @@ module.exports = cds.service.impl(async function (srv) {
 
 		// Validate the Application Id
 		srv.on('validateApplicationId', async (req) => {
+			const res = req._.res;
 			try {
 				// Method to validate the app id.
-				const validationStatus = validateApplicationId(req, this.entities);
+				const validationRes = await validateApplicationId(req, this.entities);
 
-				return validationStatus;
+				if(validationRes.statusCode != 200) {
+					throw {statusCode: 500, error: 'Unexcept error happended'}
+				}
+				
+				// Read consent form view XML file
+				const fileName = 'ConsentForm.view.xml';
+				const filePath = path.join(__dirname, '../view', fileName);
+				const consentFormViewBuffer = fs.readFileSync(filePath).toString();
+	
+				// Templating
+				const template = handlebars.compile(consentFormViewBuffer);
+				const result = template();
+
+				res.setHeader('Content-disposition', `attachment; filename=${fileName}`);
+				res.setHeader('Content-type', 'application/xml');
+
+				return result;
 			} catch (e) {
 				if (e.statusCode) {
-					return { statusCode: e.statusCode, message: e.message }
+					res.status(e.statusCode)
+					return e.message 
 				}
-				return { statusCode: 500, 'error': 'Failed to verify the App ID.' }
+				res.status(500);
+				return e.message;
 			}
 		}),
 
