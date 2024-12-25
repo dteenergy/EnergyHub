@@ -1,6 +1,6 @@
 const cds = require('@sap/cds');
 const { v4: uuidv4 } = require('uuid');
-const {emptyField} = require("./regex-and-error-message");
+const { emptyField } = require("./regex-and-error-message");
 const { string } = require('@sap/cds/lib/core/classes');
 
 /**
@@ -13,26 +13,35 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
 
   try {
     const { ApplicationDetail, BuildingDetail, AccountDetail, ConsentDetail } = req?.data;
-    const prefixFlag = process.env.APPNUMBER_PREFIX;
-    const envTag = process.env.DEPLOYED_ENVIRONMENT;
+    // Set the Application Number Env variable
+    const prefixFlag = process.env.APPNUM_PREFIX_ENABLED;
+    const envTag = process.env.APPNUM_PREFIX;
 
-    const applicationDetail = await SELECT.from(entity.ApplicationDetail).columns('ApplicationNumber').orderBy('ApplicationNumber desc')
+    // Fetch the last ApplicationNumber from ApplicationDetail entity
+    const applicationDetail = await SELECT.from(entity.ApplicationDetail)
+      .columns('ApplicationNumber')
+      .orderBy('ApplicationNumber desc')
+      .limit(1);
 
-    console.log(applicationDetail);
-    
+    let applicationNumber;
 
-    let appNumber;
-    if(applicationDetail.length){
-      let data = applicationDetail[0].ApplicationNumber;
-      if(data === '') appNumber = data.toString().padStart(9, '0');
+    // Check the recent application number exists
+    if (applicationDetail.length > 0) {
+      const lastAppNumber = applicationDetail[0]?.ApplicationNumber;
+
+      // Extract the numeric part and increment it
+      const numericPart = parseInt(lastAppNumber?.slice(1)) || 0;
+      const incrementedNumber = numericPart + 1;
+
+      // Generate the new application number with or without prefix.
+      const incrementedNumberStr = incrementedNumber.toString().padStart(9, '0');
+      applicationNumber = prefixFlag === 'Y' ? envTag.concat(incrementedNumberStr) : incrementedNumberStr;
+    } else {
+      // If no previous application number, start from 1 with or without the prefix
+      const incrementedNumberStr = '000000001';
+      applicationNumber = prefixFlag === 'Y' ? envTag.concat(incrementedNumberStr) : incrementedNumberStr;
     }
-    // let applicationNumber;
-    // const count = applicationDetail?.length + 1;
-    
-    // if(prefixFlag === 'Y') { applicationNumber = envTag.concat(count.toString().padStart(9, '0'));}
-    // else applicationNumber = `${count.toString().padStart(9, '0')}`
-    // console.log(applicationNumber, envTag);
-    
+
     // Generate a unique AppId using uuid
     const AppId = uuidv4();
 
@@ -45,23 +54,21 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
     const excludedFields = ['AddrLineTwo'];
 
     // Check the building details fields contains the empty value
-    const buildingDetailFieldCheck = buildingParsedData?.map(buildingDetail => {     
+    const buildingDetailFieldCheck = buildingParsedData?.map(buildingDetail => {
       return Object.keys(buildingDetail).filter(key => !excludedFields.includes(key)).some(key => buildingDetail[key] === "");
-    }); 
-    
+    });
+
     if ((Object.keys(applicationParsedData)?.length === 0) || (buildingParsedData?.length === 0) ||
       (buildingDetailFieldCheck.includes(true)) || (Object.keys(accountParsedData)?.length === 0) || (consentParsedData?.length === 0))
-      return { 'statusCode': 400, 'message': emptyField?.message}
+      return { 'statusCode': 400, 'message': emptyField?.message }
 
     // Assign AppId to Application Detail, Building Detail, Account Detail and Application Consent 
     applicationParsedData.AppId = AppId;
-    // applicationParsedData.ApplicationNumber = applicationNumber;
+    applicationParsedData.ApplicationNumber = applicationNumber;
     buildingParsedData?.map(detail => detail.AppRefId_AppId = AppId);
     accountParsedData.AppRefId_AppId = AppId;
     consentParsedData.map(consent => consent.AppRefId_AppId = AppId);
 
-    console.log(applicationParsedData);
-    
     // Insert Enrollment Form details to database
     const applicationDetailResult = await tx.run(INSERT.into(entity?.ApplicationDetail).entries(applicationParsedData));
     const buildingDetailResult = await tx.run(INSERT.into(entity?.BuildingDetail).entries(buildingParsedData));
@@ -72,13 +79,13 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
     if ((applicationDetailResult?.results?.length > 0) && (buildingDetailResult?.results?.length > 0)
       && (accountDetailResult?.results?.length > 0) && (consentDetailResult?.results?.length > 0))
       return { statusCode: 200, message: "Thank you! Your DTE Energy Data Hub enrollment is confirmed. " };
-      
+
   } catch (error) {
-      console.log("Enrollment Form Creation Error :", error);
-      return {
-        statusCode: 500,
-        message: error.message
-      };  
+    console.log("Enrollment Form Creation Error :", error);
+    return {
+      statusCode: 500,
+      message: error.message
+    };
   }
 };
 
