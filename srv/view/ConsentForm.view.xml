@@ -51,21 +51,21 @@
 						<VBox class= "tenant-consent-form-main-container">
 						
 							<VBox id="tenant-consent-form-container-id" class="tenant-consent-form-container">
-									<Title id="tenant-info-title" titleStyle="H6" class="form-segment-heading" text="Tenant Information"></Title>
+								<Title id="tenant-info-title" titleStyle="H6" class="form-segment-heading" text="Tenant Information"></Title>
+
+									<layout:VerticalLayout class="vertical-layout">
+											<Label text="FirstName" required="true"></Label>
+											<Input class="inputBox" liveChange="onLiveChange" type="Text" required="true"  value="{oConsentModel>/ConsentDetail/ConsentFirstName}"/>
+									</layout:VerticalLayout>
 
 										<layout:VerticalLayout class="vertical-layout">
-												<Label text="FirstName" required="true"></Label>
-												<Input class="inputBox" liveChange="onLiveChange" type="Text" required="true"  value="{oConsentModel>/ConsentDetail/ConsentFirstName}"/>
+														<Label text="LastName"  required="true"></Label>
+														<Input class="inputBox" liveChange="onLiveChange" type="Text" required="true"   value="{oConsentModel>/ConsentDetail/ConsentLastName}"/>
 										</layout:VerticalLayout>
-
-											<layout:VerticalLayout class="vertical-layout">
-															<Label text="LastName"  required="true"></Label>
-															<Input class="inputBox" liveChange="onLiveChange" type="Text" required="true"   value="{oConsentModel>/ConsentDetail/ConsentLastName}"/>
-											</layout:VerticalLayout>
-											
-													<layout:VerticalLayout class="vertical-layout">
-													<Label text="Address" required="true"></Label>
-													<Input 
+										
+												<layout:VerticalLayout class="vertical-layout">
+												<Label text="Address" required="true"></Label>
+												<Input 
 													class="inputBox" 
 													type="Text" 
 													required="true" 
@@ -75,68 +75,72 @@
 													suggestionItemSelected="onConsentAddrSugSelected"
 													filterSuggests="false"
 													suggestionItems="{
-									path: 'oConsentModel>/ConsentDetail/suggestions'}" 
-													>
-													<suggestionItems>
-															<core:Item text="{oConsentModel>fullAddress}" key="{oConsentModel>id}" ></core:Item>
-													</suggestionItems>
-													</Input>
-													<Text class="address-helper-text" text="123 Main st." ></Text>
-											</layout:VerticalLayout>
-									
-											<layout:VerticalLayout  class="vertical-layout">
-															<Label text="City"  required="true"></Label>
-															<Input class="inputBox" liveChange="onLiveChange" type="Text" required="true"  value="{oConsentModel>/ConsentDetail/ConsentCity}"/>
-											</layout:VerticalLayout>
+														path: 'oConsentModel>/ConsentDetail/suggestions'}" 
+												>
+												<suggestionItems>
+														<core:Item text="{oConsentModel>fullAddress}" key="{oConsentModel>id}" ></core:Item>
+												</suggestionItems>
+												</Input>
+												<Text class="address-helper-text" text="123 Main st." ></Text>
+										</layout:VerticalLayout>
 
-											<layout:VerticalLayout class="vertical-layout">
-													<Label labelFor="consent-form-state-list" text="State"  required="true"></Label>
-													<ComboBox required="true" items="{oLocationStateModel>/}" change="onLiveChange" width="100%" placeholder="Make a Selection" selectedKey="{oConsentModel>/ConsentDetail/ConsentState}">
-																	<core:Item text="{oLocationStateModel>text}" key="{oLocationStateModel>text}"></core:Item>
-													</ComboBox>
-											</layout:VerticalLayout>
+										<layout:VerticalLayout class="vertical-layout">
+											<Label text="Address Line 2"></Label>
+											<Input class="inputBox" type="Text" value="{oConsentModel>/ConsentDetail/AddrLineTwo}"></Input>
+										</layout:VerticalLayout>
+								
+										<layout:VerticalLayout  class="vertical-layout">
+											<Label text="City"  required="true"></Label>
+											<Input class="inputBox" liveChange="onLiveChange" type="Text" required="true"  value="{oConsentModel>/ConsentDetail/ConsentCity}"/>
+										</layout:VerticalLayout>
 
-											<layout:VerticalLayout class="vertical-layout">
-															<Label text="Zipcode"  required="true"></Label>
-															<Input class="inputBox" liveChange="onLiveChange" type="Number" required="true"  value="{oConsentModel>/ConsentDetail/ConsentZipcode}"/>
-											</layout:VerticalLayout>  
+										<layout:VerticalLayout class="vertical-layout">
+												<Label labelFor="consent-form-state-list" text="State"  required="true"></Label>
+												<ComboBox required="true" items="{oLocationStateModel>/}" change="onLiveChange" width="100%" placeholder="Make a Selection" selectedKey="{oConsentModel>/ConsentDetail/ConsentState}">
+																<core:Item text="{oLocationStateModel>text}" key="{oLocationStateModel>text}"></core:Item>
+												</ComboBox>
+										</layout:VerticalLayout>
 
-											<layout:VerticalLayout class="vertical-layout">
-															<Label text="Account Number"  required="true"></Label>
-															<Input class="inputBox" liveChange="onLiveChange" type="Text" required="true"  value="{oConsentModel>/ConsentDetail/ConsentAccountNumber}"></Input>
-											</layout:VerticalLayout>      
+										<layout:VerticalLayout class="vertical-layout">
+											<Label text="Zipcode"  required="true"></Label>
+											<Input class="inputBox" liveChange="onLiveChange" type="Number" required="true"  value="{oConsentModel>/ConsentDetail/ConsentZipcode}"/>
+										</layout:VerticalLayout>  
 
-											<layout:VerticalLayout class="vertical-layout">
-															<Label text="Email Address"  required="true"></Label>
-															<Input
-															class="inputBox" liveChange="onLiveChange" type="Email" required="true"  value="{oConsentModel>/ConsentDetail/ConsentEmailAddr}"></Input>
-											</layout:VerticalLayout>
-									</VBox>
+										<layout:VerticalLayout class="vertical-layout">
+											<Label text="Account Number"  required="true"></Label>
+											<Input class="inputBox" liveChange="onLiveChange" type="Text" required="true"  value="{oConsentModel>/ConsentDetail/ConsentAccountNumber}"></Input>
+										</layout:VerticalLayout>      
 
-									<Toolbar class="hr-line" height="1px" width="100%"></Toolbar>
+										<layout:VerticalLayout class="vertical-layout">
+											<Label text="Email Address"  required="true"></Label>
+											<Input class="inputBox" liveChange="onLiveChange" type="Email" required="true"  value="{oConsentModel>/ConsentDetail/ConsentEmailAddr}"></Input>
+										</layout:VerticalLayout>
+							</VBox>
 
-									<!-- Container to render the tenant auth and release section -->
-									<VBox id="tenant-auth-and-release-container-id" class="tenant-auth-and-release-container">
-											<Title text="Tenant Authorization and Release" class="form-segment-heading" titleStyle="H6" />
-									</VBox>
+							<Toolbar class="hr-line" height="1px" width="100%"></Toolbar>
 
-									<VBox class="message-strip-container">
-									<MessageStrip
-											text="Complete these fields to continue."
-											type="Error"
-											showIcon="true"
-											visible="{oErrorVisibilityModel>/isInputInValid}"
-											class="error-message-strip"
-									>
-									</MessageStrip>
-									<MessageStrip
-											text="Confirm you have read the terms and conditions."
-											type="Error"
-											showIcon="true"
-											visible="{oErrorVisibilityModel>/isTermsAndConditionVerifiedStatus}"
-											class="error-message-strip"
-									>
-									</MessageStrip>
+							<!-- Container to render the tenant auth and release section -->
+							<VBox id="tenant-auth-and-release-container-id" class="tenant-auth-and-release-container">
+									<Title text="Tenant Authorization and Release" class="form-segment-heading" titleStyle="H6" />
+							</VBox>
+
+							<VBox class="message-strip-container">
+								<MessageStrip
+										text="Complete these fields to continue."
+										type="Error"
+										showIcon="true"
+										visible="{oErrorVisibilityModel>/isInputInValid}"
+										class="error-message-strip"
+								>
+								</MessageStrip>
+								<MessageStrip
+										text="Confirm you have read the terms and conditions."
+										type="Error"
+										showIcon="true"
+										visible="{oErrorVisibilityModel>/isTermsAndConditionVerifiedStatus}"
+										class="error-message-strip"
+								>
+								</MessageStrip>
 							</VBox>
 
 							<Button text="Submit" type="Emphasized" press="onSubmit" class="customize-button submit-action"></Button>
