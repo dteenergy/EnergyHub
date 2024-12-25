@@ -25,7 +25,7 @@
 				suggestionItems="{
 				path: 'locationModel>suggestions'}"
 				required="true"
-				>
+				filterSuggests="false">
 				<suggestionItems>
 					<core:Item text="{locationModel>fullAddress}" key="{locationModel>id}" />
 				</suggestionItems>
@@ -35,14 +35,13 @@
 
 		<layout:VerticalLayout class="vertical-layout">
 			<Label text="Address Line 2"></Label>
-			<Input class="inputBox" value="{locationModel>AddrLineTwo}"></Input>
+			<Input class="inputBox" type="Text" value="{locationModel>AddrLineTwo}"></Input>
 		</layout:VerticalLayout>
 
 		<layout:VerticalLayout class="vertical-layout">
 			<Label text="City" required="true"></Label>
 			<Input class="inputBox" value="{locationModel>City}" liveChange="onLiveChange" required="true"></Input>
 		</layout:VerticalLayout>
-
 
 		<layout:VerticalLayout class="vertical-layout">
 			<Label text="State" required="true"></Label>

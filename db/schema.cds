@@ -11,6 +11,7 @@ entity ApplicationDetail{
     CreatedAt: Timestamp @cds.on.insert: $now;
     UpdatedAt: Timestamp @cds.on.insert: $now  @cds.on.update: $now;
     ApplicationNumber : String;
+    virtual NoOfConsentReceived : Integer;
 
     AccountDetailRefId : Association to one AccountDetail on AccountDetailRefId.AppRefId = $self;
     BuildingDetailRefId : Association to many BuildingDetail on BuildingDetailRefId.AppRefId = $self;
@@ -36,6 +37,7 @@ entity AccountDetail {
     key AccountDetailId : UUID;
     CompanyName : String not null;
     CompanyAddress : String not null;
+    CompanyAddrLineTwo: String;
     City : String not null;
     State : String not null;
     Zipcode : String not null;
@@ -46,6 +48,7 @@ entity AccountDetail {
     LastName : String not null;
     SiteContactTitle : String not null;
     SiteAddress : String not null;
+    SiteAddrLineTwo: String;
     SiteCity : String not null;
     SiteState : String not null;
     SiteZipcode : String not null;
@@ -63,6 +66,7 @@ entity ApplicationConsent {
     LastName : String not null;
     SiteContactTitle : String;
     Address: String not null;
+    AddrLineTwo: String;
     City: String not null;
     State: String not null;
     Zipcode : String not null;

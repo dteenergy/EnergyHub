@@ -19,7 +19,6 @@ body {
 }
 .sapMTitle{
   font-weight: var(--sapFontBoldWeight);
-  font-size: 25px;
 }
 .sapMLabel{
   font-weight: var(--sapFontBoldWeight);
