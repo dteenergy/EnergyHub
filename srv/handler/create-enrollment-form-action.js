@@ -18,9 +18,10 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
 
     const applicationDetail = await SELECT.from(entity.ApplicationDetail);
 
-    if(!applicationDetail) throw {statusCode:404, 'message':'Application details are not found'}
+    
     let applicationNumber;
     const count = applicationDetail?.length + 1;
+    
     if(prefixFlag === 'Y') { applicationNumber = envTag.concat(count.toString().padStart(9, '0'));}
     else applicationNumber = `${count.toString().padStart(9, '0')}`
     console.log(applicationNumber, envTag);
