@@ -1,3 +1,4 @@
+
 sap.ui.define([
     "dteconsentappclient/controller/BaseController",
     "sap/ui/core/mvc/XMLView"
@@ -45,16 +46,18 @@ sap.ui.define([
                 const validationUrl = this.SERVERHOST + `service/validateApplicationId?encrAppId=${appId}`
 
                 // Post request to create a tenant consent.
-                const {data} = await axios.get(validationUrl);
+                const response = await axios.get(validationUrl);
                 
                 /**
                  * Check requested Application ID is valid
                  * If true, then render Consent Form View 
                  * Else navigate to AEM error page
                  */
-                if(data.value.statusCode === 200){
+                if(response.status === 200){
+                    const consentFormView = response.data.value;
                     XMlView.create({
-                        viewName: "dteconsentappclient.view.ConsentForm",
+                        type: 'XML',
+                        definition: consentFormView,
                         viewData: {
                             applicationId: appId,
                             url: this.SERVERHOST,
