@@ -15,7 +15,16 @@ service DTEEnergyAdminPortal {
     function GenerateUrl() returns String;
   };
   
-  entity ApplicationConsent as projection on db.ApplicationConsent;
+  entity ApplicationConsent as projection on db.ApplicationConsent {
+    ApplicationConsentId,
+    FirstName,
+    LastName,
+    EmailAddr,
+    AuthDate,
+    AuthTitle,
+    ConsentStatus,
+    AppRefId.AppId
+  };
   entity BuildingDetail as projection on db.BuildingDetail;
   entity AccountDetail as projection on db.AccountDetail;
   
