@@ -8,6 +8,7 @@ entity ApplicationDetail{
     SignatureSignedDate : Date not null;
     CreatedAt: Timestamp @cds.on.insert: $now;
     UpdatedAt: Timestamp @cds.on.insert: $now  @cds.on.update: $now;
+    virtual NoOfConsentReceived : Integer;
 
     AccountDetailRefId : Association to one AccountDetail on AccountDetailRefId.AppRefId = $self;
     BuildingDetailRefId : Association to many BuildingDetail on BuildingDetailRefId.AppRefId = $self;
