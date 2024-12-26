@@ -31,7 +31,7 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
         // If data contains value
         if (Array.isArray(data)) {
           for (const el of data) {
-            // Check the ReferenceId with the AppId
+            // Check the ReferenceId with the AppId and ConsentStatus
             const ConsentDetail = await cds.run(
               SELECT.from(ApplicationConsent)
                 .where({ AppRefId_AppId: el.AppId, ConsentStatus: ['New', 'Accepted'] })
