@@ -34,8 +34,10 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
             // Check the ReferenceId with the AppId
             const ConsentDetail = await cds.run(
               SELECT.from(ApplicationConsent)
-                .where({ AppRefId_AppId: el.AppId })
+                .where({ AppRefId_AppId: el.AppId, ConsentStatus: ['New', 'Accepted'] })
             )
+            console.log(ConsentDetail);
+            
             el.NoOfConsentReceived = ConsentDetail?.length;
           }
         }
