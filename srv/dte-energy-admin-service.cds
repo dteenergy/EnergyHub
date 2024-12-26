@@ -29,15 +29,18 @@ service DTEEnergyAdminPortal {
   };
 
   entity BuildingDetail as projection on db.BuildingDetail {
+    BuildingId,
     BuildingName,
+    AccountNumber,
     Address,
     AddrLineTwo,
     City,
     State,
     Zipcode,
     AppRefId.AccountDetailRefId.FirstName,
-    AppRefId.AccountDetailRefId.LastName
+    AppRefId.AccountDetailRefId.LastName,
   };
+
   entity AccountDetail as projection on db.AccountDetail;
   
 }
