@@ -11,22 +11,36 @@ service DTEEnergyAdminPortal {
     AccountDetailRefId.CompanyName,
     NumberOfTenants,
     ApplicationStatus,
-    NoOfConsentReceived
+    NoOfConsentReceived,
+    ApplicationNumber
   } actions{
     function GenerateUrl() returns String;
   };
   
   entity ApplicationConsent as projection on db.ApplicationConsent {
-    ApplicationConsentId,
     FirstName,
     LastName,
     EmailAddr,
     AuthDate,
     AuthTitle,
     ConsentStatus,
-    AppRefId.AppId
+    AppRefId.AppId,
+    AppRefId.ApplicationNumber
   };
-  entity BuildingDetail as projection on db.BuildingDetail;
+
+  entity BuildingDetail as projection on db.BuildingDetail {
+    BuildingId,
+    BuildingName,
+    AccountNumber,
+    Address,
+    AddrLineTwo,
+    City,
+    State,
+    Zipcode,
+    AppRefId.AccountDetailRefId.FirstName,
+    AppRefId.AccountDetailRefId.LastName,
+  };
+
   entity AccountDetail as projection on db.AccountDetail;
   
 }

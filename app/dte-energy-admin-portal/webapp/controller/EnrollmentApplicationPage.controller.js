@@ -71,10 +71,10 @@ sap.ui.define([
 
       // Add filters if values are not empty
       if (sFirstName)
-        aFilters.push(new Filter({path: "AccountDetailRefId/FirstName", operator: FilterOperator.Contains, value1: sFirstName, caseSensitive: false}));
+        aFilters.push(new Filter({path: "FirstName", operator: FilterOperator.Contains, value1: sFirstName, caseSensitive: false}));
 
       if (sLastName)
-        aFilters.push(new Filter({path: "AccountDetailRefId/LastName", operator: FilterOperator.Contains, value1: sLastName, caseSensitive: false}));
+        aFilters.push(new Filter({path: "LastName", operator: FilterOperator.Contains, value1: sLastName, caseSensitive: false}));
 
       if (sApplicationStatus) aFilters.push(new Filter("ApplicationStatus", FilterOperator.EQ, sApplicationStatus));
 
@@ -167,6 +167,26 @@ sap.ui.define([
       updateModel.submitBatch('CustomGroupId')
         .then(() => MessageToast.show("Updated successfully!"))
         .catch((err) => MessageToast.show("Updation failed : ", err))
+    },
+    navToBuildingDetailPage: async function (oEvent) {
+      // Get the selected row's binding context
+      const oSelectedItem = oEvent.getSource();
+      const oContext = oSelectedItem.getBindingContext("MainModel");
+      const AppId = oContext.getProperty("AppId"); // Retrieve the AppId from the context
+
+      // Get the VBox id (EnrollmentApplicationPage)
+      const oVBox = this.byId("idApplicationVBox");
+
+      // Clear the existing content
+      oVBox.destroyItems();
+
+      // Dynamically create and add the new view for building detail page
+      sap.ui.core.mvc.XMLView.create({
+          viewData: {baseUrl: this.baseUrl, AppId: AppId},
+          viewName: `dteenergyadminportal.view.BuildingDetailPage`
+      }).then(function (oView) {
+          oVBox.addItem(oView);
+      });
     }
   });
 });
