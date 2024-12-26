@@ -3,9 +3,8 @@ sap.ui.define([
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
     "sap/m/MessageToast",
-     "sap/ui/comp/personalization/Controller",
-     "sap/m/MessageBox",
-], (BaseController, Filter, FilterOperator, MessageToast, PersonalizationController, MessageBox) => {
+    "sap/ui/comp/personalization/Controller"
+], (BaseController, Filter, FilterOperator, MessageToast, PersonalizationController) => {
     "use strict";
 
     return BaseController.extend("dteenergyadminportal.controller.ConsentsPage", {
@@ -24,12 +23,12 @@ sap.ui.define([
             // Set the newly created model as the "MainModel" for this view
             this.getView().setModel(model, "MainModel");
 
-
             this.oPersonalizationController = new PersonalizationController({
                 table: this.byId("idApplicationConsentTable")
               });
         },
-         /**
+        
+        /**
          * Opens the personalization dialog for the application table.
         *
         * @public
@@ -51,7 +50,7 @@ sap.ui.define([
 
             // Validate the binding
             if(!oBinding){
-                MessageBox.error("Binding for the table is not found");
+                console.error("Binding for the table is not found");
                 
                 return;
             }
@@ -80,7 +79,6 @@ sap.ui.define([
 
             // Bind the combined filter or clear filter.
             oBinding.filter(filterData.length > 0 ? combinedFilter : [])
-            
         },
 
          /**

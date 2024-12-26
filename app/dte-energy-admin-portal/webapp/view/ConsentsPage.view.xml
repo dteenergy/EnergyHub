@@ -18,7 +18,7 @@
         <ScrollContainer width="100%" vertical="true" class="applicationConsentTable paddingAlignment">
         <Table id="idApplicationConsentTable" items="{MainModel>/ApplicationConsent}" width="100%" class='consentPageTable' sticky="ColumnHeaders">
         <columns>
-            <Column width="100px"><header><Label text="App Number"></Label></header></Column>
+            <Column width="150px"><header><Label text="Application Number"></Label></header></Column>
             <Column width="150px"><header><Label text="First Name"></Label></header></Column>
             <Column width="150px"><header><Label text="Last Name"></Label></header></Column>
             <Column width="150px"><header><Label text="Consent Email"></Label></header></Column>
