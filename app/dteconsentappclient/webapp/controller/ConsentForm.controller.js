@@ -253,7 +253,7 @@ sap.ui.define([
 		 */
 		convertDateFormat: function(dateString) {
 			// Split the input date by '/'
-			const [day, month, year] = dateString.split('/');
+			const [month, day, year] = dateString.split('/');
 	
 			// Rearrange to 'YYYY-MM-DD' and return
 			return `${year}-${month}-${day}`;

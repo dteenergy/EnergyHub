@@ -109,14 +109,6 @@ sap.ui.define([
         this.loadAuthAndRelease();
       },
 
-				// After render the view then scroll to the top of the page
-				onAfterRendering: function(){
-					const newElement = that.byId("landloard-form-main-container")?.getDomRef(); 
-								if (newElement) {
-										newElement.scrollIntoView({ behavior: "smooth", block: "center" });
-								}
-				},
-
 			  // Get the navigation page url and address validation url
 				getEnv:  async function(){
 					const {DTEAddressValidationUrl, LandlordConfirmationPageUrl, ErrorPageUrl} = await this.getEnvironmentVariables();
@@ -480,12 +472,18 @@ sap.ui.define([
 						// Construct the response as needed format 
 						const aSuggestions = response.data.results.map(function (item) {
 							const addr = item.serviceAddress;
+							
+							let addressLineTwo = null;
+							// Check and concatenate secondaryCode and secondaryNumber
+							if (addr.secondaryCode) addressLineTwo = (addressLineTwo || "") + addr.secondaryCode;
+							if (addr.secondaryNumber) addressLineTwo = (addressLineTwo || "") + " " + addr.secondaryNumber;
 
 							return {
-								id: item.premiseId, // Unique identifier
-								address: addr.houseNumber + ", " + addr.streetName,
-								fullAddress: addr.houseNumber + ", " + addr.streetName + 
-											", " + addr.city + ", " + addr.state + ", " + addr.zipCode
+								"id": item.premiseId, // Unique identifier
+								"address": addr.houseNumber + ", " + addr.streetName,
+								"addressLineTwo":  addressLineTwo,
+								"fullAddress":`${addr.houseNumber}, ${addr.streetName}, 
+								 ${addressLineTwo ? addressLineTwo + "," : ''} ${addr.city}, ${addr.state}, ${addr.zipCode}`
 							};
 						});
 						
@@ -523,15 +521,21 @@ sap.ui.define([
 						if (oSelectedAddress) {
 							// Extract the relevant address parts
 							const oAddressParts = oSelectedAddress.fullAddress.split(",");
-
-							const sShortAddress = oAddressParts[0].trim()+ ", " + oAddressParts[1].trim();
 	
 							// Set properties to the 'locationModel'
 							const oLocationModel = this.getView().getModel("locationModel");
 							
-							oLocationModel.setProperty(`${sBasePath}/Address`, sShortAddress);
-							oLocationModel.setProperty(`${sBasePath}/City`, oAddressParts[2].trim());
-							oLocationModel.setProperty(`${sBasePath}/Zipcode`, +oAddressParts[4]);
+							oLocationModel.setProperty(`${sBasePath}/Address`, oSelectedAddress.address);
+							
+							if(oSelectedAddress.addressLineTwo) {
+								oLocationModel.setProperty(`${sBasePath}/AddrLineTwo`, oSelectedAddress.addressLineTwo);
+								oLocationModel.setProperty(`${sBasePath}/City`, oAddressParts[3].trim());
+								oLocationModel.setProperty(`${sBasePath}/Zipcode`, +oAddressParts[5]);
+							}else{
+								oLocationModel.setProperty(`${sBasePath}/AddrLineTwo`, "");
+								oLocationModel.setProperty(`${sBasePath}/City`, oAddressParts[2].trim());
+								oLocationModel.setProperty(`${sBasePath}/Zipcode`, +oAddressParts[4]);
+							}
 						}
 
 						// After set the address property revalidate the whole container input data
@@ -619,7 +623,7 @@ sap.ui.define([
 
 				convertDateFormat: function(dateString) {
 					// Split the input date by '/'
-					const [day, month, year] = dateString.split('/');
+					const [month, day, year] = dateString.split('/');
 			
 					// Rearrange to 'YYYY-MM-DD' and return
 					return `${year}-${month}-${day}`;
