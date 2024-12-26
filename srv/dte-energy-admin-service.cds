@@ -12,13 +12,12 @@ service DTEEnergyAdminPortal {
     NumberOfTenants,
     ApplicationStatus,
     NoOfConsentReceived,
-    ApplicationNumber,
-    ApplicationConsentRefId.ApplicationConsentId
+    ApplicationNumber
   } actions{
     function GenerateUrl() returns String;
   };
   
-  entity ApplicationConsent as projection on db.ApplicationConsent{
+  entity ApplicationConsent as projection on db.ApplicationConsent {
     ApplicationConsentId,
     FirstName,
     LastName,
