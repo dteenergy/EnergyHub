@@ -2,9 +2,9 @@
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m">
     <VBox id="iVbox" class="consentAppTable">
-        <FlexBox id="idToolbar" justifyContent="End">
-            <SearchField id="idFilterFirstName" placeholder="Firstname" liveChange="onFilterChange"></SearchField>
-            <SearchField id="idFilterLastName" placeholder="Lastname" liveChange="onFilterChange"></SearchField>
+        <FlexBox id="idToolbar" justifyContent="End" class="paddingAlignment" wrap="Wrap">
+            <SearchField id="idFilterFirstName" placeholder="Firstname" liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
+            <SearchField id="idFilterLastName" placeholder="Lastname" liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
             <ComboBox id="idConsentStatusFilter" selectedKey="" placeholder="Consent Status" selectionChange="onFilterChange" class="rightPaddingAlignment">
                 <items>
                     <core:Item key="" text="All"/>
@@ -15,8 +15,8 @@
             </ComboBox>
             <Button id="idP1nButton" icon="sap-icon://action-settings" press="setupPersonalization" tooltip="Settings"/>
         </FlexBox>
-        <ScrollContainer width="100%" vertical="true" class="applicationConsentTable">
-        <Table id="idApplicationConsentTable" items="{MainModel>/ApplicationConsent}" width="90%" class='consentPageTable' sticky="ColumnHeaders">
+        <ScrollContainer width="100%" vertical="true" class="applicationConsentTable paddingAlignment">
+        <Table id="idApplicationConsentTable" items="{MainModel>/ApplicationConsent}" width="100%" class='consentPageTable' sticky="ColumnHeaders">
         <columns>
             <Column width="100px"><header><Label text="App Number"></Label></header></Column>
             <Column width="150px"><header><Label text="First Name"></Label></header></Column>
@@ -47,7 +47,5 @@
         </items>
         </Table>
         </ScrollContainer>
-        <Toolbar>
-  </Toolbar>
     </VBox>
 </mvc:View>
