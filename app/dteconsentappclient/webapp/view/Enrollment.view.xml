@@ -66,7 +66,7 @@
 
                             <l:VerticalLayout id="acc-manager-ph" class="vertical-layout">
                                 <Label id="company-account-manager-ph" labelFor="account-manager-ph" text="DTE Energy Account Manager Phone Number (if applicable)" wrapping="true"></Label>
-                                <Input id="account-manager-ph" class="inputBox" type="Number" value="{oEnrollModel>/AccountDetail/AcctMgrPhNo}" ></Input>
+                                <Input id="account-manager-ph" class="inputBox" type="Number" liveChange="onLiveChange" value="{oEnrollModel>/AccountDetail/AcctMgrPhoneNumber}" ></Input>
                             </l:VerticalLayout>
 
                             <Label id="has-participate" text="Do you already participate in the DTE Energy Data Hub Program?" wrapping="true"></Label>
