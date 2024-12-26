@@ -18,6 +18,7 @@ service DTEEnergyAdminPortal {
   };
   
   entity ApplicationConsent as projection on db.ApplicationConsent {
+    ApplicationConsentId,
     FirstName,
     LastName,
     EmailAddr,
