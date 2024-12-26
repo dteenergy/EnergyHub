@@ -1,22 +1,16 @@
 <core:FragmentDefinition xmlns:f="sap.f" xmlns:core="sap.ui.core" xmlns= "sap.m" xmlns:tnt="sap.tnt" >
 
-     <!-- <tnt:ToolHeader id="header" class="admin-app-header"> -->
      <f:ShellBar 
      id="dteLogoContainer"
      homeIcon="images/DTE-logo.png"
      class="dteLogo"
      >
      <f:additionalContent>
-        <f:ShellBar id="dteAdminTitle" class="dteTitle" title="Admin Dashboard"></f:ShellBar>
+        <f:ShellBar id="dteAdminTitle" class="dteTitle" title="Admin Dashboard" secondTitle="heiek"></f:ShellBar>
      </f:additionalContent>
      <f:profile>
-      <Avatar src="images/profileIcon.png"></Avatar>
+      <Avatar src="images/profileIcon.png" class="profile"></Avatar>
     </f:profile>
      </f:ShellBar>
-        <!-- <VBox class="dteLogoContainer">
-            <Image id="dte-logo" src="images/DTE-logo.png" alt="DTE-Logo"></Image>
-        </VBox>
-        <Text text="Admin Dashboard" class="dteAdminTitle"></Text> -->
-    <!-- </tnt:ToolHeader> -->
 
 </core:FragmentDefinition>
