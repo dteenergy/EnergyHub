@@ -10,6 +10,8 @@ sap.ui.define([
       this.baseUrl = baseUrl;
       console.log(AppId);
       
+      this.byId("idAppId").setText(AppId);
+
       // Create an OData V4 model using the constructed service URL
       const model = new sap.ui.model.odata.v4.ODataModel({
         serviceUrl: `${this.baseUrl}admin/service/`,
@@ -29,12 +31,18 @@ sap.ui.define([
 
       // Apply a filter to fetch only BuildingDetail entries related to the selected AppId
       const oBinding = oTable.getBinding("items");
-      const oFilter = new sap.ui.model.Filter("AppRefId_AppId", "EQ", AppId);
+      const oFilter = new sap.ui.model.Filter("AppId", "EQ", AppId);
 
       if (oBinding) {
         oBinding.filter([oFilter]);
       }
     },
+    // onAfterRendering: async function () {
+    //   const oModel = this.getView().getModel("MainModel");
+    //   const aData = await oModel.requestObject("/BuildingDetail");
+    //   console.log(aData);
+      
+    // },
     /**
      * Opens the personalization dialog for the application table.
      *
