@@ -1,25 +1,8 @@
 <mvc:View xmlns:tnt="sap.tnt" controllerName="dteenergyadminportal.controller.BuildingDetailPage"
   xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
   xmlns="sap.m">
-  <!-- <VBox id="idBuildingVBox">
-    <Text text="Building Detail Page"></Text>
-    <ScrollContainer horizontal="true" vertical="false" width="100%" height="auto">
-      <Table id="idBuildingTable" items="{BuildingDetailModel>/BuildingDetail}" sticky="ColumnHeaders" width="100%" class="paddingAlignment">
-        <columns>
-          <Column width="150px"><header><Label text="Building Name"></Label></header></Column>
-        </columns>
-        <items>
-          <ColumnListItem>
-            <Text text="{BuildingDetailModel>BuildingName}"></Text>
-          </ColumnListItem>
-        </items>
-      </Table>
-    </ScrollContainer>
-  </VBox> -->
   <VBox id="idBuildingVBox">
     <FlexBox id="idBuildingToolBar" wrap="Wrap" justifyContent="End" class="paddingAlignment">
-      <Text text="{MainModel>/AppRefId_AppId}"></Text>
-      <Text text="{MainModel>/AppRefId_AppId/FirstName}"></Text>
       <!-- <SearchField id="idFirstNameFilter" placeholder="Search for First Name..." liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
       <SearchField id="idLastNameFilter" placeholder="Search for Last Name..." liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
       <ComboBox id="idApplicationStatusFilter" selectedKey="" placeholder="Select Application Status" selectionChange="onFilterChange" class="rightPaddingAlignment">
@@ -30,7 +13,9 @@
             <core:Item key="Rejected" text="Rejected"/>
         </items>
       </ComboBox> -->
+      <Text id="idAppId" text=""></Text>
       <Button id="idBuildingP13nButton" icon="sap-icon://action-settings" press="setupPersonalization" tooltip="Settings"/>
+      <Text id="idFirstName" text="{/FirstName}"></Text>
     </FlexBox>
     <ScrollContainer id="_idBuildingScrollContainer" horizontal="true" vertical="false" width="100%" height="auto">
       <Table id="idBuildingTable" items="{MainModel>/BuildingDetail}" sticky="ColumnHeaders" width="100%" class="paddingAlignment">
@@ -43,7 +28,7 @@
           <Column width="150px"><header><Label text="Zip-Code"></Label></header></Column>
           <Column width="150px"><header><Label text="Address2"></Label></header></Column>
           <Column width="150px"><header><Label text="Building Id"></Label></header></Column>
-          <!-- <Column width="150px"><header><Label text=""></Label></header></Column> -->
+          <Column width="150px"><header><Label text=""></Label></header></Column>
         </columns>
           <items>
             <ColumnListItem id="idBuildingColumnListItem">
@@ -65,6 +50,7 @@
               <Text text="{MainModel>Zipcode}"></Text>
               <Text text="{MainModel>AddrLineTwo}"></Text>
               <Text text="{MainModel>BuildingId}"></Text>
+              <Text text="{MainModel>FirstName}"></Text>
               <!-- <Button text="Generate URL" press="onGenerateUrlPress"></Button> -->
             </ColumnListItem>
           </items>
