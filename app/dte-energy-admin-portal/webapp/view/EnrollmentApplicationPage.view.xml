@@ -34,17 +34,19 @@
     <ScrollContainer id="_idScrollContainer" horizontal="true" vertical="false" width="100%" height="auto">
       <Table id="idApplicationTable" items="{MainModel>/ApplicationDetail}" sticky="ColumnHeaders" width="100%" class="paddingAlignment">
         <columns>
+          <Column width="150px"><header><Label text="Application Number"></Label></header></Column>
           <Column width="150px"><header><Label text="First Name"></Label></header></Column>
           <Column width="150px"><header><Label text="Last Name"></Label></header></Column>
           <Column width="150px"><header><Label text="Company Name"></Label></header></Column>
           <Column width="150px"><header><Label text="Number of Tenants"></Label></header></Column>
           <Column width="150px"><header><Label text="Application Status"></Label></header></Column>
-          <Column width="150px"><header><Label text="Number of Consents Recieved"></Label></header></Column>
+          <Column width="100px"><header><Label text="Number of Consents Recieved"></Label></header></Column>
           <Column width="150px"><header><Label text="Application Id"></Label></header></Column>
           <Column width="150px"><header><Label text=""></Label></header></Column>
         </columns>
           <items>
             <ColumnListItem id="idColumnListItem" type="Navigation" press="navToBuildingDetailPage">
+              <Text text="{MainModel>ApplicationNumber}"></Text>
               <Text text="{MainModel>FirstName}"></Text>
               <Text text="{MainModel>LastName}"></Text>
               <Text text="{MainModel>CompanyName}"></Text>

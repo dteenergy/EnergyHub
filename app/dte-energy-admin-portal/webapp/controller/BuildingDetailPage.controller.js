@@ -4,13 +4,42 @@ sap.ui.define([
 ], (BaseController, PersonalizationController) => {
   "use strict";
 
+  /**
+   * Controller for the Building Detail Page.
+   * Manages initialization, personalization, and navigation for building-related data.
+   */
   return BaseController.extend("dteenergyadminportal.controller.BuildingDetailPage", {
+    /**
+     * Initializes the controller.
+     * - Retrieves and sets view-specific data passed via viewData.
+     * - Configures an OData V4 model for data binding.
+     * - Applies a filter to show only building details related to the selected application ID.
+     * - Initializes the personalization controller for the building table.
+     *
+     * @public
+     */
     onInit() {
-      const { baseUrl, AppId } = this.getView().getViewData();
+      // Destructure view data properties
+      const {
+        baseUrl,
+        AppId,
+        ApplicationNumber,
+        FirstName,
+        LastName,
+        filteredApplicationStatus,
+        filteredFirstName,
+        filteredLastName
+       } = this.getView().getViewData();
+
+      // Set instance variables for later use
       this.baseUrl = baseUrl;
-      console.log(AppId);
-      
-      this.byId("idAppId").setText(AppId);
+      this.sFirstName = filteredFirstName;
+      this.sLastName = filteredLastName;
+      this.sApplicationStatus = filteredApplicationStatus;
+
+      // Update UI with application number and landlord name
+      this.byId("idAppNumberId").setText(ApplicationNumber);
+      this.byId("idLandlordName").setText(FirstName+" "+LastName);
 
       // Create an OData V4 model using the constructed service URL
       const model = new sap.ui.model.odata.v4.ODataModel({
@@ -27,29 +56,47 @@ sap.ui.define([
         table: this.byId("idBuildingTable")
       });
 
-      const oTable = this.byId("idBuildingTable"); // Ensure this ID matches your XML table ID
+       // Ensure this ID matches your XML table ID
 
-      // Apply a filter to fetch only BuildingDetail entries related to the selected AppId
+      // Apply a filter to display only relevant building details for the given AppId
+      const oTable = this.byId("idBuildingTable");
       const oBinding = oTable.getBinding("items");
       const oFilter = new sap.ui.model.Filter("AppId", "EQ", AppId);
 
-      if (oBinding) {
-        oBinding.filter([oFilter]);
-      }
+      // Apply the filter if the table binding exists
+      if (oBinding) oBinding.filter([oFilter]);
     },
-    // onAfterRendering: async function () {
-    //   const oModel = this.getView().getModel("MainModel");
-    //   const aData = await oModel.requestObject("/BuildingDetail");
-    //   console.log(aData);
-      
-    // },
     /**
-     * Opens the personalization dialog for the application table.
+     * Opens the personalization dialog for the building table.
+     * Allows users to customize table columns and settings.
      *
      * @public
      */
     setupPersonalization: function () {
       this.oPersonalizationController.openDialog();
     },
+    /**
+     * Navigates back to the Enrollment Application Page dynamically.
+     * Clears the current content of the VBox and loads the Enrollment Application Page view.
+     *
+     * @public
+     */
+    navToApplication: function () {
+      // Get the VBox id (EnrollmentApplicationPage)
+      const oVBox = this.byId("idBuildingVBox");
+
+      // Clear the existing content
+      oVBox.destroyItems();
+
+      // Dynamically create and add the Enrollment Application Page view
+      sap.ui.core.mvc.XMLView.create({
+        viewData: {baseUrl: this.baseUrl, filteredLastName: this.sLastName,
+        filteredFirstName: this.sFirstName, filteredApplicationStatus: this.sApplicationStatus},
+        viewName: `dteenergyadminportal.view.EnrollmentApplicationPage`
+      }).then(function (oView) {
+        // Add the newly created view to the VBox
+        oVBox.addItem(oView);
+      });
+    }
   });
 });
