@@ -382,15 +382,18 @@ sap.ui.define([
 						// Filtered the input and combobox controls
 						if (control instanceof sap.m.Input && !control.getId().includes("-popup-input") || control instanceof sap.m.ComboBox || control instanceof sap.m.MaskInput) {
 							
-							const userInput = control.getValue()
+							const userInput = control.getValue();
+							console.log(userInput);
+							
+							console.log((!userInput || userInput?.trim() === "") && control?.mProperties['required']);
 							
 							// Validates that all required fields are filled; if a field is empty, marks it with an error state to indicate validation failure.
-							if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) 
+							if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) {
 								if(isShowError){
 									control.setValueState("Error");
 									validationFlags[validationStatus] = false
 								}
-							else{
+							} else{								
 								control.setValueState("None");
 								/** If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
 								 *  If the email is invalid, set the corresponding validation flag to `false`.
