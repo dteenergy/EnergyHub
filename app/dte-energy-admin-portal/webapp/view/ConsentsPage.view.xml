@@ -29,6 +29,7 @@
         </columns>
         <items>
             <ColumnListItem id="ColumnListItem">
+                <Text text="{MainModel>ApplicationNumber}"></Text>
                 <Text text="{MainModel>FirstName}"></Text>
                 <Text text="{MainModel>LastName}"></Text>
                 <Text text="{MainModel>EmailAddr}"></Text>
