@@ -22,13 +22,14 @@ sap.ui.define([
       this.baseUrl = baseUrl;
       
       // Create an OData V4 model using the constructed service URL
-      this.model = new sap.ui.model.odata.v4.ODataModel({
+      const model = new sap.ui.model.odata.v4.ODataModel({
         serviceUrl: `${this.baseUrl}admin/service/`,
         synchronizationMode: "None",
         operationMode: "Server",
       });
 
-      this.getView().setModel("MainModel");
+      // Set the newly created model as the "MainModel" for this view
+      this.getView().setModel(model, "MainModel");
 
       // Initialize the Personalization Controller for the application table
       this.oPersonalizationController = new PersonalizationController({
