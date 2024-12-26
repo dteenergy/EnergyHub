@@ -10,7 +10,8 @@ service DTEEnergyAdminPortal {
     AccountDetailRefId.LastName,
     AccountDetailRefId.CompanyName,
     NumberOfTenants,
-    ApplicationStatus
+    ApplicationStatus,
+    NoOfConsentReceived
   } actions{
     function GenerateUrl() returns String;
   };

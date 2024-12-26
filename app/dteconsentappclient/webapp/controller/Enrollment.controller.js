@@ -36,6 +36,7 @@ sap.ui.define([
             AccountDetail: {
                 "CompanyName": "",
                 "CompanyAddress": "",
+								"CompanyAddrLineTwo":"",
                 "City":"",
                 "State": "",
                 "Zipcode":"",
@@ -46,6 +47,7 @@ sap.ui.define([
                 "SiteLastName": "",
                 "SiteContactTitle":"",
                 "SiteAddress":"",
+								"SiteAddrLineTwo":"",
                 "SiteCity":"",
                 "SiteState":"",
                 "SiteZipcode": null,
@@ -64,6 +66,7 @@ sap.ui.define([
 						"ConsentLastName": "",
 						"ConsentContactTitle":"",
 						"ConsentAddress": "",
+						"ConsentAddrLineTwo":"",
 						"ConsentCity":"",
 						"ConsentState": "",
 						"ConsentZipcode": null,
@@ -105,6 +108,11 @@ sap.ui.define([
         this.loadConsentForm();
         this.loadAuthAndRelease();
       },
+
+				// After render the view then scroll to the top of the page
+				onAfterRendering: function(){
+					window.scrollTo(0, 0);
+				},
 
 			  // Get the navigation page url and address validation url
 				getEnv:  async function(){
@@ -331,6 +339,7 @@ sap.ui.define([
 								"LastName": "",
 								"ConsentContactTitle":"",
 								"ConsentAddress": "",
+								"ConsentAddrLineTwo":"",
 								"ConsentCity":"",
 								"ConsentState": "",
 								"ConsentZipcode": null,
@@ -629,7 +638,7 @@ sap.ui.define([
 					// Customize content of the dialog, design the VBox container
           const dialogContent = new sap.m.FlexBox({
             items: [
-              new sap.m.Text({text: 'NOTE: If you want to add another location, you must do so before submitting this form. Adding another location after submitting will require filling out a new form.'}),
+              new sap.m.FormattedText({htmlText: "<p style='letter-spacing: .7px;'> <span style='font-weight: 600;'>NOTE:</span> If you want to add another location, you must do so before submitting this form. Adding another location after submitting will require filling out a new form. </p>"}),
               new sap.m.Button({
                 text: '+ Add Another Location',
                 press: function(){
@@ -710,6 +719,7 @@ sap.ui.define([
 								"LastName": consentDetails['ConsentLastName'],
 								"SiteContactTitle": consentDetails['ConsentContactTitle'],
 								"Address": consentDetails['ConsentAddress'],
+								"AddrLineTwo":consentDetails['ConsentAddrLineTwo'],
 								"City": consentDetails['ConsentCity'],
 								"State": consentDetails['ConsentState'],
 								"Zipcode": consentDetails['ConsentZipcode'],

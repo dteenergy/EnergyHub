@@ -34,7 +34,7 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
       return { 'statusCode': 400, 'message': emptyField?.message}
 
     // Assign AppId to Application Detail, Building Detail, Account Detail and Application Consent 
-    applicationParsedData.AppId = AppId
+    applicationParsedData.AppId = AppId;
     buildingParsedData?.map(detail => detail.AppRefId_AppId = AppId);
     accountParsedData.AppRefId_AppId = AppId;
     consentParsedData.map(consent => consent.AppRefId_AppId = AppId);
