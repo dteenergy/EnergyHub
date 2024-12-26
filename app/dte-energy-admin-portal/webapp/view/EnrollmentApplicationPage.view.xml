@@ -58,7 +58,7 @@
                   <core:Item key="Rejected" text="Rejected" />
                 </items>
               </ComboBox>
-              <Text text="5"></Text>
+              <Text text="{MainModel>NoOfConsentReceived}"></Text>
               <Text text="{MainModel>AppId}"></Text>
               <Button text="Generate URL" press="onGenerateUrlPress"></Button>
             </ColumnListItem>
