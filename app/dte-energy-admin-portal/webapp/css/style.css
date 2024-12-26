@@ -8,3 +8,21 @@
 .rightPaddingAlignment{
     padding-right: 10px !important;
 }
+
+.admin-app-header{
+    display: flex;
+    background-color: gray;
+    justify-content: space-between;
+}
+
+
+.dteLogo{
+    display: flex;
+    justify-content: space-between;
+    background-color: #1E3575;
+}
+
+#__title0-inner{
+    color: white !important;
+    /* margin: 5px auto; */
+}
