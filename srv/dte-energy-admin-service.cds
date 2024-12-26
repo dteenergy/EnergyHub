@@ -38,6 +38,7 @@ service DTEEnergyAdminPortal {
     City,
     State,
     Zipcode,
+    AppRefId.AppId,
     AppRefId.AccountDetailRefId.FirstName,
     AppRefId.AccountDetailRefId.LastName,
   };
