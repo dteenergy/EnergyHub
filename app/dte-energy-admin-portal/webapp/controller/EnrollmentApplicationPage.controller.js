@@ -17,9 +17,17 @@ sap.ui.define([
      * @public
      */
     onInit() {
-      // Retrieve the base URL from the view data
-      const { baseUrl } = this.getView().getViewData();
+      // Retrieve the base URL and filter data from the view's data
+      const { baseUrl, filteredApplicationStatus, filteredFirstName, filteredLastName } = this.getView().getViewData();
       this.baseUrl = baseUrl;
+      this.sFirstName = filteredFirstName;
+      this.sLastName = filteredLastName;
+      this.sApplicationStatus = filteredApplicationStatus;
+
+      // Populate the filters with initial values if they are defined
+      if(!["", undefined].includes(this.sFirstName)) this.byId("idFirstNameFilter").setValue(this.sFirstName);
+      if(!["", undefined].includes(this.sLastName)) this.byId("idLastNameFilter").setValue(this.sLastName);
+      if(!["", undefined].includes(this.sApplicationStatus)) this.byId("idApplicationStatusFilter").setSelectedKey(this.sApplicationStatus);
       
       // Create an OData V4 model using the constructed service URL
       const model = new sap.ui.model.odata.v4.ODataModel({
@@ -35,6 +43,9 @@ sap.ui.define([
       this.oPersonalizationController = new PersonalizationController({
         table: this.byId("idApplicationTable")
       });
+
+      // Apply initial filters
+      this.onFilterChange();
     },
     /**
      * Opens the personalization dialog for the application table.
@@ -45,13 +56,13 @@ sap.ui.define([
       this.oPersonalizationController.openDialog();
     },
     /**
-     * Handles filter changes for the application table and
-     * applies the corresponding filters.
+     * Handles changes in the filter fields and
+     * applies the corresponding filters to the table.
      *
      * @public
      */
     onFilterChange: function () {
-      // Retrieve the application table and its binding
+      // Retrieve the binding of the application table's items aggregation
       const oApplicationTable = this.byId("idApplicationTable");
       const oBinding = oApplicationTable.getBinding("items");
 
@@ -61,22 +72,22 @@ sap.ui.define([
         return;
       }
 
-      // Get values from the filters inputs
-      const sFirstName = this.byId("idFirstNameFilter").getValue(); // First Name Filter
-      const sLastName = this.byId("idLastNameFilter").getValue(); // Last Name Filter
-      const sApplicationStatus = this.byId("idApplicationStatusFilter").getSelectedKey(); // Application Status Filter
+      // Collect filter values from input fields
+      this.sFirstName = this.byId("idFirstNameFilter").getValue(); // First Name Filter
+      this.sLastName = this.byId("idLastNameFilter").getValue(); // Last Name Filter
+      this.sApplicationStatus = this.byId("idApplicationStatusFilter").getSelectedKey(); // Application Status Filter
 
       // Create an array for filters
       const aFilters = [];
 
       // Add filters if values are not empty
-      if (sFirstName)
-        aFilters.push(new Filter({path: "FirstName", operator: FilterOperator.Contains, value1: sFirstName, caseSensitive: false}));
+      if (this.sFirstName)
+        aFilters.push(new Filter({path: "FirstName", operator: FilterOperator.Contains, value1: this.sFirstName, caseSensitive: false}));
 
-      if (sLastName)
-        aFilters.push(new Filter({path: "LastName", operator: FilterOperator.Contains, value1: sLastName, caseSensitive: false}));
+      if (this.sLastName)
+        aFilters.push(new Filter({path: "LastName", operator: FilterOperator.Contains, value1: this.sLastName, caseSensitive: false}));
 
-      if (sApplicationStatus) aFilters.push(new Filter("ApplicationStatus", FilterOperator.EQ, sApplicationStatus));
+      if (this.sApplicationStatus) aFilters.push(new Filter("ApplicationStatus", FilterOperator.EQ, this.sApplicationStatus));
 
       // Combine filters with AND logic
       const oCombinedFilter = new Filter({
@@ -94,21 +105,22 @@ sap.ui.define([
      * @public
      */
     onGenerateUrlPress: async function(oEvent) {
-      // Get the button and its parent list item
+      // Retrieve the button and its parent list item
       const oButton = oEvent.getSource();
       const oListItem = oButton.getParent();
 
       // Validate the list item
       if (!oListItem) {
-        MessageBox.error("Parent List Item is missing for this button.");
+        console.error("Parent List Item is missing for this button.");
         return;
       }
 
       // Retrieve the binding context for the selected row
       const oBindingContext = oListItem.getBindingContext("MainModel"); // Get the binding context
 
+      // Get the binding context of the selected row
       if (!oBindingContext) {
-        MessageBox.error("Binding context is missing for this row.");
+        console.error("Binding context is missing for this row.");
         return;
       }
 
@@ -116,7 +128,7 @@ sap.ui.define([
       const appId = oBindingContext.getProperty("AppId");
 
       try {
-        // Call the API to generate the URL
+        // Make an API call to generate the URL
         const {data} = await axios.get(this.baseUrl+`admin/service/ApplicationDetail(${appId})/GenerateUrl`);
 
         // Set the generated URL to the input box
@@ -168,11 +180,20 @@ sap.ui.define([
         .then(() => MessageToast.show("Updated successfully!"))
         .catch((err) => MessageToast.show("Updation failed : ", err))
     },
+    /**
+     * Navigates to the building detail page dynamically based on the selected row's data.
+     *
+     * @param {sap.ui.base.Event} oEvent - The event triggered by selection.
+     * @public
+     */
     navToBuildingDetailPage: async function (oEvent) {
       // Get the selected row's binding context
       const oSelectedItem = oEvent.getSource();
       const oContext = oSelectedItem.getBindingContext("MainModel");
       const AppId = oContext.getProperty("AppId"); // Retrieve the AppId from the context
+      const FirstName = oContext.getProperty("FirstName");
+      const LastName = oContext.getProperty("LastName");
+      const ApplicationNumber = oContext.getProperty("ApplicationNumber");
 
       // Get the VBox id (EnrollmentApplicationPage)
       const oVBox = this.byId("idApplicationVBox");
@@ -182,10 +203,12 @@ sap.ui.define([
 
       // Dynamically create and add the new view for building detail page
       sap.ui.core.mvc.XMLView.create({
-          viewData: {baseUrl: this.baseUrl, AppId: AppId},
-          viewName: `dteenergyadminportal.view.BuildingDetailPage`
+        viewData: {baseUrl: this.baseUrl, AppId: AppId, ApplicationNumber: ApplicationNumber,
+          FirstName: FirstName, LastName: LastName, filteredApplicationStatus: this.sApplicationStatus,
+          filteredFirstName: this.sFirstName, filteredLastName: this.sLastName},
+        viewName: `dteenergyadminportal.view.BuildingDetailPage`
       }).then(function (oView) {
-          oVBox.addItem(oView);
+        oVBox.addItem(oView);
       });
     }
   });

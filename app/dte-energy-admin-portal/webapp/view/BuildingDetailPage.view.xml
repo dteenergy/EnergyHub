@@ -1,5 +1,48 @@
 <mvc:View xmlns:tnt="sap.tnt" controllerName="dteenergyadminportal.controller.BuildingDetailPage"
   xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
   xmlns="sap.m">
-  <Text text="Building Detail Page"></Text>
+  <VBox id="idBuildingVBox" justifyContent="Center">
+  <Button icon="sap-icon://nav-back" press="navToApplication"></Button>
+    <FlexBox id="idBuildingToolBar" width="100%" justifyContent="Center" class="paddingAlignment">
+      <HBox width="100%" justifyContent="SpaceBetween" alignItems="End">
+        <VBox>
+          <HBox>
+            <Text class="textAlignmentHeading" text="Application ID : "></Text>
+            <Text class="textAlignment" id="idAppNumberId" text=""></Text>
+          </HBox>
+          <HBox class="paddingAlignment">
+            <Text class="textAlignmentHeading" text="Landlord Name : "></Text>
+            <Text class="textAlignment" id="idLandlordName" text=""></Text>
+          </HBox>
+        </VBox>
+        <Button id="idBuildingP13nButton" icon="sap-icon://action-settings" press="setupPersonalization" tooltip="Settings"/>
+      </HBox>
+    </FlexBox>
+    <ScrollContainer class="paddingAlignment" id="_idBuildingScrollContainer" horizontal="true" vertical="false" width="100%" height="auto">
+      <Table id="idBuildingTable" items="{MainModel>/BuildingDetail}" sticky="ColumnHeaders" width="100%" class="paddingAlignment">
+        <columns>
+          <Column width="150px"><header><Label text="Building Name"></Label></header></Column>
+          <Column width="150px"><header><Label text="Account Number"></Label></header></Column>
+          <Column width="150px"><header><Label text="Location Address"></Label></header></Column>
+          <Column width="150px"><header><Label text="City"></Label></header></Column>
+          <Column width="150px"><header><Label text="State"></Label></header></Column>
+          <Column width="150px"><header><Label text="Zip-Code"></Label></header></Column>
+          <Column width="150px"><header><Label text="Address2"></Label></header></Column>
+          <Column width="150px"><header><Label text="Building Id"></Label></header></Column>
+        </columns>
+          <items>
+            <ColumnListItem id="idBuildingColumnListItem">
+              <Text text="{MainModel>BuildingName}"></Text>
+              <Text text="{MainModel>AccountNumber}"></Text>
+              <Text text="{MainModel>Address}"></Text>
+              <Text text="{MainModel>City}"></Text>
+              <Text text="{MainModel>State}"></Text>
+              <Text text="{MainModel>Zipcode}"></Text>
+              <Text text="{MainModel>AddrLineTwo}"></Text>
+              <Text text="{MainModel>BuildingId}"></Text>
+            </ColumnListItem>
+          </items>
+      </Table>
+    </ScrollContainer>
+  </VBox>
 </mvc:View>

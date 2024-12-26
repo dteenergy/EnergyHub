@@ -1,10 +1,16 @@
 /* Enter your custom styles here */
-.linkHBox{
-    padding: 10px 0;
+.linkHBox {
+  padding: 10px 0;
 }
-.paddingAlignment{
-    padding-top: 10px;
+
+.paddingAlignment {
+  padding-top: 10px;
 }
-.rightPaddingAlignment{
-    padding-right: 10px !important;
+
+.rightPaddingAlignment {
+  padding-right: 10px !important;
+}
+
+.textAlignmentHeading {
+  font-weight: bold;
 }
