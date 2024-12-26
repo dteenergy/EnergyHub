@@ -17,7 +17,7 @@
         <Button text="Close" press="onCloseDialog" />
     </endButton>
   </Dialog>
-  <VBox id="idVbox">
+  <VBox id="idApplicationVBox">
     <FlexBox id="idToolBar" wrap="Wrap" justifyContent="End" class="paddingAlignment">
       <SearchField id="idFirstNameFilter" placeholder="Search for First Name..." liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
       <SearchField id="idLastNameFilter" placeholder="Search for Last Name..." liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
@@ -44,7 +44,7 @@
           <Column width="150px"><header><Label text=""></Label></header></Column>
         </columns>
           <items>
-            <ColumnListItem id="idColumnListItem" press="navToSourceSystemObjectPage">
+            <ColumnListItem id="idColumnListItem" type="Navigation" press="navToBuildingDetailPage">
               <Text text="{MainModel>FirstName}"></Text>
               <Text text="{MainModel>LastName}"></Text>
               <Text text="{MainModel>CompanyName}"></Text>

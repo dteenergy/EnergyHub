@@ -22,14 +22,13 @@ sap.ui.define([
       this.baseUrl = baseUrl;
       
       // Create an OData V4 model using the constructed service URL
-      const model = new sap.ui.model.odata.v4.ODataModel({
+      this.model = new sap.ui.model.odata.v4.ODataModel({
         serviceUrl: `${this.baseUrl}admin/service/`,
         synchronizationMode: "None",
         operationMode: "Server",
       });
 
-      // Set the newly created model as the "MainModel" for this view
-      this.getView().setModel(model, "MainModel");
+      this.getView().setModel("MainModel");
 
       // Initialize the Personalization Controller for the application table
       this.oPersonalizationController = new PersonalizationController({
@@ -167,6 +166,26 @@ sap.ui.define([
       updateModel.submitBatch('CustomGroupId')
         .then(() => MessageToast.show("Updated successfully!"))
         .catch((err) => MessageToast.show("Updation failed : ", err))
+    },
+    navToBuildingDetailPage: async function (oEvent) {
+      // Get the selected row's binding context
+      const oSelectedItem = oEvent.getSource();
+      const oContext = oSelectedItem.getBindingContext("MainModel");
+      const AppId = oContext.getProperty("AppId"); // Retrieve the AppId from the context
+
+      // Get the VBox id (EnrollmentApplicationPage)
+      const oVBox = this.byId("idApplicationVBox");
+
+      // Clear the existing content
+      oVBox.destroyItems();
+
+      // Dynamically create and add the new view for building detail page
+      sap.ui.core.mvc.XMLView.create({
+          viewData: {baseUrl: this.baseUrl, AppId: AppId},
+          viewName: `dteenergyadminportal.view.BuildingDetailPage`
+      }).then(function (oView) {
+          oVBox.addItem(oView);
+      });
     }
   });
 });
