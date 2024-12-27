@@ -114,7 +114,6 @@ sap.ui.define([
 				// Get the DOM reference
 
 				const activeInput = this.byId("company-name");
-				console.log(activeInput);
 				
 				if(activeInput){
 					const inputDomRef = activeInput.getDomRef();

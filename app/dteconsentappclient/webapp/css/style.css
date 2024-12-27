@@ -29,7 +29,7 @@ body {
   letter-spacing: .7px;
 }
 .sapMIBar.app-header{
-  min-height: 4.5rem !important;
+  height: 4.5rem !important;
   display: flex;
   justify-content: center;
   align-items: center;
