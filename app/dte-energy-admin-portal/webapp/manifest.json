@@ -79,6 +79,9 @@
         },
         {
           "uri": "css/header.css"
+        },
+        {
+          "uri": "css/home.css"
         }
       ],
       "js": [
