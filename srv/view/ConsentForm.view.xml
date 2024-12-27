@@ -20,7 +20,6 @@
         showNavButton="false"
         showSubHeader="true"
         title=""
-        titleAlignment="Auto"
         titleLevel="Auto"
     >
         <content>
@@ -86,7 +85,7 @@
 
 										<layout:VerticalLayout class="vertical-layout">
 											<Label text="Address Line 2"></Label>
-											<Input class="inputBox" type="Text" value="{oConsentModel>/ConsentDetail/AddrLineTwo}"></Input>
+											<Input class="inputBox" type="Text" value="{oConsentModel>/ConsentDetail/ConsentAddrLineTwo}"></Input>
 										</layout:VerticalLayout>
 								
 										<layout:VerticalLayout  class="vertical-layout">

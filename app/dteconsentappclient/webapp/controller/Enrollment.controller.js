@@ -3,8 +3,10 @@ sap.ui.define([
     "sap/ui/core/Fragment",
     "sap/ui/model/json/JSONModel",
 	  "dteconsentappclient/variable/GlobalInputValues",
+		"dteconsentappclient/utils/ChecksInputValidation",
+		"dteconsentappclient/utils/FormatInputs",
 		"sap/m/Dialog"
-], (BaseController, Fragment, JSONModel, GlobalInputValues, Dialog) => {
+], (BaseController, Fragment, JSONModel, GlobalInputValues, ChecksInputValidation, FormatInputs, Dialog) => {
     "use strict";
 
     let enrollmentDetails, 
@@ -18,7 +20,6 @@ sap.ui.define([
 					consentDetailValidation: true,
 					consentAuthDetailValidation: true
 				}
-		const emailRegex = /^(?=.{1,255}$)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     return BaseController.extend("dteconsentappclient.controller.Enrollment", {
         onInit() {
@@ -42,7 +43,7 @@ sap.ui.define([
                 "Zipcode":"",
 								"EnergyPrgmParticipated": false,
 								"AcctMgrName":"",
-								"AcctMgrPhNo":"",
+								"AcctMgrPhoneNumber": null,
                 "SiteFirstName": "",
                 "SiteLastName": "",
                 "SiteContactTitle":"",
@@ -51,7 +52,7 @@ sap.ui.define([
                 "SiteCity":"",
                 "SiteState":"",
                 "SiteZipcode": null,
-                "SitePhoneNumber":"",
+                "SitePhoneNumber": null,
                 "SiteEmailAddr":""
             }
         };
@@ -71,7 +72,7 @@ sap.ui.define([
 						"ConsentState": "",
 						"ConsentZipcode": null,
 						"ConsentAccountNumber":"",
-						"ConsentPhoneNumber":"",
+						"ConsentPhoneNumber": null,
 						"ConsentEmailAddr":"",
 						"AuthPersonName":"",
 						"AuthDate":"",
@@ -108,11 +109,6 @@ sap.ui.define([
         this.loadConsentForm();
         this.loadAuthAndRelease();
       },
-
-				// After render the view then scroll to the top of the page
-				onAfterRendering: function(){
-					window.scrollTo(0, 0);
-				},
 
 			  // Get the navigation page url and address validation url
 				getEnv:  async function(){
@@ -387,22 +383,27 @@ sap.ui.define([
 						// Filtered the input and combobox controls
 						if (control instanceof sap.m.Input && !control.getId().includes("-popup-input") || control instanceof sap.m.ComboBox || control instanceof sap.m.MaskInput) {
 							
-							const userInput = control.getValue()
-							
+							const userInput = control.getValue();
+														
 							// Validates that all required fields are filled; if a field is empty, marks it with an error state to indicate validation failure.
-							if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) 
+							if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) {
 								if(isShowError){
 									control.setValueState("Error");
 									validationFlags[validationStatus] = false
 								}
-							else{
+							} else{								
 								control.setValueState("None");
 								/** If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
 								 *  If the email is invalid, set the corresponding validation flag to `false`.
 								 * */
 								if(control?.mProperties["type"] === "Email") 
-									if(!this.isValidEmail(control, userInput)) validationFlags[validationStatus] = false;
+									if(!ChecksInputValidation.isValid(control, userInput, "Email")) validationFlags[validationStatus] = false;
 								
+								/** If the binding path contains "PhoneNumber", validate the user input to ensure it is in a valid phonenumber format.
+								 *  If the phonenumber is invalid, set the corresponding validation flag to `false`.
+								 * */
+								if(userInput && control?.getBindingPath("value")?.includes("PhoneNumber"))
+									if(!ChecksInputValidation.isValid(control, userInput, "PhoneNumber")) validationFlags[validationStatus] = false;			
 							}	
 						}		
           });
@@ -410,26 +411,6 @@ sap.ui.define([
 					// Update the error message visibility status
 					this.setErrorMessageTripVisibility();
         },
-
-				/**
-				 * Checks the given email is valid
-				 * @param {Object} oControl 
-				 * @param {String} sValue 
-				 * @returns {Boolean}
-				 */
-				isValidEmail: function(oControl, sValue){
-
-					// If emailId is valid set the value state to "None"
-					if(emailRegex.test(sValue)) {
-						oControl.setValueState("None");
-						return true;
-					}else{
-						// If emailId is invalid , set the value state to "Error" with an error message
-						oControl.setValueState("Error");
-						oControl.setValueStateText("Please provide proper Email");
-						return false;
-					}
-				},
 
 				// Checks the input value on live change and remove the error state
 				onLiveChange: function(oEvent){
@@ -443,10 +424,16 @@ sap.ui.define([
 					}else{
 						oControl.setValueState("Error");
 					}
+					
+					// If the input control's binding path containes "PhoneNumber", validate the user input to ensure it is in a valid phonenumber format.
+					if(oControl?.getBindingPath("value")?.includes("PhoneNumber")) ChecksInputValidation.isValid(oControl, userInput, "PhoneNumber");					
 
 					// If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
-					if(oControl?.mProperties["type"] === "Email") this.isValidEmail(oControl, userInput);
+					if(oControl?.mProperties["type"] === "Email") ChecksInputValidation.isValid(oControl, userInput, "Email");
 
+					/**
+					 * If the validation flag have a "false", revalidate the input fields while live change happens.
+					 */
 					if(Object.values(validationFlags).includes(false)) this.validate();
 				},
 
@@ -477,12 +464,18 @@ sap.ui.define([
 						// Construct the response as needed format 
 						const aSuggestions = response.data.results.map(function (item) {
 							const addr = item.serviceAddress;
+							
+							let addressLineTwo = null;
+							// Check and concatenate secondaryCode and secondaryNumber
+							if (addr.secondaryCode) addressLineTwo = (addressLineTwo || "") + addr.secondaryCode;
+							if (addr.secondaryNumber) addressLineTwo = (addressLineTwo || "") + " " + addr.secondaryNumber;
 
 							return {
-								id: item.premiseId, // Unique identifier
-								address: addr.houseNumber + ", " + addr.streetName,
-								fullAddress: addr.houseNumber + ", " + addr.streetName + 
-											", " + addr.city + ", " + addr.state + ", " + addr.zipCode
+								"id": item.premiseId, // Unique identifier
+								"address": addr.houseNumber + ", " + addr.streetName,
+								"addressLineTwo":  addressLineTwo,
+								"fullAddress":`${addr.houseNumber}, ${addr.streetName}, 
+								 ${addressLineTwo ? addressLineTwo + "," : ''} ${addr.city}, ${addr.state}, ${addr.zipCode}`
 							};
 						});
 						
@@ -520,15 +513,21 @@ sap.ui.define([
 						if (oSelectedAddress) {
 							// Extract the relevant address parts
 							const oAddressParts = oSelectedAddress.fullAddress.split(",");
-
-							const sShortAddress = oAddressParts[0].trim()+ ", " + oAddressParts[1].trim();
 	
 							// Set properties to the 'locationModel'
 							const oLocationModel = this.getView().getModel("locationModel");
 							
-							oLocationModel.setProperty(`${sBasePath}/Address`, sShortAddress);
-							oLocationModel.setProperty(`${sBasePath}/City`, oAddressParts[2].trim());
-							oLocationModel.setProperty(`${sBasePath}/Zipcode`, +oAddressParts[4]);
+							oLocationModel.setProperty(`${sBasePath}/Address`, oSelectedAddress.address);
+							
+							if(oSelectedAddress.addressLineTwo) {
+								oLocationModel.setProperty(`${sBasePath}/AddrLineTwo`, oSelectedAddress.addressLineTwo);
+								oLocationModel.setProperty(`${sBasePath}/City`, oAddressParts[3].trim());
+								oLocationModel.setProperty(`${sBasePath}/Zipcode`, +oAddressParts[5]);
+							}else{
+								oLocationModel.setProperty(`${sBasePath}/AddrLineTwo`, "");
+								oLocationModel.setProperty(`${sBasePath}/City`, oAddressParts[2].trim());
+								oLocationModel.setProperty(`${sBasePath}/Zipcode`, +oAddressParts[4]);
+							}
 						}
 
 						// After set the address property revalidate the whole container input data
@@ -612,14 +611,6 @@ sap.ui.define([
 					if(Object.values(validationFlags).includes(false)) 
 						oErrorVisibilityModel.setProperty('/isInputInValid', true);
 					else oErrorVisibilityModel.setProperty('/isInputInValid', false);
-				},
-
-				convertDateFormat: function(dateString) {
-					// Split the input date by '/'
-					const [day, month, year] = dateString.split('/');
-			
-					// Rearrange to 'YYYY-MM-DD' and return
-					return `${year}-${month}-${day}`;
 				},
 
 				// To open the additional location alert dialog
@@ -711,9 +702,11 @@ sap.ui.define([
 								...enrollmentDetails['AccountDetail'], 
 								FirstName: enrollmentDetails['AccountDetail']['SiteFirstName'], 
 								LastName: enrollmentDetails['AccountDetail']['SiteLastName'],
-								EmailAddr: enrollmentDetails['AccountDetail']['SiteEmailAddr']}),
+								EmailAddr: enrollmentDetails['AccountDetail']['SiteEmailAddr'],
+							  AcctMgrPhNo: enrollmentDetails['AccountDetail']['AcctMgrPhoneNumber']
+							}),
 								BuildingDetail: JSON.stringify(formattedLocationDetails),
-								ApplicationDetail: JSON.stringify({'SignatureSignedBy': enrollmentDetails['SignatureSignedBy'], 'SignatureSignedDate': this.convertDateFormat(enrollmentDetails['SignatureSignedDate'])}),
+								ApplicationDetail: JSON.stringify({'SignatureSignedBy': enrollmentDetails['SignatureSignedBy'], 'SignatureSignedDate': FormatInputs.convertDateFormat(enrollmentDetails['SignatureSignedDate'])}),
 								ConsentDetail: JSON.stringify([{
 								"FirstName": consentDetails['ConsentFirstName'],
 								"LastName": consentDetails['ConsentLastName'],
@@ -727,7 +720,7 @@ sap.ui.define([
 								"PhoneNumber": consentDetails['ConsentPhoneNumber'],
 								"EmailAddr": consentDetails['ConsentEmailAddr'],
 								"AuthPersonName": consentDetails['AuthPersonName'],
-								"AuthDate": this.convertDateFormat(consentDetails['AuthDate']),
+								"AuthDate": FormatInputs.convertDateFormat(consentDetails['AuthDate']),
 								"AuthTitle": consentDetails['AuthTitle'],
 							}])
 						};
