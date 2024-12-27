@@ -6,11 +6,16 @@
      class="dteLogo"
      >
      <f:additionalContent>
-        <f:ShellBar id="dteAdminTitle" class="dteTitle" title="Admin Dashboard" secondTitle="heiek"></f:ShellBar>
+        <f:ShellBar id="dteAdminTitle" class="dteTitle" title="Admin Dashboard"></f:ShellBar>
      </f:additionalContent>
      <f:profile>
-      <Avatar src="images/profileIcon.png" class="profile"></Avatar>
+      <Avatar src="images/profileIcon.png" class="profile" press="handleAvatarPress"></Avatar>
     </f:profile>
      </f:ShellBar>
+     <Menu id="idAvatarMenu">
+    <items>
+      <MenuItem id="idLogoutItem" text="Logout" icon="sap-icon://log" press="handleLogout" />
+    </items>
+  </Menu>
 
 </core:FragmentDefinition>
