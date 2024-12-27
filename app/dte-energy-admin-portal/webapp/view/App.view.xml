@@ -9,8 +9,6 @@
     <!-- Header -->
     <core:Fragment fragmentName="dteenergyadminportal.fragment.Header" type="XML"></core:Fragment>
 
-    <!-- <App id="app">
-    </App> -->
     <Page id="idMainPage" showHeader="false">
         <content>
             <App id="app"></App>

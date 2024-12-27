@@ -6,6 +6,7 @@ sap.ui.define([
   return BaseController.extend("dteenergyadminportal.controller.App", {
       onInit() {
       },
+
       // Handle the AvatarPress
       handleAvatarPress:function (oEvent){
         const oButton = oEvent.getSource();
@@ -17,8 +18,7 @@ sap.ui.define([
 
       // Handle the logout
       handleLogout : async function (){
-        console.log("Handle Logout");
-        
+        console.log("Handle Logout"); 
       }
 
   });
