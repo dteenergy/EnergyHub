@@ -111,11 +111,22 @@ sap.ui.define([
       },
 
 			onAfterRendering: function(){
-				window.scroll({
-					top: 0, 
-					left: 0, 
-					behavior: 'smooth' 
-				 })
+				// Get the DOM reference
+
+				const activeInput = this.byId("company-name");
+				console.log(activeInput);
+				
+				if(activeInput){
+					const inputDomRef = activeInput.getDomRef();
+						if (inputDomRef) {
+							inputDomRef.blur();
+						}
+				} 
+				const oheader = this.byId("enrollment-form-header")?.getDomRef(); 
+				
+				if (oheader) {
+					oheader.scrollIntoView({ behavior: "smooth", block: "center" });
+				}
 			},
 
 			  // Get the navigation page url and address validation url
