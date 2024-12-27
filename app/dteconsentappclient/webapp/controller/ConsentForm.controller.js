@@ -3,13 +3,17 @@ sap.ui.define([
 	"sap/ui/core/Fragment",
   "sap/ui/model/json/JSONModel",
 	"dteconsentappclient/variable/GlobalInputValues",
-	"dteconsentappclient/utils/ConsentAddressSuggestion"
+	"dteconsentappclient/utils/ConsentAddressSuggestion",
+	"dteconsentappclient/utils/ChecksInputValidation",
+	"dteconsentappclient/utils/FormatInputs"
 ], function(
 	BaseController,
 	Fragment,
 	JSONModel,
 	GlobalInputValues,
-	ConsentAddressSuggestion
+	ConsentAddressSuggestion,
+	ChecksInputValidation,
+	FormatInputs
 ) {
 	"use strict";
 
@@ -17,8 +21,6 @@ sap.ui.define([
 		tenantInformationValidation: true,
 		consentAuthDetailValidation: true
 	};
-	
-	const emailRegex = /^(?=.{1,255}$)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 	return BaseController.extend("dteconsentappclient.controller.ConsentForm", {
         onInit () {
@@ -146,27 +148,7 @@ sap.ui.define([
 					oControl.setValueState("Error");
 				}else{
 					oControl.setValueState("None");
-					if(oControl?.mProperties["type"] === "Email") this.isValidEmail(oControl, userInput);
-				}
-			},
-
-			/**
-			 * Checks the given email is valid
-			 * @param {Object} oControl 
-			 * @param {String} sValue 
-			 * @returns {Boolean}
-			 */
-			isValidEmail: function(oControl, sValue){
-
-				// If emailId is valid set the value state to "None"
-				if(emailRegex.test(sValue)) {
-					oControl.setValueState("None");
-					return true;
-				}else{
-					// If emailId is invalid , set the value state to "Error" with an error message
-					oControl.setValueState("Error");
-					oControl.setValueStateText("Please provide proper Email");
-					return false;
+					if(oControl?.mProperties["type"] === "Email") ChecksInputValidation.isValid(oControl, userInput, "Email");
 				}
 			},
 
@@ -206,7 +188,7 @@ sap.ui.define([
 								 *  If the email is invalid, set the corresponding validation flag to `false`.
 								 * */
 								if(control?.mProperties["type"] === "Email")
-									if(!this.isValidEmail(control, userInput)) validationFlags[validationStatus] = false;
+									if(!ChecksInputValidation.isValid(control, userInput, "Email")) validationFlags[validationStatus] = false;
 							}
 						 }		
 					 }		
@@ -244,19 +226,6 @@ sap.ui.define([
 					}		
 				}
 				});
-		},
-
-		/**
-		 * To convert the date format
-		 * @param {String} dateString 11/12/2024
-		 * @returns {String} date 2024-12-11
-		 */
-		convertDateFormat: function(dateString) {
-			// Split the input date by '/'
-			const [day, month, year] = dateString.split('/');
-	
-			// Rearrange to 'YYYY-MM-DD' and return
-			return `${year}-${month}-${day}`;
 		},
 
 		// To update the error message visibility status
@@ -309,7 +278,7 @@ sap.ui.define([
 								"AccountNumber": consentDetails['ConsentAccountNumber'],
 								"EmailAddr": consentDetails['ConsentEmailAddr'],
 								"AuthPersonName": consentDetails['AuthPersonName'],
-								"AuthDate": this.convertDateFormat(consentDetails['AuthDate']),
+								"AuthDate": FormatInputs.convertDateFormat(consentDetails['AuthDate']),
 								"AuthTitle": consentDetails['AuthTitle'],
 							})
 						}

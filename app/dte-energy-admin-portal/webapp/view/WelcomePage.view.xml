@@ -1,7 +1,7 @@
 <mvc:View xmlns:tnt="sap.tnt" controllerName="dteenergyadminportal.controller.WelcomePage"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m">
-    <Page id="page" title="{i18n>title}">
+    <Page id="page" showHeader="false">
         <tnt:ToolPage>
             <tnt:sideContent>
                 <tnt:SideNavigation>

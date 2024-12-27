@@ -32,11 +32,17 @@ sap.ui.define([], function(){
         const aSuggestions = response.data.results.map(function (item) {
           const addr = item.serviceAddress;
 
+          let addressLineTwo = null;
+          // Check and concatenate secondaryCode and secondaryNumber
+          if (addr.secondaryCode) addressLineTwo = (addressLineTwo || "") + addr.secondaryCode;
+          if (addr.secondaryNumber) addressLineTwo = (addressLineTwo || "") + " " + addr.secondaryNumber;
+
           return {
-            id: item.premiseId, // Unique identifier
-            address: addr.houseNumber + ", " + addr.streetName,
-            fullAddress: addr.houseNumber + ", " + addr.streetName + 
-                  ", " + addr.city + ", " + addr.state + ", " + addr.zipCode
+            "id": item.premiseId, // Unique identifier
+            "address": addr.houseNumber + ", " + addr.streetName,
+						"addressLineTwo":  addressLineTwo,
+            "fullAddress":`${addr.houseNumber}, ${addr.streetName}, 
+								 ${addressLineTwo ? addressLineTwo + "," : ''} ${addr.city}, ${addr.state}, ${addr.zipCode}`
           };
         });
 
@@ -72,12 +78,18 @@ sap.ui.define([], function(){
           if (oSelectedAddress) {
             // Extract the relevant address parts
             const oAddressParts = oSelectedAddress.fullAddress.split(",");
+                        
+            oConsentModel.setProperty(`/ConsentDetail/ConsentAddress`, oSelectedAddress.address);
 
-            const sShortAddress = oAddressParts[0].trim()+ ", " + oAddressParts[1].trim();
-            
-            oConsentModel.setProperty(`/ConsentDetail/ConsentAddress`, sShortAddress);
-            oConsentModel.setProperty(`/ConsentDetail/ConsentCity`, oAddressParts[2].trim());
-            oConsentModel.setProperty(`/ConsentDetail/ConsentZipcode`, +oAddressParts[4]);
+            if(oSelectedAddress.addressLineTwo) {
+              oConsentModel.setProperty(`/ConsentDetail/ConsentAddrLineTwo`, oSelectedAddress.addressLineTwo);
+              oConsentModel.setProperty(`/ConsentDetail/ConsentCity`, oAddressParts[3].trim());
+              oConsentModel.setProperty(`/ConsentDetail/ConsentZipcode`, +oAddressParts[5]);
+            }else{
+              oConsentModel.setProperty(`/ConsentDetail/ConsentAddrLineTwo`, "");
+              oConsentModel.setProperty(`/ConsentDetail/ConsentCity`, oAddressParts[2].trim());
+              oConsentModel.setProperty(`/ConsentDetail/ConsentZipcode`, +oAddressParts[4]);
+            }
           }
         }
     }
