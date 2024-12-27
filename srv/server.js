@@ -1,8 +1,8 @@
 const cds = require('@sap/cds');
 const cors = require('cors');
 
-// Store the Whitelisted URL
-const whiteListedData = process.env.WHITELIST;
+// Fetch the whitelist from environment variables
+const whiteListedData = process.env.WHITELIST || ["*"];
 
 const dynamicCorsHandler = function (req, callback) {
   let corsOptions;
