@@ -28,6 +28,8 @@ modules:
     memory: 256M
     disk-quota: 1024M
     stack: cflinuxfs4
+    routes :
+     - route : ${org}-eh.${default-domain}
   properties:
     CJ_PROTECT_WHITELIST: >
       [
