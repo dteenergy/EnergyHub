@@ -4,8 +4,11 @@ sap.ui.define([
   "sap/ui/model/Filter",
   "sap/ui/model/FilterOperator",
   "sap/m/MessageBox",
-  "sap/m/MessageToast"
-], (BaseController, PersonalizationController, Filter, FilterOperator, MessageBox, MessageToast) => {
+  "sap/m/MessageToast",
+  'sap/m/p13n/MetadataHelper',
+  'sap/m/p13n/Engine',
+  'sap/m/p13n/SelectionController',
+], (BaseController, PersonalizationController, Filter, FilterOperator, MessageBox, MessageToast, MetadataHelper, Engine, SelectionController) => {
   "use strict";
 
   return BaseController.extend("dteenergyadminportal.controller.EnrollmentApplicationPage", {
@@ -44,17 +47,202 @@ sap.ui.define([
         table: this.byId("idApplicationTable")
       });
 
+      this._registerForP13n();
+
       // Apply initial filters
       this.onFilterChange();
     },
+    _registerForP13n: function() {
+			const oTable = this.byId("idApplicationTable");
+
+			this.oMetadataHelper = new MetadataHelper([{
+					key: "firstName_col",
+					label: "First Name",
+					path: "FirstName"
+				},
+				{
+					key: "lastName_col",
+					label: "Last Name",
+					path: "LastName"
+				},
+				{
+					key: "appNumber_col",
+					label: "Application Number",
+					path: "ApplicationNumber"
+				},
+				{
+					key: "signBy_col",
+					label: "Signature SignedBy",
+					path: "SignatureSignedBy"
+				}
+			]);
+
+			Engine.getInstance().register(oTable, {
+				helper: this.oMetadataHelper,
+				controller: {
+					Columns: new SelectionController({
+						targetAggregation: "columns",
+						control: oTable
+					})
+				}
+			});
+
+			// Engine.getInstance().attachStateChange(this.handleStateChange.bind(this));
+		},
     /**
      * Opens the personalization dialog for the application table.
      *
      * @public
      */
-    setupPersonalization: function () {
-      this.oPersonalizationController.openDialog();
+    setupPersonalization: function (oEvt) {
+      // this.oPersonalizationController.openDialog();
+      this._openPersoDialog(["Columns"], oEvt.getSource());
+      console.log("helo");
+
+      this._oPersonalizationDialog = new sap.m.P13nDialog({
+        initialView: "Columns",
+        // panels: [oColumnsPanel],
+        showReset: true,
+        ok: function () {
+          Engine.getInstance().attachStateChange(this.handleStateChange.bind(this));
+          // this._applyPersonalization();
+          this._oPersonalizationDialog.close();
+        }.bind(this),
+        cancel: function () {
+          this._oPersonalizationDialog.close();
+        }.bind(this)
+      });
     },
+    _openPersoDialog: function(aPanels, oSource) {
+			var oTable = this.byId("idApplicationTable");
+
+			Engine.getInstance().show(oTable, aPanels, {
+				// contentHeight: aPanels.length > 1 ? "50rem" : "35rem",
+				// contentWidth: aPanels.length > 1 ? "45rem" : "32rem",
+				source: oSource || oTable
+			});
+      console.log("hai");
+		},
+    // _getKey: function(oControl) {
+		// 	return oControl.data("p13nKey");
+		// },
+    _applyPersonalization: function () {
+      
+      oState.Columns.forEach((oProp, iIndex) => {
+        const oCol = oTable.getColumns().find((oColumn) => oColumn.data("p13nKey") === oProp.key);
+        oCol.setVisible(true);
+
+        oTable.removeColumn(oCol);
+        oTable.insertColumn(oCol, iIndex);
+      });
+    },
+
+		handleStateChange: function(oEvt) {
+			// const oTable = this.byId("idApplicationTable");
+			const oState = oEvt.getParameter("state");
+
+			// if (!oState) {
+			// 	return;
+			// }
+
+			//Update the columns per selection in the state
+			this.updateColumns(oState);
+
+			//Create Filters & Sorters
+			// const aFilter = this.createFilters(oState);
+			// const aGroups = this.createGroups(oState);
+			// const aSorter = this.createSorters(oState, aGroups);
+
+			// const aCells = oState.Columns.map(function(oColumnState) {
+			// 	return new Text({
+			// 		text: "{" + this.oMetadataHelper.getProperty(oColumnState.key).path + "}"
+			// 	});
+			// }.bind(this));
+
+			// //rebind the table with the updated cell template
+			// oTable.bindItems({
+			// 	templateShareable: false,
+			// 	path: '/items',
+			// 	// sorter: aSorter.concat(aGroups),
+			// 	// filters: aFilter,
+			// 	template: new ColumnListItem({
+			// 		cells: aCells
+			// 	})
+			// });
+
+		},
+
+		// createFilters: function(oState) {
+		// 	const aFilter = [];
+		// 	Object.keys(oState.Filter).forEach((sFilterKey) => {
+		// 		const filterPath = this.oMetadataHelper.getProperty(sFilterKey).path;
+
+		// 		oState.Filter[sFilterKey].forEach(function(oConditon) {
+		// 			aFilter.push(new Filter(filterPath, oConditon.operator, oConditon.values[0]));
+		// 		});
+		// 	});
+
+		// 	this.byId("filterInfo").setVisible(aFilter.length > 0);
+
+		// 	return aFilter;
+		// },
+
+		// createSorters: function(oState, aExistingSorter) {
+		// 	const aSorter = aExistingSorter || [];
+		// 	oState.Sorter.forEach(function(oSorter) {
+		// 		const oExistingSorter = aSorter.find(function(oSort) {
+		// 			return oSort.sPath === this.oMetadataHelper.getProperty(oSorter.key).path;
+		// 		}.bind(this));
+
+		// 		if (oExistingSorter) {
+		// 			oExistingSorter.bDescending = !!oSorter.descending;
+		// 		} else {
+		// 			aSorter.push(new Sorter(this.oMetadataHelper.getProperty(oSorter.key).path, oSorter.descending));
+		// 		}
+		// 	}.bind(this));
+
+		// 	oState.Sorter.forEach((oSorter) => {
+		// 		const oCol = this.byId("persoTable").getColumns().find((oColumn) => oColumn.data("p13nKey") === oSorter.key);
+		// 		if (oSorter.sorted !== false) {
+		// 			oCol.setSortIndicator(oSorter.descending ? coreLibrary.SortOrder.Descending : coreLibrary.SortOrder.Ascending);
+		// 		}
+		// 	});
+
+		// 	return aSorter;
+		// },
+
+		// createGroups: function(oState) {
+		// 	const aGroupings = [];
+		// 	oState.Groups.forEach(function(oGroup) {
+		// 		aGroupings.push(new Sorter(this.oMetadataHelper.getProperty(oGroup.key).path, false, true));
+		// 	}.bind(this));
+
+		// 	oState.Groups.forEach((oSorter) => {
+		// 		const oCol = this.byId("persoTable").getColumns().find((oColumn) => oColumn.data("p13nKey") === oSorter.key);
+		// 		oCol.data("grouped", true);
+		// 	});
+
+		// 	return aGroupings;
+		// },
+
+		updateColumns: function(oState) {
+			const oTable = this.byId("idApplicationTable");
+
+			// oTable.getColumns().forEach((oColumn, iIndex) => {
+			// 	oColumn.setVisible(false);
+			// 	// oColumn.setWidth(oState.ColumnWidth[this._getKey(oColumn)]);
+			// 	// oColumn.setSortIndicator(coreLibrary.SortOrder.None);
+			// 	// oColumn.data("grouped", false);
+			// });
+      
+			oState.Columns.forEach((oProp, iIndex) => {
+				const oCol = oTable.getColumns().find((oColumn) => oColumn.data("p13nKey") === oProp.key);
+				oCol.setVisible(true);
+
+				oTable.removeColumn(oCol);
+				oTable.insertColumn(oCol, iIndex);
+			});
+		},
     /**
      * Handles changes in the filter fields and
      * applies the corresponding filters to the table.

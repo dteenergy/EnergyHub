@@ -1,6 +1,6 @@
 <mvc:View xmlns:tnt="sap.tnt" controllerName="dteenergyadminportal.controller.EnrollmentApplicationPage"
   xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
-  xmlns="sap.m">
+  xmlns="sap.m" xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1">
   <Dialog id="linkDialog" title="Generated Link">
     <HBox justifyContent="SpaceAround" alignItems="Center" width="500px" class="linkHBox">
       <FlexBox width="70%">
@@ -32,24 +32,28 @@
       <Button id="idP13nButton" icon="sap-icon://action-settings" press="setupPersonalization" tooltip="Settings"/>
     </FlexBox>
     <ScrollContainer id="_idScrollContainer" horizontal="true" vertical="false" width="100%" height="auto">
-      <Table id="idApplicationTable" items="{MainModel>/ApplicationDetail}" sticky="ColumnHeaders" width="100%" class="paddingAlignment">
+      <Table id="idApplicationTable" items="{MainModel>/ApplicationDetail}" fixedLayout="Strict" popinLayout="GridSmall" sticky="ColumnHeaders" width="100%" class="paddingAlignment">
         <columns>
-          <Column width="150px"><header><Label text="Application Number"></Label></header></Column>
-          <Column width="150px"><header><Label text="First Name"></Label></header></Column>
-          <Column width="150px"><header><Label text="Last Name"></Label></header></Column>
-          <Column width="150px"><header><Label text="Company Name"></Label></header></Column>
-          <Column width="150px"><header><Label text="Number of Tenants"></Label></header></Column>
-          <Column width="150px"><header><Label text="Application Status"></Label></header></Column>
-          <Column width="100px"><header><Label text="Number of Consents Recieved"></Label></header></Column>
-          <Column width="150px"><header><Label text="Application Id"></Label></header></Column>
-          <Column width="150px"><header><Label text=""></Label></header></Column>
+          <Column app:p13nKey="appNumber_col" headerMenu="menu" width="150px"><header><Label text="Application Number"></Label></header></Column>
+          <Column app:p13nKey="firstName_col" headerMenu="menu" width="150px"><header><Label text="First Name"></Label></header></Column>
+          <Column app:p13nKey="lastName_col" headerMenu="menu" width="150px"><header><Label text="Last Name"></Label></header></Column>
+          <!-- <Column headerMenu="menu" width="150px"><header><Label text="Company Name"></Label></header></Column>
+          <Column headerMenu="menu" width="150px"><header><Label text="Number of Tenants"></Label></header></Column>
+          <Column headerMenu="menu" width="150px"><header><Label text="Application Status"></Label></header></Column>
+          <Column headerMenu="menu" width="100px" hAlign="End"><header><Label text="Number of Consents Recieved"></Label></header></Column>
+          <Column headerMenu="menu" width="150px"><header><Label text="Application Id"></Label></header></Column> -->
+          <Column app:p13nKey="signBy_col" visible="false" headerMenu="menu" width="150px"><header><Label text="Signature SignedBy"></Label></header></Column>
+          <!-- <Column headerMenu="menu" width="150px"><header><Label text="Signature SignedDate"></Label></header></Column>
+          <Column headerMenu="menu" width="150px"><header><Label text="CreatedBy"></Label></header></Column>
+          <Column headerMenu="menu" width="150px"><header><Label text="UpdatedBy"></Label></header></Column>
+          <Column headerMenu="menu" width="150px"><header><Label text=""></Label></header></Column> -->
         </columns>
           <items>
             <ColumnListItem id="idColumnListItem" type="Navigation" press="navToBuildingDetailPage">
               <Text text="{MainModel>ApplicationNumber}"></Text>
               <Text text="{MainModel>FirstName}"></Text>
               <Text text="{MainModel>LastName}"></Text>
-              <Text text="{MainModel>CompanyName}"></Text>
+              <!-- <Text text="{MainModel>CompanyName}"></Text>
               <Input value="{MainModel>NumberOfTenants}" change="onUpdateField" type="Number" placeholder="Number of tenants"></Input>
               <ComboBox
                 selectedKey="{MainModel>ApplicationStatus}"
@@ -61,8 +65,12 @@
                 </items>
               </ComboBox>
               <Text text="{MainModel>NoOfConsentReceived}"></Text>
-              <Text text="{MainModel>AppId}"></Text>
-              <Button text="Generate URL" press="onGenerateUrlPress"></Button>
+              <Text text="{MainModel>AppId}"></Text> -->
+              <Text text="{MainModel>SignatureSignedBy}"></Text>
+              <!-- <Text text="{MainModel>SignatureSignedDate}"></Text>
+              <Text text="{MainModel>CreatedAt}"></Text>
+              <Text text="{MainModel>UpdatedAt}"></Text>
+              <Button text="Generate URL" press="onGenerateUrlPress"></Button> -->
             </ColumnListItem>
           </items>
       </Table>

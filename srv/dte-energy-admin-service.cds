@@ -12,7 +12,11 @@ service DTEEnergyAdminPortal {
     NumberOfTenants,
     ApplicationStatus,
     NoOfConsentReceived,
-    ApplicationNumber
+    ApplicationNumber,
+    SignatureSignedBy,
+    SignatureSignedDate,
+    CreatedAt,
+    UpdatedAt
   } actions{
     function GenerateUrl() returns String;
   };
