@@ -31,7 +31,8 @@ sap.ui.define([
 
         // Get the first part of the path (app name)
         const pathName = window.location.pathname.split("/")[1];
-
+        console.log("Window.location.pathname", window.location.pathname);
+        
         console.log(origin, pathName);
 
         // Construct the application prefix URL

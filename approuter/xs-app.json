@@ -14,6 +14,19 @@
       "csrfProtection": false
     },
     {
+      "source": "^/eh-forms/admin/service/(.*)$",
+      "target": "/admin/service/$1",
+      "destination": "dteConsentAppPortal-srv",
+      "authenticationType": "none",
+      "csrfProtection": false
+    },
+    {
+      "source": "^/eh-forms/admin/(.*)$",
+      "target": "/dteenergyadminportal/$1",
+      "service": "html5-apps-repo-rt",
+      "authenticationType": "none"
+    },
+    {
       "source": "^/eh-forms/(.*)$",
       "target": "/dteconsentappclient/$1",
       "service": "html5-apps-repo-rt",
