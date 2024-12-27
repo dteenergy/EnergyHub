@@ -16,9 +16,30 @@ sap.ui.define([
         oMenu.openBy(oButton);
       },
 
-      // Handle the logout
+      /**
+      * Handles the logout process.
+      * Redirects the user to the application's logout endpoint.
+      *
+      * This function dynamically constructs the application URL prefix based on the current
+      * window location and appends the "/do/logout" path to log the user out.
+      *
+      * @returns {Promise<void>} - A promise that resolves after the redirection to the logout URL.
+      */
       handleLogout : async function (){
-        console.log("Handle Logout"); 
+        // Get the origin of the current window (protocol + host)
+        const origin = window.location.origin;
+
+        // Get the first part of the path (app name)
+        const pathName = window.location.pathname.split("/")[1];
+
+        console.log(origin, pathName);
+
+        // Construct the application prefix URL
+
+        const appPrefix = origin + "/" + pathName;
+
+        // Redirect to the logout URL
+        window.location.href = appPrefix + "/do/logout"; 
       }
 
   });

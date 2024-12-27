@@ -1,6 +1,10 @@
 {
   "welcomeFile": "/eh-forms/index.html",
   "authenticationMethod": "route",
+  "logout": {
+    "logoutEndpoint": "/do/logout",
+    "logoutPage": "/logout.html"
+  },
   "routes": [
     {
       "source": "^/eh-forms/service/(.*)$",
@@ -19,6 +23,12 @@
       "source": "^/index.html$",
       "service": "html5-apps-repo-rt",
       "authenticationType": "xsuaa",
+      "cacheControl": "no-cache, no-store, must-revalidate"
+    },
+    {
+      "source": "^/logout.html$",
+      "service": "html5-apps-repo-rt",
+      "authenticationType": "none",
       "cacheControl": "no-cache, no-store, must-revalidate"
     },
     {
