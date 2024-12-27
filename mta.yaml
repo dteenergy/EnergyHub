@@ -7,7 +7,7 @@ modules:
   type: nodejs
   path: gen/srv
   requires:
-  - name: postgre-sql-db
+  - name: PostgreSQL-Reference
   - name: dteConsentAppPortal-auth
   - name: dteConsentAppPortal-destination-service
   provides:
@@ -134,7 +134,7 @@ modules:
   type: nodejs
   path: gen/pg
   requires:
-  - name: postgre-sql-db
+  - name: PostgreSQL-Reference
   parameters:
     buildpack: nodejs_buildpack
     no-route: true
@@ -187,11 +187,11 @@ resources:
     service: html5-apps-repo
     service-name: dteConsentAppPortal-html5-app-host-service
     service-plan: app-host
-- name: postgre-sql-db
+- name: PostgreSQL-Reference
   type: org.cloudfoundry.managed-service
   parameters:
     service: postgresql-db
-    service-plan: trial
+    service-plan: reference
 - name: dteConsentAppPortal_html5-app-repo-runtime
   type: org.cloudfoundry.managed-service
   parameters:

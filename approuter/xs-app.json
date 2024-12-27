@@ -2,29 +2,29 @@
   "welcomeFile": "/eh-forms/index.html",
   "authenticationMethod": "route",
   "logout": {
-    "logoutEndpoint": "/do/logout",
-    "logoutPage": "/logout.html"
+    "logoutEndpoint": "/eh-admin/do/logout",
+    "logoutPage": "/eh-admin/index.html"
   },
   "routes": [
+    {
+      "source": "^/eh-admin/admin/service/(.*)$",
+      "target": "/admin/service/$1",
+      "destination": "dteConsentAppPortal-srv",
+      "authenticationType": "xsuaa",  
+      "csrfProtection": false
+    },
+    {
+      "source": "^/eh-admin/(.*)$",
+      "target": "/dteenergyadminportal/$1",
+      "service": "html5-apps-repo-rt",
+      "authenticationType": "xsuaa"
+    },
     {
       "source": "^/eh-forms/service/(.*)$",
       "target": "/service/$1",
       "destination": "dteConsentAppPortal-srv",
       "authenticationType": "none",
       "csrfProtection": false
-    },
-    {
-      "source": "^/eh-forms/admin/service/(.*)$",
-      "target": "/admin/service/$1",
-      "destination": "dteConsentAppPortal-srv",
-      "authenticationType": "none",
-      "csrfProtection": false
-    },
-    {
-      "source": "^/eh-forms/admin/(.*)$",
-      "target": "/dteenergyadminportal/$1",
-      "service": "html5-apps-repo-rt",
-      "authenticationType": "none"
     },
     {
       "source": "^/eh-forms/(.*)$",
@@ -36,12 +36,6 @@
       "source": "^/index.html$",
       "service": "html5-apps-repo-rt",
       "authenticationType": "xsuaa",
-      "cacheControl": "no-cache, no-store, must-revalidate"
-    },
-    {
-      "source": "^/logout.html$",
-      "service": "html5-apps-repo-rt",
-      "authenticationType": "none",
       "cacheControl": "no-cache, no-store, must-revalidate"
     },
     {
