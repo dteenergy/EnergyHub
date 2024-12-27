@@ -14,3 +14,18 @@
 .textAlignmentHeading {
   font-weight: bold;
 }
+
+.HomePageContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.HomePageTitle{
+  font-size: 2rem;
+  padding: 15px;
+}
+
+.HomepageContent{
+  padding: 0px 0px 20px 0px;
+}
