@@ -26,6 +26,7 @@ sap.ui.define([
         ApplicationNumber,
         FirstName,
         LastName,
+        filteredApplicationNumber,
         filteredApplicationStatus,
         filteredFirstName,
         filteredLastName
@@ -33,6 +34,7 @@ sap.ui.define([
 
       // Set instance variables for later use
       this.baseUrl = baseUrl;
+      this.sAppNumber = filteredApplicationNumber;
       this.sFirstName = filteredFirstName;
       this.sLastName = filteredLastName;
       this.sApplicationStatus = filteredApplicationStatus;
@@ -90,8 +92,11 @@ sap.ui.define([
 
       // Dynamically create and add the Enrollment Application Page view
       sap.ui.core.mvc.XMLView.create({
-        viewData: {baseUrl: this.baseUrl, filteredLastName: this.sLastName,
-        filteredFirstName: this.sFirstName, filteredApplicationStatus: this.sApplicationStatus},
+        viewData: {
+          baseUrl: this.baseUrl, filteredApplicationNumber: this.sAppNumber,
+          filteredLastName: this.sLastName, filteredFirstName: this.sFirstName,
+          filteredApplicationStatus: this.sApplicationStatus
+        },
         viewName: `dteenergyadminportal.view.EnrollmentApplicationPage`
       }).then(function (oView) {
         // Add the newly created view to the VBox
