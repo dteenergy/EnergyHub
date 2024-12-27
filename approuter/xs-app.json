@@ -1,16 +1,16 @@
 {
-  "welcomeFile": "/eh-forms/index.html",
+  "welcomeFile": "/portal/index.html",
   "authenticationMethod": "route",
   "routes": [
     {
-      "source": "^/eh-forms/service/(.*)$",
+      "source": "^/portal/service/(.*)$",
       "target": "/service/$1",
       "destination": "dteConsentAppPortal-srv",
       "authenticationType": "none",
       "csrfProtection": false
     },
     {
-      "source": "^/eh-forms/(.*)$",
+      "source": "^/portal/(.*)$",
       "target": "/dteconsentappclient/$1",
       "service": "html5-apps-repo-rt",
       "authenticationType": "none"
