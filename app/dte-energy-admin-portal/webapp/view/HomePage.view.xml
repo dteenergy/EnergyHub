@@ -2,17 +2,15 @@
           controllerName="dteenergyadminportal.controller.HomePage"
           xmlns:mvc="sap.ui.core.mvc"
           xmlns="sap.m">
-    <VBox class="HomePageContainer">
-        <VBox class="paddingAlignment">
-            <Text text="Energy Hub Enrollments and Consents Admin Portal​" class="HomePageTitle"/>
-        </VBox>
+    <VBox class="paddingAlignment">
+        <Text text="Energy Hub Enrollments and Consents Admin Portal​" class="HomePageTitle"/>
         <List class="listOfItems">
             <items>
-                <StandardListItem icon="sap-icon://open-command-field" class="listData" title="Ability to view the enrolled applications" />
-                <StandardListItem icon="sap-icon://open-command-field" class="listData" title="Ability to set the status of application: New, Completed, Rejected" />
-                <StandardListItem icon="sap-icon://open-command-field" class="listData" title="Ability to set the Number of tenants for each application submitted" />
-                <StandardListItem icon="sap-icon://open-command-field" class="listData" title="Ability to view the consents, received from tenants" />
-                <StandardListItem icon="sap-icon://open-command-field" class="listData" title="Ability to set status on consent record (void/cancel the consent received)"/>
+                <StandardListItem icon="sap-icon://open-command-field" class="listData" title="Ability to view the enrolled applications" wrapping="true" />
+                <StandardListItem icon="sap-icon://open-command-field" class="listData" title="Ability to set the status of application: New, Completed, Rejected" wrapping="true" />
+                <StandardListItem icon="sap-icon://open-command-field" class="listData" title="Ability to set the Number of tenants for each application submitted" wrapping="true" />
+                <StandardListItem icon="sap-icon://open-command-field" class="listData" title="Ability to view the consents, received from tenants" wrapping="true" />
+                <StandardListItem icon="sap-icon://open-command-field" class="listData" title="Ability to set status on consent record (void/cancel the consent received)" wrapping="true"/>
             </items>
         </List>
     </VBox>
