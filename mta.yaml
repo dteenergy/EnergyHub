@@ -7,15 +7,22 @@ modules:
   type: nodejs
   path: gen/srv
   requires:
-  - name: postgre-sql-db
+  - name: PostgreSQL-Reference
   - name: dteConsentAppPortal-auth
   - name: dteConsentAppPortal-destination-service
   provides:
   - name: srv-api
-    properties: 
+    properties:
       srv-url: ${default-url}
   properties:
-    CRYPTOJS_SECRET_KEY : "@dteEneHub*123*ConsentApp"
+    CRYPTOJS_SECRET_KEY : "@dteEneHub*123*ConsentApp" 
+    DTE_ADDRESS_VALIDATION_URL : https://test.api.customer.sites.dteenergy.com/public/qa/premises/
+    TENANT_CONFIRMATION_PAGE_URL : https://aem-stage.newlook.dteenergy.com/content/dteenergy/deg/website/us/en/quicklinks/energy-hub/energy-hub-tenant-confirmation.html
+    LANDLORD_CONFIRMATION_PAGE_URL : https://aem-stage.newlook.dteenergy.com/content/dteenergy/deg/website/us/en/quicklinks/energy-hub/energy-hub-landlord-confirmation.html
+    ERROR_PAGE_URL : https://www.dteenergy.com/us/en/quicklinks/energy-hub/energy-hub-error.html
+    TENANT_CONSENT_FORM_URL : https://dte-electric-company-dte-fiori-development-energydatahu7a93e2b9.cfapps.us20.hana.ondemand.com/eh-forms/index.html#tenant/consent?appId=
+    APPNUM_PREFIX_ENABLED : "N"
+    APPNUM_PREFIX : ""
   parameters:
     memory: 256MB
   build-parameters:
@@ -136,7 +143,7 @@ modules:
   type: nodejs
   path: gen/pg
   requires:
-  - name: postgre-sql-db
+  - name: PostgreSQL-Reference
   parameters:
     buildpack: nodejs_buildpack
     no-route: true
@@ -189,11 +196,11 @@ resources:
     service: html5-apps-repo
     service-name: dteConsentAppPortal-html5-app-host-service
     service-plan: app-host
-- name: postgre-sql-db
+- name: PostgreSQL-Reference
   type: org.cloudfoundry.managed-service
   parameters:
     service: postgresql-db
-    service-plan: trial
+    service-plan: reference
 - name: dteConsentAppPortal_html5-app-repo-runtime
   type: org.cloudfoundry.managed-service
   parameters:
