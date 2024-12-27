@@ -18,13 +18,15 @@ sap.ui.define([
      */
     onInit() {
       // Retrieve the base URL and filter data from the view's data
-      const { baseUrl, filteredApplicationStatus, filteredFirstName, filteredLastName } = this.getView().getViewData();
+      const { baseUrl, filteredApplicationNumber, filteredApplicationStatus, filteredFirstName, filteredLastName } = this.getView().getViewData();
       this.baseUrl = baseUrl;
+      this.sAppNumber = filteredApplicationNumber;
       this.sFirstName = filteredFirstName;
       this.sLastName = filteredLastName;
       this.sApplicationStatus = filteredApplicationStatus;
 
       // Populate the filters with initial values if they are defined
+      if(!["", undefined].includes(this.sAppNumber)) this.byId("idAppNumberFilter").setValue(this.sAppNumber);
       if(!["", undefined].includes(this.sFirstName)) this.byId("idFirstNameFilter").setValue(this.sFirstName);
       if(!["", undefined].includes(this.sLastName)) this.byId("idLastNameFilter").setValue(this.sLastName);
       if(!["", undefined].includes(this.sApplicationStatus)) this.byId("idApplicationStatusFilter").setSelectedKey(this.sApplicationStatus);
@@ -73,6 +75,7 @@ sap.ui.define([
       }
 
       // Collect filter values from input fields
+      this.sAppNumber = this.byId("idAppNumberFilter").getValue(); // Application Number Filter
       this.sFirstName = this.byId("idFirstNameFilter").getValue(); // First Name Filter
       this.sLastName = this.byId("idLastNameFilter").getValue(); // Last Name Filter
       this.sApplicationStatus = this.byId("idApplicationStatusFilter").getSelectedKey(); // Application Status Filter
@@ -81,6 +84,9 @@ sap.ui.define([
       const aFilters = [];
 
       // Add filters if values are not empty
+      if (this.sAppNumber)
+        aFilters.push(new Filter({path: "ApplicationNumber", operator: FilterOperator.Contains, value1: this.sAppNumber, caseSensitive: false}));
+
       if (this.sFirstName)
         aFilters.push(new Filter({path: "FirstName", operator: FilterOperator.Contains, value1: this.sFirstName, caseSensitive: false}));
 
@@ -203,9 +209,12 @@ sap.ui.define([
 
       // Dynamically create and add the new view for building detail page
       sap.ui.core.mvc.XMLView.create({
-        viewData: {baseUrl: this.baseUrl, AppId: AppId, ApplicationNumber: ApplicationNumber,
-          FirstName: FirstName, LastName: LastName, filteredApplicationStatus: this.sApplicationStatus,
-          filteredFirstName: this.sFirstName, filteredLastName: this.sLastName},
+        viewData: {
+          baseUrl: this.baseUrl, AppId: AppId, ApplicationNumber: ApplicationNumber,
+          FirstName: FirstName, LastName: LastName, filteredApplicationNumber: this.sAppNumber,
+          filteredApplicationStatus: this.sApplicationStatus,
+          filteredFirstName: this.sFirstName, filteredLastName: this.sLastName
+        },
         viewName: `dteenergyadminportal.view.BuildingDetailPage`
       }).then(function (oView) {
         oVBox.addItem(oView);
