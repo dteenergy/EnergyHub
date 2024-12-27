@@ -1,16 +1,19 @@
-<mvc:View xmlns:tnt="sap.tnt" controllerName="dteenergyadminportal.controller.HomePage"
-    xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m">
+<mvc:View xmlns:tnt="sap.tnt" 
+          controllerName="dteenergyadminportal.controller.HomePage"
+          xmlns:mvc="sap.ui.core.mvc"
+          xmlns="sap.m">
     <VBox class="HomePageContainer">
-        <FlexBox wrap="Wrap" class="paddingAlignment" alignItems="Center" direction="Column" justifyContent="SpaceBetween">
+        <VBox class="paddingAlignment">
             <Text text="Energy Hub Enrollments and Consents Admin Portal​" class="HomePageTitle"/>
-            <VBox >
-                <Text text="Ability to view the enrolled applications​​" class="HomepageContent"></Text>
-                <Text text="Ability to set the status of application : New, Completed, Rejected​"></Text>
-                <Text text="Ability to set the Number of tenants for each application submitted​"></Text>
-                <Text text="Ability to view the consents , received from tenants​"></Text>
-                <Text text="Ability to set status on consent record (void/cancel the consent received)​"></Text>
-            </VBox>
-        </FlexBox>
+        </VBox>
+        <List class="listOfItems">
+            <items>
+                <StandardListItem icon="sap-icon://open-command-field" class="listData" title="Ability to view the enrolled applications" />
+                <StandardListItem icon="sap-icon://open-command-field" class="listData" title="Ability to set the status of application: New, Completed, Rejected" />
+                <StandardListItem icon="sap-icon://open-command-field" class="listData" title="Ability to set the Number of tenants for each application submitted" />
+                <StandardListItem icon="sap-icon://open-command-field" class="listData" title="Ability to view the consents, received from tenants" />
+                <StandardListItem icon="sap-icon://open-command-field" class="listData" title="Ability to set status on consent record (void/cancel the consent received)"/>
+            </items>
+        </List>
     </VBox>
 </mvc:View>
