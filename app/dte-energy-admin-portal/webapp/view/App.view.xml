@@ -1,7 +1,17 @@
 <mvc:View controllerName="dteenergyadminportal.controller.App"
     displayBlock="true"
-    xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m">
-    <App id="app">
-    </App>
+     xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:core="sap.ui.core"
+    xmlns:uxap="sap.uxap">
+
+    <!-- Header -->
+    <core:Fragment fragmentName="dteenergyadminportal.fragment.Header" type="XML"></core:Fragment>
+
+    <Page id="idMainPage" showHeader="false">
+        <content>
+            <App id="app"></App>
+        </content>
+    </Page>
 </mvc:View>
