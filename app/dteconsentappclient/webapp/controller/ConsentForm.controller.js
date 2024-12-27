@@ -2,12 +2,14 @@ sap.ui.define([
 	"dteconsentappclient/controller/BaseController",
 	"sap/ui/core/Fragment",
   "sap/ui/model/json/JSONModel",
-	"dteconsentappclient/variable/GlobalInputValues"
+	"dteconsentappclient/variable/GlobalInputValues",
+	"dteconsentappclient/utils/ConsentAddressSuggestion"
 ], function(
 	BaseController,
 	Fragment,
 	JSONModel,
-	GlobalInputValues
+	GlobalInputValues,
+	ConsentAddressSuggestion
 ) {
 	"use strict";
 
@@ -15,23 +17,30 @@ sap.ui.define([
 		tenantInformationValidation: true,
 		consentAuthDetailValidation: true
 	};
-	const validationProperties = [
-		{sContainerId: "tenant-consent-form-container-id", isShowError: true, validationStatus: "tenantInformationValidation"},
-		{sContainerId: "tenant-auth-and-release-container-id", isShowError: true, validationStatus: "consentAuthDetailValidation"}
-	]
+	
+	const emailRegex = /^(?=.{1,255}$)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 	return BaseController.extend("dteconsentappclient.controller.ConsentForm", {
         onInit () {
 
-					const {applicationId, url, router} = this.getView().getViewData();
+					const {
+								applicationId,
+								url, 
+								TenantConfirmationPageUrl, 
+								ErrorPageUrl, 
+								DTEAddressValidationUrl
+							} = this.getView().getViewData();
 					
 					// Get the required properties from the parent view
 					this.applicationId = applicationId;
 					this.SERVERHOST = url;
-					this.router = router;
+					this.TenantConfirmationPageUrl = TenantConfirmationPageUrl;
+					this.ErrorPageUrl = ErrorPageUrl;	
+					this.DTEAddressValidationUrl = DTEAddressValidationUrl
 					
 					//Initialize Model for this view
 					this.initializeModel();
+
 					// Load the AuthAndRelease fragement
 					this.loadAuthAndRelease();
 			},
@@ -43,14 +52,16 @@ sap.ui.define([
 							"ConsentFirstName": "",
 							"ConsentLastName": "",
 							"ConsentAddress": "",
+							"ConsentAddrLineTwo":"",
 							"ConsentCity":"",
-							"ConsentState": "",
+							"ConsentState": "Michigan",
 							"ConsentZipcode": null,
 							"ConsentAccountNumber":"",
 							"ConsentEmailAddr":"",
 							"AuthPersonName":"",
 							"AuthDate":"",
-							"AuthTitle":""
+							"AuthTitle":"",
+							"suggestions": []
 						}
 					};
 
@@ -61,6 +72,10 @@ sap.ui.define([
 					// Model to set the list of US states
 					const ostateValuesModel = new JSONModel(GlobalInputValues.usStates);
 					this.getView().setModel(ostateValuesModel, "ostateValuesModel");
+
+					// Model to set the location available state list 
+					const oLocationStateModel = new JSONModel(GlobalInputValues.locationStates);
+					this.getView().setModel(oLocationStateModel, "oLocationStateModel");
 
 					// Model to hold the visibility status of error message
 					const oErrorVisibilityModel = new JSONModel({
@@ -75,6 +90,7 @@ sap.ui.define([
 					const oConsentModel = this.getView().getModel("oConsentModel");
 
 					const customerAuthAndReleaseContainer = this.byId("tenant-auth-and-release-container-id");
+					
 					Fragment.load({
 							name: "dteconsentappclient.fragment.AuthAndRelease",
 							controller: this
@@ -88,33 +104,69 @@ sap.ui.define([
 					});
 			},
 
+			/**
+			 * Get the value while suggest
+			 * @param {Object} oEvent 
+			 */
+			onConsentAddrSuggest: function(oEvent){
+				// Get the entered value from input
+				const sAddrValue = oEvent.getParameter("suggestValue");
+
+				// Get the bound model
+				const oConsentModel = this.getView().getModel("oConsentModel");
+
+				// To checks the condition and call the DTE address End point to get the suggestion list
+				ConsentAddressSuggestion.onConsentAddrSuggestion(sAddrValue, oConsentModel, this.DTEAddressValidationUrl);
+			},
+
+			// To get the selected item from the suggestion list
+			onConsentAddrSugSelected: function(oEvent){
+			
+				// Get the bound model
+			const oConsentModel = this.getView().getModel("oConsentModel");
+			
+			// To get the selected item from the suggestion list and binding with according field in the model
+			ConsentAddressSuggestion.onConsentAddrSugSelected(oEvent, oConsentModel);
+			
+			// Validate the form fields 
+			if(!validationFlags["tenantInformationValidation"]) this.validateFormDetails("tenant-consent-form-container-id", true, "tenantInformationValidation")
+			},
+
 			// Check the input on live change and remove the error state
 			onLiveChange: function(oEvent){
 				const oControl = oEvent.getSource();
 				
-				// Get the parent container's Id
-				let oParent = oControl.getParent();
-				let id;
-
-				while(!id){
-					id = oParent.getId().split('--')[1];
-					oParent = oParent.getParent();
-				}
 				const userInput = oEvent.getParameter("value") || oEvent.getParameter("selectedKey");
 				
 				// Checks the containers all input are get valid
-				if(Object.values(validationFlags).includes(false)){
-					const needToBeUpdate = validationProperties.filter((validationItem => validationItem.sContainerId == id));
-					
-					const {sContainerId, isShowError, validationStatus} = needToBeUpdate[0];
-					this.validateFormDetails(sContainerId, isShowError, validationStatus);
-				}
+				if(Object.values(validationFlags).includes(false)) this.validate();
 				
 				// Validates if a field has value, if it is remove the error state
 				if(userInput?.trim() === "" || !userInput && oControl?.mProperties['required']) {
 					oControl.setValueState("Error");
 				}else{
 					oControl.setValueState("None");
+					if(oControl?.mProperties["type"] === "Email") this.isValidEmail(oControl, userInput);
+				}
+			},
+
+			/**
+			 * Checks the given email is valid
+			 * @param {Object} oControl 
+			 * @param {String} sValue 
+			 * @returns {Boolean}
+			 */
+			isValidEmail: function(oControl, sValue){
+
+				// If emailId is valid set the value state to "None"
+				if(emailRegex.test(sValue)) {
+					oControl.setValueState("None");
+					return true;
+				}else{
+					// If emailId is invalid , set the value state to "Error" with an error message
+					oControl.setValueState("Error");
+					oControl.setValueStateText("Please provide proper Email");
+					return false;
 				}
 			},
 
@@ -146,14 +198,20 @@ sap.ui.define([
 							if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) {
 								if(isShowError){
 									control.setValueState("Error");
+									validationFlags[validationStatus] = false;
 								}
-								validationFlags[validationStatus] = false
 							}else{
 								control.setValueState("None");
+								/** If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
+								 *  If the email is invalid, set the corresponding validation flag to `false`.
+								 * */
+								if(control?.mProperties["type"] === "Email")
+									if(!this.isValidEmail(control, userInput)) validationFlags[validationStatus] = false;
 							}
 						 }		
 					 }		
 				 });
+
 				 // To update the error message visility status
 				 this.setErrorMessageTripVisibility();
 		 },
@@ -244,6 +302,7 @@ sap.ui.define([
 								"FirstName": consentDetails['ConsentFirstName'],
 								"LastName": consentDetails['ConsentLastName'],
 								"Address": consentDetails['ConsentAddress'],
+								"AddrLineTwo": consentDetails['ConsentAddrLineTwo'],
 								"City": consentDetails['ConsentCity'],
 								"State": consentDetails['ConsentState'],
 								"Zipcode": consentDetails['ConsentZipcode'],
@@ -254,27 +313,40 @@ sap.ui.define([
 								"AuthTitle": consentDetails['AuthTitle'],
 							})
 						}
-					
+				
+				try{		
 					// Post request to create a tenant consent.
 					const {data} = await axios.post(tenantConsentCreateUrl, tenantConsentFormDetails);
 						
-					if(data.value.status === 200){
-						this.initializeModel();
-						this.router.navTo("Confirmation", {
-							StatusCode: data.value.status,
-							Message: data.value.message
-						});
+					if(data.value.statusCode === 200){
+						// Navigate to the tenant confirmation page
+						window.open(this.TenantConfirmationPageUrl, '_self');
+					}else{
+						// Navigate to the error page
+						window.open(this.ErrorPageUrl, '_self');
 					}
+				}catch(err){
+					// Navigate to the error page
+					window.open(this.ErrorPageUrl, '_self');
+				}	
 			}
 		},
 
+		// To validate the all form fields 
+		validate: function(){
+			this.validateFormDetails("tenant-consent-form-container-id", true, "tenantInformationValidation");
+			this.validateFormDetails("tenant-auth-and-release-container-id",true,"consentAuthDetailValidation");
+			this.validateTermsAndConditionIsVerified("tenant-auth-and-release-container-id");
+		},
+
 			onSubmit: function(){
-				validationProperties.map(({sContainerId, isShowError, validationStatus}) => {
-					this.validateFormDetails(sContainerId, isShowError, validationStatus);
-				});
-				this.validateTermsAndConditionIsVerified("tenant-auth-and-release-container-id");
+				// Validate form details 
+				this.validate();
+
+				// Update the error message visibility status.
 				this.setErrorMessageTripVisibility();
 
+				// To call the backend service and store the consent data
 				this.submitTenantConsentForm();
 			}
 	});

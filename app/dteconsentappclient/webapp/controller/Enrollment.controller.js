@@ -18,6 +18,7 @@ sap.ui.define([
 					consentDetailValidation: true,
 					consentAuthDetailValidation: true
 				}
+		const emailRegex = /^(?=.{1,255}$)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     return BaseController.extend("dteconsentappclient.controller.Enrollment", {
         onInit() {
@@ -27,12 +28,15 @@ sap.ui.define([
           this.SERVERHOST = url;
 					this.buildingCount = 1;
 
+					this.getEnv();
+
           let oEnrollFormData = {
             SignatureSignedBy: "",
             SignatureSignedDate: "",
             AccountDetail: {
                 "CompanyName": "",
                 "CompanyAddress": "",
+								"CompanyAddrLineTwo":"",
                 "City":"",
                 "State": "",
                 "Zipcode":"",
@@ -43,6 +47,7 @@ sap.ui.define([
                 "SiteLastName": "",
                 "SiteContactTitle":"",
                 "SiteAddress":"",
+								"SiteAddrLineTwo":"",
                 "SiteCity":"",
                 "SiteState":"",
                 "SiteZipcode": null,
@@ -61,6 +66,7 @@ sap.ui.define([
 						"ConsentLastName": "",
 						"ConsentContactTitle":"",
 						"ConsentAddress": "",
+						"ConsentAddrLineTwo":"",
 						"ConsentCity":"",
 						"ConsentState": "",
 						"ConsentZipcode": null,
@@ -102,6 +108,20 @@ sap.ui.define([
         this.loadConsentForm();
         this.loadAuthAndRelease();
       },
+
+				// After render the view then scroll to the top of the page
+				onAfterRendering: function(){
+					window.scrollTo(0, 0);
+				},
+
+			  // Get the navigation page url and address validation url
+				getEnv:  async function(){
+					const {DTEAddressValidationUrl, LandlordConfirmationPageUrl, ErrorPageUrl} = await this.getEnvironmentVariables();
+					
+					this.DTEAddressValidationUrl = DTEAddressValidationUrl;
+					this.LandlordConfirmationPageUrl = LandlordConfirmationPageUrl;
+					this.ErrorPageUrl = ErrorPageUrl;
+				},
 
         /**
 				 * Add additional location(Building) container
@@ -158,10 +178,11 @@ sap.ui.define([
 
 							// Add the remove button
 							buildingInfoLabel.addStyleClass("location-inner-title");
+
 								const removeButton = new sap.m.Button({
 									text: 'Remove This Location',
 									press: function (oEvent) { that.removeBuilding(oEvent)}
-								});
+								}).addStyleClass("outline-button");
 								
 								flexItems = [buildingInfoLabel, removeButton];
 							}
@@ -311,13 +332,14 @@ sap.ui.define([
 								oConsentModel.setProperty(`/ConsentDetail/${consentkey}`, enrollmentData['AccountDetail'][key]);
 							}
 						});
-						this.validateFormDetails("enrollment-consent-section", false, "oConsentModel", "consentDetailValidation");		
+						this.validateFormDetails("enrollment-consent-section", false, "consentDetailValidation");		
 					}else{
 						oConsentModel.setProperty('/ConsentDetail', {
 								"FirstName": "",
 								"LastName": "",
 								"ConsentContactTitle":"",
 								"ConsentAddress": "",
+								"ConsentAddrLineTwo":"",
 								"ConsentCity":"",
 								"ConsentState": "",
 								"ConsentZipcode": null,
@@ -352,11 +374,9 @@ sap.ui.define([
 				 * Validate account details site and auth details
 				 * @param {String} sContainerId Container Id
 				 * @param {Boolean} isShowError Have to add value state or not
-				 * @param {Object} model model with bind with the container
 				 * @param {String} validationStatus
 				 */
-        validateFormDetails: function(sContainerId, isShowError, model, validationStatus){
-					const oModel = this.getView().getModel(model);
+        validateFormDetails: function(sContainerId, isShowError, validationStatus){
 					const container = this.byId(sContainerId);
 
 					validationFlags[validationStatus] = true;
@@ -366,32 +386,55 @@ sap.ui.define([
 							
 						// Filtered the input and combobox controls
 						if (control instanceof sap.m.Input && !control.getId().includes("-popup-input") || control instanceof sap.m.ComboBox || control instanceof sap.m.MaskInput) {
-		
-								// Get the binding path from the control
-								const bindingPath = control.getBinding('value')?.getPath() || control.getBinding("selectedKey")?.getPath();
+							
+							const userInput = control.getValue()
+							
+							// Validates that all required fields are filled; if a field is empty, marks it with an error state to indicate validation failure.
+							if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) 
+								if(isShowError){
+									control.setValueState("Error");
+									validationFlags[validationStatus] = false
+								}
+							else{
+								control.setValueState("None");
+								/** If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
+								 *  If the email is invalid, set the corresponding validation flag to `false`.
+								 * */
+								if(control?.mProperties["type"] === "Email") 
+									if(!this.isValidEmail(control, userInput)) validationFlags[validationStatus] = false;
 								
-								if(bindingPath){
-									
-										const userInput = oModel.getProperty(bindingPath);
-										
-										// Validates that all required fields are filled; if a field is empty, marks it with an error state to indicate validation failure.
-										if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) {
-											if(isShowError){
-												control.setValueState("Error");
-											}
-											validationFlags[validationStatus] = false
-										}else{
-											control.setValueState("None");
-										}
-								}		
-							}		
-            });
+							}	
+						}		
+          });
+
+					// Update the error message visibility status
+					this.setErrorMessageTripVisibility();
         },
+
+				/**
+				 * Checks the given email is valid
+				 * @param {Object} oControl 
+				 * @param {String} sValue 
+				 * @returns {Boolean}
+				 */
+				isValidEmail: function(oControl, sValue){
+
+					// If emailId is valid set the value state to "None"
+					if(emailRegex.test(sValue)) {
+						oControl.setValueState("None");
+						return true;
+					}else{
+						// If emailId is invalid , set the value state to "Error" with an error message
+						oControl.setValueState("Error");
+						oControl.setValueStateText("Please provide proper Email");
+						return false;
+					}
+				},
 
 				// Checks the input value on live change and remove the error state
 				onLiveChange: function(oEvent){
 					const oControl = oEvent.getSource();
-					
+		
 					const userInput = oEvent.getParameter("value") || oEvent.getParameter("selectedKey");
 
 					// Validates if a field has value, if it is remove the error state
@@ -400,6 +443,11 @@ sap.ui.define([
 					}else{
 						oControl.setValueState("Error");
 					}
+
+					// If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
+					if(oControl?.mProperties["type"] === "Email") this.isValidEmail(oControl, userInput);
+
+					if(Object.values(validationFlags).includes(false)) this.validate();
 				},
 
 				onSuggest: function(oEvent) {
@@ -424,7 +472,7 @@ sap.ui.define([
 					const oLocationModel = this.getView().getModel("locationModel");
 
 					// DTE address validation api
-					await axios.get(`https://test.api.customer.sites.dteenergy.com/public/qa/premises/?address=${sQuery}&maxResults=10`).then(function (response) {		
+					await axios.get(`${this.DTEAddressValidationUrl}?address=${sQuery}&maxResults=10`).then(function (response) {		
 						
 						// Construct the response as needed format 
 						const aSuggestions = response.data.results.map(function (item) {
@@ -437,7 +485,7 @@ sap.ui.define([
 											", " + addr.city + ", " + addr.state + ", " + addr.zipCode
 							};
 						});
-
+						
 						// Set the suggestions array to the model
 						oLocationModel.setProperty(`/locations/${id}/suggestions`, aSuggestions);
 					})
@@ -447,12 +495,13 @@ sap.ui.define([
 
 				},
 
-				onSuggestionSelect: function (oEvent) {
+				onSuggestionSelect: function (oEvent) {	
 					const oInputControl = oEvent.getSource();
 
 					// Retrieve the bound path
 					const sBasePath = oInputControl.getBinding('value')?.getContext()?.getPath();
 					const id = sBasePath.split("/")[2];
+					
 
 					// Handle item selection
 					const oSelectedItem = oEvent.getParameter("selectedItem");
@@ -481,12 +530,15 @@ sap.ui.define([
 							oLocationModel.setProperty(`${sBasePath}/City`, oAddressParts[2].trim());
 							oLocationModel.setProperty(`${sBasePath}/Zipcode`, +oAddressParts[4]);
 						}
+
+						// After set the address property revalidate the whole container input data
+						if(!validationFlags["locationDetailsValidation"]) this.validateBuildingDetails("building-detail-main-container");
 					}
 				},
 
 				// Validate the building information
 				validateBuildingDetails: function(sContainerId){
-
+					
 					const container = this.byId(sContainerId);
 					validationFlags["locationDetailsValidation"] = true;
 
@@ -509,11 +561,14 @@ sap.ui.define([
 									if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) {
 										control.setValueState("Error");
 										validationFlags["locationDetailsValidation"] = false;
-									}
+									}else control.setValueState("None");
 								}		
 							}
 						})
 					});
+
+					// Update the error message visibility status
+					this.setErrorMessageTripVisibility();
 				},
 
 				// Retrieve the all input data
@@ -583,14 +638,14 @@ sap.ui.define([
 					// Customize content of the dialog, design the VBox container
           const dialogContent = new sap.m.FlexBox({
             items: [
-              new sap.m.Text({text: 'NOTE: If you want to add another location, you must do so before submitting this form. Adding another location after submitting will require filling out a new form.'}),
+              new sap.m.FormattedText({htmlText: "<p style='letter-spacing: .7px;'> <span style='font-weight: 600;'>NOTE:</span> If you want to add another location, you must do so before submitting this form. Adding another location after submitting will require filling out a new form. </p>"}),
               new sap.m.Button({
                 text: '+ Add Another Location',
                 press: function(){
                   that.onAddAnotherLocation(),
                   that.oConfirmationDialog.close()
                 }
-              }),
+              }).addStyleClass("outline-button"),
               new sap.m.Text({text: 'I don’t have another location.'}),
               new sap.m.Button({
                 text: 'Continue Submission',
@@ -600,7 +655,7 @@ sap.ui.define([
                   that.oConfirmationDialog.close()
                 },
                 type: sap.m.ButtonType.Emphasized
-              })
+              }).addStyleClass("dialog-submit-action")
             ],
           });
 
@@ -609,7 +664,11 @@ sap.ui.define([
 
 					// Custom header for the dialog
 					const dialogTitle = new sap.m.Bar({
-						contentMiddle: [new sap.m.Text({ text: 'Additional Location Alert' })],
+						contentMiddle: [
+							new sap.m.Text({ 
+								text: 'Additional Location Alert' 
+							}).addStyleClass("alert-title")
+						],
 						contentRight: [
 								new sap.ui.core.Icon({
 										src: 'sap-icon://decline',
@@ -617,9 +676,12 @@ sap.ui.define([
 										press: function () {
 												that.oConfirmationDialog.close();
 										}
-								})
+								}).addStyleClass("alert-close-icon")
 						]
 				});
+
+				// Add the class for the dialog content
+				dialogTitle.addStyleClass("confirmation-dialog-title");
 
 				// Open the additional location alert dialog while submit pressed
           if(!this.oConfirmationDialog){
@@ -633,62 +695,73 @@ sap.ui.define([
 				},
 
 				submitAction: async function(){
-					// Retrieve the data from bound models
-					this.retrieveAllInputBindings();
+					try{
+						// Retrieve the data from bound models
+						this.retrieveAllInputBindings();
 
-					// Url to create the enrollment application
-					const enrollmentCreateUrl = this.SERVERHOST + 'service/CreateEnrollmentFormDetail';
-					
-					// Format the location details
-					const formattedLocationDetails = Object.values(locationDetails['locations']);
-					formattedLocationDetails.forEach((item)=> delete item.suggestions);
-					
-					const enrollmentFormDetails = {
-						AccountDetail: JSON.stringify({
-							...enrollmentDetails['AccountDetail'], 
-							FirstName: enrollmentDetails['AccountDetail']['SiteFirstName'], 
-							LastName: enrollmentDetails['AccountDetail']['SiteLastName'],
-							EmailAddr: enrollmentDetails['AccountDetail']['SiteEmailAddr']}),
-							BuildingDetail: JSON.stringify(formattedLocationDetails),
-							ApplicationDetail: JSON.stringify({'SignatureSignedBy': enrollmentDetails['SignatureSignedBy'], 'SignatureSignedDate': this.convertDateFormat(enrollmentDetails['SignatureSignedDate'])}),
-							ConsentDetail: JSON.stringify([{
-							"FirstName": consentDetails['ConsentFirstName'],
-							"LastName": consentDetails['ConsentLastName'],
-							"SiteContactTitle": consentDetails['ConsentContactTitle'],
-							"Address": consentDetails['ConsentAddress'],
-							"City": consentDetails['ConsentCity'],
-							"State": consentDetails['ConsentState'],
-							"Zipcode": consentDetails['ConsentZipcode'],
-							"AccountNumber": consentDetails['ConsentAccountNumber'],
-							"PhoneNumber": consentDetails['ConsentPhoneNumber'],
-							"EmailAddr": consentDetails['ConsentEmailAddr'],
-							"AuthPersonName": consentDetails['AuthPersonName'],
-							"AuthDate": this.convertDateFormat(consentDetails['AuthDate']),
-							"AuthTitle": consentDetails['AuthTitle'],
-						}])
-					};
-					
-					// Post request to create a enrollment application
-					const {data} = await axios.post(enrollmentCreateUrl, enrollmentFormDetails);
-					
-					// If get the success(200) response then navigate to the confirmation page
-					if(data.value.statusCode === 200){
-						this.getOwnerComponent().getRouter().navTo("Confirmation", {
-							StatusCode: data.value.statusCode,
-							Message: data.value.Message
-						});
+						// Url to create the enrollment application
+						const enrollmentCreateUrl = this.SERVERHOST + 'service/CreateEnrollmentFormDetail';
+						
+						// Format the location details
+						const formattedLocationDetails = Object.values(locationDetails['locations']);
+						formattedLocationDetails.forEach((item)=> delete item.suggestions);
+						
+						const enrollmentFormDetails = {
+							AccountDetail: JSON.stringify({
+								...enrollmentDetails['AccountDetail'], 
+								FirstName: enrollmentDetails['AccountDetail']['SiteFirstName'], 
+								LastName: enrollmentDetails['AccountDetail']['SiteLastName'],
+								EmailAddr: enrollmentDetails['AccountDetail']['SiteEmailAddr']}),
+								BuildingDetail: JSON.stringify(formattedLocationDetails),
+								ApplicationDetail: JSON.stringify({'SignatureSignedBy': enrollmentDetails['SignatureSignedBy'], 'SignatureSignedDate': this.convertDateFormat(enrollmentDetails['SignatureSignedDate'])}),
+								ConsentDetail: JSON.stringify([{
+								"FirstName": consentDetails['ConsentFirstName'],
+								"LastName": consentDetails['ConsentLastName'],
+								"SiteContactTitle": consentDetails['ConsentContactTitle'],
+								"Address": consentDetails['ConsentAddress'],
+								"AddrLineTwo":consentDetails['ConsentAddrLineTwo'],
+								"City": consentDetails['ConsentCity'],
+								"State": consentDetails['ConsentState'],
+								"Zipcode": consentDetails['ConsentZipcode'],
+								"AccountNumber": consentDetails['ConsentAccountNumber'],
+								"PhoneNumber": consentDetails['ConsentPhoneNumber'],
+								"EmailAddr": consentDetails['ConsentEmailAddr'],
+								"AuthPersonName": consentDetails['AuthPersonName'],
+								"AuthDate": this.convertDateFormat(consentDetails['AuthDate']),
+								"AuthTitle": consentDetails['AuthTitle'],
+							}])
+						};
+						
+						// Post request to create a enrollment application
+						const {data} = await axios.post(enrollmentCreateUrl, enrollmentFormDetails);
+						
+						// If get the success(200) response then navigate to the confirmation page
+						if(data.value.statusCode === 200){
+							// Navigate to the landlord confirmation page
+							window.open(this.LandlordConfirmationPageUrl, '_self');
+						}else{
+							// Navigate to the error page
+							window.open(this.ErrorPageUrl, '_self');
+						}
+					}catch(err){						
+						// Navigate to the error page
+						window.open(this.ErrorPageUrl, '_self');
 					}
+				},
+
+				validate: function(){
+					this.validateFormDetails("account-info-container", true, "accountDetailsValidation");
+					this.validateFormDetails("site-contact-info-container", true, "siteDetailsValidation");
+					this.validateBuildingDetails("building-detail-main-container");
+					this.validateFormDetails("auth-info-container", true, "customerAuthDetailValidation");
+					this.validateFormDetails("enrollment-consent-section", true, "consentDetailValidation");
+					this.validateFormDetails("customer-auth-and-release-container", true, "consentAuthDetailValidation");
+					this.validateTermsAndConditionIsVerified("customer-auth-and-release-container");
 				},
 
         handleSubmit: function () {
 					// While submit button is pressed, validate all the fields in the form
-					this.validateFormDetails("account-info-container", true, "oEnrollModel", "accountDetailsValidation");
-					this.validateFormDetails("site-contact-info-container", true, "oEnrollModel", "siteDetailsValidation");
-					this.validateBuildingDetails("building-detail-main-container");
-					this.validateFormDetails("auth-info-container", true, "oEnrollModel", "customerAuthDetailValidation");
-					this.validateFormDetails("enrollment-consent-section", true, "oConsentModel", "consentDetailValidation");
-					this.validateFormDetails("customer-auth-and-release-container", true, "oConsentModel", "consentAuthDetailValidation");
-					this.validateTermsAndConditionIsVerified("customer-auth-and-release-container");
+					this.validate();
 
 					// Update the error message trip visibility status once validation is done
 					this.setErrorMessageTripVisibility();

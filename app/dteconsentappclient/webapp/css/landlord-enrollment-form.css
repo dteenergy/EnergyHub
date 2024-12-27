@@ -9,20 +9,41 @@
     justify-content: center;
 }
  .enrollment-form-header > *{
-    padding: 10px;
+    padding: 7px;
  }
 .required-instruction-indicator{
     color: red;
 }
 .customize-button{
-    width: 50% !important;
+    width: 50%;
 }
 .customize-button.submit-action{
     margin-bottom: 30px;
+    background: #0072ce !important;
+    border: none;
+    width: 30%;
+}
+.customize-button.outline-button{
+    border: 1px solid #0072ce;
+}
+.outline-button{
+    border: 1px solid #0072ce;
+}
+.dialog-submit-action{
+    background: #0072ce !important;
+    border: none; 
+}
+.sapMBtnEmphasized{
+    background: #0072ce !important;
 }
 .enrollment-form-header{
+    margin-top: 30px;
     flex-direction: column;
 }
+.main-title{
+    letter-spacing: .3px;
+    font-size: 25px;
+ }
 .account-info{
     flex-direction: column;
 }
@@ -42,6 +63,13 @@
 }
 .sapMBtnInner{
     border-radius: 0 !important;
+    font-weight: var(--sapFontBoldWeight);
+    border: none;
+    outline: none;
+}
+.sapMBtnInner::before{
+    border: none !important;
+    outline: none !important;
 }
 .state-and-code{
     justify-content: space-between;
@@ -58,16 +86,18 @@
 .auth-and-release-container > *,
 .message-strip-container > *,
 .confirmation-dialog-content > *{
-    padding-bottom: 17px;
+    padding-bottom: 15px;
 }
 .vertical-layout{
     width: 100%;
 }
 .form-segment-heading{
     margin-top: 15px;
+    font-size: 18px !important;
 }
 .location-inner-title{
     padding-bottom: 15px;
+    font-size: 18px !important;
 }
 .sapUiFormResGridCont{
     padding-bottom: 10px !important;
@@ -78,13 +108,14 @@
     margin-bottom: 15px;
 }
 .address-helper-text{
-    font-size: 12px;
+    font-size: 14px;
     padding: 3px;
 }
 .error-message-strip{
     border-radius: 5px;
     border: 2px solid #f53232;
     background-color: transparent;
+    padding: 15px !important;
 }
 .checkbox-error-view{
     border: 1px solid #f53232;
@@ -104,7 +135,21 @@
 .confirmation-dialog-content{
     flex-direction: column;
     padding: 15px;
+    border-radius: 0 !important;
 }
+.confirmation-dialog-title, .sapMDialogSection{
+    border-radius: 0 !important;
+}
+.alert-title{
+    font-size: 18px;
+}
+.alert-close-icon{
+    color: #0072CE;
+}
+.sapMDialog{
+    border-radius: 0 !important;
+}
+
 @media only screen and (max-width: 600px) {
     .state-and-code{
         flex-direction: column;

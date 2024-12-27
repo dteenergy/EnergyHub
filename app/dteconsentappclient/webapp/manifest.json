@@ -116,6 +116,13 @@
       },
       "routes": [
         {
+          "name": "Home",
+          "pattern": ":?query:",
+          "target": [
+            "EnrollmentForm"
+          ]
+        },
+        {
           "name": "Enrollment",
           "pattern": "landlord/enrollment",
           "target": [
@@ -127,13 +134,6 @@
           "pattern": "tenant/consent/{?appId}",
           "target": [
             "TargetConsentForm"
-          ]
-        },
-        {
-          "name": "Confirmation",
-          "pattern": "confirmation/{StatusCode}/{Message}",
-          "target": [
-            "Confirmation"
           ]
         }
       ],
@@ -151,13 +151,6 @@
           "clearControlAggregation": false,
           "viewId": "Enrollment",
           "viewName": "Enrollment"
-        },
-        "Confirmation": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "Confirmation",
-          "viewName": "Confirmation"
         }
       }
     },

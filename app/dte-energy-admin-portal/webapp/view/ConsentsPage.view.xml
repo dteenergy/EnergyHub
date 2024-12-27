@@ -1,5 +1,51 @@
-<mvc:View xmlns:tnt="sap.tnt" controllerName="dteenergyadminportal.controller.ConsentsPage"
+<mvc:View xmlns:core="sap.ui.core" xmlns:tnt="sap.tnt" controllerName="dteenergyadminportal.controller.ConsentsPage"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m">
-    <Text  text="Consents Page"></Text>
+    <VBox id="iVbox" class="consentAppTable">
+        <FlexBox id="idToolbar" justifyContent="End" class="paddingAlignment" wrap="Wrap">
+            <SearchField id="idFilterFirstName" placeholder="Firstname" liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
+            <SearchField id="idFilterLastName" placeholder="Lastname" liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
+            <ComboBox id="idConsentStatusFilter" selectedKey="" placeholder="Consent Status" selectionChange="onFilterChange" class="rightPaddingAlignment">
+                <items>
+                    <core:Item key="" text="All"/>
+                    <core:Item key="New" text="New"/>
+                    <core:Item key="Accepted" text="Accepted"/>
+                    <core:Item key="Rejected" text="Rejected"/>
+                </items>
+            </ComboBox>
+            <Button id="idP1nButton" icon="sap-icon://action-settings" press="setupPersonalization" tooltip="Settings"/>
+        </FlexBox>
+        <ScrollContainer width="100%" vertical="true" class="applicationConsentTable paddingAlignment">
+        <Table id="idApplicationConsentTable" items="{MainModel>/ApplicationConsent}" width="100%" class='consentPageTable' sticky="ColumnHeaders">
+        <columns>
+            <Column width="150px"><header><Label text="Application Number"></Label></header></Column>
+            <Column width="150px"><header><Label text="First Name"></Label></header></Column>
+            <Column width="150px"><header><Label text="Last Name"></Label></header></Column>
+            <Column width="150px"><header><Label text="Consent Email"></Label></header></Column>
+            <Column width="150px"><header><Label text="Consent Given Date"></Label></header></Column>
+            <Column width="150px"><header><Label text="Consent Auth Title"></Label></header></Column>
+            <Column width="150px"><header><Label text="Consent Status"></Label></header></Column>
+            <Column width="150px"><header><Label text="Application Id"></Label></header></Column>
+        </columns>
+        <items>
+            <ColumnListItem id="ColumnListItem">
+                <Text text="{MainModel>ApplicationNumber}"></Text>
+                <Text text="{MainModel>FirstName}"></Text>
+                <Text text="{MainModel>LastName}"></Text>
+                <Text text="{MainModel>EmailAddr}"></Text>
+                <Text text="{MainModel>AuthDate}"></Text>
+                <Text text="{MainModel>AuthTitle}"></Text>
+                <ComboBox selectedKey="{MainModel>ConsentStatus}" selectionChange="" change="handleResponse">
+                <items>
+                    <core:Item key="New" text="New" />
+                    <core:Item key="Accepted" text="Accepted" />
+                    <core:Item key="Rejected" text="Rejected" />
+                </items>
+                </ComboBox>
+                <Text text="{MainModel>AppId}"></Text>
+            </ColumnListItem>
+        </items>
+        </Table>
+        </ScrollContainer>
+    </VBox>
 </mvc:View>

@@ -7,6 +7,8 @@ const whiteListedData = process.env.WHITELIST;
 const dynamicCorsHandler = function (req, callback) {
   let corsOptions;
   if (whiteListedData.indexOf(req.header('Origin')) !== -1) {
+    console.log(whiteListedData.indexOf(req.header('Origin')));
+    
     // reflect (enable) the requested origin in the CORS response
     corsOptions = { origin: true } 
   } else {
