@@ -110,6 +110,14 @@ sap.ui.define([
         this.loadAuthAndRelease();
       },
 
+			onAfterRendering: function(){
+				window.scroll({
+					top: 0, 
+					left: 0, 
+					behavior: 'smooth' 
+				 })
+			},
+
 			  // Get the navigation page url and address validation url
 				getEnv:  async function(){
 					const {DTEAddressValidationUrl, LandlordConfirmationPageUrl, ErrorPageUrl} = await this.getEnvironmentVariables();
@@ -209,6 +217,11 @@ sap.ui.define([
 								if (newElement) {
 										newElement.scrollIntoView({ behavior: "smooth", block: "center" });
 								}
+								window.scroll({
+									top: 0, 
+									left: 0, 
+									behavior: 'smooth' 
+								 })
 						}, 0);
 					}
 

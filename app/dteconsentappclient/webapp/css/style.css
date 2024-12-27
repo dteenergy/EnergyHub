@@ -1,9 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap');
 
 body {
-  margin: 0;
-  padding: 0;
-  overflow: hidden; /* Prevent double scrolling */
+  overflow: hidden; 
 }
 
 :root {
@@ -31,7 +29,7 @@ body {
   letter-spacing: .7px;
 }
 .sapMIBar.app-header{
-  height: 4.5rem !important;
+  min-height: 4.5rem !important;
   display: flex;
   justify-content: center;
   align-items: center;
