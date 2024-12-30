@@ -35,23 +35,23 @@
     <ScrollContainer id="_idScrollContainer" horizontal="true" vertical="false" width="100%" height="auto">
       <Table id="idApplicationTable" items="{MainModel>/ApplicationDetail}" sticky="ColumnHeaders" width="100%" class="paddingAlignment">
         <columns>
-          <Column width="150px"><header><Label text="Application Number"></Label></header></Column>
-          <Column width="150px"><header><Label text="First Name"></Label></header></Column>
-          <Column width="150px"><header><Label text="Last Name"></Label></header></Column>
-          <Column width="150px"><header><Label text="Company Name"></Label></header></Column>
-          <Column width="150px"><header><Label text="Number of Tenants"></Label></header></Column>
-          <Column width="150px"><header><Label text="Application Status"></Label></header></Column>
-          <Column width="100px"><header><Label text="Number of Consents Recieved"></Label></header></Column>
-          <Column width="150px"><header><Label text="Application Id"></Label></header></Column>
-          <Column width="150px"><header><Label text=""></Label></header></Column>
+          <Column width="150px"><header><Text text="Application Number" class="boldText"></Text></header></Column>
+          <Column width="150px"><header><Text text="Site Contact" class="boldText"></Text></header></Column>
+          <Column width="150px"><header><Text text="Company Name" class="boldText"></Text></header></Column>
+          <Column width="150px"><header><Text text="Company Address" class="boldText"></Text></header></Column>
+          <Column width="150px"><header><Text text="Application Status" class="boldText"></Text></header></Column>
+          <Column width="150px"><header><Text text="Number of Tenants" class="boldText"></Text></header></Column>
+          <Column width="150px"><header><Text text="Number of Consents Recieved" class="boldText"></Text></header></Column>
+          <Column width="150px"><header><Text text="Signed By" class="boldText"></Text></header></Column>
+          <Column width="150px"><header><Text text="Email Address" class="boldText"></Text></header></Column>
+          <Column width="150px"><header><Text text="Consent Link" class="boldText"></Text></header></Column>
         </columns>
           <items>
             <ColumnListItem id="idColumnListItem" type="Navigation" press="navToBuildingDetailPage">
               <Text text="{MainModel>ApplicationNumber}"></Text>
-              <Text text="{MainModel>FirstName}"></Text>
-              <Text text="{MainModel>LastName}"></Text>
+              <Text text="{MainModel>FirstName} {MainModel>LastName}"></Text>
               <Text text="{MainModel>CompanyName}"></Text>
-              <Input value="{MainModel>NumberOfTenants}" change="onUpdateField" type="Number" placeholder="Number of tenants"></Input>
+              <Text text="{parts: [{path: 'MainModel>CompanyAddress'}, {path: 'MainModel>CompanyAddrLineTwo'}, {path: 'MainModel>City'}, {path: 'MainModel>State'}], formatter: '.formatCompanyAddress'}"></Text>
               <ComboBox
                 selectedKey="{MainModel>ApplicationStatus}"
                 selectionChange="" change="onUpdateField">
@@ -61,9 +61,11 @@
                   <core:Item key="Rejected" text="Rejected" />
                 </items>
               </ComboBox>
+              <Input value="{MainModel>NumberOfTenants}" change="onUpdateField" type="Number" placeholder="Number of tenants"></Input>
               <Text text="{MainModel>NoOfConsentReceived}"></Text>
-              <Text text="{MainModel>AppId}"></Text>
-              <Button text="Generate URL" press="onGenerateUrlPress"></Button>
+              <Text text="{MainModel>SignatureSignedBy}"></Text>
+              <Text text="{MainModel>EmailAddr}"></Text>
+              <Button text="Generate" press="onGenerateUrlPress"></Button>
             </ColumnListItem>
           </items>
       </Table>

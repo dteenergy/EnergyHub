@@ -18,12 +18,13 @@ sap.ui.define([
      */
     onInit() {
       // Retrieve the base URL and filter data from the view's data
-      const { baseUrl, filteredApplicationNumber, filteredApplicationStatus, filteredFirstName, filteredLastName } = this.getView().getViewData();
+      const { baseUrl, filteredApplicationNumber, filteredApplicationStatus, filteredFirstName, filteredLastName, contextPath } = this.getView().getViewData();
       this.baseUrl = baseUrl;
       this.sAppNumber = filteredApplicationNumber;
       this.sFirstName = filteredFirstName;
       this.sLastName = filteredLastName;
       this.sApplicationStatus = filteredApplicationStatus;
+      this.contextPath = contextPath;
 
       // Populate the filters with initial values if they are defined
       if(!["", undefined].includes(this.sAppNumber)) this.byId("idAppNumberFilter").setValue(this.sAppNumber);
@@ -135,11 +136,11 @@ sap.ui.define([
 
       try {
         // Make an API call to generate the URL
-        const {data} = await axios.get(this.baseUrl+`admin/service/ApplicationDetail(${appId})/GenerateUrl`);
+        const {data} = await axios.get(this.baseUrl+`admin/service/ApplicationDetail(${appId})/GenerateUrl`);        
 
         // Set the generated URL to the input box
         const linkInputBox = this.byId("linkInput");
-        linkInputBox.setText(data.value.generatedUrl);
+        linkInputBox.setText(`${window.location.origin}/${this.contextPath}/index.html#tenant/consent?appId=${data.value.generatedUrl}`);
 
         // Open the dialog to display the generated URL
         this.byId("linkDialog").open();
@@ -185,6 +186,23 @@ sap.ui.define([
       updateModel.submitBatch('CustomGroupId')
         .then(() => MessageToast.show("Updated successfully!"))
         .catch((err) => MessageToast.show("Updation failed : ", err))
+    },
+    /**
+     * Formats the company address into a single string based on the provided components.
+     *
+     * This function checks if the second address line (`CompanyAddrLineTwo`) is empty,
+     * undefined, or null. If it is, the formatted address excludes the second line.
+     * Otherwise, it includes all address components.
+     *
+     * @param {string} CompanyAddress - The primary address line of the company.
+     * @param {string} CompanyAddrLineTwo - The optional second address line of the company.
+     * @param {string} City - The city where the company is located.
+     * @param {string} State - The state where the company is located.
+     * @returns {string} A formatted address string that includes all non-empty components.
+     */
+    formatCompanyAddress: function (CompanyAddress, CompanyAddrLineTwo, City, State) {
+      if(["", undefined, null].includes(CompanyAddrLineTwo)) return `${CompanyAddress}, ${City}, ${State}`;
+      else return `${CompanyAddress}, ${CompanyAddrLineTwo}, ${City}, ${State}`;
     },
     /**
      * Navigates to the building detail page dynamically based on the selected row's data.
