@@ -63,7 +63,7 @@ sap.ui.define([
 
       MessageBox.error(`${errorCode}, ${errorMessage}`);
     },
-    // Get environment variable (Navigation page url and address validation url)
+    // Get environment variable
     GetEnvironmentVariables: async function(){
       try{
         const {url} = this.getApiConfig();
