@@ -37,7 +37,8 @@ modules:
     # Please application specific unique path. Don't create just route just as org and default-domain.
     # It will affect future application deployment in that org. Say "error you can't create this route. This route is already occupied".
     routes:
-      - route : ${org}.${default-domain}/eh
+      # - route : ${org}.${default-domain}/eh
+      - route : ${org}.${default-domain}
   properties:
     CJ_PROTECT_WHITELIST: >
       [

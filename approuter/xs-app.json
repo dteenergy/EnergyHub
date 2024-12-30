@@ -2,25 +2,25 @@
   "welcomeFile": "/eh/consent-portal/index.html",
   "authenticationMethod": "route",
   "logout": {
-    "logoutEndpoint": "/admin/do/logout",
-    "logoutPage": "/admin/index.html"
+    "logoutEndpoint": "/eh/admin/do/logout",
+    "logoutPage": "/eh/admin/index.html"
   },
   "routes": [
     {
-      "source": "^/admin/admin/service/(.*)$",
+      "source": "^/eh/admin/admin/service/(.*)$",
       "target": "/admin/service/$1",
       "destination": "dteConsentAppPortal-srv",
       "authenticationType": "xsuaa",  
       "csrfProtection": false
     },
     {
-      "source": "^/admin/(.*)$",
+      "source": "^/eh/admin/(.*)$",
       "target": "/dteenergyadminportal/$1",
       "service": "html5-apps-repo-rt",
       "authenticationType": "xsuaa"
     },
     {
-      "source": "^/consent-portal/service/(.*)$",
+      "source": "^/eh/consent-portal/service/(.*)$",
       "target": "/service/$1",
       "destination": "dteConsentAppPortal-srv",
       "authenticationType": "none",
@@ -51,7 +51,7 @@
       "destination": "ui5"
     },
     {
-      "source": "^/eh/(.*)$",
+      "source": "^(.*)$",
       "target": "$1",
       "service": "html5-apps-repo-rt",
       "authenticationType": "xsuaa",
