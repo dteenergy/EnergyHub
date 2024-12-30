@@ -18,14 +18,14 @@
         <ScrollContainer width="100%" vertical="true" class="applicationConsentTable paddingAlignment">
         <Table id="idApplicationConsentTable" items="{MainModel>/ApplicationConsent}" width="100%" class='consentPageTable' sticky="ColumnHeaders">
         <columns>
-            <Column width="150px"><header><Label text="Application Number"></Label></header></Column>
-            <Column width="150px"><header><Label text="First Name"></Label></header></Column>
-            <Column width="150px"><header><Label text="Last Name"></Label></header></Column>
-            <Column width="150px"><header><Label text="Consent Email"></Label></header></Column>
-            <Column width="150px"><header><Label text="Consent Given Date"></Label></header></Column>
-            <Column width="150px"><header><Label text="Consent Auth Title"></Label></header></Column>
-            <Column width="150px"><header><Label text="Consent Status"></Label></header></Column>
-            <Column width="150px"><header><Label text="Application Id"></Label></header></Column>
+            <Column width="150px"><header><Text text="Application Number" class="boldText"></Text></header></Column>
+            <Column width="150px"><header><Text text="First Name" class="boldText"></Text></header></Column>
+            <Column width="150px"><header><Text text="Last Name" class="boldText"></Text></header></Column>
+            <Column width="150px"><header><Text text="Consent Email" class="boldText"></Text></header></Column>
+            <Column width="150px"><header><Text text="Consent Given Date" class="boldText"></Text></header></Column>
+            <Column width="150px"><header><Text text="Consent Auth Title" class="boldText"></Text></header></Column>
+            <Column width="150px"><header><Text text="Consent Status" class="boldText"></Text></header></Column>
+            <Column width="150px"><header><Text text="Application Id" class="boldText"></Text></header></Column>
         </columns>
         <items>
             <ColumnListItem id="ColumnListItem">
