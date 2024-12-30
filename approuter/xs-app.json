@@ -1,5 +1,5 @@
 {
-  "welcomeFile": "/consent-portal/index.html",
+  "welcomeFile": "/eh/consent-portal/index.html",
   "authenticationMethod": "route",
   "logout": {
     "logoutEndpoint": "/admin/do/logout",
@@ -27,7 +27,7 @@
       "csrfProtection": false
     },
     {
-      "source": "^/consent-portal/(.*)$",
+      "source": "^/eh/consent-portal/(.*)$",
       "target": "/dteconsentappclient/$1",
       "service": "html5-apps-repo-rt",
       "authenticationType": "none"
@@ -51,7 +51,7 @@
       "destination": "ui5"
     },
     {
-      "source": "^(.*)$",
+      "source": "^/eh/(.*)$",
       "target": "$1",
       "service": "html5-apps-repo-rt",
       "authenticationType": "xsuaa",
