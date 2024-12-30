@@ -24,10 +24,10 @@
       <SearchField id="idLastNameFilter" placeholder="Search for Last Name..." liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
       <ComboBox id="idApplicationStatusFilter" selectedKey="" placeholder="Select Application Status" selectionChange="onFilterChange" class="rightPaddingAlignment">
         <items>
-            <core:Item key="" text="All"/>
-            <core:Item key="New" text="New"/>
-            <core:Item key="Accepted" text="Accepted"/>
-            <core:Item key="Rejected" text="Rejected"/>
+          <core:Item key="" text="All"/>
+          <core:Item key="New" text="New"/>
+          <core:Item key="Accepted" text="Accepted"/>
+          <core:Item key="Rejected" text="Rejected"/>
         </items>
       </ComboBox>
       <Button id="idP13nButton" icon="sap-icon://action-settings" press="setupPersonalization" tooltip="Settings"/>
