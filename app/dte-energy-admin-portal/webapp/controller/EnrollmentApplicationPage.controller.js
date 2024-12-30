@@ -18,12 +18,13 @@ sap.ui.define([
      */
     onInit() {
       // Retrieve the base URL and filter data from the view's data
-      const { baseUrl, filteredApplicationNumber, filteredApplicationStatus, filteredFirstName, filteredLastName } = this.getView().getViewData();
+      const { baseUrl, filteredApplicationNumber, filteredApplicationStatus, filteredFirstName, filteredLastName, contextPath } = this.getView().getViewData();
       this.baseUrl = baseUrl;
       this.sAppNumber = filteredApplicationNumber;
       this.sFirstName = filteredFirstName;
       this.sLastName = filteredLastName;
       this.sApplicationStatus = filteredApplicationStatus;
+      this.contextPath = contextPath;
 
       // Populate the filters with initial values if they are defined
       if(!["", undefined].includes(this.sAppNumber)) this.byId("idAppNumberFilter").setValue(this.sAppNumber);
@@ -135,11 +136,11 @@ sap.ui.define([
 
       try {
         // Make an API call to generate the URL
-        const {data} = await axios.get(this.baseUrl+`admin/service/ApplicationDetail(${appId})/GenerateUrl`);
+        const {data} = await axios.get(this.baseUrl+`admin/service/ApplicationDetail(${appId})/GenerateUrl`);        
 
         // Set the generated URL to the input box
         const linkInputBox = this.byId("linkInput");
-        linkInputBox.setText(data.value.generatedUrl);
+        linkInputBox.setText(`${window.location.origin}/${this.contextPath}/index.html#tenant/consent?appId=${data.value.generatedUrl}`);
 
         // Open the dialog to display the generated URL
         this.byId("linkDialog").open();

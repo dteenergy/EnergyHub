@@ -13,7 +13,9 @@
                 </tnt:SideNavigation>
             </tnt:sideContent>
             <tnt:mainContents>
-                <VBox id="mainContent" width="100%" />
+                <ScrollContainer vertical="true" width="auto" height="100%">
+                    <VBox id="mainContent" width="100%" />
+                </ScrollContainer>
             </tnt:mainContents>
         </tnt:ToolPage>
     </Page>

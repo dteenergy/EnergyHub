@@ -23,7 +23,7 @@ service DTEEnergyAdminPortal {
   } order by AppCreatedAt desc
   actions{
     function GenerateUrl() returns String;
-  };
+  } function GetEnvironmentVariables() returns String;
 
   entity ApplicationConsent as projection on db.ApplicationConsent {
     ApplicationConsentId,
