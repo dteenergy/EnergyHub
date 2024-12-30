@@ -25,23 +25,30 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
 
   }),
 
-    // Method to add the NoOfConsentReceived Field.
-    srv.after('READ', 'ApplicationDetail', async (data) => {
-      try {
-        // If data contains value
-        if (Array.isArray(data)) {
-          for (const el of data) {
-            // Check the ReferenceId with the AppId
-            const ConsentDetail = await cds.run(
-              SELECT.from(ApplicationConsent)
-                .where({ AppRefId_AppId: el.AppId })
-            )
-            el.NoOfConsentReceived = ConsentDetail?.length;
-          }
+  // Method to add the NoOfConsentReceived Field.
+  srv.after('READ', 'ApplicationDetail', async (data) => {
+    try {
+      // If data contains value
+      if (Array.isArray(data)) {
+        for (const el of data) {
+          // Check the ReferenceId with the AppId and ConsentStatus
+          const ConsentDetail = await cds.run(
+            SELECT.from(ApplicationConsent)
+              .where({ AppId: el.AppId, ConsentStatus: ['New', 'Accepted'] })
+          )
+          
+          el.NoOfConsentReceived = ConsentDetail?.length;
         }
-      } catch (e) {
-        return {message:e?.message, code:500}
       }
-    })
+    } catch (e) {
+      return {message:e?.message, code:500}
+    }
+  });
 
+  // Get environment variable
+  srv.on('GetEnvironmentVariables', (req) => {
+    return {
+      contextPath: process.env.CONSENT_PORTAL_CONTEXTPATH
+    }
+  });
 })

@@ -1,0 +1,44 @@
+.dteLogo {
+    display: flex;
+    justify-content: space-between;
+    background-color: #1E3575;
+    align-items: center;
+    height: 55px;
+    padding-left: 20px;
+}
+
+.profile {
+    height: 4rem;
+    width: 4rem;
+}
+
+#__title0 {
+    display: flex !important;
+    align-items: center !important;
+    padding-top: 8px;
+}
+
+.sapFShellBar,
+.dteTitle,
+.sapFShellBarItem,
+.sapMBarChild,
+.sapFShellBarSizePhone {
+    margin: 0px !important;
+}
+
+#__title0-inner {
+    color: white !important;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+@media (max-width: 750px) {
+    .dteLogo{
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .sapFShellBarORHB{
+        display: none;
+    }
+}  

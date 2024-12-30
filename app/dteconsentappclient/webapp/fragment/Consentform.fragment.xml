@@ -24,6 +24,11 @@
             <Input class="inputBox" liveChange="onLiveChange" type="Text" required="true" value="{oConsentModel>/ConsentDetail/ConsentAddress}"/>
             <Text class="address-helper-text" text="123 Main St." ></Text>
         </layout:VerticalLayout>
+
+        <layout:VerticalLayout class="vertical-layout">
+            <Label text="Address Line 2"></Label>
+            <Input class="inputBox" type="Text" value="{oConsentModel>/ConsentDetail/ConsentAddrLineTwo}"></Input>
+        </layout:VerticalLayout>
         
         <layout:VerticalLayout  class="vertical-layout">
             <Label text="City"  required="true"></Label>

@@ -38,15 +38,20 @@
                             </l:VerticalLayout>
 
                             <l:VerticalLayout class="vertical-layout">
+                                <Label text="Address Line 2"></Label>
+                                <Input class="inputBox" type="Text" value="{oEnrollModel>/AccountDetail/CompanyAddrLineTwo}"></Input>
+                            </l:VerticalLayout>
+
+                            <l:VerticalLayout class="vertical-layout">
                                 <Label id="company-city" labelFor="city"  text="City"></Label>
                                 <Input id="city" class="inputBox" type="Text" required="true" liveChange="onLiveChange"  value="{oEnrollModel>/AccountDetail/City}"/>
                             </l:VerticalLayout>
 
                             <l:VerticalLayout class="vertical-layout">
-                            <Label id="company-state" labelFor="state-list" text="State"></Label>
-                            <ComboBox id="state-list" required="true" change="onLiveChange" width="100%" items="{path: 'ostateValuesModel>/'}" placeholder="Make a Selection" selectedKey="{oEnrollModel>/AccountDetail/State}">
-                                <core:Item text="{ostateValuesModel>text}" key="{ostateValuesModel>text}"></core:Item>
-                            </ComboBox>
+                                <Label id="company-state" labelFor="state-list" text="State"></Label>
+                                <ComboBox id="state-list" required="true" change="onLiveChange" width="100%" items="{path: 'ostateValuesModel>/'}" placeholder="Make a Selection" selectedKey="{oEnrollModel>/AccountDetail/State}">
+                                    <core:Item text="{ostateValuesModel>text}" key="{ostateValuesModel>text}"></core:Item>
+                                </ComboBox>
                             </l:VerticalLayout>
 
                             <l:VerticalLayout id="zip-code" class="vertical-layout">
@@ -61,13 +66,13 @@
 
                             <l:VerticalLayout id="acc-manager-ph" class="vertical-layout">
                                 <Label id="company-account-manager-ph" labelFor="account-manager-ph" text="DTE Energy Account Manager Phone Number (if applicable)" wrapping="true"></Label>
-                                <Input id="account-manager-ph" class="inputBox" type="Number" value="{oEnrollModel>/AccountDetail/AcctMgrPhNo}"></Input>
+                                <Input id="account-manager-ph" class="inputBox" type="Number" liveChange="onLiveChange" value="{oEnrollModel>/AccountDetail/AcctMgrPhoneNumber}" ></Input>
                             </l:VerticalLayout>
 
                             <Label id="has-participate" text="Do you already participate in the DTE Energy Data Hub Program?" wrapping="true"></Label>
                             <RadioButtonGroup id="radio-group" select="onRadioButtonSelect">
-                                <RadioButton id="yes" text="Yes"></RadioButton>
-                                <RadioButton id="no" text="No" selected="true"></RadioButton>
+                                <RadioButton id="yes" text="Yes" selected="true"></RadioButton>
+                                <RadioButton id="no" text="No" ></RadioButton>
                             </RadioButtonGroup>
                         </VBox>
 
@@ -96,6 +101,11 @@
                             <Label id="site-contact-address-label" labelFor="site-contact-address-value" text="Site Address"></Label>
                             <Input id="site-contact-address-value" class="inputBox" liveChange="onLiveChange" type="Text" required="true" value="{oEnrollModel>/AccountDetail/SiteAddress}"/>
                             <Text id="site-contact-address-helper-text" class="address-helper-text" text="123 Main St."></Text>
+                        </l:VerticalLayout>
+
+                        <l:VerticalLayout class="vertical-layout">
+                            <Label text="Address Line 2"></Label>
+                            <Input class="inputBox" type="Text" value="{oEnrollModel>/AccountDetail/SiteAddrLineTwo}"></Input>
                         </l:VerticalLayout>
                         
                         <l:VerticalLayout id="site-contact-city" class="vertical-layout">
@@ -151,9 +161,17 @@
                         (and/or their authorized management company) to benchmark their building’s energy usage. 
                         I verify that I am an authorized building owner or management company representative."></Text>
 
-                         <l:VerticalLayout id="auth-date" class="vertical-layout">
+                        <l:VerticalLayout id="auth-date" class="vertical-layout">
                             <Label id="auth-date-label" labelFor="auth-date-value" required="true" text="Date"></Label>
-                            <MaskInput mask="99/99/9999" width="100%" liveChange="onLiveChange" required="true" value="{oEnrollModel>/SignatureSignedDate}"/>
+                           <DatePicker
+                                id="id-customer-auth-date"
+                                displayFormat="MM/dd/yyyy" 
+                                valueFormat="MM/dd/yyyy"
+                                value="{oEnrollModel>/SignatureSignedDate}"
+                                change="onDateChange" 
+                                liveChange="onLiveChange"
+                                required="true">
+                            </DatePicker>
                         </l:VerticalLayout>
                     </VBox>
 

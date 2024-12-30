@@ -17,7 +17,7 @@ const createConsentFormDetail = async (req, entity, tx, decrAppId) => {
     const consentDetailParsedData = JSON.parse(ConsentDetail);
 
     // Check the Consent details fields contains the empty value.
-    const excludedFields = ['AuthTitle'];
+    const excludedFields = ['AuthTitle', 'AddrLineTwo'];
     const consentDetailFieldCheck = Object.keys(consentDetailParsedData).filter((key=> !excludedFields.includes(key))).some(key => consentDetailParsedData[key] === '');
     if (consentDetailFieldCheck)
       throw { statusCode: 400, message: emptyField?.message}
