@@ -40,5 +40,24 @@
       "authenticationType": "xsuaa",
       "cacheControl": "no-cache, no-store, must-revalidate"
     }
+  ],
+  "cors":[
+    {
+      "uriPattern": "^/eh-forms/service/(.*)$",
+      "allowedOrigin": [
+        {
+          "host": "*.dteenergy.com",
+          "port": 8443
+        },
+        {
+          "host":"*.hana.ondemand.com",
+          "port":8443
+        },
+        {
+          "host":"*.us20.applicationstudio.cloud.sap",
+          "port":8443
+        }
+      ]
+    }
   ]
 }
