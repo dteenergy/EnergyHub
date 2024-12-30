@@ -33,7 +33,7 @@
       <Button id="idP13nButton" icon="sap-icon://action-settings" press="setupPersonalization" tooltip="Settings"/>
     </FlexBox>
     <ScrollContainer id="_idScrollContainer" horizontal="true" vertical="false" width="100%" height="auto">
-      <Table id="idApplicationTable" items="{MainModel>/ApplicationDetail}" sticky="ColumnHeaders" width="100%" class="paddingAlignment">
+      <Table id="idApplicationTable" items="{MainModel>/ApplicationDetail}" sticky="ColumnHeaders" width="100%" class="paddingAlignment mainContentBorder">
         <columns>
           <Column width="150px"><header><Text text="Application Number" class="boldText"></Text></header></Column>
           <Column width="150px"><header><Text text="Site Contact" class="boldText"></Text></header></Column>

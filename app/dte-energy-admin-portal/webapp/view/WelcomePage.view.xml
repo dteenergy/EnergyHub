@@ -14,7 +14,9 @@
             </tnt:sideContent>
             <tnt:mainContents>
                 <ScrollContainer vertical="true" width="auto" height="100%">
-                    <VBox id="mainContent" width="100%" />
+                    <FlexBox width="100%" height="100%" justifyContent="Center" >
+                        <VBox id="mainContent" width="90%" height="100%" class="mainContentAlignment" />
+                    </FlexBox>
                 </ScrollContainer>
             </tnt:mainContents>
         </tnt:ToolPage>
