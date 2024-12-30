@@ -26,7 +26,6 @@
             <Column width="150px"><header><Text text="Consent Given Date" class="boldText"></Text></header></Column>
             <Column width="150px"><header><Text text="Consent Auth Title" class="boldText"></Text></header></Column>
             <Column width="150px"><header><Text text="Consent Status" class="boldText"></Text></header></Column>
-            <Column width="150px"><header><Text text="Application Id" class="boldText"></Text></header></Column>
         </columns>
         <items>
             <ColumnListItem id="ColumnListItem">
@@ -37,13 +36,12 @@
                 <Text text="{MainModel>AuthDate}"></Text>
                 <Text text="{MainModel>AuthTitle}"></Text>
                 <ComboBox selectedKey="{MainModel>ConsentStatus}" selectionChange="" change="handleResponse">
-                <items>
-                    <core:Item key="New" text="New" />
-                    <core:Item key="Accepted" text="Accepted" />
-                    <core:Item key="Rejected" text="Rejected" />
-                </items>
+                    <items>
+                        <core:Item key="New" text="New" />
+                        <core:Item key="Accepted" text="Accepted" />
+                        <core:Item key="Rejected" text="Rejected" />
+                    </items>
                 </ComboBox>
-                <Text text="{MainModel>AppId}"></Text>
             </ColumnListItem>
         </items>
         </Table>
