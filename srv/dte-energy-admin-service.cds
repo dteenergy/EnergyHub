@@ -9,10 +9,16 @@ service DTEEnergyAdminPortal {
     AccountDetailRefId.FirstName,
     AccountDetailRefId.LastName,
     AccountDetailRefId.CompanyName,
+    AccountDetailRefId.CompanyAddress,
+    AccountDetailRefId.CompanyAddrLineTwo,
+    AccountDetailRefId.City,
+    AccountDetailRefId.State,
+    AccountDetailRefId.EmailAddr,
     NumberOfTenants,
     ApplicationStatus,
     NoOfConsentReceived,
-    ApplicationNumber
+    ApplicationNumber,
+    SignatureSignedBy
   } actions{
     function GenerateUrl() returns String;
   };

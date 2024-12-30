@@ -21,14 +21,14 @@
     <ScrollContainer class="paddingAlignment" id="_idBuildingScrollContainer" horizontal="true" vertical="false" width="100%" height="auto">
       <Table id="idBuildingTable" items="{MainModel>/BuildingDetail}" sticky="ColumnHeaders" width="100%" class="paddingAlignment">
         <columns>
-          <Column width="150px"><header><Label text="Building Name"></Label></header></Column>
-          <Column width="150px"><header><Label text="Account Number"></Label></header></Column>
-          <Column width="150px"><header><Label text="Location Address"></Label></header></Column>
-          <Column width="150px"><header><Label text="City"></Label></header></Column>
-          <Column width="150px"><header><Label text="State"></Label></header></Column>
-          <Column width="150px"><header><Label text="Zip-Code"></Label></header></Column>
-          <Column width="150px"><header><Label text="Address2"></Label></header></Column>
-          <Column width="150px"><header><Label text="Building Id"></Label></header></Column>
+          <Column width="150px"><header><Text text="Building Name" class="boldText"></Text></header></Column>
+          <Column width="150px"><header><Text text="Account Number" class="boldText"></Text></header></Column>
+          <Column width="150px"><header><Text text="Location Address" class="boldText"></Text></header></Column>
+          <Column width="150px"><header><Text text="City" class="boldText"></Text></header></Column>
+          <Column width="150px"><header><Text text="State" class="boldText"></Text></header></Column>
+          <Column width="150px"><header><Text text="Zip-Code" class="boldText"></Text></header></Column>
+          <Column width="150px"><header><Text text="Address2" class="boldText"></Text></header></Column>
+          <Column width="150px"><header><Text text="Building Id" class="boldText"></Text></header></Column>
         </columns>
           <items>
             <ColumnListItem id="idBuildingColumnListItem">
@@ -38,7 +38,7 @@
               <Text text="{MainModel>City}"></Text>
               <Text text="{MainModel>State}"></Text>
               <Text text="{MainModel>Zipcode}"></Text>
-              <Text text="{MainModel>AddrLineTwo}"></Text>
+              <Text text="{parts: [{path: 'MainModel>AddrLineTwo'}], formatter: '.formatAddrLineTwo'}"></Text>
               <Text text="{MainModel>BuildingId}"></Text>
             </ColumnListItem>
           </items>
