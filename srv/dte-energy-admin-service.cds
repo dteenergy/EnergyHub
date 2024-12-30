@@ -9,14 +9,22 @@ service DTEEnergyAdminPortal {
     AccountDetailRefId.FirstName,
     AccountDetailRefId.LastName,
     AccountDetailRefId.CompanyName,
+    AccountDetailRefId.CompanyAddress,
+    AccountDetailRefId.CompanyAddrLineTwo,
+    AccountDetailRefId.City,
+    AccountDetailRefId.State,
+    AccountDetailRefId.EmailAddr,
     NumberOfTenants,
     ApplicationStatus,
     NoOfConsentReceived,
-    ApplicationNumber
-  } actions{
+    ApplicationNumber,
+    SignatureSignedBy,
+    CreatedAt as AppCreatedAt
+  } order by AppCreatedAt desc
+  actions{
     function GenerateUrl() returns String;
-  };
-  
+  } function GetEnvironmentVariables() returns String;
+
   entity ApplicationConsent as projection on db.ApplicationConsent {
     ApplicationConsentId,
     FirstName,
@@ -26,8 +34,9 @@ service DTEEnergyAdminPortal {
     AuthTitle,
     ConsentStatus,
     AppRefId.AppId,
-    AppRefId.ApplicationNumber
-  };
+    AppRefId.ApplicationNumber,
+    CreatedAt as AppCreatedAt
+  } order by AppCreatedAt desc;
 
   entity BuildingDetail as projection on db.BuildingDetail {
     BuildingId,

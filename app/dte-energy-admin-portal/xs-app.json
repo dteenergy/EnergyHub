@@ -10,6 +10,12 @@
       "csrfProtection": false
     },
     {
+      "source": "^/logout.html$",
+      "service": "html5-apps-repo-rt",
+      "authenticationType": "none",
+      "cacheControl": "no-cache, no-store, must-revalidate"
+    },
+    {
       "source": "^/resources/(.*)$",
       "target": "/resources/$1",
       "authenticationType": "none",

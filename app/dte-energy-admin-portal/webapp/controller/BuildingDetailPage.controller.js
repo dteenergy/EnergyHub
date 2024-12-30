@@ -26,6 +26,7 @@ sap.ui.define([
         ApplicationNumber,
         FirstName,
         LastName,
+        filteredApplicationNumber,
         filteredApplicationStatus,
         filteredFirstName,
         filteredLastName
@@ -33,6 +34,7 @@ sap.ui.define([
 
       // Set instance variables for later use
       this.baseUrl = baseUrl;
+      this.sAppNumber = filteredApplicationNumber;
       this.sFirstName = filteredFirstName;
       this.sLastName = filteredLastName;
       this.sApplicationStatus = filteredApplicationStatus;
@@ -76,6 +78,19 @@ sap.ui.define([
       this.oPersonalizationController.openDialog();
     },
     /**
+     * Formats the second address line by providing a default value if it's empty or undefined.
+     *
+     * If the provided second address line (`AddrLineTwo`) is empty, undefined, or null,
+     * the function returns a value ("-"). Otherwise, it returns the original value.
+     *
+     * @param {string} AddrLineTwo - The second address line to be formatted.
+     * @returns {string} The formatted second address line or a placeholder ("-") if empty.
+     */
+    formatAddrLineTwo: function (AddrLineTwo) {
+      if(["", undefined, null].includes(AddrLineTwo)) return '-';
+      else return AddrLineTwo;
+    },
+    /**
      * Navigates back to the Enrollment Application Page dynamically.
      * Clears the current content of the VBox and loads the Enrollment Application Page view.
      *
@@ -90,8 +105,11 @@ sap.ui.define([
 
       // Dynamically create and add the Enrollment Application Page view
       sap.ui.core.mvc.XMLView.create({
-        viewData: {baseUrl: this.baseUrl, filteredLastName: this.sLastName,
-        filteredFirstName: this.sFirstName, filteredApplicationStatus: this.sApplicationStatus},
+        viewData: {
+          baseUrl: this.baseUrl, filteredApplicationNumber: this.sAppNumber,
+          filteredLastName: this.sLastName, filteredFirstName: this.sFirstName,
+          filteredApplicationStatus: this.sApplicationStatus
+        },
         viewName: `dteenergyadminportal.view.EnrollmentApplicationPage`
       }).then(function (oView) {
         // Add the newly created view to the VBox

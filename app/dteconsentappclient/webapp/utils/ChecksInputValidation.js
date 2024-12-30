@@ -13,7 +13,7 @@ sap.ui.define([
 		 * @returns {Boolean}
 		 */
     isValid: function(oControl, sValue, sType){
-
+      
       // If the given value is valid set the valueState to "None"
       if(RegexAndMessage.regex[sType].test(sValue)) {
         oControl.setValueState("None");
