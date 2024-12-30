@@ -45,7 +45,7 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
     }
   });
 
-  // Get environment variable (Navigation page url and address validation url)
+  // Get environment variable
   srv.on('GetEnvironmentVariables', (req) => {
     return {
       contextPath: process.env.CONSENT_PORTAL_CONTEXTPATH
