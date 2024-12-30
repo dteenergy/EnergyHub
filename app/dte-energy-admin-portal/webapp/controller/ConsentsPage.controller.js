@@ -61,14 +61,16 @@ sap.ui.define([
              */
             const firstName = this.byId("idFilterFirstName").getValue();
             const lastName = this.byId("idFilterLastName").getValue();
+            const appNumber = this.byId("idFilterAppNumber").getValue();
             const consentStatus = this.byId("idConsentStatusFilter").getSelectedKey();
-
+            
             // Array for filter
             const filterData = [];
 
             // Handle the filters value
             if(firstName) filterData.push(new Filter({path: "FirstName", operator: FilterOperator.Contains, value1: firstName, caseSensitive: false}));
             if(lastName) filterData.push(new Filter({path: "LastName", operator: FilterOperator.Contains, value1: lastName, caseSensitive: false}));
+            if(appNumber) filterData.push(new Filter({path: "ApplicationNumber", operator: FilterOperator.Contains, value1: appNumber, caseSensitive: false}));
             if(consentStatus) filterData.push(new Filter("ConsentStatus", FilterOperator.EQ, consentStatus));
 
             // Combine filter logic.

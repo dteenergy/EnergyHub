@@ -3,6 +3,7 @@
     xmlns="sap.m">
     <VBox id="iVbox" class="consentAppTable">
         <FlexBox id="idToolbar" justifyContent="End" class="paddingAlignment" wrap="Wrap">
+            <SearchField id="idFilterAppNumber" placeholder="Application Number" liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
             <SearchField id="idFilterFirstName" placeholder="Firstname" liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
             <SearchField id="idFilterLastName" placeholder="Lastname" liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
             <ComboBox id="idConsentStatusFilter" selectedKey="" placeholder="Consent Status" selectionChange="onFilterChange" class="rightPaddingAlignment">
