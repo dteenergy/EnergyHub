@@ -9,8 +9,15 @@
 		</l:VerticalLayout>
 
 		<l:VerticalLayout class="vertical-layout">
-			<Label text="Date" required="true"></Label>
-			<MaskInput mask="99/99/9999" width="100%" liveChange="onLiveChange" required="true" value="{oConsentModel>/ConsentDetail/AuthDate}"/>
+      <Label labelFor="auth-date-value" required="true" text="Date"></Label>
+			<DatePicker
+				displayFormat="MM/dd/yyyy"
+				valueFormat="MM/dd/yyyy" 
+				value="{oConsentModel>/ConsentDetail/AuthDate}" 
+				liveChange="onLiveChange"
+				required="true"
+				change="onDateChange">
+			</DatePicker>
 		</l:VerticalLayout>
 
 		<l:VerticalLayout class="vertical-layout">
