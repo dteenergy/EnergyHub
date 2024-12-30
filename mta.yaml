@@ -2,7 +2,11 @@ _schema-version: 3.3.0
 ID: dteConsentAppPortal
 description: DTE consent app portal project.
 version: 1.0.0
+
+
 modules:
+
+# Backend Service
 - name: dteConsentAppPortal-srv
   type: nodejs
   path: gen/srv
@@ -22,7 +26,7 @@ modules:
     ERROR_PAGE_URL : https://www.dteenergy.com/us/en/quicklinks/energy-hub/energy-hub-error.html
     APPNUM_PREFIX_ENABLED : "N"
     APPNUM_PREFIX : ""
-    CONSENT_PORTAL_CONTEXTPATH: "eh-forms"
+    CONSENT_PORTAL_CONTEXTPATH: "eh/consent-portal"
     WHITELIST: ["https://*.hana.ondemand.com", "https://*.dteenergy.com", "https://*.us20.applicationstudio.cloud.sap"]
   parameters:
     memory: 256MB
@@ -31,6 +35,8 @@ modules:
     ignore:
     - node_modules
     - package-lock.json
+
+# Approuter    
 - name: dteConsentAppPortal-approuter
   type: approuter.nodejs
   path: approuter
@@ -38,6 +44,11 @@ modules:
     memory: 256M
     disk-quota: 1024M
     stack: cflinuxfs4
+    # Please application specific unique path. Don't create just route just as org and default-domain.
+    # It will affect future application deployment in that org. Say "error you can't create this route. This route is already occupied".
+    routes:
+      # - route : ${org}.${default-domain}/eh
+      - route : ${org}.${default-domain}
   properties:
     CJ_PROTECT_WHITELIST: >
       [
@@ -70,7 +81,6 @@ modules:
           "Access-Control-Allow-Headers": "Authorization,Content-Type"
         }
       ]
-
   build-parameters:
     ignore: ["node_modules/"]
   requires:
@@ -84,6 +94,7 @@ modules:
         strictSSL: false
         name: dteConsentAppPortal-srv
         url: ~{srv-url}
+
 - name: dteConsentAppPortal-destination-content
   type: com.sap.application.content
   requires:
@@ -122,6 +133,7 @@ modules:
         existing_destinations_policy: ignore
   build-parameters:
     no-source: true
+
 - name: dteConsentAppPortal-app-content
   type: com.sap.application.content
   path: .
@@ -140,6 +152,7 @@ modules:
       - dteenergyadminportal.zip
       name: dteenergyadminportal
       target-path: resources/
+
 - name: dteConsentAppPortal-db-deployer
   type: nodejs
   path: gen/pg
@@ -152,6 +165,7 @@ modules:
     tasks:
     - command: npm start
       name: deploy-to-postgresql
+
 - name: dteconsentappclient
   type: html5
   path: app/dteconsentappclient
@@ -162,6 +176,7 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
+
 - name: dteenergyadminportal
   type: html5
   path: app/dte-energy-admin-portal
@@ -172,6 +187,8 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
+
+
 resources:
 - name: dteConsentAppPortal-destination-service
   type: org.cloudfoundry.managed-service
