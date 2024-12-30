@@ -12,11 +12,13 @@ service DTEEnergyAdminPortal {
     NumberOfTenants,
     ApplicationStatus,
     NoOfConsentReceived,
-    ApplicationNumber
-  } actions{
+    ApplicationNumber,
+    CreatedAt as AppCreatedAt
+  } order by AppCreatedAt desc
+  actions{
     function GenerateUrl() returns String;
   };
-  
+
   entity ApplicationConsent as projection on db.ApplicationConsent {
     ApplicationConsentId,
     FirstName,
@@ -26,8 +28,9 @@ service DTEEnergyAdminPortal {
     AuthTitle,
     ConsentStatus,
     AppRefId.AppId,
-    AppRefId.ApplicationNumber
-  };
+    AppRefId.ApplicationNumber,
+    CreatedAt as AppCreatedAt
+  } order by AppCreatedAt desc;
 
   entity BuildingDetail as projection on db.BuildingDetail {
     BuildingId,
