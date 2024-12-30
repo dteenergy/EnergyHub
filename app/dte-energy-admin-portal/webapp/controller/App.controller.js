@@ -37,7 +37,7 @@ sap.ui.define([
         const appPrefix = origin + "/" + pathName;
 
         // Redirect to the logout URL
-        window.location.href = appPrefix + "/eh/admin/do/logout"; 
+        window.location.href = appPrefix + "/admin/do/logout"; 
       }
 
   });
