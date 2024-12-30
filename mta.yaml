@@ -18,6 +18,16 @@ modules:
   - name: srv-api
     properties:
       srv-url: ${default-url}
+  properties:
+    CRYPTOJS_SECRET_KEY : "@dteEneHub*123*Forms" 
+    DTE_ADDRESS_VALIDATION_URL : https://test.api.customer.sites.dteenergy.com/public/qa/premises/
+    TENANT_CONFIRMATION_PAGE_URL : https://preview-p70003-e710499.adobeaemcloud.com/content/dteenergy/deg/website/us/en/quicklinks/energy-hub/energy-hub-tenant-confirmation.html
+    LANDLORD_CONFIRMATION_PAGE_URL : https://preview-p70003-e710499.adobeaemcloud.com/content/dteenergy/deg/website/us/en/quicklinks/energy-hub/energy-hub-landlord-confirmation.html
+    ERROR_PAGE_URL : https://www.dteenergy.com/us/en/quicklinks/energy-hub/energy-hub-error.html
+    APPNUM_PREFIX_ENABLED : "N"
+    APPNUM_PREFIX : ""
+    CONSENT_PORTAL_CONTEXTPATH: "eh-forms"
+    WHITELIST: ["https://*.hana.ondemand.com", "https://*.dteenergy.com", "https://*.us20.applicationstudio.cloud.sap"]
   parameters:
     memory: 256MB
   build-parameters:

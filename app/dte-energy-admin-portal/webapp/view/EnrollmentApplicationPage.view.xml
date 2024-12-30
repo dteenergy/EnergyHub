@@ -24,16 +24,16 @@
       <SearchField id="idLastNameFilter" placeholder="Search for Last Name..." liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
       <ComboBox id="idApplicationStatusFilter" selectedKey="" placeholder="Select Application Status" selectionChange="onFilterChange" class="rightPaddingAlignment">
         <items>
-            <core:Item key="" text="All"/>
-            <core:Item key="New" text="New"/>
-            <core:Item key="Accepted" text="Accepted"/>
-            <core:Item key="Rejected" text="Rejected"/>
+          <core:Item key="" text="All"/>
+          <core:Item key="New" text="New"/>
+          <core:Item key="Accepted" text="Accepted"/>
+          <core:Item key="Rejected" text="Rejected"/>
         </items>
       </ComboBox>
       <Button id="idP13nButton" icon="sap-icon://action-settings" press="setupPersonalization" tooltip="Settings"/>
     </FlexBox>
     <ScrollContainer id="_idScrollContainer" horizontal="true" vertical="false" width="100%" height="auto">
-      <Table id="idApplicationTable" items="{MainModel>/ApplicationDetail}" sticky="ColumnHeaders" width="100%" class="paddingAlignment">
+      <Table id="idApplicationTable" items="{MainModel>/ApplicationDetail}" sticky="ColumnHeaders" width="100%" class="paddingAlignment mainContentBorder">
         <columns>
           <Column width="150px"><header><Text text="Application Number" class="boldText"></Text></header></Column>
           <Column width="150px"><header><Text text="Site Contact" class="boldText"></Text></header></Column>
