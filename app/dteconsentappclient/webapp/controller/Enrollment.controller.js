@@ -21,9 +21,6 @@ sap.ui.define([
 					consentAuthDetailValidation: true
 				};
 
-		const dateInputIds = [{"containerId": "auth-info-container", "DateInputId":"id-customer-auth-date"},
-			 {"containerId": "customer-auth-and-release-container", "DateInputId":"id-consent-auth-date"}]
-
     return BaseController.extend("dteconsentappclient.controller.Enrollment", {
         onInit() {
 					
@@ -381,7 +378,6 @@ sap.ui.define([
 				 */
         validateFormDetails: function(sContainerId, isShowError, validationStatus){
 					const container = this.byId(sContainerId);	
-					const that = this;
 					validationFlags[validationStatus] = true;
 					
 					// To get the aggregated objects from the given container
@@ -393,9 +389,6 @@ sap.ui.define([
 								control instanceof sap.m.DatePicker ) {
 							
 							let userInput = control.getValue();
-							// const a = this.byId("id-customer-auth-date").getValue();
-							// console.log(a);
-							
 							
 							// Validates that all required fields are filled; if a field is empty, marks it with an error state to indicate validation failure.
 							if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) {
@@ -417,7 +410,7 @@ sap.ui.define([
 								if(userInput && control?.getBindingPath("value")?.includes("PhoneNumber"))
 									if(!ChecksInputValidation.isValid(control, userInput, "PhoneNumber")) validationFlags[validationStatus] = false;	
 								
-								// // If the input type is datePicker, validate the user input to ensure it is in a valid date format.
+								// If the input type is datePicker, validate the user input to ensure it is in a valid date format.
 								if(control instanceof sap.m.DatePicker) 
 									if(!ChecksInputValidation.isValid(control, userInput, "Date")) validationFlags[validationStatus] = false;
 							}	
@@ -783,9 +776,8 @@ sap.ui.define([
 				},
 
 				validate: function(){
-					this.retrieveAllInputBindings();
 					this.validateFormDetails("account-info-container", true, "accountDetailsValidation");
-					this.validateFormDetails("site-contact-info-container", true,  "siteDetailsValidation");
+					this.validateFormDetails("site-contact-info-container", true, "siteDetailsValidation");
 					this.validateBuildingDetails("building-detail-main-container");
 					this.validateFormDetails("auth-info-container", true, "customerAuthDetailValidation");
 					this.validateFormDetails("enrollment-consent-section", true, "consentDetailValidation");
