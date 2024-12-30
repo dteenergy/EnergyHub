@@ -26,7 +26,7 @@ modules:
     ERROR_PAGE_URL : https://www.dteenergy.com/us/en/quicklinks/energy-hub/energy-hub-error.html
     APPNUM_PREFIX_ENABLED : "N"
     APPNUM_PREFIX : ""
-    CONSENT_PORTAL_CONTEXTPATH: "eh-forms"
+    CONSENT_PORTAL_CONTEXTPATH: "eh/consent-portal"
     WHITELIST: ["https://*.hana.ondemand.com", "https://*.dteenergy.com", "https://*.us20.applicationstudio.cloud.sap"]
   parameters:
     memory: 256MB
