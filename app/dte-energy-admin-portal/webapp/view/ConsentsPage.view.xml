@@ -16,17 +16,17 @@
             </ComboBox>
             <Button id="idP1nButton" icon="sap-icon://action-settings" press="setupPersonalization" tooltip="Settings"/>
         </FlexBox>
-        <ScrollContainer width="100%" vertical="true" class="applicationConsentTable paddingAlignment">
+        <ScrollContainer width="100%" class="applicationConsentTable paddingAlignment" horizontal="true" vertical="false" height="auto">
         <Table id="idApplicationConsentTable" items="{MainModel>/ApplicationConsent}" width="100%" class='consentPageTable' sticky="ColumnHeaders">
         <columns>
-            <Column width="150px"><header><Label text="Application Number"></Label></header></Column>
-            <Column width="150px"><header><Label text="First Name"></Label></header></Column>
-            <Column width="150px"><header><Label text="Last Name"></Label></header></Column>
-            <Column width="150px"><header><Label text="Consent Email"></Label></header></Column>
-            <Column width="150px"><header><Label text="Consent Given Date"></Label></header></Column>
-            <Column width="150px"><header><Label text="Consent Auth Title"></Label></header></Column>
-            <Column width="150px"><header><Label text="Consent Status"></Label></header></Column>
-            <Column width="150px"><header><Label text="Application Id"></Label></header></Column>
+            <Column width="150px"><header><Label text="Application Number" class = "textAlignmentHeading"></Label></header></Column>
+            <Column width="150px"><header><Label text="First Name" class = "textAlignmentHeading"></Label></header></Column>
+            <Column width="150px"><header><Label text="Last Name" class = "textAlignmentHeading"></Label></header></Column>
+            <Column width="150px"><header><Label text="Consent Email" class = "textAlignmentHeading"></Label></header></Column>
+            <Column width="150px"><header><Label text="Consent Given Date" class = "textAlignmentHeading"></Label></header></Column>
+            <Column width="150px"><header><Label text="Consent Auth Title" class = "textAlignmentHeading"></Label></header></Column>
+            <Column width="150px"><header><Label text="Consent Status" class = "textAlignmentHeading"></Label></header></Column>
+            <Column width="150px"><header><Label text="Application Id" class = "textAlignmentHeading"></Label></header></Column>
         </columns>
         <items>
             <ColumnListItem id="ColumnListItem">
