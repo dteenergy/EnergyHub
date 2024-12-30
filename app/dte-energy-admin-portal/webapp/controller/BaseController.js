@@ -63,5 +63,20 @@ sap.ui.define([
 
       MessageBox.error(`${errorCode}, ${errorMessage}`);
     },
-  });
+    // Get environment variable (Navigation page url and address validation url)
+    GetEnvironmentVariables: async function(){
+      try{
+        const {url} = this.getApiConfig();
+
+        // construct the url to get the environment variables
+        const urlToGetEnvironmentVariables = url + 'admin/service/GetEnvironmentVariables';
+
+        const response = await axios.get(urlToGetEnvironmentVariables);
+
+        return response?.data?.value;
+      }catch(err){
+        this.errorHandler(err);
+      }
+    }
+  }); 
 });

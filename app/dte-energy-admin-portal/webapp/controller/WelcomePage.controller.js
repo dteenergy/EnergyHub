@@ -27,8 +27,14 @@ sap.ui.define([
             }).then(function (oView) {
                 oVBox.addItem(oView);
             });
-        },
 
+            this.getENV();
+        },
+        // Get the env data
+        getENV: async function () {
+            const {contextPath} = await this.GetEnvironmentVariables();
+            this.contextPath = contextPath;
+        },
         /**
          * Handles the event triggered when a menu item is selected.
          * Dynamically loads the corresponding view based on the selected key and adds it to the VBox container.
@@ -49,7 +55,7 @@ sap.ui.define([
 
             // Dynamically create and add the new view as per click the menu
             sap.ui.core.mvc.XMLView.create({
-                viewData: {baseUrl: this.SERVERHOST},
+                viewData: {baseUrl: this.SERVERHOST, contextPath: this.contextPath},
                 viewName: `dteenergyadminportal.view.${selectedKey}` // Example: Home, Profile, Preferences
             }).then(function (oView) {
                 oVBox.addItem(oView);
