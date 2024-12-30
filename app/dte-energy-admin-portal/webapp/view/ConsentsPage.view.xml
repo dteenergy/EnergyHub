@@ -3,6 +3,7 @@
     xmlns="sap.m">
     <VBox id="iVbox" class="consentAppTable">
         <FlexBox id="idToolbar" justifyContent="End" class="paddingAlignment" wrap="Wrap">
+            <SearchField id="idFilterAppNumber" placeholder="Application Number" liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
             <SearchField id="idFilterFirstName" placeholder="Firstname" liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
             <SearchField id="idFilterLastName" placeholder="Lastname" liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
             <ComboBox id="idConsentStatusFilter" selectedKey="" placeholder="Consent Status" selectionChange="onFilterChange" class="rightPaddingAlignment">
@@ -15,7 +16,7 @@
             </ComboBox>
             <Button id="idP1nButton" icon="sap-icon://action-settings" press="setupPersonalization" tooltip="Settings"/>
         </FlexBox>
-        <ScrollContainer width="100%" vertical="true" class="applicationConsentTable paddingAlignment">
+        <ScrollContainer width="100%" class="applicationConsentTable paddingAlignment" horizontal="true" vertical="false" height="auto">
         <Table id="idApplicationConsentTable" items="{MainModel>/ApplicationConsent}" width="100%" class='consentPageTable' sticky="ColumnHeaders">
         <columns>
             <Column width="150px"><header><Text text="Application Number" class="boldText"></Text></header></Column>
