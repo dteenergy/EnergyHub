@@ -19,14 +19,14 @@
         <ScrollContainer width="100%" class="applicationConsentTable paddingAlignment" horizontal="true" vertical="false" height="auto">
         <Table id="idApplicationConsentTable" items="{MainModel>/ApplicationConsent}" width="100%" class='consentPageTable' sticky="ColumnHeaders">
         <columns>
-            <Column width="150px"><header><Label text="Application Number" class = "textAlignmentHeading"></Label></header></Column>
-            <Column width="150px"><header><Label text="First Name" class = "textAlignmentHeading"></Label></header></Column>
-            <Column width="150px"><header><Label text="Last Name" class = "textAlignmentHeading"></Label></header></Column>
-            <Column width="150px"><header><Label text="Consent Email" class = "textAlignmentHeading"></Label></header></Column>
-            <Column width="150px"><header><Label text="Consent Given Date" class = "textAlignmentHeading"></Label></header></Column>
-            <Column width="150px"><header><Label text="Consent Auth Title" class = "textAlignmentHeading"></Label></header></Column>
-            <Column width="150px"><header><Label text="Consent Status" class = "textAlignmentHeading"></Label></header></Column>
-            <Column width="150px"><header><Label text="Application Id" class = "textAlignmentHeading"></Label></header></Column>
+            <Column width="150px"><header><Text text="Application Number" class="boldText"></Text></header></Column>
+            <Column width="150px"><header><Text text="First Name" class="boldText"></Text></header></Column>
+            <Column width="150px"><header><Text text="Last Name" class="boldText"></Text></header></Column>
+            <Column width="150px"><header><Text text="Consent Email" class="boldText"></Text></header></Column>
+            <Column width="150px"><header><Text text="Consent Given Date" class="boldText"></Text></header></Column>
+            <Column width="150px"><header><Text text="Consent Auth Title" class="boldText"></Text></header></Column>
+            <Column width="150px"><header><Text text="Consent Status" class="boldText"></Text></header></Column>
+            <Column width="150px"><header><Text text="Application Id" class="boldText"></Text></header></Column>
         </columns>
         <items>
             <ColumnListItem id="ColumnListItem">

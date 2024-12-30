@@ -187,6 +187,23 @@ sap.ui.define([
         .catch((err) => MessageToast.show("Updation failed : ", err))
     },
     /**
+     * Formats the company address into a single string based on the provided components.
+     *
+     * This function checks if the second address line (`CompanyAddrLineTwo`) is empty,
+     * undefined, or null. If it is, the formatted address excludes the second line.
+     * Otherwise, it includes all address components.
+     *
+     * @param {string} CompanyAddress - The primary address line of the company.
+     * @param {string} CompanyAddrLineTwo - The optional second address line of the company.
+     * @param {string} City - The city where the company is located.
+     * @param {string} State - The state where the company is located.
+     * @returns {string} A formatted address string that includes all non-empty components.
+     */
+    formatCompanyAddress: function (CompanyAddress, CompanyAddrLineTwo, City, State) {
+      if(["", undefined, null].includes(CompanyAddrLineTwo)) return `${CompanyAddress}, ${City}, ${State}`;
+      else return `${CompanyAddress}, ${CompanyAddrLineTwo}, ${City}, ${State}`;
+    },
+    /**
      * Navigates to the building detail page dynamically based on the selected row's data.
      *
      * @param {sap.ui.base.Event} oEvent - The event triggered by selection.

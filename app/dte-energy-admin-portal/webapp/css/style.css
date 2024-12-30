@@ -32,5 +32,9 @@ body {
 }
 
 .textAlignmentHeading {
-  font-weight: bold !important;
+  font-weight: bold;
+}
+
+.boldText{
+  font-weight: bold;
 }
