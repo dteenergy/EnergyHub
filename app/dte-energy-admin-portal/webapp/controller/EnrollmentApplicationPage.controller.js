@@ -139,7 +139,7 @@ sap.ui.define([
 
         // Set the generated URL to the input box
         const linkInputBox = this.byId("linkInput");
-        linkInputBox.setText(data.value.generatedUrl);
+        linkInputBox.setText(`${window.location.origin}/eh-forms/index.html#tenant/consent?appId=${data.value.generatedUrl}`);
 
         // Open the dialog to display the generated URL
         this.byId("linkDialog").open();
