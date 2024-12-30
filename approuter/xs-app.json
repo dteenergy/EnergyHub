@@ -1,7 +1,24 @@
 {
   "welcomeFile": "/eh-forms/index.html",
   "authenticationMethod": "route",
+  "logout": {
+    "logoutEndpoint": "/eh-admin/do/logout",
+    "logoutPage": "/eh-admin/index.html"
+  },
   "routes": [
+    {
+      "source": "^/eh-admin/admin/service/(.*)$",
+      "target": "/admin/service/$1",
+      "destination": "dteConsentAppPortal-srv",
+      "authenticationType": "xsuaa",  
+      "csrfProtection": false
+    },
+    {
+      "source": "^/eh-admin/(.*)$",
+      "target": "/dteenergyadminportal/$1",
+      "service": "html5-apps-repo-rt",
+      "authenticationType": "xsuaa"
+    },
     {
       "source": "^/eh-forms/service/(.*)$",
       "target": "/service/$1",
