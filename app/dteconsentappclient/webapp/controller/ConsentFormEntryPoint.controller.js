@@ -15,7 +15,11 @@ sap.ui.define([
             const { url } = this.getApiConfig();
             this.SERVERHOST = url;
 
-            this.getEnv();
+            this.getEnv((envVariables)=>{
+                this.TenantConfirmationPageUrl = envVariables.TenantConfirmationPageUrl;
+                this.ErrorPageUrl = envVariables.ErrorPageUrl;
+                this.DTEAddressValidationUrl = envVariables.DTEAddressValidationUrl;
+            });
         },
         /**
          * Get router params from router
@@ -29,12 +33,9 @@ sap.ui.define([
         },
 
         // Get the env data (Navigation page url)
-        getEnv:  async function(){
-            const {TenantConfirmationPageUrl, ErrorPageUrl, DTEAddressValidationUrl} = await this.getEnvironmentVariables();
-            
-            this.TenantConfirmationPageUrl = TenantConfirmationPageUrl;
-            this.ErrorPageUrl = ErrorPageUrl;
-            this.DTEAddressValidationUrl = DTEAddressValidationUrl;
+        getEnv:  async function(callback){
+            const envVariables = await this.getEnvironmentVariables();
+            callback(envVariables);
         },
 
         /**
