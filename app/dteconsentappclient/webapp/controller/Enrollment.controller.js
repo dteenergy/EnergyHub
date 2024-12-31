@@ -29,11 +29,11 @@ sap.ui.define([
           this.SERVERHOST = url;
 					this.buildingCount = 1;
 
-			this.getEnv((envVariables)=>{
-				this.TenantConfirmationPageUrl = envVariables.TenantConfirmationPageUrl;
-				this.ErrorPageUrl = envVariables.ErrorPageUrl;
-				this.DTEAddressValidationUrl = envVariables.DTEAddressValidationUrl;
-			});
+					this.getEnv((envVariables)=>{
+						this.LandlordConfirmationPageUrl = envVariables.LandlordConfirmationPageUrl;
+						this.ErrorPageUrl = envVariables.ErrorPageUrl;
+						this.DTEAddressValidationUrl = envVariables.DTEAddressValidationUrl;
+					});
 
           let oEnrollFormData = {
             SignatureSignedBy: "",
