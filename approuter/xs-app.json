@@ -33,22 +33,10 @@
       "authenticationType": "none"
     },
     {
-      "source": "^/index.html$",
+      "source": "^/eh",
+      "target": "/dteconsentappclient/index.html",
       "service": "html5-apps-repo-rt",
-      "authenticationType": "xsuaa",
-      "cacheControl": "no-cache, no-store, must-revalidate"
-    },
-    {
-      "source": "^/resources/(.*)$",
-      "target": "/resources/$1",
-      "authenticationType": "none",
-      "destination": "ui5"
-    },
-    {
-      "source": "^/test-resources/(.*)$",
-      "target": "/test-resources/$1",
-      "authenticationType": "none",
-      "destination": "ui5"
+      "authenticationType": "none"
     },
     {
       "source": "^(.*)$",
