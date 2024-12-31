@@ -26,6 +26,7 @@ sap.ui.define([
 					
 					this.buildingCount = 1;
 
+					// Retrieve the server host and env variables from the view data.
 					const {
 						serverHost,
 						envVariables
@@ -35,8 +36,6 @@ sap.ui.define([
 					this.LandlordConfirmationPageUrl = envVariables.LandlordConfirmationPageUrl;
 					this.ErrorPageUrl = envVariables.ErrorPageUrl;
 					this.DTEAddressValidationUrl = envVariables.DTEAddressValidationUrl;
-
-					console.log(envVariables);
 					
           let oEnrollFormData = {
             SignatureSignedBy: "",
