@@ -29,7 +29,11 @@ sap.ui.define([
           this.SERVERHOST = url;
 					this.buildingCount = 1;
 
-					this.getEnv();
+					this.getEnv((envVariables)=>{
+						this.LandlordConfirmationPageUrl = envVariables.LandlordConfirmationPageUrl;
+						this.ErrorPageUrl = envVariables.ErrorPageUrl;
+						this.DTEAddressValidationUrl = envVariables.DTEAddressValidationUrl;
+					});
 
           let oEnrollFormData = {
             SignatureSignedBy: "",
@@ -111,13 +115,10 @@ sap.ui.define([
       },
 
 			  // Get the navigation page url and address validation url
-				getEnv:  async function(){
-					const {DTEAddressValidationUrl, LandlordConfirmationPageUrl, ErrorPageUrl} = await this.getEnvironmentVariables();
-					
-					this.DTEAddressValidationUrl = DTEAddressValidationUrl;
-					this.LandlordConfirmationPageUrl = LandlordConfirmationPageUrl;
-					this.ErrorPageUrl = ErrorPageUrl;
-				},
+			  getEnv:  async function(callback){
+				const envVariables = await this.getEnvironmentVariables();
+				callback(envVariables);
+			},
 
         /**
 				 * Add additional location(Building) container
@@ -462,7 +463,7 @@ sap.ui.define([
 									return;
 								}	 
 						}else return;
-						}
+					}
 
 					/**
 					 * If the validation flag have a "false", revalidate the input fields while live change happens.
