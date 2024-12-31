@@ -149,8 +149,8 @@
           "viewType": "XML",
           "transition": "slide",
           "clearControlAggregation": false,
-          "viewId": "Enrollment",
-          "viewName": "Enrollment"
+          "viewId": "EnrollmentFormEntryPoint",
+          "viewName": "EnrollmentFormEntryPoint"
         }
       }
     },
@@ -162,7 +162,7 @@
     "config": {
       "routerConfig": {
         "localApi": {
-          "uri": "https://port4004-workspaces-ws-mjfnp.us20.applicationstudio.cloud.sap/"
+          "uri": "https://port4004-workspaces-ws-xv87q.us10.trial.applicationstudio.cloud.sap/"
         },
         "productionApi": {
           "uri": ""

@@ -24,13 +24,20 @@ sap.ui.define([
     return BaseController.extend("dteconsentappclient.controller.Enrollment", {
         onInit() {
 					
-        // Assign url and headers into this controller global scope
-          const { url } = this.getApiConfig();
-          this.SERVERHOST = url;
 					this.buildingCount = 1;
 
-					this.getEnv();
+					const {
+						serverHost,
+						envVariables
+					} = this.getView().getViewData();
 
+					this.SERVERHOST = serverHost;
+					this.LandlordConfirmationPageUrl = envVariables.LandlordConfirmationPageUrl;
+					this.ErrorPageUrl = envVariables.ErrorPageUrl;
+					this.DTEAddressValidationUrl = envVariables.DTEAddressValidationUrl;
+
+					console.log(envVariables);
+					
           let oEnrollFormData = {
             SignatureSignedBy: "",
             SignatureSignedDate: "",
@@ -109,15 +116,6 @@ sap.ui.define([
         this.loadConsentForm();
         this.loadAuthAndRelease();
       },
-
-			  // Get the navigation page url and address validation url
-				getEnv:  async function(){
-					const {DTEAddressValidationUrl, LandlordConfirmationPageUrl, ErrorPageUrl} = await this.getEnvironmentVariables();
-					
-					this.DTEAddressValidationUrl = DTEAddressValidationUrl;
-					this.LandlordConfirmationPageUrl = LandlordConfirmationPageUrl;
-					this.ErrorPageUrl = ErrorPageUrl;
-				},
 
         /**
 				 * Add additional location(Building) container
