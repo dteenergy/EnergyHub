@@ -462,7 +462,7 @@ sap.ui.define([
 									return;
 								}	 
 						}else return;
-						}
+					}
 
 					/**
 					 * If the validation flag have a "false", revalidate the input fields while live change happens.
