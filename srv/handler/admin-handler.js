@@ -48,7 +48,7 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
   // Get environment variable
   srv.on('GetEnvironmentVariables', (req) => {
     return {
-      contextPath: process.env.CONSENT_PORTAL_CONTEXTPATH
+      tenantConsentFormURL: process.env.TENANT_CONSENT_FORM_URL
     }
   });
 })
