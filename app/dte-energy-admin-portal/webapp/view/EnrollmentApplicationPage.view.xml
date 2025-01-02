@@ -3,15 +3,8 @@
   xmlns="sap.m">
   <Dialog id="linkDialog" title="Generated Link">
     <HBox justifyContent="SpaceAround" alignItems="Center" width="500px" class="linkHBox">
-      <FlexBox width="70%">
-        <Text id="linkInput" text="" width="100%" />
-      </FlexBox>
-      <Button
-        width="30%"
-        icon="sap-icon://copy"
-        press="onCopyLink"
-        tooltip="Copy Link"
-        />
+      <FlexBox width="70%"><Text id="linkInput" text="" width="100%" /></FlexBox>
+      <Button width="30%" icon="sap-icon://copy" press="onCopyLink" tooltip="Copy Link" />
     </HBox>
     <endButton>
         <Button text="Close" press="onCloseDialog" />
@@ -33,7 +26,7 @@
       <Button id="idP13nButton" icon="sap-icon://action-settings" press="setupPersonalization" tooltip="Settings"/>
     </FlexBox>
     <ScrollContainer id="_idScrollContainer" horizontal="true" vertical="false" width="100%" height="auto">
-      <Table id="idApplicationTable" items="{MainModel>/ApplicationDetail}" sticky="ColumnHeaders" width="100%" class="paddingAlignment mainContentBorder">
+      <Table id="idApplicationTable" items="{MainModel>/ApplicationDetail}" growing="true" growingThreshold="10" sticky="ColumnHeaders" width="100%" class="paddingAlignment setTableHeight">
         <columns>
           <Column width="150px"><header><Text text="Application Number" class="boldText"></Text></header></Column>
           <Column width="150px"><header><Text text="Site Contact" class="boldText"></Text></header></Column>
@@ -62,7 +55,7 @@
                 </items>
               </ComboBox>
               <Input value="{MainModel>NumberOfTenants}" change="onUpdateField" type="Number" placeholder="Number of tenants"></Input>
-              <Text text="{MainModel>NoOfConsentReceived}"></Text>
+              <Link text="{MainModel>NoOfConsentReceived}" press="navToConsentPage" class="underline"></Link>
               <Text text="{MainModel>SignatureSignedBy}"></Text>
               <Text text="{MainModel>EmailAddr}"></Text>
               <Button text="Generate" press="onGenerateUrlPress"></Button>
