@@ -1,65 +1,83 @@
 sap.ui.define([
-    "dteenergyadminportal/controller/BaseController"
+  "dteenergyadminportal/controller/BaseController"
 ], (BaseController) => {
-    "use strict";
+  "use strict";
 
-    return BaseController.extend("dteenergyadminportal.controller.WelcomePage", {
-        /**
-         * Initializes the controller by dynamically loading the default view (`HomePage`) into the VBox container.
-         * Clears any existing content in the VBox before adding the default view.
-         *
-         * @public
-         */
-        onInit() {
-            const { url } = this.getApiConfig();
-            this.SERVERHOST = url;
+  return BaseController.extend("dteenergyadminportal.controller.WelcomePage", {
+    /**
+     * Initializes the controller by setting up required configurations,]
+     * subscribing to event bus topics, 
+     * and dynamically loading the default HomePage view into the main content area. 
+     * Also fetches environment settings via `getENV` method.
+     *
+     * @public
+     */
+    onInit() {
+      // Retrieve the API configuration and set the server host URL
+      const { url } = this.getApiConfig();
+      this.SERVERHOST = url;
 
-            // Get the VBox id (mainContent)
-            const oVBox = this.byId("mainContent");
+      // Subscribe to the "setSelectedKeyEvent" event from the welcomePage
+      const setSelectedKeyBus = sap.ui.getCore().getEventBus();
+      setSelectedKeyBus.subscribe("welcomePage", "setSelectedKeyEvent", this.setSelectedKeyToConsent, this);
 
-            // Clear the existing content
-            oVBox.destroyItems();
+      // Get the VBox id (mainContent)
+      const oVBox = this.byId("mainContent");
 
-            // Dynamically create and add the new view for default HomePage
-            sap.ui.core.mvc.XMLView.create({
-                viewData: {baseUrl: this.SERVERHOST},
-                viewName: `dteenergyadminportal.view.HomePage`
-            }).then(function (oView) {
-                oVBox.addItem(oView);
-            });
+      // Clear the existing content
+      oVBox.destroyItems();
 
-            this.getENV();
-        },
-        // Get the env data
-        getENV: async function () {
-            const {contextPath} = await this.GetEnvironmentVariables();
-            this.contextPath = contextPath;
-        },
-        /**
-         * Handles the event triggered when a menu item is selected.
-         * Dynamically loads the corresponding view based on the selected key and adds it to the VBox container.
-         * Clears any existing content in the VBox before adding the selected view.
-         *
-         * @param {sap.ui.base.Event} oEvent - The event object containing the selected item's details.
-         * @public
-         */
-        selectedItem: function (oEvent) {
-            // Get the selected key
-            const selectedKey = oEvent.getParameter("item").getKey();
+      // Dynamically create and add the new view for default HomePage
+      sap.ui.core.mvc.XMLView.create({
+        viewData: { baseUrl: this.SERVERHOST },
+        viewName: `dteenergyadminportal.view.HomePage`
+      }).then(function (oView) {
+        oVBox.addItem(oView);
+      });
 
-            // Get the VBox id (mainContent)
-            const oVBox = this.byId("mainContent");
+      // Fetch environment configurations
+      this.getENV();
+    },
+    /**
+     * Updates the navigation list menu to set "ConsentsPage" as the selected key.
+     * This ensures the navigation menu highlights the correct page
+     * when navigating to the Consents page.
+     *
+     * @public
+     */
+    setSelectedKeyToConsent: function() {
+      this.byId("idNavigationListMenu").setSelectedKey("ConsentsPage");
+    },
+    // Get the env data
+    getENV: async function () {
+      const { contextPath } = await this.GetEnvironmentVariables();
+      this.contextPath = contextPath;
+    },
+    /**
+     * Handles the event triggered when a menu item is selected.
+     * Dynamically loads the corresponding view based on the selected key and adds it to the VBox container.
+     * Clears any existing content in the VBox before adding the selected view.
+     *
+     * @param {sap.ui.base.Event} oEvent - The event object containing the selected item's details.
+     * @public
+     */
+    selectedItem: function (oEvent) {
+      // Get the selected key
+      const selectedKey = oEvent.getParameter("item").getKey();
 
-            // Clear the existing content
-            oVBox.destroyItems();
+      // Get the VBox id (mainContent)
+      const oVBox = this.byId("mainContent");
 
-            // Dynamically create and add the new view as per click the menu
-            sap.ui.core.mvc.XMLView.create({
-                viewData: {baseUrl: this.SERVERHOST, contextPath: this.contextPath},
-                viewName: `dteenergyadminportal.view.${selectedKey}` // Example: Home, Profile, Preferences
-            }).then(function (oView) {
-                oVBox.addItem(oView);
-            });
-        }
-    });
+      // Clear the existing content
+      oVBox.destroyItems();
+
+      // Dynamically create and add the new view as per click the menu
+      sap.ui.core.mvc.XMLView.create({
+        viewData: { baseUrl: this.SERVERHOST, contextPath: this.contextPath },
+        viewName: `dteenergyadminportal.view.${selectedKey}` // Example: Home, Profile, Preferences
+      }).then(function (oView) {
+        oVBox.addItem(oView);
+      });
+    }
+  });
 });

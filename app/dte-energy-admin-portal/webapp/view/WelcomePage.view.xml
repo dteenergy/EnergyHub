@@ -5,7 +5,7 @@
         <tnt:ToolPage>
             <tnt:sideContent>
                 <tnt:SideNavigation>
-                    <tnt:NavigationList itemSelect="selectedItem" selectedKey="HomePage">
+                    <tnt:NavigationList id="idNavigationListMenu" itemSelect="selectedItem" selectedKey="HomePage">
                         <tnt:NavigationListItem text="Home" key="HomePage" icon="sap-icon://home"></tnt:NavigationListItem>
                         <tnt:NavigationListItem text="Enrollment Application" key="EnrollmentApplicationPage" icon="sap-icon://request"></tnt:NavigationListItem>
                         <tnt:NavigationListItem text="Consents" key="ConsentsPage" icon="sap-icon://approvals"></tnt:NavigationListItem>
