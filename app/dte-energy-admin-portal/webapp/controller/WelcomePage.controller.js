@@ -26,6 +26,8 @@ sap.ui.define([
       // Clear the existing content
       oVBox.destroyItems();
 
+      this.getENV();
+
       // Dynamically create and add the new view for default HomePage
       sap.ui.core.mvc.XMLView.create({
         viewData: { baseUrl: this.SERVERHOST },
@@ -34,6 +36,13 @@ sap.ui.define([
         oVBox.addItem(oView);
       });
     },
+
+    // Get the env data
+    getENV: async function () {
+      const {tenantConsentFormURL} = await this.GetEnvironmentVariables();
+      this.tenantConsentFormURL = tenantConsentFormURL;
+    },
+    
     /**
      * Updates the navigation list menu to set "ConsentsPage" as the selected key.
      * This ensures the navigation menu highlights the correct page
