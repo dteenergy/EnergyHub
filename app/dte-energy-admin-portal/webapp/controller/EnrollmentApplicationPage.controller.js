@@ -16,7 +16,7 @@ sap.ui.define([
      *
      * @public
      */
-    onInit() {
+    onInit: function() {
       // Retrieve the base URL and filter data from the view's data
       const { baseUrl, filteredApplicationNumber, filteredApplicationStatus, filteredFirstName, filteredLastName, tenantConsentFormURL} = this.getView().getViewData();
       this.baseUrl = baseUrl;
@@ -234,6 +234,50 @@ sap.ui.define([
           filteredFirstName: this.sFirstName, filteredLastName: this.sLastName
         },
         viewName: `dteenergyadminportal.view.BuildingDetailPage`
+      }).then(function (oView) {
+        oVBox.addItem(oView);
+      });
+    },
+    /**
+     * Navigates to the Consent Page dynamically, based on the selected application's AppId.
+     * Clears the existing content of the VBox and loads the Consent Page view.
+     *
+     * @param {sap.ui.base.Event} oEvent - The event triggered by the button press.
+     * @public
+     */
+    navToConsentPage: function(oEvent) {
+      // Retrieve the button and its parent list item
+      const oButton = oEvent.getSource();
+      const oListItem = oButton.getParent();
+
+      // Validate the list item
+      if (!oListItem) {
+        console.error("Parent List Item is missing for this button.");
+        return;
+      }
+
+      // Retrieve the binding context for the selected row
+      const oBindingContext = oListItem.getBindingContext("MainModel"); // Get the binding context
+
+      // Get the binding context of the selected row
+      if (!oBindingContext) {
+        console.error("Binding context is missing for this row.");
+        return;
+      }
+
+      // Extract application ID from the binding context
+      const appId = oBindingContext.getProperty("AppId");
+
+      // Get the VBox id (EnrollmentApplicationPage)
+      const oVBox = this.byId("idApplicationVBox");
+
+      // Clear the existing content
+      oVBox.destroyItems();
+
+      // Dynamically create and add the view for consent page
+      sap.ui.core.mvc.XMLView.create({
+        viewData: { baseUrl: this.baseUrl, AppId: appId },
+        viewName: `dteenergyadminportal.view.ConsentsPage`
       }).then(function (oView) {
         oVBox.addItem(oView);
       });
