@@ -32,8 +32,8 @@ sap.ui.define([
         },
         // Get the env data
         getENV: async function () {
-            const {contextPath} = await this.GetEnvironmentVariables();
-            this.contextPath = contextPath;
+            const {tenantConsentFormURL} = await this.GetEnvironmentVariables();
+            this.tenantConsentFormURL = tenantConsentFormURL;
         },
         /**
          * Handles the event triggered when a menu item is selected.
@@ -55,7 +55,7 @@ sap.ui.define([
 
             // Dynamically create and add the new view as per click the menu
             sap.ui.core.mvc.XMLView.create({
-                viewData: {baseUrl: this.SERVERHOST, contextPath: this.contextPath},
+                viewData: {baseUrl: this.SERVERHOST, tenantConsentFormURL: this.tenantConsentFormURL},
                 viewName: `dteenergyadminportal.view.${selectedKey}` // Example: Home, Profile, Preferences
             }).then(function (oView) {
                 oVBox.addItem(oView);
