@@ -149,8 +149,8 @@
           "viewType": "XML",
           "transition": "slide",
           "clearControlAggregation": false,
-          "viewId": "Enrollment",
-          "viewName": "Enrollment"
+          "viewId": "EnrollmentFormEntryPoint",
+          "viewName": "EnrollmentFormEntryPoint"
         }
       }
     },
