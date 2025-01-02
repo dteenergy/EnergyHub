@@ -19,18 +19,24 @@ sap.ui.define([
 					locationDetailsValidation: true,
 					consentDetailValidation: true,
 					consentAuthDetailValidation: true
-				}
+				};
 
     return BaseController.extend("dteconsentappclient.controller.Enrollment", {
         onInit() {
 					
-        // Assign url and headers into this controller global scope
-          const { url } = this.getApiConfig();
-          this.SERVERHOST = url;
 					this.buildingCount = 1;
 
-					this.getEnv();
+					// Retrieve the server host and env variables from the view data.
+					const {
+						serverHost,
+						envVariables
+					} = this.getView().getViewData();
 
+					this.SERVERHOST = serverHost;
+					this.LandlordConfirmationPageUrl = envVariables.LandlordConfirmationPageUrl;
+					this.ErrorPageUrl = envVariables.ErrorPageUrl;
+					this.DTEAddressValidationUrl = envVariables.DTEAddressValidationUrl;
+					
           let oEnrollFormData = {
             SignatureSignedBy: "",
             SignatureSignedDate: "",
@@ -41,7 +47,7 @@ sap.ui.define([
                 "City":"",
                 "State": "",
                 "Zipcode":"",
-								"EnergyPrgmParticipated": false,
+								"EnergyPrgmParticipated": true,
 								"AcctMgrName":"",
 								"AcctMgrPhoneNumber": null,
                 "SiteFirstName": "",
@@ -109,15 +115,6 @@ sap.ui.define([
         this.loadConsentForm();
         this.loadAuthAndRelease();
       },
-
-			  // Get the navigation page url and address validation url
-				getEnv:  async function(){
-					const {DTEAddressValidationUrl, LandlordConfirmationPageUrl, ErrorPageUrl} = await this.getEnvironmentVariables();
-					
-					this.DTEAddressValidationUrl = DTEAddressValidationUrl;
-					this.LandlordConfirmationPageUrl = LandlordConfirmationPageUrl;
-					this.ErrorPageUrl = ErrorPageUrl;
-				},
 
         /**
 				 * Add additional location(Building) container
@@ -209,6 +206,11 @@ sap.ui.define([
 								if (newElement) {
 										newElement.scrollIntoView({ behavior: "smooth", block: "center" });
 								}
+								window.scroll({
+									top: 0, 
+									left: 0, 
+									behavior: 'smooth' 
+								 })
 						}, 0);
 					}
 
@@ -258,7 +260,6 @@ sap.ui.define([
             let sSelectedVal = false;
 
             if(sSelectedText === 'Yes') sSelectedVal = true;
-            else sSelectedVal; 
             
             // Get the model
             let oEnrollModel = this.getView().getModel("oEnrollModel");
@@ -373,18 +374,19 @@ sap.ui.define([
 				 * @param {String} validationStatus
 				 */
         validateFormDetails: function(sContainerId, isShowError, validationStatus){
-					const container = this.byId(sContainerId);
-
+					const container = this.byId(sContainerId);	
 					validationFlags[validationStatus] = true;
 					
 					// To get the aggregated objects from the given container
 					container.findAggregatedObjects(true, (control) => {
 							
 						// Filtered the input and combobox controls
-						if (control instanceof sap.m.Input && !control.getId().includes("-popup-input") || control instanceof sap.m.ComboBox || control instanceof sap.m.MaskInput) {
+						if (control instanceof sap.m.Input && !control.getId().includes("-popup-input") || 
+								control instanceof sap.m.ComboBox || 
+								control instanceof sap.m.DatePicker ) {
 							
-							const userInput = control.getValue();
-														
+							let userInput = control.getValue();
+							
 							// Validates that all required fields are filled; if a field is empty, marks it with an error state to indicate validation failure.
 							if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) {
 								if(isShowError){
@@ -403,7 +405,11 @@ sap.ui.define([
 								 *  If the phonenumber is invalid, set the corresponding validation flag to `false`.
 								 * */
 								if(userInput && control?.getBindingPath("value")?.includes("PhoneNumber"))
-									if(!ChecksInputValidation.isValid(control, userInput, "PhoneNumber")) validationFlags[validationStatus] = false;			
+									if(!ChecksInputValidation.isValid(control, userInput, "PhoneNumber")) validationFlags[validationStatus] = false;	
+								
+								// If the input type is datePicker, validate the user input to ensure it is in a valid date format.
+								if(control instanceof sap.m.DatePicker) 
+									if(!ChecksInputValidation.isValid(control, userInput, "Date")) validationFlags[validationStatus] = false;
 							}	
 						}		
           });
@@ -411,6 +417,20 @@ sap.ui.define([
 					// Update the error message visibility status
 					this.setErrorMessageTripVisibility();
         },
+
+				/**
+				 * Validate the input while changes happen
+				 * @param {Object} oEvent 
+				 */
+				onDateChange: function(oEvent){
+					const oControl = oEvent.getSource();
+					oControl.setValueState("None");
+
+					/**
+					 * If the validation flag have a "false", revalidate the input fields while live change happens.
+					 */
+					if(Object.values(validationFlags).includes(false)) this.validate();
+				},
 
 				// Checks the input value on live change and remove the error state
 				onLiveChange: function(oEvent){
@@ -430,6 +450,16 @@ sap.ui.define([
 
 					// If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
 					if(oControl?.mProperties["type"] === "Email") ChecksInputValidation.isValid(oControl, userInput, "Email");
+
+					// If the input type is datePicker, validate the user input to ensure it is in a valid date format.
+					if(oControl instanceof sap.m.DatePicker) {
+						if(ChecksInputValidation.isValid(oControl, userInput, "Date")){
+								if(Object.values(validationFlags).includes(false)) {
+									this.validate();
+									return;
+								}	 
+						}else return;
+					}
 
 					/**
 					 * If the validation flag have a "false", revalidate the input fields while live change happens.
@@ -573,9 +603,9 @@ sap.ui.define([
 				// Retrieve the all input data
 				retrieveAllInputBindings: function(){
 					enrollmentDetails = this.getView().getModel("oEnrollModel").getData();
-
+				
 					consentDetails = this.getView().getModel("oConsentModel").getData()?.ConsentDetail;
-
+					
 					locationDetails = this.getView().getModel("locationModel").getData();
 				},
 

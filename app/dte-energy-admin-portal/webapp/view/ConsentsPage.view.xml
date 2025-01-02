@@ -17,7 +17,7 @@
             <Button id="idP1nButton" icon="sap-icon://action-settings" press="setupPersonalization" tooltip="Settings"/>
         </FlexBox>
         <ScrollContainer width="100%" class="applicationConsentTable paddingAlignment" horizontal="true" vertical="false" height="auto">
-        <Table id="idApplicationConsentTable" items="{MainModel>/ApplicationConsent}" growing="true" growingThreshold="10" width="100%" class='consentPageTable' sticky="ColumnHeaders">
+        <Table id="idApplicationConsentTable" items="{MainModel>/ApplicationConsent}" growing="true" growingThreshold="10" width="100%" class='consentPageTable setTableHeight' sticky="ColumnHeaders">
         <columns>
             <Column width="150px"><header><Text text="Application Number" class="boldText"></Text></header></Column>
             <Column width="150px"><header><Text text="First Name" class="boldText"></Text></header></Column>

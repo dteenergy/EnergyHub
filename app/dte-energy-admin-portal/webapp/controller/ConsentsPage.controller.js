@@ -99,7 +99,7 @@ sap.ui.define([
       const filterData = [];
 
       // Handle the filters value
-      if(this.AppId) filterData.push(new Filter({ path: "AppId", operator: FilterOperator.Contains, value1: this.AppId }));
+      if (this.AppId) filterData.push(new Filter({ path: "AppId", operator: FilterOperator.Contains, value1: this.AppId }))
       if (firstName) filterData.push(new Filter({ path: "FirstName", operator: FilterOperator.Contains, value1: firstName, caseSensitive: false }));
       if (lastName) filterData.push(new Filter({ path: "LastName", operator: FilterOperator.Contains, value1: lastName, caseSensitive: false }));
       if (appNumber) filterData.push(new Filter({ path: "ApplicationNumber", operator: FilterOperator.Contains, value1: appNumber, caseSensitive: false }));

@@ -2,7 +2,11 @@ _schema-version: 3.3.0
 ID: dteConsentAppPortal
 description: DTE consent app portal project.
 version: 1.0.0
+
+
 modules:
+
+# Backend Service
 - name: dteConsentAppPortal-srv
   type: nodejs
   path: gen/srv
@@ -14,6 +18,16 @@ modules:
   - name: srv-api
     properties:
       srv-url: ${default-url}
+  properties:
+    CRYPTOJS_SECRET_KEY : "@dteEneHub*123*Forms" 
+    DTE_ADDRESS_VALIDATION_URL : https://test.api.customer.sites.dteenergy.com/public/qa/premises/
+    TENANT_CONFIRMATION_PAGE_URL : https://preview-p70003-e710499.adobeaemcloud.com/content/dteenergy/deg/website/us/en/quicklinks/energy-hub/energy-hub-tenant-confirmation.html
+    LANDLORD_CONFIRMATION_PAGE_URL : https://preview-p70003-e710499.adobeaemcloud.com/content/dteenergy/deg/website/us/en/quicklinks/energy-hub/energy-hub-landlord-confirmation.html
+    ERROR_PAGE_URL : https://www.dteenergy.com/us/en/quicklinks/energy-hub/energy-hub-error.html
+    APPNUM_PREFIX_ENABLED : "N"
+    APPNUM_PREFIX : ""
+    TENANT_CONSENT_FORM_URL: https://fiori-dev-n-dte-ehconsentportal.cfapps.us21.hana.ondemand.com/eh/consent-portal/index.html#tenant/consent?appId=
+    WHITELIST: ["https://*.hana.ondemand.com", "https://*.dteenergy.com", "https://*.us20.applicationstudio.cloud.sap"]
   parameters:
     memory: 256MB
   build-parameters:
@@ -21,6 +35,8 @@ modules:
     ignore:
     - node_modules
     - package-lock.json
+
+# Approuter    
 - name: dteConsentAppPortal-approuter
   type: approuter.nodejs
   path: approuter
@@ -28,6 +44,8 @@ modules:
     memory: 256M
     disk-quota: 1024M
     stack: cflinuxfs4
+    routes:
+      - route : ${org}-ehconsentportal.${default-domain}
   properties:
     CJ_PROTECT_WHITELIST: >
       [
@@ -60,7 +78,6 @@ modules:
           "Access-Control-Allow-Headers": "Authorization,Content-Type"
         }
       ]
-
   build-parameters:
     ignore: ["node_modules/"]
   requires:
@@ -74,6 +91,7 @@ modules:
         strictSSL: false
         name: dteConsentAppPortal-srv
         url: ~{srv-url}
+
 - name: dteConsentAppPortal-destination-content
   type: com.sap.application.content
   requires:
@@ -112,6 +130,7 @@ modules:
         existing_destinations_policy: ignore
   build-parameters:
     no-source: true
+
 - name: dteConsentAppPortal-app-content
   type: com.sap.application.content
   path: .
@@ -130,6 +149,7 @@ modules:
       - dteenergyadminportal.zip
       name: dteenergyadminportal
       target-path: resources/
+
 - name: dteConsentAppPortal-db-deployer
   type: nodejs
   path: gen/pg
@@ -142,6 +162,7 @@ modules:
     tasks:
     - command: npm start
       name: deploy-to-postgresql
+
 - name: dteconsentappclient
   type: html5
   path: app/dteconsentappclient
@@ -152,6 +173,7 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
+
 - name: dteenergyadminportal
   type: html5
   path: app/dte-energy-admin-portal
@@ -162,6 +184,8 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
+
+
 resources:
 - name: dteConsentAppPortal-destination-service
   type: org.cloudfoundry.managed-service

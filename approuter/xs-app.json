@@ -1,54 +1,42 @@
 {
-  "welcomeFile": "/eh-forms/index.html",
+  "welcomeFile": "/eh/consent-portal/index.html",
   "authenticationMethod": "route",
   "logout": {
-    "logoutEndpoint": "/eh-admin/do/logout",
-    "logoutPage": "/eh-admin/index.html"
+    "logoutEndpoint": "/eh/admin/do/logout",
+    "logoutPage": "/eh/admin/index.html"
   },
   "routes": [
     {
-      "source": "^/eh-admin/admin/service/(.*)$",
+      "source": "^/eh/admin/admin/service/(.*)$",
       "target": "/admin/service/$1",
       "destination": "dteConsentAppPortal-srv",
       "authenticationType": "xsuaa",  
       "csrfProtection": false
     },
     {
-      "source": "^/eh-admin/(.*)$",
+      "source": "^/eh/admin/(.*)$",
       "target": "/dteenergyadminportal/$1",
       "service": "html5-apps-repo-rt",
       "authenticationType": "xsuaa"
     },
     {
-      "source": "^/eh-forms/service/(.*)$",
+      "source": "^/eh/consent-portal/service/(.*)$",
       "target": "/service/$1",
       "destination": "dteConsentAppPortal-srv",
       "authenticationType": "none",
       "csrfProtection": false
     },
     {
-      "source": "^/eh-forms/(.*)$",
+      "source": "^/eh/consent-portal/(.*)$",
       "target": "/dteconsentappclient/$1",
       "service": "html5-apps-repo-rt",
       "authenticationType": "none"
     },
     {
-      "source": "^/index.html$",
+      "source": "^/eh",
+      "target": "/dteconsentappclient/index.html",
       "service": "html5-apps-repo-rt",
-      "authenticationType": "xsuaa",
-      "cacheControl": "no-cache, no-store, must-revalidate"
-    },
-    {
-      "source": "^/resources/(.*)$",
-      "target": "/resources/$1",
-      "authenticationType": "none",
-      "destination": "ui5"
-    },
-    {
-      "source": "^/test-resources/(.*)$",
-      "target": "/test-resources/$1",
-      "authenticationType": "none",
-      "destination": "ui5"
+      "authenticationType": "none"
     },
     {
       "source": "^(.*)$",
