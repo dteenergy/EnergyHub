@@ -1,797 +1,802 @@
 sap.ui.define([
-    "dteconsentappclient/controller/BaseController",
-    "sap/ui/core/Fragment",
-    "sap/ui/model/json/JSONModel",
-	  "dteconsentappclient/variable/GlobalInputValues",
-		"dteconsentappclient/utils/ChecksInputValidation",
-		"dteconsentappclient/utils/FormatInputs",
-		"sap/m/Dialog"
+	"dteconsentappclient/controller/BaseController",
+	"sap/ui/core/Fragment",
+	"sap/ui/model/json/JSONModel",
+	"dteconsentappclient/variable/GlobalInputValues",
+	"dteconsentappclient/utils/ChecksInputValidation",
+	"dteconsentappclient/utils/FormatInputs",
+	"sap/m/Dialog"
 ], (BaseController, Fragment, JSONModel, GlobalInputValues, ChecksInputValidation, FormatInputs, Dialog) => {
-    "use strict";
+	"use strict";
 
-    let enrollmentDetails, 
-				consentDetails, 
-				locationDetails, 
-				validationFlags = {
-					accountDetailsValidation: true, 
-					siteDetailsValidation: true,
-					customerAuthDetailValidation: true,
-					locationDetailsValidation: true,
-					consentDetailValidation: true,
-					consentAuthDetailValidation: true
-				};
+	let enrollmentDetails, 
+			consentDetails, 
+			locationDetails, 
+			validationFlags = {
+				accountDetailsValidation: true, 
+				siteDetailsValidation: true,
+				customerAuthDetailValidation: true,
+				locationDetailsValidation: true,
+				consentDetailValidation: true,
+				consentAuthDetailValidation: true
+			};
 
-    return BaseController.extend("dteconsentappclient.controller.Enrollment", {
-        onInit() {
-					
-					this.buildingCount = 1;
+	return BaseController.extend("dteconsentappclient.controller.Enrollment", {
+			onInit() {
 
-					// Retrieve the server host and env variables from the view data.
-					const {
-						serverHost,
-						envVariables
-					} = this.getView().getViewData();
+				// Get the base url and assign into this controller global scope
+				const { url } = this.getApiConfig();
+				this.SERVERHOST = url;
+				
+				this.buildingCount = 1;
 
-					this.SERVERHOST = serverHost;
+				this.getEnv((envVariables)=>{
 					this.LandlordConfirmationPageUrl = envVariables.LandlordConfirmationPageUrl;
 					this.ErrorPageUrl = envVariables.ErrorPageUrl;
 					this.DTEAddressValidationUrl = envVariables.DTEAddressValidationUrl;
-					
-          let oEnrollFormData = {
-            SignatureSignedBy: "",
-            SignatureSignedDate: "",
-            AccountDetail: {
-                "CompanyName": "",
-                "CompanyAddress": "",
-								"CompanyAddrLineTwo":"",
-                "City":"",
-                "State": "",
-                "Zipcode":"",
-								"EnergyPrgmParticipated": true,
-								"AcctMgrName":"",
-								"AcctMgrPhoneNumber": null,
-                "SiteFirstName": "",
-                "SiteLastName": "",
-                "SiteContactTitle":"",
-                "SiteAddress":"",
-								"SiteAddrLineTwo":"",
-                "SiteCity":"",
-                "SiteState":"",
-                "SiteZipcode": null,
-                "SitePhoneNumber": null,
-                "SiteEmailAddr":""
-            }
-        };
-
-        // Set the JSONModel with the correct name
-        const oEnrollModel = new JSONModel(oEnrollFormData);
-        this.getView().setModel(oEnrollModel, "oEnrollModel");
-
-				let oConsentData = {
-					ConsentDetail: {
-						"ConsentFirstName": "",
-						"ConsentLastName": "",
-						"ConsentContactTitle":"",
-						"ConsentAddress": "",
-						"ConsentAddrLineTwo":"",
-						"ConsentCity":"",
-						"ConsentState": "",
-						"ConsentZipcode": null,
-						"ConsentAccountNumber":"",
-						"ConsentPhoneNumber": null,
-						"ConsentEmailAddr":"",
-						"AuthPersonName":"",
-						"AuthDate":"",
-						"AuthTitle":""
-					}
-				};
-
-				// Set the JSONModel with the correct name
-				const oConsentModel = new JSONModel(oConsentData);
-				this.getView().setModel(oConsentModel, "oConsentModel");
-
-				const oModel = new JSONModel({
-						locations: {}, // Array to hold all building location data
 				});
-				this.getView().setModel(oModel, "locationModel");
-
-				// Model to hold the visibility status of error message
-				const oErrorVisibilityModel = new JSONModel({
-					"isInputInValid":false,
-					"isTermsAndConditionVerifiedStatus":false
-				});
-				this.getView().setModel(oErrorVisibilityModel, "oErrorVisibilityModel");
-
-				// Model to set the list of US states
-				const ostateValuesModel = new JSONModel(GlobalInputValues.usStates);
-				this.getView().setModel(ostateValuesModel, "ostateValuesModel");
-
-				// Model to set the location available state list 
-				const oLocationStateModel = new JSONModel(GlobalInputValues.locationStates);
-				this.getView().setModel(oLocationStateModel, "oLocationStateModel");
-
-				// Load the initial fragment
-        this.onAddAnotherLocation();
-        this.loadConsentForm();
-        this.loadAuthAndRelease();
-      },
-
-        /**
-				 * Add additional location(Building) container
-				 * In a location model there was id, that hold the locationInfo object
-				 * The id is bound with the adding container
-				 * Note: Id was generated by logic of increment one while the "onAddAnotherLocation" is called
-				 */
-        onAddAnotherLocation: function(){
-					const oView = this.getView();
-
-					const oLocationModel = oView.getModel("locationModel");
-					let locations = oLocationModel.getProperty("/locations");
-
-					// Get the container Id which holds the building details fragments
-					const buildingMainContainer = this.byId("building-detail-main-container");
-					
-					const newLocation = {
-						BuildingName: "",
-						AccountNumber: "",
-						Address: "",
-						City: "",
-						State: "Michigan",
-						Zipcode: "",
-						AddrLineTwo: "",
-						suggestions: []
+				
+				let oEnrollFormData = {
+					SignatureSignedBy: "",
+					SignatureSignedDate: "",
+					AccountDetail: {
+							"CompanyName": "",
+							"CompanyAddress": "",
+							"CompanyAddrLineTwo":"",
+							"City":"",
+							"State": "",
+							"Zipcode":"",
+							"EnergyPrgmParticipated": true,
+							"AcctMgrName":"",
+							"AcctMgrPhoneNumber": null,
+							"SiteFirstName": "",
+							"SiteLastName": "",
+							"SiteContactTitle":"",
+							"SiteAddress":"",
+							"SiteAddrLineTwo":"",
+							"SiteCity":"",
+							"SiteState":"",
+							"SiteZipcode": null,
+							"SitePhoneNumber": null,
+							"SiteEmailAddr":""
 					}
+			};
 
-					// Get the added building count
-					const count = this.buildingCount;
-					// Using the count value structure the id
-					const id = `Building${count}`;
+			// Set the JSONModel with the correct name
+			const oEnrollModel = new JSONModel(oEnrollFormData);
+			this.getView().setModel(oEnrollModel, "oEnrollModel");
 
-					// Find the length to show it in the label
-					const lengthOfLocations = buildingMainContainer.getItems().length;
-					
-					locations = {...locations, [id]: newLocation}
-					oLocationModel.setProperty("/locations", locations);
+			let oConsentData = {
+				ConsentDetail: {
+					"ConsentFirstName": "",
+					"ConsentLastName": "",
+					"ConsentContactTitle":"",
+					"ConsentAddress": "",
+					"ConsentAddrLineTwo":"",
+					"ConsentCity":"",
+					"ConsentState": "",
+					"ConsentZipcode": null,
+					"ConsentAccountNumber":"",
+					"ConsentPhoneNumber": null,
+					"ConsentEmailAddr":"",
+					"AuthPersonName":"",
+					"AuthDate":"",
+					"AuthTitle":""
+				}
+			};
 
-					let that = this;
+			// Set the JSONModel with the correct name
+			const oConsentModel = new JSONModel(oConsentData);
+			this.getView().setModel(oConsentModel, "oConsentModel");
 
-					// Load the location(Building) fragment in the enrollment form 
-					Fragment.load({
-							name: "dteconsentappclient.fragment.Buildingdetail",
-							controller: this,
-					}).then(function (oFragment) {
-							let flexItems = []
-							 
-							// Add the label for additional buildings
-								if(count > 1){
-								const buildingInfoLabel = new sap.m.Title({
-										text:  `Location ${lengthOfLocations + 1}`,
-										titleStyle: 'H6'
-								});
+			const oModel = new JSONModel({
+					locations: {}, // Array to hold all building location data
+			});
+			this.getView().setModel(oModel, "locationModel");
 
-							// Add the remove button
-							buildingInfoLabel.addStyleClass("location-inner-title");
+			// Model to hold the visibility status of error message
+			const oErrorVisibilityModel = new JSONModel({
+				"isInputInValid":false,
+				"isTermsAndConditionVerifiedStatus":false
+			});
+			this.getView().setModel(oErrorVisibilityModel, "oErrorVisibilityModel");
 
-								const removeButton = new sap.m.Button({
-									text: 'Remove This Location',
-									press: function (oEvent) { that.removeBuilding(oEvent)}
-								}).addStyleClass("outline-button");
-								
-								flexItems = [buildingInfoLabel, removeButton];
-							}
+			// Model to set the list of US states
+			const ostateValuesModel = new JSONModel(GlobalInputValues.usStates);
+			this.getView().setModel(ostateValuesModel, "ostateValuesModel");
 
-							const [firstElement, ...rest] = flexItems;
+			// Model to set the location available state list 
+			const oLocationStateModel = new JSONModel(GlobalInputValues.locationStates);
+			this.getView().setModel(oLocationStateModel, "oLocationStateModel");
 
-							// Set and bind the model with the fragment
-							oFragment.setModel(oLocationModel, "locationModel");
-							oFragment.bindElement(`locationModel>/locations/${id}`);
+			// Load the initial fragment
+			this.onAddAnotherLocation();
+			this.loadConsentForm();
+			this.loadAuthAndRelease();
+		},
 
-							const wrapper = new sap.m.FlexBox(that.createId(id),{
-									items: [firstElement, oFragment, ...rest],
-									direction: 'Column',
-							});
-							if(count > 1) wrapper.addStyleClass("addition-building-container");
+		// Get the navigation page url and address validation url
+		getEnv:  async function(callback){
+			const envVariables = await this.getEnvironmentVariables();
+			callback(envVariables);
+		},
 
-							// Add the fragment to the according container
-							buildingMainContainer.addItem(wrapper);
-							that.buildingCount += 1;
-		
+			/**
+			 * Add additional location(Building) container
+			 * In a location model there was id, that hold the locationInfo object
+			 * The id is bound with the adding container
+			 * Note: Id was generated by logic of increment one while the "onAddAnotherLocation" is called
+			 */
+			onAddAnotherLocation: function(){
+				const oView = this.getView();
+
+				const oLocationModel = oView.getModel("locationModel");
+				let locations = oLocationModel.getProperty("/locations");
+
+				// Get the container Id which holds the building details fragments
+				const buildingMainContainer = this.byId("building-detail-main-container");
+				
+				const newLocation = {
+					BuildingName: "",
+					AccountNumber: "",
+					Address: "",
+					City: "",
+					State: "Michigan",
+					Zipcode: "",
+					AddrLineTwo: "",
+					suggestions: []
+				}
+
+				// Get the added building count
+				const count = this.buildingCount;
+				// Using the count value structure the id
+				const id = `Building${count}`;
+
+				// Find the length to show it in the label
+				const lengthOfLocations = buildingMainContainer.getItems().length;
+				
+				locations = {...locations, [id]: newLocation}
+				oLocationModel.setProperty("/locations", locations);
+
+				let that = this;
+
+				// Load the location(Building) fragment in the enrollment form 
+				Fragment.load({
+						name: "dteconsentappclient.fragment.Buildingdetail",
+						controller: this,
+				}).then(function (oFragment) {
+						let flexItems = []
+						 
+						// Add the label for additional buildings
 							if(count > 1){
-							const fullId = that.createId(id);
+							const buildingInfoLabel = new sap.m.Title({
+									text:  `Location ${lengthOfLocations + 1}`,
+									titleStyle: 'H6'
+							});
+
+						// Add the remove button
+						buildingInfoLabel.addStyleClass("location-inner-title");
+
+							const removeButton = new sap.m.Button({
+								text: 'Remove This Location',
+								press: function (oEvent) { that.removeBuilding(oEvent)}
+							}).addStyleClass("outline-button");
 							
-							// Execute the scroll of newly added location container after rendering the fragment 
-							setTimeout(() => {
-								// Get the DOM reference
-								const newElement = that.byId(fullId)?.getDomRef(); 
-								if (newElement) {
-										newElement.scrollIntoView({ behavior: "smooth", block: "center" });
-								}
-								window.scroll({
-									top: 0, 
-									left: 0, 
-									behavior: 'smooth' 
-								 })
-						}, 0);
-					}
+							flexItems = [buildingInfoLabel, removeButton];
+						}
 
-					}).catch(function (err) {
-							console.log(`Failed to load fragment: ${err}`)
-					});
-			},
+						const [firstElement, ...rest] = flexItems;
 
-			  // Remove the additional location 
-				removeBuilding: function (oEvent) {
-					// Load the location model
-					const oLocationModel = this.getView().getModel("locationModel");
-					let locations = oLocationModel.getProperty("/locations");
-					
-					// Get the Id of the container, which holds the additional building that the user clicked remove button
-					const oButton = oEvent.getSource();
-					const oFlexWrapper = oButton.getParent();
-					
-					const flexWrapperId = oFlexWrapper.getId().split('--')[2];
+						// Set and bind the model with the fragment
+						oFragment.setModel(oLocationModel, "locationModel");
+						oFragment.bindElement(`locationModel>/locations/${id}`);
 
-					// Remove the particular location from the whole container
-					const buildingDetailMainContainer = this.byId("building-detail-main-container");
-					buildingDetailMainContainer.removeItem(oFlexWrapper);
-					oFlexWrapper.destroy();
+						const wrapper = new sap.m.FlexBox(that.createId(id),{
+								items: [firstElement, oFragment, ...rest],
+								direction: 'Column',
+						});
+						if(count > 1) wrapper.addStyleClass("addition-building-container");
 
-					// Delete the location info from the model
-					delete locations[flexWrapperId];
-					
-					// Update the location info label
-					if(buildingDetailMainContainer.getItems().length > 1){
+						// Add the fragment to the according container
+						buildingMainContainer.addItem(wrapper);
+						that.buildingCount += 1;
+	
+						if(count > 1){
+						const fullId = that.createId(id);
+						
+						// Execute the scroll of newly added location container after rendering the fragment 
+						setTimeout(() => {
+							// Get the DOM reference
+							const newElement = that.byId(fullId)?.getDomRef(); 
+							if (newElement) {
+									newElement.scrollIntoView({ behavior: "smooth", block: "center" });
+							}
+							window.scroll({
+								top: 0, 
+								left: 0, 
+								behavior: 'smooth' 
+							 })
+					}, 0);
+				}
 
-						buildingDetailMainContainer.getItems().map((wrapper, index)=>{
-							
-							wrapper.getItems().forEach(item =>{
-								if(item instanceof sap.m.Title){
-									item.setText(`Location ${index + 1}`)
-								}
-							})
+				}).catch(function (err) {
+						console.log(`Failed to load fragment: ${err}`)
+				});
+		},
+
+			// Remove the additional location 
+			removeBuilding: function (oEvent) {
+				// Load the location model
+				const oLocationModel = this.getView().getModel("locationModel");
+				let locations = oLocationModel.getProperty("/locations");
+				
+				// Get the Id of the container, which holds the additional building that the user clicked remove button
+				const oButton = oEvent.getSource();
+				const oFlexWrapper = oButton.getParent();
+				
+				const flexWrapperId = oFlexWrapper.getId().split('--')[2];
+
+				// Remove the particular location from the whole container
+				const buildingDetailMainContainer = this.byId("building-detail-main-container");
+				buildingDetailMainContainer.removeItem(oFlexWrapper);
+				oFlexWrapper.destroy();
+
+				// Delete the location info from the model
+				delete locations[flexWrapperId];
+				
+				// Update the location info label
+				if(buildingDetailMainContainer.getItems().length > 1){
+
+					buildingDetailMainContainer.getItems().map((wrapper, index)=>{
+						
+						wrapper.getItems().forEach(item =>{
+							if(item instanceof sap.m.Title){
+								item.setText(`Location ${index + 1}`)
+							}
 						})
-					}
+					})
+				}
+		},
+
+				// Define the event handler in your controller
+				onRadioButtonSelect: function (oEvent) {
+					// Get the selected button's text
+					let sSelectedText = oEvent.getSource().getSelectedButton().getText();
+					let sSelectedVal = false;
+
+					if(sSelectedText === 'Yes') sSelectedVal = true;
+					
+					// Get the model
+					let oEnrollModel = this.getView().getModel("oEnrollModel");
+
+					// Update the model with the selected value
+					oEnrollModel.setProperty("/AccountDetail/EnergyPrgmParticipated", sSelectedVal);
 			},
+			
+			// Define model and load the Customer consent form fragment to the enrollment form
+			loadConsentForm: function(){
+					const oView = this.getView();
+					const oConsentModel = oView.getModel("oConsentModel");
 
-          // Define the event handler in your controller
-          onRadioButtonSelect: function (oEvent) {
-            // Get the selected button's text
-            let sSelectedText = oEvent.getSource().getSelectedButton().getText();
-            let sSelectedVal = false;
-
-            if(sSelectedText === 'Yes') sSelectedVal = true;
-            
-            // Get the model
-            let oEnrollModel = this.getView().getModel("oEnrollModel");
-
-            // Update the model with the selected value
-            oEnrollModel.setProperty("/AccountDetail/EnergyPrgmParticipated", sSelectedVal);
-        },
-        
-        // Define model and load the Customer consent form fragment to the enrollment form
-        loadConsentForm: function(){
-            const oView = this.getView();
-            const oConsentModel = oView.getModel("oConsentModel");
-
-            const enrollmentConsentContainer = this.byId("enrollment-consent-section");
-            Fragment.load({
-                name: "dteconsentappclient.fragment.Consentform",
-                controller: this
-            }).then(function (oFragment) {
-                oFragment.setModel(oConsentModel, "oConsentModel");
-                oFragment.bindElement('oConsentModel');
-                
-                enrollmentConsentContainer.addItem(oFragment);
-            }).catch(function (err) {
-                console.log(`Failed to load fragment: ${err}`)
-            });
-        },
-
-        // Define model and load the Customer Auth and Release section fragment to the enrollment form
-        loadAuthAndRelease: function(){
-					const oConsentModel = this.getView().getModel("oConsentModel");
-
-					const customerAuthAndReleaseContainer = this.byId("customer-auth-and-release-container");
+					const enrollmentConsentContainer = this.byId("enrollment-consent-section");
 					Fragment.load({
-							name: "dteconsentappclient.fragment.AuthAndRelease",
+							name: "dteconsentappclient.fragment.Consentform",
 							controller: this
 					}).then(function (oFragment) {
 							oFragment.setModel(oConsentModel, "oConsentModel");
 							oFragment.bindElement('oConsentModel');
 							
-							customerAuthAndReleaseContainer.addItem(oFragment);
+							enrollmentConsentContainer.addItem(oFragment);
 					}).catch(function (err) {
 							console.log(`Failed to load fragment: ${err}`)
 					});
-        },
+			},
 
-				// Bind or unbind the data based on the checbox checked
-        onConsentAndSiteSameSelected: function(oEvent){
-					const isConsentAndSiteSame = oEvent.getParameters().selected;
-					const oEnrollModel = this.getView().getModel("oEnrollModel");
-					const enrollmentData = oEnrollModel.getData();
+			// Define model and load the Customer Auth and Release section fragment to the enrollment form
+			loadAuthAndRelease: function(){
+				const oConsentModel = this.getView().getModel("oConsentModel");
 
-					const oConsentModel = this.getView().getModel("oConsentModel");
-					const consentData = oConsentModel.getData();
-					
-					const accountDetailsKeys = Object.keys(enrollmentData.AccountDetail);
-
-					/**
-					 * Checks, is consent release check box is checked,
-					 * If it is, consent and site information will be same
-					 * So have to bind the data from site details to consent details
-					 */
-					if(isConsentAndSiteSame){   
-							
-						accountDetailsKeys.map((key)=>{
-							if(key.startsWith('Site')){
-								const consentkey = key.replace('Site', 'Consent');
-								oConsentModel.setProperty(`/ConsentDetail/${consentkey}`, enrollmentData['AccountDetail'][key]);
-							}
-						});
-						this.validateFormDetails("enrollment-consent-section", false, "consentDetailValidation");		
-					}else{
-						oConsentModel.setProperty('/ConsentDetail', {
-								"FirstName": "",
-								"LastName": "",
-								"ConsentContactTitle":"",
-								"ConsentAddress": "",
-								"ConsentAddrLineTwo":"",
-								"ConsentCity":"",
-								"ConsentState": "",
-								"ConsentZipcode": null,
-								"ConsentAccountNumber":"",
-								"ConsentPhoneNumber":"",
-								"ConsentEmailAddr":"",
-								"AuthPersonName": consentData['ConsentDetail']['AuthPersonName'],
-								"AuthDate": consentData['ConsentDetail']['AuthPersonName'],
-								"AuthTitle": consentData['ConsentDetail']['AuthPersonName']
-							});
-					}      
-        },
-
-				handleTermsAndConditionVerified: function(oEvent){
-					const oControl = oEvent.getSource();
-					
-					const isVerified = oEvent.getParameters().selected;
-					const oErrorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
-
-					const innerDiv = oControl.$().find(".sapMCbBg");
-
-					if(isVerified){
-						innerDiv.removeClass("checkbox-error-view");
-						oErrorVisibilityModel.setProperty('/isTermsAndConditionVerifiedStatus', false);
-					}else{
-						innerDiv.addClass("checkbox-error-view");
-						oErrorVisibilityModel.setProperty('/isTermsAndConditionVerifiedStatus', true);
-					}
-				},
-
-        /**
-				 * Validate account details site and auth details
-				 * @param {String} sContainerId Container Id
-				 * @param {Boolean} isShowError Have to add value state or not
-				 * @param {String} validationStatus
-				 */
-        validateFormDetails: function(sContainerId, isShowError, validationStatus){
-					const container = this.byId(sContainerId);	
-					validationFlags[validationStatus] = true;
-					
-					// To get the aggregated objects from the given container
-					container.findAggregatedObjects(true, (control) => {
-							
-						// Filtered the input and combobox controls
-						if (control instanceof sap.m.Input && !control.getId().includes("-popup-input") || 
-								control instanceof sap.m.ComboBox || 
-								control instanceof sap.m.DatePicker ) {
-							
-							let userInput = control.getValue();
-							
-							// Validates that all required fields are filled; if a field is empty, marks it with an error state to indicate validation failure.
-							if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) {
-								if(isShowError){
-									control.setValueState("Error");
-									validationFlags[validationStatus] = false
-								}
-							} else{								
-								control.setValueState("None");
-								/** If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
-								 *  If the email is invalid, set the corresponding validation flag to `false`.
-								 * */
-								if(control?.mProperties["type"] === "Email") 
-									if(!ChecksInputValidation.isValid(control, userInput, "Email")) validationFlags[validationStatus] = false;
-								
-								/** If the binding path contains "PhoneNumber", validate the user input to ensure it is in a valid phonenumber format.
-								 *  If the phonenumber is invalid, set the corresponding validation flag to `false`.
-								 * */
-								if(userInput && control?.getBindingPath("value")?.includes("PhoneNumber"))
-									if(!ChecksInputValidation.isValid(control, userInput, "PhoneNumber")) validationFlags[validationStatus] = false;	
-								
-								// If the input type is datePicker, validate the user input to ensure it is in a valid date format.
-								if(control instanceof sap.m.DatePicker) 
-									if(!ChecksInputValidation.isValid(control, userInput, "Date")) validationFlags[validationStatus] = false;
-							}	
-						}		
-          });
-
-					// Update the error message visibility status
-					this.setErrorMessageTripVisibility();
-        },
-
-				/**
-				 * Validate the input while changes happen
-				 * @param {Object} oEvent 
-				 */
-				onDateChange: function(oEvent){
-					const oControl = oEvent.getSource();
-					oControl.setValueState("None");
-
-					/**
-					 * If the validation flag have a "false", revalidate the input fields while live change happens.
-					 */
-					if(Object.values(validationFlags).includes(false)) this.validate();
-				},
-
-				// Checks the input value on live change and remove the error state
-				onLiveChange: function(oEvent){
-					const oControl = oEvent.getSource();
-		
-					const userInput = oEvent.getParameter("value") || oEvent.getParameter("selectedKey");
-
-					// Validates if a field has value, if it is remove the error state
-					if(userInput?.trim() !== "" && oControl?.mProperties['required']) {
-						oControl.setValueState("None");
-					}else{
-						oControl.setValueState("Error");
-					}
-					
-					// If the input control's binding path containes "PhoneNumber", validate the user input to ensure it is in a valid phonenumber format.
-					if(oControl?.getBindingPath("value")?.includes("PhoneNumber")) ChecksInputValidation.isValid(oControl, userInput, "PhoneNumber");					
-
-					// If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
-					if(oControl?.mProperties["type"] === "Email") ChecksInputValidation.isValid(oControl, userInput, "Email");
-
-					// If the input type is datePicker, validate the user input to ensure it is in a valid date format.
-					if(oControl instanceof sap.m.DatePicker) {
-						if(ChecksInputValidation.isValid(oControl, userInput, "Date")){
-								if(Object.values(validationFlags).includes(false)) {
-									this.validate();
-									return;
-								}	 
-						}else return;
-					}
-
-					/**
-					 * If the validation flag have a "false", revalidate the input fields while live change happens.
-					 */
-					if(Object.values(validationFlags).includes(false)) this.validate();
-				},
-
-				onSuggest: function(oEvent) {
-					const sPath = oEvent.getSource().getBinding('value')?.getContext()?.getPath();
-					const id = sPath.split("/")[2];
-
-					// Get the entered value from input
-					const sValue = oEvent.getParameter("suggestValue");
-		
-					if (sValue.length > 3) {
-						 // Trigger API call after 3 characters
-						this.fetchAddressSuggestions(sValue, id);
-					}
-				},
-
-				/**
-				 * To call the DTE Address validation api and bind the result with accoording model
-				 * @param {String} sQuery userInput
-				 * @param {String} id particular fragment bound id
-				 */
-				fetchAddressSuggestions: async function (sQuery, id) {
-					const oLocationModel = this.getView().getModel("locationModel");
-
-					// DTE address validation api
-					await axios.get(`${this.DTEAddressValidationUrl}?address=${sQuery}&maxResults=10`).then(function (response) {		
+				const customerAuthAndReleaseContainer = this.byId("customer-auth-and-release-container");
+				Fragment.load({
+						name: "dteconsentappclient.fragment.AuthAndRelease",
+						controller: this
+				}).then(function (oFragment) {
+						oFragment.setModel(oConsentModel, "oConsentModel");
+						oFragment.bindElement('oConsentModel');
 						
-						// Construct the response as needed format 
-						const aSuggestions = response.data.results.map(function (item) {
-							const addr = item.serviceAddress;
-							
-							let addressLineTwo = null;
-							// Check and concatenate secondaryCode and secondaryNumber
-							if (addr.secondaryCode) addressLineTwo = (addressLineTwo || "") + addr.secondaryCode;
-							if (addr.secondaryNumber) addressLineTwo = (addressLineTwo || "") + " " + addr.secondaryNumber;
+						customerAuthAndReleaseContainer.addItem(oFragment);
+				}).catch(function (err) {
+						console.log(`Failed to load fragment: ${err}`)
+				});
+			},
 
-							return {
-								"id": item.premiseId, // Unique identifier
-								"address": addr.houseNumber + ", " + addr.streetName,
-								"addressLineTwo":  addressLineTwo,
-								"fullAddress":`${addr.houseNumber}, ${addr.streetName}, 
-								 ${addressLineTwo ? addressLineTwo + "," : ''} ${addr.city}, ${addr.state}, ${addr.zipCode}`
-							};
-						});
-						
-						// Set the suggestions array to the model
-						oLocationModel.setProperty(`/locations/${id}/suggestions`, aSuggestions);
-					})
-					.catch(function (error) {
-						console.error("Error fetching suggestions : ", error);
-					});
+			// Bind or unbind the data based on the checbox checked
+			onConsentAndSiteSameSelected: function(oEvent){
+				const isConsentAndSiteSame = oEvent.getParameters().selected;
+				const oEnrollModel = this.getView().getModel("oEnrollModel");
+				const enrollmentData = oEnrollModel.getData();
 
-				},
-
-				onSuggestionSelect: function (oEvent) {	
-					const oInputControl = oEvent.getSource();
-
-					// Retrieve the bound path
-					const sBasePath = oInputControl.getBinding('value')?.getContext()?.getPath();
-					const id = sBasePath.split("/")[2];
-					
-
-					// Handle item selection
-					const oSelectedItem = oEvent.getParameter("selectedItem");
-					if (oSelectedItem) {
-						const sKey = oSelectedItem.getKey(); // Unique ID (premiseId) of the selected address	
-
-						// Access the suggestions array from the default model
-						const oLocationModel = this.getView().getModel("locationModel");
-						const aSuggestions = oLocationModel.getProperty(`/locations/${id}/suggestions`);
-
-						// Find the selected address using the key
-						const oSelectedAddress = aSuggestions.find(function (item, index) {
-							return item.id === sKey; // Match the key (premiseId)
-						});						
-
-						if (oSelectedAddress) {
-							// Extract the relevant address parts
-							const oAddressParts = oSelectedAddress.fullAddress.split(",");
-	
-							// Set properties to the 'locationModel'
-							const oLocationModel = this.getView().getModel("locationModel");
-							
-							oLocationModel.setProperty(`${sBasePath}/Address`, oSelectedAddress.address);
-							
-							if(oSelectedAddress.addressLineTwo) {
-								oLocationModel.setProperty(`${sBasePath}/AddrLineTwo`, oSelectedAddress.addressLineTwo);
-								oLocationModel.setProperty(`${sBasePath}/City`, oAddressParts[3].trim());
-								oLocationModel.setProperty(`${sBasePath}/Zipcode`, +oAddressParts[5]);
-							}else{
-								oLocationModel.setProperty(`${sBasePath}/AddrLineTwo`, "");
-								oLocationModel.setProperty(`${sBasePath}/City`, oAddressParts[2].trim());
-								oLocationModel.setProperty(`${sBasePath}/Zipcode`, +oAddressParts[4]);
-							}
-						}
-
-						// After set the address property revalidate the whole container input data
-						if(!validationFlags["locationDetailsValidation"]) this.validateBuildingDetails("building-detail-main-container");
-					}
-				},
-
-				// Validate the building information
-				validateBuildingDetails: function(sContainerId){
-					
-					const container = this.byId(sContainerId);
-					validationFlags["locationDetailsValidation"] = true;
-
-					/**
-					 * Building info have a list of items(one or more buildings)
-					 * So, get the all items from the container 
-					 */
-					container.getItems().forEach((wrapper, index)=>{
-						
-						wrapper.findAggregatedObjects(true, (control)=>{
-							
-							// Filtered the input and combobox controls
-							if (control instanceof sap.m.Input && !control.getId().includes("-popup-input") || control instanceof sap.m.ComboBox) {
-                            
-								const bindingPath = control.getBinding('value')?.getPath() || control.getBinding("selectedKey")?.getPath();
-								
-								if(bindingPath){
-									const userInput = control.getValue();
-									
-									if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) {
-										control.setValueState("Error");
-										validationFlags["locationDetailsValidation"] = false;
-									}else control.setValueState("None");
-								}		
-							}
-						})
-					});
-
-					// Update the error message visibility status
-					this.setErrorMessageTripVisibility();
-				},
-
-				// Retrieve the all input data
-				retrieveAllInputBindings: function(){
-					enrollmentDetails = this.getView().getModel("oEnrollModel").getData();
+				const oConsentModel = this.getView().getModel("oConsentModel");
+				const consentData = oConsentModel.getData();
 				
-					consentDetails = this.getView().getModel("oConsentModel").getData()?.ConsentDetail;
-					
-					locationDetails = this.getView().getModel("locationModel").getData();
-				},
+				const accountDetailsKeys = Object.keys(enrollmentData.AccountDetail);
 
-				validateTermsAndConditionIsVerified: function(sContainerId){
-					const oErrorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
+				/**
+				 * Checks, is consent release check box is checked,
+				 * If it is, consent and site information will be same
+				 * So have to bind the data from site details to consent details
+				 */
+				if(isConsentAndSiteSame){   
+						
+					accountDetailsKeys.map((key)=>{
+						if(key.startsWith('Site')){
+							const consentkey = key.replace('Site', 'Consent');
+							oConsentModel.setProperty(`/ConsentDetail/${consentkey}`, enrollmentData['AccountDetail'][key]);
+						}
+					});
+					this.validateFormDetails("enrollment-consent-section", false, "consentDetailValidation");		
+				}else{
+					oConsentModel.setProperty('/ConsentDetail', {
+							"FirstName": "",
+							"LastName": "",
+							"ConsentContactTitle":"",
+							"ConsentAddress": "",
+							"ConsentAddrLineTwo":"",
+							"ConsentCity":"",
+							"ConsentState": "",
+							"ConsentZipcode": null,
+							"ConsentAccountNumber":"",
+							"ConsentPhoneNumber":"",
+							"ConsentEmailAddr":"",
+							"AuthPersonName": consentData['ConsentDetail']['AuthPersonName'],
+							"AuthDate": consentData['ConsentDetail']['AuthPersonName'],
+							"AuthTitle": consentData['ConsentDetail']['AuthPersonName']
+						});
+				}      
+			},
 
-					const container = this.byId(sContainerId);
+			handleTermsAndConditionVerified: function(oEvent){
+				const oControl = oEvent.getSource();
+				
+				const isVerified = oEvent.getParameters().selected;
+				const oErrorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
 
-					// To get the aggregated objects from the given container
-					container.findAggregatedObjects(true, (control) => {
-							
-							// Filtered the input and combobox controls
-						if (control instanceof sap.m.CheckBox) {
-							const inputvalue = control.getSelected();
-							
-							const innerDiv = control.$().find(".sapMCbBg");
-								
-							if(inputvalue) {
-								oErrorVisibilityModel.setProperty('/isTermsAndConditionVerifiedStatus', false);
-								innerDiv.removeClass("checkbox-error-view");
+				const innerDiv = oControl.$().find(".sapMCbBg");
+
+				if(isVerified){
+					innerDiv.removeClass("checkbox-error-view");
+					oErrorVisibilityModel.setProperty('/isTermsAndConditionVerifiedStatus', false);
+				}else{
+					innerDiv.addClass("checkbox-error-view");
+					oErrorVisibilityModel.setProperty('/isTermsAndConditionVerifiedStatus', true);
+				}
+			},
+
+			/**
+			 * Validate account details site and auth details
+			 * @param {String} sContainerId Container Id
+			 * @param {Boolean} isShowError Have to add value state or not
+			 * @param {String} validationStatus
+			 */
+			validateFormDetails: function(sContainerId, isShowError, validationStatus){
+				const container = this.byId(sContainerId);	
+				validationFlags[validationStatus] = true;
+				
+				// To get the aggregated objects from the given container
+				container.findAggregatedObjects(true, (control) => {
+						
+					// Filtered the input and combobox controls
+					if (control instanceof sap.m.Input && !control.getId().includes("-popup-input") || 
+							control instanceof sap.m.ComboBox || 
+							control instanceof sap.m.DatePicker ) {
+						
+						let userInput = control.getValue();
+						
+						// Validates that all required fields are filled; if a field is empty, marks it with an error state to indicate validation failure.
+						if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) {
+							if(isShowError){
+								control.setValueState("Error");
+								validationFlags[validationStatus] = false
 							}
-							else {
-								oErrorVisibilityModel.setProperty('/isTermsAndConditionVerifiedStatus', true);	
-								innerDiv.addClass("checkbox-error-view");
+						} else{								
+							control.setValueState("None");
+							/** If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
+							 *  If the email is invalid, set the corresponding validation flag to `false`.
+							 * */
+							if(control?.mProperties["type"] === "Email") 
+								if(!ChecksInputValidation.isValid(control, userInput, "Email")) validationFlags[validationStatus] = false;
+							
+							/** If the binding path contains "PhoneNumber", validate the user input to ensure it is in a valid phonenumber format.
+							 *  If the phonenumber is invalid, set the corresponding validation flag to `false`.
+							 * */
+							if(userInput && control?.getBindingPath("value")?.includes("PhoneNumber"))
+								if(!ChecksInputValidation.isValid(control, userInput, "PhoneNumber")) validationFlags[validationStatus] = false;	
+							
+							// If the input type is datePicker, validate the user input to ensure it is in a valid date format.
+							if(control instanceof sap.m.DatePicker) 
+								if(!ChecksInputValidation.isValid(control, userInput, "Date")) validationFlags[validationStatus] = false;
+						}	
+					}		
+				});
+
+				// Update the error message visibility status
+				this.setErrorMessageTripVisibility();
+			},
+
+			/**
+			 * Validate the input while changes happen
+			 * @param {Object} oEvent 
+			 */
+			onDateChange: function(oEvent){
+				const oControl = oEvent.getSource();
+				oControl.setValueState("None");
+
+				/**
+				 * If the validation flag have a "false", revalidate the input fields while live change happens.
+				 */
+				if(Object.values(validationFlags).includes(false)) this.validate();
+			},
+
+			// Checks the input value on live change and remove the error state
+			onLiveChange: function(oEvent){
+				const oControl = oEvent.getSource();
+	
+				const userInput = oEvent.getParameter("value") || oEvent.getParameter("selectedKey");
+
+				// Validates if a field has value, if it is remove the error state
+				if(userInput?.trim() !== "" && oControl?.mProperties['required']) {
+					oControl.setValueState("None");
+				}else{
+					oControl.setValueState("Error");
+				}
+				
+				// If the input control's binding path containes "PhoneNumber", validate the user input to ensure it is in a valid phonenumber format.
+				if(oControl?.getBindingPath("value")?.includes("PhoneNumber")) ChecksInputValidation.isValid(oControl, userInput, "PhoneNumber");					
+
+				// If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
+				if(oControl?.mProperties["type"] === "Email") ChecksInputValidation.isValid(oControl, userInput, "Email");
+
+				// If the input type is datePicker, validate the user input to ensure it is in a valid date format.
+				if(oControl instanceof sap.m.DatePicker) {
+					if(ChecksInputValidation.isValid(oControl, userInput, "Date")){
+							if(Object.values(validationFlags).includes(false)) {
+								this.validate();
+								return;
+							}	 
+					}else return;
+				}
+
+				/**
+				 * If the validation flag have a "false", revalidate the input fields while live change happens.
+				 */
+				if(Object.values(validationFlags).includes(false)) this.validate();
+			},
+
+			onSuggest: function(oEvent) {
+				const sPath = oEvent.getSource().getBinding('value')?.getContext()?.getPath();
+				const id = sPath.split("/")[2];
+
+				// Get the entered value from input
+				const sValue = oEvent.getParameter("suggestValue");
+	
+				if (sValue.length > 3) {
+					 // Trigger API call after 3 characters
+					this.fetchAddressSuggestions(sValue, id);
+				}
+			},
+
+			/**
+			 * To call the DTE Address validation api and bind the result with accoording model
+			 * @param {String} sQuery userInput
+			 * @param {String} id particular fragment bound id
+			 */
+			fetchAddressSuggestions: async function (sQuery, id) {
+				const oLocationModel = this.getView().getModel("locationModel");
+
+				// DTE address validation api
+				await axios.get(`${this.DTEAddressValidationUrl}?address=${sQuery}&maxResults=10`).then(function (response) {		
+					
+					// Construct the response as needed format 
+					const aSuggestions = response.data.results.map(function (item) {
+						const addr = item.serviceAddress;
+						
+						let addressLineTwo = null;
+						// Check and concatenate secondaryCode and secondaryNumber
+						if (addr.secondaryCode) addressLineTwo = (addressLineTwo || "") + addr.secondaryCode;
+						if (addr.secondaryNumber) addressLineTwo = (addressLineTwo || "") + " " + addr.secondaryNumber;
+
+						return {
+							"id": item.premiseId, // Unique identifier
+							"address": addr.houseNumber + ", " + addr.streetName,
+							"addressLineTwo":  addressLineTwo,
+							"fullAddress":`${addr.houseNumber}, ${addr.streetName}, 
+							 ${addressLineTwo ? addressLineTwo + "," : ''} ${addr.city}, ${addr.state}, ${addr.zipCode}`
+						};
+					});
+					
+					// Set the suggestions array to the model
+					oLocationModel.setProperty(`/locations/${id}/suggestions`, aSuggestions);
+				})
+				.catch(function (error) {
+					console.error("Error fetching suggestions : ", error);
+				});
+
+			},
+
+			onSuggestionSelect: function (oEvent) {	
+				const oInputControl = oEvent.getSource();
+
+				// Retrieve the bound path
+				const sBasePath = oInputControl.getBinding('value')?.getContext()?.getPath();
+				const id = sBasePath.split("/")[2];
+				
+
+				// Handle item selection
+				const oSelectedItem = oEvent.getParameter("selectedItem");
+				if (oSelectedItem) {
+					const sKey = oSelectedItem.getKey(); // Unique ID (premiseId) of the selected address	
+
+					// Access the suggestions array from the default model
+					const oLocationModel = this.getView().getModel("locationModel");
+					const aSuggestions = oLocationModel.getProperty(`/locations/${id}/suggestions`);
+
+					// Find the selected address using the key
+					const oSelectedAddress = aSuggestions.find(function (item, index) {
+						return item.id === sKey; // Match the key (premiseId)
+					});						
+
+					if (oSelectedAddress) {
+						// Extract the relevant address parts
+						const oAddressParts = oSelectedAddress.fullAddress.split(",");
+
+						// Set properties to the 'locationModel'
+						const oLocationModel = this.getView().getModel("locationModel");
+						
+						oLocationModel.setProperty(`${sBasePath}/Address`, oSelectedAddress.address);
+						
+						if(oSelectedAddress.addressLineTwo) {
+							oLocationModel.setProperty(`${sBasePath}/AddrLineTwo`, oSelectedAddress.addressLineTwo);
+							oLocationModel.setProperty(`${sBasePath}/City`, oAddressParts[3].trim());
+							oLocationModel.setProperty(`${sBasePath}/Zipcode`, +oAddressParts[5]);
+						}else{
+							oLocationModel.setProperty(`${sBasePath}/AddrLineTwo`, "");
+							oLocationModel.setProperty(`${sBasePath}/City`, oAddressParts[2].trim());
+							oLocationModel.setProperty(`${sBasePath}/Zipcode`, +oAddressParts[4]);
+						}
+					}
+
+					// After set the address property revalidate the whole container input data
+					if(!validationFlags["locationDetailsValidation"]) this.validateBuildingDetails("building-detail-main-container");
+				}
+			},
+
+			// Validate the building information
+			validateBuildingDetails: function(sContainerId){
+				
+				const container = this.byId(sContainerId);
+				validationFlags["locationDetailsValidation"] = true;
+
+				/**
+				 * Building info have a list of items(one or more buildings)
+				 * So, get the all items from the container 
+				 */
+				container.getItems().forEach((wrapper, index)=>{
+					
+					wrapper.findAggregatedObjects(true, (control)=>{
+						
+						// Filtered the input and combobox controls
+						if (control instanceof sap.m.Input && !control.getId().includes("-popup-input") || control instanceof sap.m.ComboBox) {
+													
+							const bindingPath = control.getBinding('value')?.getPath() || control.getBinding("selectedKey")?.getPath();
+							
+							if(bindingPath){
+								const userInput = control.getValue();
+								
+								if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) {
+									control.setValueState("Error");
+									validationFlags["locationDetailsValidation"] = false;
+								}else control.setValueState("None");
 							}		
 						}
-          });
-				},
+					})
+				});
 
-				setErrorMessageTripVisibility: function(){
-					const oErrorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
+				// Update the error message visibility status
+				this.setErrorMessageTripVisibility();
+			},
 
-					if(Object.values(validationFlags).includes(false)) 
-						oErrorVisibilityModel.setProperty('/isInputInValid', true);
-					else oErrorVisibilityModel.setProperty('/isInputInValid', false);
-				},
+			// Retrieve the all input data
+			retrieveAllInputBindings: function(){
+				enrollmentDetails = this.getView().getModel("oEnrollModel").getData();
+			
+				consentDetails = this.getView().getModel("oConsentModel").getData()?.ConsentDetail;
+				
+				locationDetails = this.getView().getModel("locationModel").getData();
+			},
 
-				// To open the additional location alert dialog
-				additionalLocationAlert: function(){
-					const oErrorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
-          const oErrorVisibilityModelData = oErrorVisibilityModel.getData();
-					
-					/**
-					 * Here checks if the error message strip was in inVisible state
-					 * If it is all inputs are valid, then open the additional location alert dialog
-					 */
-					if(!oErrorVisibilityModelData?.isInputInValid && !oErrorVisibilityModelData?.isTermsAndConditionVerifiedStatus){
+			validateTermsAndConditionIsVerified: function(sContainerId){
+				const oErrorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
 
-					const that = this;
+				const container = this.byId(sContainerId);
 
-					// Customize content of the dialog, design the VBox container
-          const dialogContent = new sap.m.FlexBox({
-            items: [
-              new sap.m.FormattedText({htmlText: "<p style='letter-spacing: .7px;'> <span style='font-weight: 600;'>NOTE:</span> If you want to add another location, you must do so before submitting this form. Adding another location after submitting will require filling out a new form. </p>"}),
-              new sap.m.Button({
-                text: '+ Add Another Location',
-                press: function(){
-                  that.onAddAnotherLocation(),
-                  that.oConfirmationDialog.close()
-                }
-              }).addStyleClass("outline-button"),
-              new sap.m.Text({text: 'I don’t have another location.'}),
-              new sap.m.Button({
-                text: 'Continue Submission',
-                press: function(){
-									// To call the backend service and store the data
-                  that.submitAction(),
-                  that.oConfirmationDialog.close()
-                },
-                type: sap.m.ButtonType.Emphasized
-              }).addStyleClass("dialog-submit-action")
-            ],
-          });
+				// To get the aggregated objects from the given container
+				container.findAggregatedObjects(true, (control) => {
+						
+						// Filtered the input and combobox controls
+					if (control instanceof sap.m.CheckBox) {
+						const inputvalue = control.getSelected();
+						
+						const innerDiv = control.$().find(".sapMCbBg");
+							
+						if(inputvalue) {
+							oErrorVisibilityModel.setProperty('/isTermsAndConditionVerifiedStatus', false);
+							innerDiv.removeClass("checkbox-error-view");
+						}
+						else {
+							oErrorVisibilityModel.setProperty('/isTermsAndConditionVerifiedStatus', true);	
+							innerDiv.addClass("checkbox-error-view");
+						}		
+					}
+				});
+			},
 
-					// Add the class for the dialog content
-          dialogContent.addStyleClass("confirmation-dialog-content");
+			setErrorMessageTripVisibility: function(){
+				const oErrorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
 
-					// Custom header for the dialog
-					const dialogTitle = new sap.m.Bar({
-						contentMiddle: [
-							new sap.m.Text({ 
-								text: 'Additional Location Alert' 
-							}).addStyleClass("alert-title")
-						],
-						contentRight: [
-								new sap.ui.core.Icon({
-										src: 'sap-icon://decline',
-										decorative: false,
-										press: function () {
-												that.oConfirmationDialog.close();
-										}
-								}).addStyleClass("alert-close-icon")
-						]
+				if(Object.values(validationFlags).includes(false)) 
+					oErrorVisibilityModel.setProperty('/isInputInValid', true);
+				else oErrorVisibilityModel.setProperty('/isInputInValid', false);
+			},
+
+			// To open the additional location alert dialog
+			additionalLocationAlert: function(){
+				const oErrorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
+				const oErrorVisibilityModelData = oErrorVisibilityModel.getData();
+				
+				/**
+				 * Here checks if the error message strip was in inVisible state
+				 * If it is all inputs are valid, then open the additional location alert dialog
+				 */
+				if(!oErrorVisibilityModelData?.isInputInValid && !oErrorVisibilityModelData?.isTermsAndConditionVerifiedStatus){
+
+				const that = this;
+
+				// Customize content of the dialog, design the VBox container
+				const dialogContent = new sap.m.FlexBox({
+					items: [
+						new sap.m.FormattedText({htmlText: "<p style='letter-spacing: .7px;'> <span style='font-weight: 600;'>NOTE:</span> If you want to add another location, you must do so before submitting this form. Adding another location after submitting will require filling out a new form. </p>"}),
+						new sap.m.Button({
+							text: '+ Add Another Location',
+							press: function(){
+								that.onAddAnotherLocation(),
+								that.oConfirmationDialog.close()
+							}
+						}).addStyleClass("outline-button"),
+						new sap.m.Text({text: 'I don’t have another location.'}),
+						new sap.m.Button({
+							text: 'Continue Submission',
+							press: function(){
+								// To call the backend service and store the data
+								that.submitAction(),
+								that.oConfirmationDialog.close()
+							},
+							type: sap.m.ButtonType.Emphasized
+						}).addStyleClass("dialog-submit-action")
+					],
 				});
 
 				// Add the class for the dialog content
-				dialogTitle.addStyleClass("confirmation-dialog-title");
+				dialogContent.addStyleClass("confirmation-dialog-content");
 
-				// Open the additional location alert dialog while submit pressed
-          if(!this.oConfirmationDialog){
-            this.oConfirmationDialog = new Dialog({
-							customHeader: dialogTitle,
-              content: dialogContent
-            })
-          }
-          this.oConfirmationDialog.open();
-        	}
-				},
+				// Custom header for the dialog
+				const dialogTitle = new sap.m.Bar({
+					contentMiddle: [
+						new sap.m.Text({ 
+							text: 'Additional Location Alert' 
+						}).addStyleClass("alert-title")
+					],
+					contentRight: [
+							new sap.ui.core.Icon({
+									src: 'sap-icon://decline',
+									decorative: false,
+									press: function () {
+											that.oConfirmationDialog.close();
+									}
+							}).addStyleClass("alert-close-icon")
+					]
+			});
 
-				submitAction: async function(){
-					try{
-						// Retrieve the data from bound models
-						this.retrieveAllInputBindings();
+			// Add the class for the dialog content
+			dialogTitle.addStyleClass("confirmation-dialog-title");
 
-						// Url to create the enrollment application
-						const enrollmentCreateUrl = this.SERVERHOST + 'service/CreateEnrollmentFormDetail';
-						
-						// Format the location details
-						const formattedLocationDetails = Object.values(locationDetails['locations']);
-						formattedLocationDetails.forEach((item)=> delete item.suggestions);
-						
-						const enrollmentFormDetails = {
-							AccountDetail: JSON.stringify({
-								...enrollmentDetails['AccountDetail'], 
-								FirstName: enrollmentDetails['AccountDetail']['SiteFirstName'], 
-								LastName: enrollmentDetails['AccountDetail']['SiteLastName'],
-								EmailAddr: enrollmentDetails['AccountDetail']['SiteEmailAddr'],
-							  AcctMgrPhNo: enrollmentDetails['AccountDetail']['AcctMgrPhoneNumber']
-							}),
-								BuildingDetail: JSON.stringify(formattedLocationDetails),
-								ApplicationDetail: JSON.stringify({'SignatureSignedBy': enrollmentDetails['SignatureSignedBy'], 'SignatureSignedDate': FormatInputs.convertDateFormat(enrollmentDetails['SignatureSignedDate'])}),
-								ConsentDetail: JSON.stringify([{
-								"FirstName": consentDetails['ConsentFirstName'],
-								"LastName": consentDetails['ConsentLastName'],
-								"SiteContactTitle": consentDetails['ConsentContactTitle'],
-								"Address": consentDetails['ConsentAddress'],
-								"AddrLineTwo":consentDetails['ConsentAddrLineTwo'],
-								"City": consentDetails['ConsentCity'],
-								"State": consentDetails['ConsentState'],
-								"Zipcode": consentDetails['ConsentZipcode'],
-								"AccountNumber": consentDetails['ConsentAccountNumber'],
-								"PhoneNumber": consentDetails['ConsentPhoneNumber'],
-								"EmailAddr": consentDetails['ConsentEmailAddr'],
-								"AuthPersonName": consentDetails['AuthPersonName'],
-								"AuthDate": FormatInputs.convertDateFormat(consentDetails['AuthDate']),
-								"AuthTitle": consentDetails['AuthTitle'],
-							}])
-						};
-						
-						// Post request to create a enrollment application
-						const {data} = await axios.post(enrollmentCreateUrl, enrollmentFormDetails);
-						
-						// If get the success(200) response then navigate to the confirmation page
-						if(data.value.statusCode === 200){
-							// Navigate to the landlord confirmation page
-							window.open(this.LandlordConfirmationPageUrl, '_self');
-						}else{
-							// Navigate to the error page
-							window.open(this.ErrorPageUrl, '_self');
-						}
-					}catch(err){						
+			// Open the additional location alert dialog while submit pressed
+				if(!this.oConfirmationDialog){
+					this.oConfirmationDialog = new Dialog({
+						customHeader: dialogTitle,
+						content: dialogContent
+					})
+				}
+				this.oConfirmationDialog.open();
+				}
+			},
+
+			submitAction: async function(){
+				try{
+					// Retrieve the data from bound models
+					this.retrieveAllInputBindings();
+
+					// Url to create the enrollment application
+					const enrollmentCreateUrl = this.SERVERHOST + 'service/CreateEnrollmentFormDetail';
+					
+					// Format the location details
+					const formattedLocationDetails = Object.values(locationDetails['locations']);
+					formattedLocationDetails.forEach((item)=> delete item.suggestions);
+					
+					const enrollmentFormDetails = {
+						AccountDetail: JSON.stringify({
+							...enrollmentDetails['AccountDetail'], 
+							FirstName: enrollmentDetails['AccountDetail']['SiteFirstName'], 
+							LastName: enrollmentDetails['AccountDetail']['SiteLastName'],
+							EmailAddr: enrollmentDetails['AccountDetail']['SiteEmailAddr'],
+							AcctMgrPhNo: enrollmentDetails['AccountDetail']['AcctMgrPhoneNumber']
+						}),
+							BuildingDetail: JSON.stringify(formattedLocationDetails),
+							ApplicationDetail: JSON.stringify({'SignatureSignedBy': enrollmentDetails['SignatureSignedBy'], 'SignatureSignedDate': FormatInputs.convertDateFormat(enrollmentDetails['SignatureSignedDate'])}),
+							ConsentDetail: JSON.stringify([{
+							"FirstName": consentDetails['ConsentFirstName'],
+							"LastName": consentDetails['ConsentLastName'],
+							"SiteContactTitle": consentDetails['ConsentContactTitle'],
+							"Address": consentDetails['ConsentAddress'],
+							"AddrLineTwo":consentDetails['ConsentAddrLineTwo'],
+							"City": consentDetails['ConsentCity'],
+							"State": consentDetails['ConsentState'],
+							"Zipcode": consentDetails['ConsentZipcode'],
+							"AccountNumber": consentDetails['ConsentAccountNumber'],
+							"PhoneNumber": consentDetails['ConsentPhoneNumber'],
+							"EmailAddr": consentDetails['ConsentEmailAddr'],
+							"AuthPersonName": consentDetails['AuthPersonName'],
+							"AuthDate": FormatInputs.convertDateFormat(consentDetails['AuthDate']),
+							"AuthTitle": consentDetails['AuthTitle'],
+						}])
+					};
+					
+					// Post request to create a enrollment application
+					const {data} = await axios.post(enrollmentCreateUrl, enrollmentFormDetails);
+					
+					// If get the success(200) response then navigate to the confirmation page
+					if(data.value.statusCode === 200){
+						// Navigate to the landlord confirmation page
+						window.open(this.LandlordConfirmationPageUrl, '_self');
+					}else{
 						// Navigate to the error page
 						window.open(this.ErrorPageUrl, '_self');
 					}
-				},
+				}catch(err){						
+					// Navigate to the error page
+					window.open(this.ErrorPageUrl, '_self');
+				}
+			},
 
-				validate: function(){
-					this.validateFormDetails("account-info-container", true, "accountDetailsValidation");
-					this.validateFormDetails("site-contact-info-container", true, "siteDetailsValidation");
-					this.validateBuildingDetails("building-detail-main-container");
-					this.validateFormDetails("auth-info-container", true, "customerAuthDetailValidation");
-					this.validateFormDetails("enrollment-consent-section", true, "consentDetailValidation");
-					this.validateFormDetails("customer-auth-and-release-container", true, "consentAuthDetailValidation");
-					this.validateTermsAndConditionIsVerified("customer-auth-and-release-container");
-				},
+			validate: function(){
+				this.validateFormDetails("account-info-container", true, "accountDetailsValidation");
+				this.validateFormDetails("site-contact-info-container", true, "siteDetailsValidation");
+				this.validateBuildingDetails("building-detail-main-container");
+				this.validateFormDetails("auth-info-container", true, "customerAuthDetailValidation");
+				this.validateFormDetails("enrollment-consent-section", true, "consentDetailValidation");
+				this.validateFormDetails("customer-auth-and-release-container", true, "consentAuthDetailValidation");
+				this.validateTermsAndConditionIsVerified("customer-auth-and-release-container");
+			},
 
-        handleSubmit: function () {
-					// While submit button is pressed, validate all the fields in the form
-					this.validate();
+			handleSubmit: function () {
+				// While submit button is pressed, validate all the fields in the form
+				this.validate();
 
-					// Update the error message trip visibility status once validation is done
-					this.setErrorMessageTripVisibility();
+				// Update the error message trip visibility status once validation is done
+				this.setErrorMessageTripVisibility();
 
-					// Dialog to additional location alert
-					this.additionalLocationAlert();
-        },
+				// Dialog to additional location alert
+				this.additionalLocationAlert();
+			},
 
-    });
+	});
 });
