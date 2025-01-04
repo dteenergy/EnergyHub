@@ -98,3 +98,9 @@ body {
       padding-bottom: 10px;
     }
   }
+
+  .recaptcha{
+    display: block !important;
+    visibility: visible !important;
+    background-color: antiquewhite;
+  }

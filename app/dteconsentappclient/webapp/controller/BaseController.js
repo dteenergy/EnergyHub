@@ -87,6 +87,8 @@ sap.ui.define([
 
           const response = await axios.get(urlToGetEnvironmentVariables);
           
+          console.log(response, "Client");
+          
           return response?.data?.value;
         }catch(err){
           this.errorHandler(err);

@@ -28,4 +28,7 @@ service DTEConsentAppPortal {
 
     // Get environment variable (AEM Navigation page url and address validation url)
     function getEnvironmentVariables () returns String;
+
+    // Verify the Google Recaptcha.
+    function verifyRecaptcha() returns String;
 };

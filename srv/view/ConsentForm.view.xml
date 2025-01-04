@@ -8,6 +8,8 @@
 	busyIndicatorDelay="0"
 	xmlns:form="sap.ui.layout.form"
 	xmlns:layout="sap.ui.layout"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns:utils="utils"
 >
     <Page
         backgroundDesign="Standard"
@@ -141,9 +143,10 @@
 								>
 								</MessageStrip>
 							</VBox>
-
-							<Button text="Submit" type="Emphasized" press="onSubmit" class="customize-button submit-action"></Button>
-				
+							<VBox id="recaptchacontainer">
+                        		<core:HTML id="recaptchaPlaceholder" />
+                    		</VBox>
+							<Button text="Submit" type="Emphasized" press="onSubmit" class="customize-button submit-action"  enabled="{/recaptchaStatus}" ></Button>
 							</VBox>
 					</items>
 					</FlexBox>

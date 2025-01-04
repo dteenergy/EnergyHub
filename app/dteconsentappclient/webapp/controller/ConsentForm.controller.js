@@ -1,12 +1,12 @@
 sap.ui.define([
 	"dteconsentappclient/controller/BaseController",
 	"sap/ui/core/Fragment",
-  "sap/ui/model/json/JSONModel",
+	"sap/ui/model/json/JSONModel",
 	"dteconsentappclient/variable/GlobalInputValues",
 	"dteconsentappclient/utils/ConsentAddressSuggestion",
 	"dteconsentappclient/utils/ChecksInputValidation",
 	"dteconsentappclient/utils/FormatInputs"
-], function(
+], function (
 	BaseController,
 	Fragment,
 	JSONModel,
@@ -21,334 +21,402 @@ sap.ui.define([
 		tenantInformationValidation: true,
 		consentAuthDetailValidation: true
 	};
-
+	
 	return BaseController.extend("dteconsentappclient.controller.ConsentForm", {
-        onInit () {
+		onInit() {
+			// Handle the button visibility based on recaptcha.
+			let oModel = new JSONModel({
+				recaptchaStatus: false // Default to false (disabled)
+			});
 
-					const {
-								applicationId,
-								url, 
-								TenantConfirmationPageUrl, 
-								ErrorPageUrl, 
-								DTEAddressValidationUrl
-							} = this.getView().getViewData();
-					
-					// Get the required properties from the parent view
-					this.applicationId = applicationId;
-					this.SERVERHOST = url;
-					this.TenantConfirmationPageUrl = TenantConfirmationPageUrl;
-					this.ErrorPageUrl = ErrorPageUrl;	
-					this.DTEAddressValidationUrl = DTEAddressValidationUrl
-					
-					//Initialize Model for this view
-					this.initializeModel();
+			this.getView().setModel(oModel);
 
-					// Load the AuthAndRelease fragement
-					this.loadAuthAndRelease();
-			},
+			const {
+				applicationId,
+				url,
+				TenantConfirmationPageUrl,
+				ErrorPageUrl,
+				DTEAddressValidationUrl,
+				GoogleRecaptchaSiteKey
+			} = this.getView().getViewData();
 
-				initializeModel: function(){
-					
-					let oConsentData = {
-						ConsentDetail: {
-							"ConsentFirstName": "",
-							"ConsentLastName": "",
-							"ConsentAddress": "",
-							"ConsentAddrLineTwo":"",
-							"ConsentCity":"",
-							"ConsentState": "Michigan",
-							"ConsentZipcode": null,
-							"ConsentAccountNumber":"",
-							"ConsentEmailAddr":"",
-							"AuthPersonName":"",
-							"AuthDate":"",
-							"AuthTitle":"",
-							"suggestions": []
-						}
-					};
+			// Get the required properties from the parent view
+			this.applicationId = applicationId;
+			this.SERVERHOST = url;
+			this.TenantConfirmationPageUrl = TenantConfirmationPageUrl;
+			this.ErrorPageUrl = ErrorPageUrl;
+			this.DTEAddressValidationUrl = DTEAddressValidationUrl
+			this.GoogleRecaptchaSiteKey = GoogleRecaptchaSiteKey;
+			//Initialize Model for this view
+			this.initializeModel();
 
-					// Model to store the tenant consent detail
-					const oConsentModel = new JSONModel(oConsentData);
-					this.getView().setModel(oConsentModel, "oConsentModel");
+			// Load the AuthAndRelease fragement
+			this.loadAuthAndRelease();
+			this.recaptchaContainer();
+		},
 
-					// Model to set the list of US states
-					const ostateValuesModel = new JSONModel(GlobalInputValues.usStates);
-					this.getView().setModel(ostateValuesModel, "ostateValuesModel");
+		initializeModel: function () {
 
-					// Model to set the location available state list 
-					const oLocationStateModel = new JSONModel(GlobalInputValues.locationStates);
-					this.getView().setModel(oLocationStateModel, "oLocationStateModel");
+			let oConsentData = {
+				ConsentDetail: {
+					"ConsentFirstName": "",
+					"ConsentLastName": "",
+					"ConsentAddress": "",
+					"ConsentAddrLineTwo": "",
+					"ConsentCity": "",
+					"ConsentState": "Michigan",
+					"ConsentZipcode": null,
+					"ConsentAccountNumber": "",
+					"ConsentEmailAddr": "",
+					"AuthPersonName": "",
+					"AuthDate": "",
+					"AuthTitle": "",
+					"suggestions": []
+				}
+			};
 
-					// Model to hold the visibility status of error message
-					const oErrorVisibilityModel = new JSONModel({
-						"isInputInValid":false,
-						"isTermsAndConditionVerifiedStatus":false
-					});
-					this.getView().setModel(oErrorVisibilityModel, "oErrorVisibilityModel");
-				},
+			// Model to store the tenant consent detail
+			const oConsentModel = new JSONModel(oConsentData);
+			this.getView().setModel(oConsentModel, "oConsentModel");
 
-        // Define model and load the Customer Auth and Release section fragment to the enrollment form
-        loadAuthAndRelease: function(){
-					const oConsentModel = this.getView().getModel("oConsentModel");
+			// Model to set the list of US states
+			const ostateValuesModel = new JSONModel(GlobalInputValues.usStates);
+			this.getView().setModel(ostateValuesModel, "ostateValuesModel");
 
-					const customerAuthAndReleaseContainer = this.byId("tenant-auth-and-release-container-id");
-					
-					Fragment.load({
-							name: "dteconsentappclient.fragment.AuthAndRelease",
-							controller: this
-					}).then(function (oFragment) {
-							oFragment.setModel(oConsentModel, "oConsentModel");
-							oFragment.bindElement('oConsentModel');
-							
-							customerAuthAndReleaseContainer.addItem(oFragment);
-					}).catch(function (err) {
-							console.log(`Failed to load fragment: ${err}`)
-					});
-			},
+			// Model to set the location available state list 
+			const oLocationStateModel = new JSONModel(GlobalInputValues.locationStates);
+			this.getView().setModel(oLocationStateModel, "oLocationStateModel");
 
-			/**
-			 * Get the value while suggest
-			 * @param {Object} oEvent 
-			 */
-			onConsentAddrSuggest: function(oEvent){
-				// Get the entered value from input
-				const sAddrValue = oEvent.getParameter("suggestValue");
+			// Model to hold the visibility status of error message
+			const oErrorVisibilityModel = new JSONModel({
+				"isInputInValid": false,
+				"isTermsAndConditionVerifiedStatus": false
+			});
+			this.getView().setModel(oErrorVisibilityModel, "oErrorVisibilityModel");
+		},
 
-				// Get the bound model
-				const oConsentModel = this.getView().getModel("oConsentModel");
-
-				// To checks the condition and call the DTE address End point to get the suggestion list
-				ConsentAddressSuggestion.onConsentAddrSuggestion(sAddrValue, oConsentModel, this.DTEAddressValidationUrl);
-			},
-
-			// To get the selected item from the suggestion list
-			onConsentAddrSugSelected: function(oEvent){
-			
-				// Get the bound model
+		// Define model and load the Customer Auth and Release section fragment to the enrollment form
+		loadAuthAndRelease: function () {
 			const oConsentModel = this.getView().getModel("oConsentModel");
+
+			const customerAuthAndReleaseContainer = this.byId("tenant-auth-and-release-container-id");
+
+			Fragment.load({
+				name: "dteconsentappclient.fragment.AuthAndRelease",
+				controller: this
+			}).then(function (oFragment) {
+				oFragment.setModel(oConsentModel, "oConsentModel");
+				oFragment.bindElement('oConsentModel');
+
+				customerAuthAndReleaseContainer.addItem(oFragment);
+			}).catch(function (err) {
+				console.log(`Failed to load fragment: ${err}`)
+			});
+		},
+		
+		// Initializes the reCAPTCHA widget and renders it in the specified container.
+		recaptchaContainer: function () {
+			const siteKey = this.GoogleRecaptchaSiteKey;
+
+			let oHtmlContainer = this.byId("recaptchaPlaceholder")
 			
+			oHtmlContainer.setContent("<div id='recaptchaDiv'></div>")
+			oHtmlContainer.attachAfterRendering(function () {
+				// Check if the reCAPTCHA library is loaded
+				if (window.grecaptcha) {
+					grecaptcha.render("recaptchaDiv", {
+						sitekey: siteKey,
+						theme: "light",
+						callback: this._onRecaptchaSuccess.bind(this)
+					});
+				} else {
+					console.error("reCAPTCHA script not loaded!");
+				}
+			}.bind(this))
+		},
+		// Callback function to verify the recaptcha token
+		_onRecaptchaSuccess: function (token) {
+			// Example: Send the token to your backend for verification
+			this._verifyRecaptchaToken(token);
+		},
+
+		// Activate the reCAPTCHA verification service to obtain the verification status.
+		_verifyRecaptchaToken: async function (token) {
+			// URL to verify the reCAPTCHA token
+			const verifyRecaptcha = this.SERVERHOST + 'service/verifyRecaptcha';
+			let oModel = this.getView().getModel();
+			try {
+				const response = await axios.get(verifyRecaptcha, {
+					params: {
+						response: token // Pass the token as a query parameter
+					}
+				});
+
+				const statusCode = response.data?.value?.statusCode;
+
+				if (statusCode === 200) {
+					console.log("Recaptcha verified successfully!");
+					// Set recaptchaStatus to true if the reCAPTCHA is verified
+					oModel.setProperty("/recaptchaStatus", true);
+					return true; // Indicate success
+				} else {
+					console.error("Recaptcha verification failed.");
+					// Set recaptchaStatus to false if the reCAPTCHA is verified
+					oModel.setProperty("/recaptchaStatus", false);
+					this.recaptchaStatus = false; // Set the recaptcha status as failed
+					return false; // Indicate failure
+				}
+			} catch (error) {
+				console.error(`Failed to verify the recaptcha: ${error}`);
+				oModel.setProperty("/recaptchaStatus", false);
+				this.recaptchaStatus = false; // Set the recaptcha status as failed
+				return false; // Indicate failure
+			}
+		},
+
+		/**
+		 * Get the value while suggest
+		 * @param {Object} oEvent 
+		 */
+		onConsentAddrSuggest: function (oEvent) {
+			// Get the entered value from input
+			const sAddrValue = oEvent.getParameter("suggestValue");
+
+			// Get the bound model
+			const oConsentModel = this.getView().getModel("oConsentModel");
+
+			// To checks the condition and call the DTE address End point to get the suggestion list
+			ConsentAddressSuggestion.onConsentAddrSuggestion(sAddrValue, oConsentModel, this.DTEAddressValidationUrl);
+		},
+
+		// To get the selected item from the suggestion list
+		onConsentAddrSugSelected: function (oEvent) {
+
+			// Get the bound model
+			const oConsentModel = this.getView().getModel("oConsentModel");
+
 			// To get the selected item from the suggestion list and binding with according field in the model
 			ConsentAddressSuggestion.onConsentAddrSugSelected(oEvent, oConsentModel);
-			
+
 			// Validate the form fields 
-			if(!validationFlags["tenantInformationValidation"]) this.validateFormDetails("tenant-consent-form-container-id", true, "tenantInformationValidation")
-			},
+			if (!validationFlags["tenantInformationValidation"]) this.validateFormDetails("tenant-consent-form-container-id", true, "tenantInformationValidation")
+		},
 
-			// Check the input on live change and remove the error state
-			onLiveChange: function(oEvent){
-				const oControl = oEvent.getSource();
-				
-				const userInput = oEvent.getParameter("value") || oEvent.getParameter("selectedKey");
-				
-				// Checks the containers all input are get valid
-				if(Object.values(validationFlags).includes(false)) this.validate();
-				
-				// Validates if a field has value, if it is remove the error state
-				if(userInput?.trim() === "" || !userInput && oControl?.mProperties['required']) {
-					oControl.setValueState("Error");
-				}else{
-					oControl.setValueState("None");
-					
-					// If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
-					if(oControl?.mProperties["type"] === "Email") ChecksInputValidation.isValid(oControl, userInput, "Email");
+		// Check the input on live change and remove the error state
+		onLiveChange: function (oEvent) {
+			const oControl = oEvent.getSource();
 
-					// If the input type is datePicker, validate the user input to ensure it is in a valid date format.
-					if(oControl instanceof sap.m.DatePicker) {
-						if(ChecksInputValidation.isValid(oControl, userInput, "Date")){
-								if(Object.values(validationFlags).includes(false)) {
-									this.validate();
-									return;
-								}	 
-						}else return;
-					}
+			const userInput = oEvent.getParameter("value") || oEvent.getParameter("selectedKey");
+
+			// Checks the containers all input are get valid
+			if (Object.values(validationFlags).includes(false)) this.validate();
+
+			// Validates if a field has value, if it is remove the error state
+			if (userInput?.trim() === "" || !userInput && oControl?.mProperties['required']) {
+				oControl.setValueState("Error");
+			} else {
+				oControl.setValueState("None");
+
+				// If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
+				if (oControl?.mProperties["type"] === "Email") ChecksInputValidation.isValid(oControl, userInput, "Email");
+
+				// If the input type is datePicker, validate the user input to ensure it is in a valid date format.
+				if (oControl instanceof sap.m.DatePicker) {
+					if (ChecksInputValidation.isValid(oControl, userInput, "Date")) {
+						if (Object.values(validationFlags).includes(false)) {
+							this.validate();
+							return;
+						}
+					} else return;
 				}
-			},
+			}
+		},
 
-				/**
-				 * Validate the input while changes happen
-				 * @param {Object} oEvent 
-				 */
-				onDateChange: function(oEvent){
-					const oControl = oEvent.getSource();
-					oControl.setValueState("None");
+		/**
+		 * Validate the input while changes happen
+		 * @param {Object} oEvent 
+		 */
+		onDateChange: function (oEvent) {
+			const oControl = oEvent.getSource();
+			oControl.setValueState("None");
 
-					/**
-					 * If the validation flag have a "false", revalidate the input fields while live change happens.
-					 */
-					if(Object.values(validationFlags).includes(false)) this.validate();
-				},
+			/**
+			 * If the validation flag have a "false", revalidate the input fields while live change happens.
+			 */
+			if (Object.values(validationFlags).includes(false)) this.validate();
+		},
 
-			/** 
-	 		* Validate tenant form details
-			* @param {String} sContainerId Container Id
-			* @param {Boolean} isShowError Have to add value state or not
-			* @param {String} validationStatus 
-			*/
-		 validateFormDetails: function(sContainerId, isShowError, validationStatus){
+		/** 
+			* Validate tenant form details
+		* @param {String} sContainerId Container Id
+		* @param {Boolean} isShowError Have to add value state or not
+		* @param {String} validationStatus 
+		*/
+		validateFormDetails: function (sContainerId, isShowError, validationStatus) {
 
 			const container = this.byId(sContainerId);
 			validationFlags[validationStatus] = true;
-			 
+
 			// To get the aggregated objects from the given container
 			container.findAggregatedObjects(true, (control) => {
-					 
+
 				// Filtered the input and combobox controls
-				if (control instanceof sap.m.Input && !control.getId().includes("-popup-input") || 
-						control instanceof sap.m.ComboBox || 
-						control instanceof sap.m.DatePicker) {
+				if (control instanceof sap.m.Input && !control.getId().includes("-popup-input") ||
+					control instanceof sap.m.ComboBox ||
+					control instanceof sap.m.DatePicker) {
 
-						// Get the binding path from the control
-						const bindingPath = control.getBinding('value')?.getPath() || control.getBinding("selectedKey")?.getPath();
-						
-						if(bindingPath){
-							 
-							const userInput = control.getValue();
-							
-							// Validates that all required fields are filled; if a field is empty, marks it with an error state to indicate validation failure.
-							if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) {
-								if(isShowError){
-									control.setValueState("Error");
-									validationFlags[validationStatus] = false;
-								}
-							}else{
-								control.setValueState("None");
-								/** If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
-								 *  If the email is invalid, set the corresponding validation flag to `false`.
-								 * */
-								if(control?.mProperties["type"] === "Email")
-									if(!ChecksInputValidation.isValid(control, userInput, "Email")) validationFlags[validationStatus] = false;
+					// Get the binding path from the control
+					const bindingPath = control.getBinding('value')?.getPath() || control.getBinding("selectedKey")?.getPath();
 
-								// If the input type is datePicker, validate the user input to ensure it is in a valid date format.
-								if(control instanceof sap.m.DatePicker) 
-									if(!ChecksInputValidation.isValid(control, userInput, "Date")) validationFlags[validationStatus] = false;
+					if (bindingPath) {
+
+						const userInput = control.getValue();
+
+						// Validates that all required fields are filled; if a field is empty, marks it with an error state to indicate validation failure.
+						if ((!userInput || userInput?.trim() === "") && control?.mProperties['required']) {
+							if (isShowError) {
+								control.setValueState("Error");
+								validationFlags[validationStatus] = false;
 							}
-						 }		
-					 }		
-				 });
+						} else {
+							control.setValueState("None");
+							/** If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
+							 *  If the email is invalid, set the corresponding validation flag to `false`.
+							 * */
+							if (control?.mProperties["type"] === "Email")
+								if (!ChecksInputValidation.isValid(control, userInput, "Email")) validationFlags[validationStatus] = false;
 
-				 // To update the error message visility status
-				 this.setErrorMessageTripVisibility();
-		 },
+							// If the input type is datePicker, validate the user input to ensure it is in a valid date format.
+							if (control instanceof sap.m.DatePicker)
+								if (!ChecksInputValidation.isValid(control, userInput, "Date")) validationFlags[validationStatus] = false;
+						}
+					}
+				}
+			});
 
-		 /**
-			* Update the error message visibility for terms and condition verified status while click the submit button.
-			* @param {String} sContainerId 
-			*/
-		 validateTermsAndConditionIsVerified: function(sContainerId){
+			// To update the error message visility status
+			this.setErrorMessageTripVisibility();
+		},
+
+		/**
+		   * Update the error message visibility for terms and condition verified status while click the submit button.
+		   * @param {String} sContainerId 
+		   */
+		validateTermsAndConditionIsVerified: function (sContainerId) {
 			const oErrorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
 
 			const container = this.byId(sContainerId);
 
 			// To get the aggregated objects from the given container
 			container.findAggregatedObjects(true, (control) => {
-					
-					// Filtered the input and combobox controls
-					if (control instanceof sap.m.CheckBox) {
-						const inputvalue = control.getSelected();
-						
-						const innerDiv = control.$().find(".sapMCbBg");
-						
-					if(inputvalue) {
+
+				// Filtered the input and combobox controls
+				if (control instanceof sap.m.CheckBox) {
+					const inputvalue = control.getSelected();
+
+					const innerDiv = control.$().find(".sapMCbBg");
+
+					if (inputvalue) {
 						oErrorVisibilityModel.setProperty('/isTermsAndConditionVerifiedStatus', false);
 						innerDiv.removeClass("checkbox-error-view");
 					}
 					else {
-						oErrorVisibilityModel.setProperty('/isTermsAndConditionVerifiedStatus', true);	
+						oErrorVisibilityModel.setProperty('/isTermsAndConditionVerifiedStatus', true);
 						innerDiv.addClass("checkbox-error-view");
-					}		
+					}
 				}
-				});
+			});
 		},
 
 		// To update the error message visibility status
-		setErrorMessageTripVisibility: function(){
+		setErrorMessageTripVisibility: function () {
 			const oErrorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
 
-			if(Object.values(validationFlags).includes(false)) 
+			if (Object.values(validationFlags).includes(false))
 				oErrorVisibilityModel.setProperty('/isInputInValid', true);
 			else oErrorVisibilityModel.setProperty('/isInputInValid', false);
 		},
 
-		 // Update the error message visibility for terms and condition verified status while on change.
-		 handleTermsAndConditionVerified: function(oEvent){
+		// Update the error message visibility for terms and condition verified status while on change.
+		handleTermsAndConditionVerified: function (oEvent) {
 			const oControl = oEvent.getSource();
-			
+
 			const isVerified = oEvent.getParameters().selected;
 			const oErrorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
 
 			const innerDiv = oControl.$().find(".sapMCbBg");
 
-			if(isVerified){
+			if (isVerified) {
 				innerDiv.removeClass("checkbox-error-view");
 				oErrorVisibilityModel.setProperty('/isTermsAndConditionVerifiedStatus', false);
-			}else{
+			} else {
 				innerDiv.addClass("checkbox-error-view");
 				oErrorVisibilityModel.setProperty('/isTermsAndConditionVerifiedStatus', true);
 			}
 		},
 
-			submitTenantConsentForm: async function(){
-				const oErrorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
-        const oErrorVisibilityModelData = oErrorVisibilityModel.getData();
-					
-				const consentDetails = this.getView().getModel("oConsentModel").getData()?.ConsentDetail;
-					
-					if(!oErrorVisibilityModelData?.isInputInValid && !oErrorVisibilityModelData?.isTermsAndConditionVerifiedStatus){
+		submitTenantConsentForm: async function () {
+			const oErrorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
+			const oErrorVisibilityModelData = oErrorVisibilityModel.getData();
 
-						// Url to create the enrollment application
-						const tenantConsentCreateUrl = this.SERVERHOST + `service/CreateConsentFormDetail?encrAppId=${this.applicationId}`;
+			const consentDetails = this.getView().getModel("oConsentModel").getData()?.ConsentDetail;
 
-						const tenantConsentFormDetails = {
-							ConsentDetail: JSON.stringify({
-								"FirstName": consentDetails['ConsentFirstName'],
-								"LastName": consentDetails['ConsentLastName'],
-								"Address": consentDetails['ConsentAddress'],
-								"AddrLineTwo": consentDetails['ConsentAddrLineTwo'],
-								"City": consentDetails['ConsentCity'],
-								"State": consentDetails['ConsentState'],
-								"Zipcode": consentDetails['ConsentZipcode'],
-								"AccountNumber": consentDetails['ConsentAccountNumber'],
-								"EmailAddr": consentDetails['ConsentEmailAddr'],
-								"AuthPersonName": consentDetails['AuthPersonName'],
-								"AuthDate": FormatInputs.convertDateFormat(consentDetails['AuthDate']),
-								"AuthTitle": consentDetails['AuthTitle'],
-							})
-						}
-				
-				try{		
+			if (!oErrorVisibilityModelData?.isInputInValid && !oErrorVisibilityModelData?.isTermsAndConditionVerifiedStatus) {
+
+				// Url to create the enrollment application
+				const tenantConsentCreateUrl = this.SERVERHOST + `service/CreateConsentFormDetail?encrAppId=${this.applicationId}`;
+
+				const tenantConsentFormDetails = {
+					ConsentDetail: JSON.stringify({
+						"FirstName": consentDetails['ConsentFirstName'],
+						"LastName": consentDetails['ConsentLastName'],
+						"Address": consentDetails['ConsentAddress'],
+						"AddrLineTwo": consentDetails['ConsentAddrLineTwo'],
+						"City": consentDetails['ConsentCity'],
+						"State": consentDetails['ConsentState'],
+						"Zipcode": consentDetails['ConsentZipcode'],
+						"AccountNumber": consentDetails['ConsentAccountNumber'],
+						"EmailAddr": consentDetails['ConsentEmailAddr'],
+						"AuthPersonName": consentDetails['AuthPersonName'],
+						"AuthDate": FormatInputs.convertDateFormat(consentDetails['AuthDate']),
+						"AuthTitle": consentDetails['AuthTitle'],
+					})
+				}
+
+				try {
 					// Post request to create a tenant consent.
-					const {data} = await axios.post(tenantConsentCreateUrl, tenantConsentFormDetails);
-						
-					if(data.value.statusCode === 200){
+					const { data } = await axios.post(tenantConsentCreateUrl, tenantConsentFormDetails);
+
+					if (data.value.statusCode === 200) {
 						// Navigate to the tenant confirmation page
 						window.open(this.TenantConfirmationPageUrl, '_self');
-					}else{
+					} else {
 						// Navigate to the error page
 						window.open(this.ErrorPageUrl, '_self');
 					}
-				}catch(err){
+				} catch (err) {
 					// Navigate to the error page
 					window.open(this.ErrorPageUrl, '_self');
-				}	
+				}
 			}
 		},
 
 		// To validate the all form fields 
-		validate: function(){
+		validate: function () {
 			this.validateFormDetails("tenant-consent-form-container-id", true, "tenantInformationValidation");
-			this.validateFormDetails("tenant-auth-and-release-container-id",true,"consentAuthDetailValidation");
+			this.validateFormDetails("tenant-auth-and-release-container-id", true, "consentAuthDetailValidation");
 			this.validateTermsAndConditionIsVerified("tenant-auth-and-release-container-id");
 		},
 
-			onSubmit: function(){
-				// Validate form details 
-				this.validate();
+		onSubmit: function () {
+			// Validate form details 
+			this.validate();
 
-				// Update the error message visibility status.
-				this.setErrorMessageTripVisibility();
+			// Update the error message visibility status.
+			this.setErrorMessageTripVisibility();
 
-				// To call the backend service and store the consent data
-				this.submitTenantConsentForm();
-			}
+			// To call the backend service and store the consent data
+			this.submitTenantConsentForm();
+		}
 	});
 });

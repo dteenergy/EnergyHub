@@ -19,7 +19,9 @@ sap.ui.define([
                 this.TenantConfirmationPageUrl = envVariables.TenantConfirmationPageUrl;
                 this.ErrorPageUrl = envVariables.ErrorPageUrl;
                 this.DTEAddressValidationUrl = envVariables.DTEAddressValidationUrl;
+                this.GoogleRecaptchaSiteKey = envVariables.GoogleRecaptchaSiteKey;
             });
+            
         },
         /**
          * Get router params from router
@@ -64,7 +66,8 @@ sap.ui.define([
                             url: this.SERVERHOST,
                             TenantConfirmationPageUrl: this.TenantConfirmationPageUrl,
                             ErrorPageUrl: this.ErrorPageUrl,
-                            DTEAddressValidationUrl: this.DTEAddressValidationUrl
+                            DTEAddressValidationUrl: this.DTEAddressValidationUrl,
+                            GoogleRecaptchaSiteKey: this.GoogleRecaptchaSiteKey
                         },
                     }).then(function(oView) {
                         // Render the created view into the App view

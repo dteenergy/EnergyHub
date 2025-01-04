@@ -1,10 +1,10 @@
-<mvc:View xmlns:core="sap.ui.core" xmlns:form="sap.ui.layout.form" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:l="sap.ui.layout" controllerName="dteconsentappclient.controller.Enrollment">
+<mvc:View xmlns:core="sap.ui.core" xmlns:form="sap.ui.layout.form" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:l="sap.ui.layout" controllerName="dteconsentappclient.controller.Enrollment" xmlns:html="http://www.w3.org/1999/xhtml">
     <Page id="landloard-form" showHeader="false">
         <content>
+            
             <FlexBox id="landloard-form-main-container" class="landloard-form-main-container" >
                 <FlexBox id="landloard-form-sub-container" class="landloard-form-sub-container">
-                <items>
-
+                <items>                
                     <!-- Landlord Enrollment form Header -->
                     <FlexBox id="enrollment-form-header" class="enrollment-form-header">
                         <Title xmlns="sap.m" titleStyle="H5" text="DTE Energy Data Hub Enrollment Form" wrapping="true" id="title" class="main-title"/>
@@ -212,9 +212,10 @@
                         >
                         </MessageStrip>
                     </VBox>
-
-                    <Button id="submit-landlord-form" text="Submit" type="Emphasized" press="handleSubmit" class="customize-button submit-action"></Button>
-                    
+                    <VBox id="recaptchacontainer">
+                        <core:HTML id="recaptchaPlaceholder" />
+                    </VBox>
+                    <Button id="submit-landlord-form" text="Submit" type="Emphasized" press="handleSubmit" class="customize-button submit-action"></Button>    
                 </VBox>
                  </items>
                 </FlexBox>

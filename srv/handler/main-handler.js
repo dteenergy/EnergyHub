@@ -9,6 +9,7 @@ const createEnrollmentFormDetail = require('./create-enrollment-form-action');
 const createConsentFormDetail = require('./create-consent-form-action');
 const { valueEncrypt, valueDecrypt } = require('./encrypt-and-decrypt-id');
 const validateApplicationId = require('./validate-app-id');
+const { verifyRecaptchaToken } = require('./verify-recaptcha-token');
 
 module.exports = cds.service.impl(async function (srv) {
 	srv.on('CreateEnrollmentFormDetail', async (req) => {
@@ -108,7 +109,27 @@ module.exports = cds.service.impl(async function (srv) {
 				DTEAddressValidationUrl: process.env.DTE_ADDRESS_VALIDATION_URL,
 				LandlordConfirmationPageUrl: process.env.LANDLORD_CONFIRMATION_PAGE_URL,
 				TenantConfirmationPageUrl: process.env.TENANT_CONFIRMATION_PAGE_URL,
-				ErrorPageUrl: process.env.ERROR_PAGE_URL
+				ErrorPageUrl: process.env.ERROR_PAGE_URL,
+				GoogleRecaptchaSiteKey: process.env.GOOGLE_RECAPTCHA_SITEKEY
 			}
 		});
+
+		srv.on('verifyRecaptcha', async (req)=>{
+			const recaptchaToken =  req._.req.query.response;
+
+			try{
+				const verifyTokenResponse = await verifyRecaptchaToken(recaptchaToken);
+
+				return verifyTokenResponse;
+			} catch(e){
+				if (e.statusCode) {
+					
+					return { statusCode: e.statusCode, message: e.message };
+				} else
+					return {
+						statusCode: 500, message: e.message
+					}
+			}
+			
+		})
 })
