@@ -14,6 +14,7 @@ sap.ui.define([
 		consentDetails,
 		locationDetails,
 		recaptchaStatus,
+		recaptchaClicked = false,
 		validationFlags = {
 			accountDetailsValidation: true,
 			siteDetailsValidation: true,
@@ -135,17 +136,19 @@ sap.ui.define([
 
 				if (statusCode === 200) {
 					console.log("Recaptcha verified successfully!");
-					this.recaptchaStatus = true; // Set the recaptcha status as verified
+					recaptchaClicked = true;
+					recaptchaStatus = true; // Set the recaptcha status as verified
+					
 					return true; // Indicate success
 				} else {
 					console.error("Recaptcha verification failed.");
-					this.recaptchaStatus = false; // Set the recaptcha status as failed
+					recaptchaStatus = false; // Set the recaptcha status as failed
 					window.open(this.ErrorPageUrl, '_self'); // Redirect to an error page
 					return false; // Indicate failure
 				}
 			} catch (error) {
 				console.error(`Failed to verify the recaptcha: ${error}`);
-				this.recaptchaStatus = false; // Set the recaptcha status as failed
+				recaptchaStatus = false; // Set the recaptcha status as failed
 				return false; // Indicate failure
 			}
 		},
@@ -725,9 +728,17 @@ sap.ui.define([
 						new sap.m.Button({
 							text: 'Continue Submission',
 							press: function () {
+								if(recaptchaClicked === true){
+									console.log("recaptcha true", recaptchaClicked);
+									
 								// To call the backend service and store the data
-								that.submitAction(),
+									that.submitAction(),
 									that.oConfirmationDialog.close()
+								} else {
+									console.log("recaptcha  else", recaptchaClicked);
+									MessageToast.show("Please click the Recaptcha")
+									return;
+								}
 							},
 							type: sap.m.ButtonType.Emphasized
 						}).addStyleClass("dialog-submit-action")
