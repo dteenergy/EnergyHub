@@ -53,7 +53,8 @@
           "restrict_all_services": false,
           "users": {
             "test@gmail.com": {
-              "password": "test@123"
+              "password": "test@123",
+              "roles": ["Administrator"]
             }
           }
         }

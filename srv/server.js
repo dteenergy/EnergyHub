@@ -1,25 +1,24 @@
 const cds = require('@sap/cds');
-const cors = require('cors');
-
-// Fetch the whitelist from environment variables
-const whiteListedData = process.env.WHITELIST || ["*"];
-
-const dynamicCorsHandler = function (req, callback) {
-  let corsOptions;
-  if (whiteListedData.indexOf(req.header('Origin')) !== -1) {    
-    // reflect (enable) the requested origin in the CORS response
-    corsOptions = { origin: true } 
-  } else {
-    // disable CORS for this request
-    corsOptions = { origin: false }
-  }
-  // callback expects two parameters: error and options
-  callback(null, corsOptions) 
-}
 
 cds.on('bootstrap', async (app)=>{
-  // Access the CorsValidation
-    app.use(cors(dynamicCorsHandler));  
+
+    app.use((req, res, next) =>{
+      // const whiteList = JSON.parse(process.env.WHITELIST || '["*"]');
+
+      // // Allow every request to access service
+      // if(whiteList.includes("*")) return next()
+
+      // // Check incoming path is service path
+      // const isServicePath = /^\/service(\/.*)?$/.test(req.path);
+      // if(!isServicePath) next();
+      // else{
+      //   // Allow access service When req header's referer in White list
+      //   if(whiteList.includes(req.headers.referer)) next()
+      //   else res.status(403).send('Forbidden');
+      // }   
+      
+      next();
+    });  
 })
 
 module.exports = cds.server;
