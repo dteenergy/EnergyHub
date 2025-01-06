@@ -12,33 +12,24 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
 
   try {
     const { ApplicationDetail, BuildingDetail, AccountDetail, ConsentDetail } = req?.data;
+    
     // Get the flag and prefix for the application number from environment variables
     const prefixFlag = process.env.APPNUM_PREFIX_ENABLED;
     const appNumPrefix = process.env.APPNUM_PREFIX;
  
     // Define the base query
     let query = SELECT.from(entity.ApplicationDetail)
-
       .columns('ApplicationNumber')
-
       .orderBy('ApplicationNumber desc')
-
       .limit(1);
     
-    // Add a condition for the prefix if prefixFlag is "Yes"
-
+    // Add a condition for the prefix if prefixFlag is "Y"
     if (prefixFlag === "Y" && appNumPrefix) {
-
       query = query.where({ ApplicationNumber: { like: `${appNumPrefix}%` } });
-
     }
     
     // Fetch the last ApplicationNumber based on the query
-
     const applicationDetail = await cds.run(query);
-    
-    console.log(applicationDetail);
-
  
     // Store the application number
     let applicationNumber;
@@ -64,9 +55,6 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
       const incrementedNumberStr = '000000001';
       applicationNumber = prefixFlag === 'Y' ? appNumPrefix.concat(incrementedNumberStr) : incrementedNumberStr;
     }
-
-    console.log(applicationNumber);
-    
 
     // Generate a unique AppId using uuid
     const AppId = uuidv4();
