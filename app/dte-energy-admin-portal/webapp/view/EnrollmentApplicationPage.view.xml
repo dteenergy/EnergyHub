@@ -38,6 +38,23 @@
           <Column width="150px"><header><Text text="Signed By" class="boldText"></Text></header></Column>
           <Column width="150px"><header><Text text="Email Address" class="boldText"></Text></header></Column>
           <Column width="150px"><header><Text text="Consent Link" class="boldText"></Text></header></Column>
+          <Column visible="false" width="150px"><header><Text text="Application CreatedAt" class="boldText"></Text></header></Column>
+          <Column visible="false" width="150px"><header><Text text="Application UpdatedAt" class="boldText"></Text></header></Column>
+          <Column visible="false" width="150px"><header><Text text="Signed Date" class="boldText"></Text></header></Column>
+          <Column visible="false" width="150px"><header><Text text="App Id" class="boldText"></Text></header></Column>
+          <Column visible="false" width="150px"><header><Text text="Account ZipCode" class="boldText"></Text></header></Column>
+          <Column visible="false" width="150px"><header><Text text="Account Manager Name" class="boldText"></Text></header></Column>
+          <Column visible="false" width="150px"><header><Text text="Account Manager PhoneNo" class="boldText"></Text></header></Column>
+          <Column visible="false" width="150px"><header><Text text="Energy Program Participated" class="boldText"></Text></header></Column>
+          <Column visible="false" width="150px"><header><Text text="Site Contact Title" class="boldText"></Text></header></Column>
+          <Column visible="false" width="150px"><header><Text text="Site Address" class="boldText"></Text></header></Column>
+          <Column visible="false" width="150px"><header><Text text="Site Address Line Two" class="boldText"></Text></header></Column>
+          <Column visible="false" width="150px"><header><Text text="Site City" class="boldText"></Text></header></Column>
+          <Column visible="false" width="150px"><header><Text text="Site State" class="boldText"></Text></header></Column>
+          <Column visible="false" width="150px"><header><Text text="Site ZipCode" class="boldText"></Text></header></Column>
+          <Column visible="false" width="150px"><header><Text text="Site PhoneNo" class="boldText"></Text></header></Column>
+          <Column visible="false" width="150px"><header><Text text="Account CreatedAt" class="boldText"></Text></header></Column>
+          <Column visible="false" width="150px"><header><Text text="Account UpdatedAT" class="boldText"></Text></header></Column>
         </columns>
           <items>
             <ColumnListItem id="idColumnListItem" type="Navigation" press="navToBuildingDetailPage">
@@ -55,10 +72,27 @@
                 </items>
               </ComboBox>
               <Input value="{MainModel>NumberOfTenants}" change="onUpdateField" type="Number" placeholder="Number of tenants"></Input>
-              <Link text="{MainModel>NoOfConsentReceived}" press="navToConsentPage" class="underline"></Link>
+              <Link text="{MainModel>NoOfConsentReceived}" press="navToConsentPage"></Link>
               <Text text="{MainModel>SignatureSignedBy}"></Text>
               <Text text="{MainModel>EmailAddr}"></Text>
               <Button text="Generate" press="onGenerateUrlPress"></Button>
+              <Text text="{MainModel>AppCreatedAt}"></Text>
+              <Text text="{MainModel>AppUpdatedAt}"></Text>
+              <Text text="{MainModel>SignatureSignedDate}"></Text>
+              <Text text="{MainModel>AppId}"></Text>
+              <Text text="{MainModel>Zipcode}"></Text>
+              <Text text="{MainModel>AcctMgrName}"></Text>
+              <Text text="{MainModel>AcctMgrPhNo}"></Text>
+              <Text text="{MainModel>EnergyPrgmParticipated}"></Text>
+              <Text text="{MainModel>SiteContactTitle}"></Text>
+              <Text text="{MainModel>SiteAddress}"></Text>
+              <Text text="{MainModel>SiteAddrLineTwo}"></Text>
+              <Text text="{MainModel>SiteCity}"></Text>
+              <Text text="{MainModel>SiteState}"></Text>
+              <Text text="{MainModel>SiteZipcode}"></Text>
+              <Text text="{MainModel>SitePhoneNumber}"></Text>
+              <Text text="{MainModel>AccCreatedAt}"></Text>
+              <Text text="{MainModel>AccUpdatedAt}"></Text>
             </ColumnListItem>
           </items>
       </Table>
