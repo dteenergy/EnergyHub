@@ -27,7 +27,7 @@ modules:
     APPNUM_PREFIX_ENABLED : "N"
     APPNUM_PREFIX : ""
     TENANT_CONSENT_FORM_URL: https://fiori-dev-n-dte-ehconsentportal.cfapps.us21.hana.ondemand.com/eh/consent-portal/index.html#tenant/consent?appId=
-    WHITELIST: ["https://*.hana.ondemand.com", "https://*.dteenergy.com", "https://*.us20.applicationstudio.cloud.sap"]
+    WHITELIST: ["https://forms.dteenergy.com/eh/consent-portal/index.html"]
   parameters:
     memory: 256MB
   build-parameters:
