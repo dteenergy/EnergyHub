@@ -27,7 +27,6 @@ modules:
     APPNUM_PREFIX_ENABLED : "N"
     APPNUM_PREFIX : ""
     TENANT_CONSENT_FORM_URL: https://www.dteenergy.com/us/en/quicklinks/energy-hub/energy-hub-tenant.html?appId=
-    WHITELIST: ["https://forms.dteenergy.com/eh/consent-portal/index.html"]
   parameters:
     memory: 256MB
   build-parameters:
