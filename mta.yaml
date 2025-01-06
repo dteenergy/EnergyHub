@@ -26,7 +26,7 @@ modules:
     ERROR_PAGE_URL : https://www.dteenergy.com/us/en/quicklinks/energy-hub/energy-hub-error.html
     APPNUM_PREFIX_ENABLED : "N"
     APPNUM_PREFIX : ""
-    TENANT_CONSENT_FORM_URL: https://fiori-dev-n-dte-ehconsentportal.cfapps.us21.hana.ondemand.com/eh/consent-portal/index.html#tenant/consent?appId=
+    TENANT_CONSENT_FORM_URL: https://qa-forms.dteenergy.com/eh/consent-portal/index.html#tenant/consent?appId=
     WHITELIST: ["https://forms.dteenergy.com/eh/consent-portal/index.html"]
   parameters:
     memory: 256MB
