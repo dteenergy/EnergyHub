@@ -4,28 +4,34 @@ using {dteConsentApp as db} from '../db/schema';
 @impl : './handler/admin-handler.js'
 service DTEEnergyAdminPortal {
 
-  entity ApplicationDetail as projection on db.ApplicationDetail {
-    AppId,
-    AccountDetailRefId.FirstName,
-    AccountDetailRefId.LastName,
-    AccountDetailRefId.CompanyName,
-    AccountDetailRefId.CompanyAddress,
-    AccountDetailRefId.CompanyAddrLineTwo,
-    AccountDetailRefId.City,
-    AccountDetailRefId.State,
-    AccountDetailRefId.EmailAddr,
-    NumberOfTenants,
-    ApplicationStatus,
-    NoOfConsentReceived,
-    ApplicationNumber,
-    SignatureSignedBy,
-    CreatedAt as AppCreatedAt
-  } order by AppCreatedAt desc
-  actions{
-    function GenerateUrl() returns String;
-  } function GetEnvironmentVariables() returns String;
+  entity ApplicationDetail @(restrict: [{
+    grant: ['READ', 'UPDATE', 'GenerateUrl', 'GetEnvironmentVariables'], 
+    to: 'Administrator'
+    }])as projection on db.ApplicationDetail {
+      AppId,
+      AccountDetailRefId.FirstName,
+      AccountDetailRefId.LastName,
+      AccountDetailRefId.CompanyName,
+      AccountDetailRefId.CompanyAddress,
+      AccountDetailRefId.CompanyAddrLineTwo,
+      AccountDetailRefId.City,
+      AccountDetailRefId.State,
+      AccountDetailRefId.EmailAddr,
+      NumberOfTenants,
+      ApplicationStatus,
+      NoOfConsentReceived,
+      ApplicationNumber,
+      SignatureSignedBy,
+      CreatedAt as AppCreatedAt
+    } order by AppCreatedAt desc
+    actions{
+      function GenerateUrl() returns String;
+    } function GetEnvironmentVariables() returns String;
 
-  entity ApplicationConsent as projection on db.ApplicationConsent {
+  entity ApplicationConsent @(restrict: [{
+    grant: ['READ', 'UPDATE'], 
+    to: 'Administrator'
+    }]) as projection on db.ApplicationConsent {
     ApplicationConsentId,
     FirstName,
     LastName,
@@ -38,7 +44,10 @@ service DTEEnergyAdminPortal {
     CreatedAt as AppCreatedAt
   } order by AppCreatedAt desc;
 
-  entity BuildingDetail as projection on db.BuildingDetail {
+  entity BuildingDetail @(restrict: [{
+    grant: ['READ'], 
+    to: 'Administrator'
+    }]) as projection on db.BuildingDetail {
     BuildingId,
     BuildingName,
     AccountNumber,
@@ -52,10 +61,14 @@ service DTEEnergyAdminPortal {
     AppRefId.AccountDetailRefId.LastName,
   };
 
-  entity AccountDetail as projection on db.AccountDetail;
+  entity AccountDetail @(restrict: [{
+    grant: ['READ'], 
+    to: 'Administrator'
+    }]) as projection on db.AccountDetail;
   
 }
 
 annotate DTEEnergyAdminPortal with @requires: [
-  'authenticated-user'
+  'authenticated-user',
+  'Administrator'
 ];

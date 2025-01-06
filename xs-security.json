@@ -1,7 +1,22 @@
 {
-  "xsappname": "dteConsentAppPortal-xsuaa-service",
-  "tenant-mode": "dedicated",
-  "scopes": [],
-  "attributes": [],
-  "role-templates": []
+  "scopes": [
+    {
+      "name": "$XSAPPNAME.Administrator",
+      "description": "All access"
+    }
+  ],
+  "role-templates": [
+    {
+      "name": "Administrator",
+      "description": "Energy Data Hub admin",
+      "scope-references": ["$XSAPPNAME.Administrator"]
+    }
+  ],
+  "role-collections": [
+    {
+      "name": "EnergyDataHub_Administrator",
+      "description": "DTE Energy Data Hub Administrator RC",
+      "role-template-references": ["$XSAPPNAME.Administrator"]
+    }
+  ]
 }

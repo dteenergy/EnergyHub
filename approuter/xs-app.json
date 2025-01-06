@@ -11,13 +11,15 @@
       "target": "/admin/service/$1",
       "destination": "dteConsentAppPortal-srv",
       "authenticationType": "xsuaa",  
+      "scope": ["$XSAPPNAME.Administrator"],
       "csrfProtection": false
     },
     {
       "source": "^/eh/admin/(.*)$",
       "target": "/dteenergyadminportal/$1",
       "service": "html5-apps-repo-rt",
-      "authenticationType": "xsuaa"
+      "authenticationType": "xsuaa",
+      "scope": ["$XSAPPNAME.Administrator"]
     },
     {
       "source": "^/eh/consent-portal/service/(.*)$",
