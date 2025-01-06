@@ -4,29 +4,29 @@ using {dteConsentApp as db} from '../db/schema';
 @impl : './handler/admin-handler.js'
 service DTEEnergyAdminPortal {
 
-entity ApplicationDetail @(restrict: [{
-  grant: ['READ', 'UPDATE', 'GenerateUrl', 'GetEnvironmentVariables'], 
-  to: 'Administrator'
-  }])as projection on db.ApplicationDetail {
-    AppId,
-    AccountDetailRefId.FirstName,
-    AccountDetailRefId.LastName,
-    AccountDetailRefId.CompanyName,
-    AccountDetailRefId.CompanyAddress,
-    AccountDetailRefId.CompanyAddrLineTwo,
-    AccountDetailRefId.City,
-    AccountDetailRefId.State,
-    AccountDetailRefId.EmailAddr,
-    NumberOfTenants,
-    ApplicationStatus,
-    NoOfConsentReceived,
-    ApplicationNumber,
-    SignatureSignedBy,
-    CreatedAt as AppCreatedAt
-  } order by AppCreatedAt desc
-  actions{
-    function GenerateUrl() returns String;
-  } function GetEnvironmentVariables() returns String;
+  entity ApplicationDetail @(restrict: [{
+    grant: ['READ', 'UPDATE', 'GenerateUrl', 'GetEnvironmentVariables'], 
+    to: 'Administrator'
+    }])as projection on db.ApplicationDetail {
+      AppId,
+      AccountDetailRefId.FirstName,
+      AccountDetailRefId.LastName,
+      AccountDetailRefId.CompanyName,
+      AccountDetailRefId.CompanyAddress,
+      AccountDetailRefId.CompanyAddrLineTwo,
+      AccountDetailRefId.City,
+      AccountDetailRefId.State,
+      AccountDetailRefId.EmailAddr,
+      NumberOfTenants,
+      ApplicationStatus,
+      NoOfConsentReceived,
+      ApplicationNumber,
+      SignatureSignedBy,
+      CreatedAt as AppCreatedAt
+    } order by AppCreatedAt desc
+    actions{
+      function GenerateUrl() returns String;
+    } function GetEnvironmentVariables() returns String;
 
   entity ApplicationConsent @(restrict: [{
     grant: ['READ', 'UPDATE'], 
