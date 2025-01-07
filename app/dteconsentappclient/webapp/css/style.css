@@ -11,19 +11,24 @@ body {
   --sapFontFamilyHeader: 'Open Sans', sans-serif; /* For Titles */
   --sapFontFamilyMonospace: 'Open Sans', sans-serif; /* For Monospace Text */
   --sapFontSemiboldDuplexFamily: 'Open Sans', sans-serif;
-  --sapFontBoldWeight: 600;
+  --sapFontSemiBold: 600;
+  --sapFontRegular: 400;
   --sapTextMediumFontSize: 16px;
   --sapTextSmallFontSize: 14px;
+  --sapFontPrimaryColor: #2B2B2B;
+  --sapFontSecondaryColor: #505357;
 }
 
 .sapMTitle, .sapMText{
   font-family: 'Open Sans', sans-serif;
 }
 .sapMTitle{
-  font-weight: var(--sapFontBoldWeight);
+  font-weight: var(--sapFontSemiBold);
+  color: var(--sapFontPrimaryColor);
 }
 .sapMLabel{
-  font-weight: var(--sapFontBoldWeight);
+  font-weight: var(--sapFontSemiBold);
+  color: var(--sapFontSecondaryColor);
   font-size: 14px;
 }
 .sapUiBody{
@@ -31,6 +36,7 @@ body {
 }
 .sapMText {
   letter-spacing: .7px;
+  color: var(--sapFontSecondaryColor);
 }
 .sapMIBar.app-header{
   height: 4.5rem !important;

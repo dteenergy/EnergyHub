@@ -15,7 +15,7 @@
     color: red;
 }
 .required-text-indicator{
-    font-weight: var(--sapFontBoldWeight);
+    font-weight: var(--sapFontSemiBold);
 }
 .form-instruction{
     font-size: var(--sapTextMediumFontSize);
@@ -73,7 +73,7 @@
 }
 .sapMBtnInner{
     border-radius: 0 !important;
-    font-weight: var(--sapFontBoldWeight);
+    font-weight: var(--sapFontSemiBold);
     border: none;
     outline: none;
 }
@@ -135,6 +135,11 @@
 }
 .checkbox-selected{
     background: #1E3575;
+}
+.checkbox-label{
+    .sapMLabelTextWrapper{
+        font-weight: var(--sapFontRegular) !important;
+    }
 }
 .enroll-form-container{
     margin-top: 15px;

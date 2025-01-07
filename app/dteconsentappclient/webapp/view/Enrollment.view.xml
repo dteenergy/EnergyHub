@@ -177,7 +177,7 @@
 
                     <!-- Enrollment form customer consent release -->
                     <VBox id="customer-release-header" class="customer-release-header">
-                        <CheckBox id="consent-and-site-same" select="onConsentAndSiteSameSelected" text="Information is the same as Enrollment information" wrapping="true"/>
+                        <CheckBox id="consent-and-site-same" class="checkbox-label" select="onConsentAndSiteSameSelected" text="Information is the same as Enrollment information" wrapping="true"/>
                         <Title id="consent-relese-title" titleStyle="H4" text="Customer Consent Release" wrapping="true"/>
                         <Text id="consent-release-instruction" text="Please fill out all required fields below to give your 
                         consent to share your building’s information."></Text>
@@ -191,7 +191,7 @@
 
                     <!-- This container renders the customer auth and release section from the AuthAndRelease fragment, which is loaded and managed by the landlord controller -->
                     <VBox id="customer-auth-and-release-container" class="customer-auth-and-release">
-                        <Title id="auth-and-release-title" text="Customer Authorization and Release" class="form-segment-heading" titleStyle="H6" />
+                        <Title id="auth-and-release-title" text="Customer Authorization and Release" class="form-segment-heading" titleStyle="H6" wrapping="true" />
                     </VBox>
 
                     <VBox id="message-strip-container" class="message-strip-container">
