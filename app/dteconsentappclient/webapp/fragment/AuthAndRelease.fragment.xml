@@ -28,17 +28,17 @@
 		<Text text="I understand that by reason of this Authorization, the named Authorized Third Party
 		 may conduct the designated activity and transactions on the account(s) that I as a customer of
 		record may direct or perform even though I remain responsible for all payments and other 
-		service obligations."></Text>
+		service obligations." class="auth-instruction"></Text>
 
 		<Text text="I (Customer) hereby release, hold harmless, and indemnify DTE Energy from any liability,
 		 claims, demands, and cause of action, damages, or expenses resulting from any release of information
 		or transaction of business pursuant to this Authorization; the unauthorized use of this information or 
 		transaction of business by the Authorized Third Party; and any actions taken by the Authorized Third Party 
-		pursuant to this Authorization."></Text>
+		pursuant to this Authorization." class="auth-instruction"></Text>
 
 		<FlexBox class="required-instruction">
-			<Text class="required-instruction-indicator" text="*" />
-			<Text text="Terms and Conditions" />
+			<Text text="*" class="required-instruction-indicator" />
+			<Text text="Terms and Conditions" class= "required-text-indicator auth-instruction" />
 		</FlexBox>
 
 		<HBox>

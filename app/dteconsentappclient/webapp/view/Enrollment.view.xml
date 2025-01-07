@@ -8,12 +8,12 @@
                     <!-- Landlord Enrollment form Header -->
                     <FlexBox id="enrollment-form-header" class="enrollment-form-header">
                         <Title xmlns="sap.m" titleStyle="H5" text="DTE Energy Data Hub Enrollment Form" wrapping="true" id="title" class="main-title"/>
-                        <Text id ="istruction" class="sub-content" wrapping="true" 
+                        <Text id ="istruction" class="form-instruction" wrapping="true" 
                                 text="Complete the information below to enroll for no fee to DTE’s Building Energy Usage Data Hub. In order for us to process your enrollment, you must complete all required fields on this form.">
                         </Text>
                         <FlexBox id="required-instruction" class="required-instruction">
-                            <Text id="required-instruction-indicator" class="required-instruction-indicator" text="*" />
-                            <Text id="required-instruction-content" text="Indicates a required field" />
+                            <Text id="required-instruction-indicator"  text="*" class="required-instruction-indicator" />
+                            <Text id="required-instruction-content" text="Indicates a required field" class="required-text-indicator form-instruction" />
                         </FlexBox>
                     </FlexBox>
                     
@@ -23,7 +23,7 @@
                         <!-- Account Information -->
                         <VBox id="account-info-container" fitContainer="true" class="account-info-container">
                             <FormattedText 
-                                htmlText="&lt;p style='letter-spacing: .7px; margin-top: 15px;'&gt; &lt;span style='font-weight: 600; font-size: 18px;'&gt;Account Information&lt;/span&gt; (as it appears on customer’s monthly DTE Energy bill)&lt;/p&gt;"  
+                                htmlText="&lt;p style='letter-spacing: .7px; font-size: 18px;'&gt; &lt;span style='font-weight: 600; font-size: 18px;'&gt;Account Information&lt;/span&gt; (as it appears on customer’s monthly DTE Energy bill)&lt;/p&gt;"  
                             ></FormattedText>
 
                             <l:VerticalLayout class="vertical-layout">
@@ -55,7 +55,7 @@
                             </l:VerticalLayout>
 
                             <l:VerticalLayout id="zip-code" class="vertical-layout">
-                                <Label id="company-zipcode" labelFor="zipcode" text="Zipcode"></Label>
+                                <Label id="company-zipcode" labelFor="zipcode" text="Zip Code"></Label>
                                 <Input id="zipcode" class="inputBox" type="Number" required="true" liveChange="onLiveChange" value="{oEnrollModel>/AccountDetail/Zipcode}"/>
                             </l:VerticalLayout>
 
@@ -83,12 +83,12 @@
                         <Title id="site-contact-heading" titleStyle="H6" class="form-segment-heading" text="Site Contact Information"></Title>
 
                         <l:VerticalLayout id="site-contact-fst-name" class="vertical-layout">
-                            <Label id="site-contact-fst-name-label" labelFor="site-contact-fst-name-value" text="FirstName"></Label>
+                            <Label id="site-contact-fst-name-label" labelFor="site-contact-fst-name-value" text="First Name"></Label>
                             <Input id="site-contact-fst-name-value" class="inputBox" liveChange="onLiveChange" type="Text" required="true" value="{oEnrollModel>/AccountDetail/SiteFirstName}"/>
                         </l:VerticalLayout>
 
                         <l:VerticalLayout id="site-contact-lst-name" class="vertical-layout">
-                            <Label id="site-contact-lst-name-label" labelFor="site-contact-lst-name-value" text="LastName"></Label>
+                            <Label id="site-contact-lst-name-label" labelFor="site-contact-lst-name-value" text="Last Name"></Label>
                             <Input id="site-contact-lst-name-value" class="inputBox" liveChange="onLiveChange" type="Text" required="true"  value="{oEnrollModel>/AccountDetail/SiteLastName}"/>
                         </l:VerticalLayout>
                         
@@ -121,7 +121,7 @@
                         </l:VerticalLayout>
 
                         <l:VerticalLayout id="site-contact-zipcode" class="vertical-layout">
-                            <Label id="site-contact-zipcode-label" labelFor="site-contact-zipcode-value" text="Zipcode"></Label>
+                            <Label id="site-contact-zipcode-label" labelFor="site-contact-zipcode-value" text="Zip Code"></Label>
                             <Input id="site-contact-zipcode-value" class="inputBox" liveChange="onLiveChange" type="Number" required="true" value="{oEnrollModel>/AccountDetail/SiteZipcode}"/>
                         </l:VerticalLayout>        
                     

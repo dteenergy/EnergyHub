@@ -1,8 +1,9 @@
 .tenant-consent-form-container > *,
 .tenant-auth-and-release-container > *{
-    padding-bottom: 17px;
+    padding-bottom: 20px;
 }
 .tenant-consent-form-main-container{
+    margin-top: 15px;
     padding: 0 30px 0 30px;
     width: 95%;
 }
