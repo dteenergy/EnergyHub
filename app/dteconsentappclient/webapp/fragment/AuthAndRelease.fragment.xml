@@ -42,7 +42,7 @@
 		</FlexBox>
 
 		<HBox>
-        	<CheckBox select="handleTermsAndConditionVerified" text="I have read and understand the terms and conditions of this form." wrapping="true"/>
+        	<CheckBox class="checkbox-label" select="handleTermsAndConditionVerified" text="I have read and understand the terms and conditions of this form." wrapping="true"/>
 		</HBox>
 
 		<HBox>
