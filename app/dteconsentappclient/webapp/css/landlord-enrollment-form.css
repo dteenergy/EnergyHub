@@ -132,6 +132,11 @@
     background-color: transparent;
     padding: 15px !important;
 }
+.error-message-strip{
+	.sapMText{
+		color: var(--sapFontPrimaryColor);
+	}
+}
 .checkbox-error-view{
     border: 1px solid #f53232;
 }
@@ -141,6 +146,7 @@
 .checkbox-label{
     .sapMLabelTextWrapper{
         font-weight: var(--sapFontRegular) !important;
+				font-size: var(--sapTextMediumFontSize) !important;
     }
 }
 .enroll-form-container{
