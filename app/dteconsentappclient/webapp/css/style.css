@@ -13,6 +13,7 @@ body {
   --sapFontSemiboldDuplexFamily: 'Open Sans', sans-serif;
   --sapFontBoldWeight: 600;
   --sapTextMediumFontSize: 16px;
+  --sapTextSmallFontSize: 14px;
 }
 
 .sapMTitle, .sapMText{
@@ -30,7 +31,6 @@ body {
 }
 .sapMText {
   letter-spacing: .7px;
-  font-size: var(--sapTextMediumFontSize);
 }
 .sapMIBar.app-header{
   height: 4.5rem !important;

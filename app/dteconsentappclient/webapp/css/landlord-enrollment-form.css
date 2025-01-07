@@ -17,6 +17,12 @@
 .required-text-indicator{
     font-weight: var(--sapFontBoldWeight);
 }
+.form-instruction{
+    font-size: var(--sapTextMediumFontSize);
+}
+.auth-instruction{
+    font-size: var(--sapTextSmallFontSize);   
+}
 .customize-button{
     width: 50%;
 }
@@ -58,10 +64,11 @@
     padding-right: 3px;
 }
 .hr-line.sapMTB{
+    margin-top: 10px;
     background: #d6d0d0;
 } 
 .sapMInputBaseContentWrapper{
-    height: 30px !important;
+    height: 36px !important;
     border-radius: 0 !important;
 }
 .sapMBtnInner{
@@ -89,7 +96,10 @@
 .auth-and-release-container > *,
 .message-strip-container > *,
 .confirmation-dialog-content > *{
-    padding-bottom: 15px;
+    padding-bottom: 20px;
+}
+.account-info-container > *:last-child {
+    padding-bottom: 0;
 }
 .vertical-layout{
     width: 100%;
@@ -112,7 +122,7 @@
 }
 .address-helper-text{
     font-size: 14px;
-    padding: 3px;
+    padding-top: 10px;
 }
 .error-message-strip{
     border-radius: 5px;
@@ -127,6 +137,7 @@
     background: #1E3575;
 }
 .enroll-form-container{
+    margin-top: 15px;
     padding: 0 30px 0 30px;
     width: 95%;
 }

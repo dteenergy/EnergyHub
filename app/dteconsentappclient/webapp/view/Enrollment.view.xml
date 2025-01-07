@@ -8,12 +8,12 @@
                     <!-- Landlord Enrollment form Header -->
                     <FlexBox id="enrollment-form-header" class="enrollment-form-header">
                         <Title xmlns="sap.m" titleStyle="H5" text="DTE Energy Data Hub Enrollment Form" wrapping="true" id="title" class="main-title"/>
-                        <Text id ="istruction" class="sub-content" wrapping="true" 
+                        <Text id ="istruction" class="form-instruction" wrapping="true" 
                                 text="Complete the information below to enroll for no fee to DTE’s Building Energy Usage Data Hub. In order for us to process your enrollment, you must complete all required fields on this form.">
                         </Text>
                         <FlexBox id="required-instruction" class="required-instruction">
                             <Text id="required-instruction-indicator"  text="*" class="required-instruction-indicator" />
-                            <Text id="required-instruction-content" text="Indicates a required field" class="required-text-indicator" />
+                            <Text id="required-instruction-content" text="Indicates a required field" class="required-text-indicator form-instruction" />
                         </FlexBox>
                     </FlexBox>
                     
@@ -23,7 +23,7 @@
                         <!-- Account Information -->
                         <VBox id="account-info-container" fitContainer="true" class="account-info-container">
                             <FormattedText 
-                                htmlText="&lt;p style='letter-spacing: .7px; margin-top: 15px; font-size: 18px;'&gt; &lt;span style='font-weight: 600; font-size: 18px;'&gt;Account Information&lt;/span&gt; (as it appears on customer’s monthly DTE Energy bill)&lt;/p&gt;"  
+                                htmlText="&lt;p style='letter-spacing: .7px; font-size: 18px;'&gt; &lt;span style='font-weight: 600; font-size: 18px;'&gt;Account Information&lt;/span&gt; (as it appears on customer’s monthly DTE Energy bill)&lt;/p&gt;"  
                             ></FormattedText>
 
                             <l:VerticalLayout class="vertical-layout">
