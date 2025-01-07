@@ -18,6 +18,7 @@ body {
   --sapFontHighFontSize: 18px;
   --sapFontPrimaryColor: #2B2B2B;
   --sapFontSecondaryColor: #505357;
+  --sapButton_TextColor: #0072CE;
   --sapInputHeight: 36px;
   --sapButtonHeight: 40px;
 }
@@ -32,7 +33,7 @@ body {
 .sapMLabel{
   font-weight: var(--sapFontSemiBold);
   color: var(--sapFontSecondaryColor);
-  font-size: 14px;
+  font-size: var(--sapTextSmallFontSize);
 }
 .sapUiBody{
   font-family: 'Open Sans';
@@ -40,6 +41,7 @@ body {
 .sapMText {
   letter-spacing: .7px;
   color: var(--sapFontSecondaryColor);
+  font-size: var(--sapTextMediumFontSize);
 }
 .sapMIBar.app-header{
   height: 4.5rem !important;

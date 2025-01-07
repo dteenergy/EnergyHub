@@ -137,6 +137,9 @@
 		color: var(--sapFontPrimaryColor);
 	}
 }
+.sapMMsgStrip{
+	font-size: var(--sapTextMediumFontSize);
+}
 .checkbox-error-view{
     border: 1px solid #f53232;
 }
