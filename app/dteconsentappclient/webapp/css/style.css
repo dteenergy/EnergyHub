@@ -11,17 +11,27 @@ body {
   --sapFontFamilyHeader: 'Open Sans', sans-serif; /* For Titles */
   --sapFontFamilyMonospace: 'Open Sans', sans-serif; /* For Monospace Text */
   --sapFontSemiboldDuplexFamily: 'Open Sans', sans-serif;
-  --sapFontBoldWeight: 600;
+  --sapFontSemiBold: 600;
+  --sapFontRegular: 400;
+  --sapTextSmallFontSize: 14px;
+  --sapTextMediumFontSize: 16px;
+  --sapFontHighFontSize: 18px;
+  --sapFontPrimaryColor: #2B2B2B;
+  --sapFontSecondaryColor: #505357;
+  --sapInputHeight: 36px;
+  --sapButtonHeight: 40px;
 }
 
 .sapMTitle, .sapMText{
   font-family: 'Open Sans', sans-serif;
 }
 .sapMTitle{
-  font-weight: var(--sapFontBoldWeight);
+  font-weight: var(--sapFontSemiBold);
+  color: var(--sapFontPrimaryColor);
 }
 .sapMLabel{
-  font-weight: var(--sapFontBoldWeight);
+  font-weight: var(--sapFontSemiBold);
+  color: var(--sapFontSecondaryColor);
   font-size: 14px;
 }
 .sapUiBody{
@@ -29,6 +39,7 @@ body {
 }
 .sapMText {
   letter-spacing: .7px;
+  color: var(--sapFontSecondaryColor);
 }
 .sapMIBar.app-header{
   height: 4.5rem !important;
@@ -59,18 +70,17 @@ body {
     padding-bottom: 10px;
   } 
   .legal-info-links{
-    padding-right: 10px;
+    padding: 0 10px;
     font-size: 14px;
     text-decoration: none;
-  }
-  .sapMLnkText:not(:last-child)::after{
-    content: ' |';
-    color: white;
   }
   .sapMLnkText{
     letter-spacing: .7px;
     color: #ffffff;
     font-weight: 100;
+  }
+  .vertical-line{
+    color: #73767B;
   }
   .footerText{
     font-size: 11px;
@@ -84,7 +94,7 @@ body {
   .sapMLnk:hover {
     text-decoration: none;
   } 
-
+ 
   @media only screen and (max-width: 600px) {
     .legal-info-details{
       flex-direction: column !important;
@@ -96,5 +106,8 @@ body {
     }
     .legal-info-links{
       padding-bottom: 10px;
+    }
+    .vertical-line{
+      display: none;
     }
   }

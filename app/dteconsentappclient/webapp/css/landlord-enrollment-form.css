@@ -14,14 +14,19 @@
 .required-instruction-indicator{
     color: red;
 }
-.customize-button{
-    width: 50%;
+.required-text-indicator{
+    font-weight: var(--sapFontSemiBold);
+}
+.form-instruction{
+    font-size: var(--sapTextMediumFontSize);
+}
+.auth-instruction{
+    font-size: var(--sapTextSmallFontSize);   
 }
 .customize-button.submit-action{
     margin-bottom: 30px;
     background: #0072ce !important;
     border: none;
-    width: 30%;
 }
 .customize-button.outline-button{
     border: 1px solid #0072ce;
@@ -55,17 +60,24 @@
     padding-right: 3px;
 }
 .hr-line.sapMTB{
+    margin-top: 10px;
     background: #d6d0d0;
 } 
 .sapMInputBaseContentWrapper{
-    height: 30px !important;
+    height: var(--sapInputHeight) !important;
     border-radius: 0 !important;
+}
+.sapMBtn{
+    height: var(--sapButtonHeight) !important;
+    padding: 8px 40px !important;
 }
 .sapMBtnInner{
     border-radius: 0 !important;
-    font-weight: var(--sapFontBoldWeight);
+    font-weight: var(--sapFontSemiBold);
+    font-size: var(--sapFontHighFontSize);
     border: none;
     outline: none;
+    padding: 0 !important;
 }
 .sapMBtnInner::before{
     border: none !important;
@@ -86,7 +98,10 @@
 .auth-and-release-container > *,
 .message-strip-container > *,
 .confirmation-dialog-content > *{
-    padding-bottom: 15px;
+    padding-bottom: 20px;
+}
+.account-info-container > *:last-child {
+    padding-bottom: 0;
 }
 .vertical-layout{
     width: 100%;
@@ -109,7 +124,7 @@
 }
 .address-helper-text{
     font-size: 14px;
-    padding: 3px;
+    padding-top: 10px;
 }
 .error-message-strip{
     border-radius: 5px;
@@ -117,13 +132,25 @@
     background-color: transparent;
     padding: 15px !important;
 }
+.error-message-strip{
+	.sapMText{
+		color: var(--sapFontPrimaryColor);
+	}
+}
 .checkbox-error-view{
     border: 1px solid #f53232;
 }
 .checkbox-selected{
     background: #1E3575;
 }
+.checkbox-label{
+    .sapMLabelTextWrapper{
+        font-weight: var(--sapFontRegular) !important;
+				font-size: var(--sapTextMediumFontSize) !important;
+    }
+}
 .enroll-form-container{
+    margin-top: 15px;
     padding: 0 30px 0 30px;
     width: 95%;
 }
@@ -141,6 +168,7 @@
     border-radius: 0 !important;
 }
 .alert-title{
+    color: var(--sapFontPrimaryColor);
     font-size: 18px;
 }
 .alert-close-icon{

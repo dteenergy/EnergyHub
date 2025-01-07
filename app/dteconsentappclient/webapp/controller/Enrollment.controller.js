@@ -659,7 +659,7 @@ sap.ui.define([
 					// Customize content of the dialog, design the VBox container
           const dialogContent = new sap.m.FlexBox({
             items: [
-              new sap.m.FormattedText({htmlText: "<p style='letter-spacing: .7px;'> <span style='font-weight: 600;'>NOTE:</span> If you want to add another location, you must do so before submitting this form. Adding another location after submitting will require filling out a new form. </p>"}),
+              new sap.m.FormattedText({htmlText: "<p style='letter-spacing: .7px; font-size: 14px; font-weigt: 400;'> <span style='font-weight: 600; font-size: 14px;'>NOTE:</span> If you want to add another location, you must do so before submitting this form. Adding another location after submitting will require filling out a new form. </p>"}),
               new sap.m.Button({
                 text: '+ Add Another Location',
                 press: function(){
@@ -686,7 +686,7 @@ sap.ui.define([
 					// Custom header for the dialog
 					const dialogTitle = new sap.m.Bar({
 						contentMiddle: [
-							new sap.m.Text({ 
+							new sap.m.Title({ 
 								text: 'Additional Location Alert' 
 							}).addStyleClass("alert-title")
 						],
