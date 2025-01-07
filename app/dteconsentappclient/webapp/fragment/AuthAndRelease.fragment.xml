@@ -46,7 +46,7 @@
 		</HBox>
 
 		<HBox>
-            <Link class="customer-policy-link" href="https://www.dteenergy.com/us/en/quicklinks/customer-data-privacy-policy.html" text="View our Customer Data Privacy Policy" endIcon="sap-icon://slim-arrow-right" target="_blank"></Link>
+            <Link class="customer-policy-link" href="https://www.dteenergy.com/us/en/quicklinks/customer-data-privacy-policy.html" text="View our Customer Data Privacy Policy" wrapping="true" endIcon="sap-icon://slim-arrow-right" target="_blank"></Link>
         </HBox>
 	</VBox>
 </core:FragmentDefinition>
