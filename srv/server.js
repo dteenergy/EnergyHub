@@ -1,24 +1,19 @@
 const cds = require('@sap/cds');
 
-cds.on('bootstrap', async (app)=>{
+cds.on('bootstrap', async (app) => {
+  app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'https://d78e4f76trial-ehconsentportal.cfapps.us10-001.hana.ondemand.com');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+    res.header('Access-Control-Allow-Credentials', 'true');
 
-    app.use((req, res, next) =>{
-      // const whiteList = JSON.parse(process.env.WHITELIST || '["*"]');
 
-      // // Allow every request to access service
-      // if(whiteList.includes("*")) return next()
+    if (req.method === 'OPTIONS') {
+      return res.status(200).end();
+    }
 
-      // // Check incoming path is service path
-      // const isServicePath = /^\/service(\/.*)?$/.test(req.path);
-      // if(!isServicePath) next();
-      // else{
-      //   // Allow access service When req header's referer in White list
-      //   if(whiteList.includes(req.headers.referer)) next()
-      //   else res.status(403).send('Forbidden');
-      // }   
-      
-      next();
-    });  
+    next();
+  });
 })
 
 module.exports = cds.server;

@@ -68,7 +68,7 @@ modules:
           "Content-Security-Policy": "frame-ancestors iframe frame object embed 'self' https://*.hcs.cloud.sap;"
         },
         {
-          "Access-Control-Allow-Origin": "https://localhost:3000"
+          "Access-Control-Allow-Origin": "https://d78e4f76trial-ehconsentportal.cfapps.us10-001.hana.ondemand.com"
         },
         {
           "Access-Control-Allow-Credentials": "true"
@@ -214,7 +214,7 @@ resources:
   type: org.cloudfoundry.managed-service
   parameters:
     service: postgresql-db
-    service-plan: reference
+    service-plan: trial
 - name: dteConsentAppPortal_html5-app-repo-runtime
   type: org.cloudfoundry.managed-service
   parameters:
