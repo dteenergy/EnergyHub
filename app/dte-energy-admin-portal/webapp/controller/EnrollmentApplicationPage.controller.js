@@ -114,6 +114,8 @@ sap.ui.define([
      * @public
      */
     onGenerateUrlPress: async function(oEvent) {
+      this.handleSessionExpiry(this.baseUrl);
+
       // Retrieve the button and its parent list item
       const oButton = oEvent.getSource();
       const oListItem = oButton.getParent();
@@ -184,6 +186,8 @@ sap.ui.define([
      */
     onUpdateField: async function() {
       const updateModel = this.getView().getModel("MainModel");
+
+      this.handleSessionExpiry(this.baseUrl);
 
       updateModel.submitBatch('CustomGroupId')
         .then(() => MessageToast.show("Updated successfully!"))

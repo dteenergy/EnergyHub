@@ -126,6 +126,8 @@ sap.ui.define([
     handleResponse: function () {
       const updateModel = this.getView().getModel("MainModel");
 
+      this.handleSessionExpiry(this.baseUrl);
+
       updateModel.submitBatch('CustomGroupId')
         .then(() => MessageToast.show("Updated successfully!"))
         .catch((err) => MessageToast.show("Updation failed : ", err))
