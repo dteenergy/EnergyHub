@@ -5,12 +5,12 @@
     <VBox fitContainer="true" width="100%" class="consent-form-container">
 
         <layout:VerticalLayout class="vertical-layout">
-            <Label text="FirstName" required="true"></Label>
+            <Label text="First Name" required="true"></Label>
             <Input class="inputBox" liveChange="onLiveChange" type="Text" required="true" value="{oConsentModel>/ConsentDetail/ConsentFirstName}"/>
         </layout:VerticalLayout>
 
         <layout:VerticalLayout class="vertical-layout">
-            <Label text="LastName"  required="true"></Label>
+            <Label text="Last Name"  required="true"></Label>
             <Input class="inputBox" liveChange="onLiveChange" type="Text" required="true"  value="{oConsentModel>/ConsentDetail/ConsentLastName}"/>
         </layout:VerticalLayout>
         
@@ -43,7 +43,7 @@
         </layout:VerticalLayout>
 
         <layout:VerticalLayout class="vertical-layout">
-            <Label text="Zipcode"  required="true"></Label>
+            <Label text="Zip Code"  required="true"></Label>
             <Input class="inputBox" liveChange="onLiveChange" type="Number" required="true" value="{oConsentModel>/ConsentDetail/ConsentZipcode}"/>
         </layout:VerticalLayout>  
 

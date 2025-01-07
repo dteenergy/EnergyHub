@@ -20,16 +20,28 @@
         <Table id="idApplicationConsentTable" items="{MainModel>/ApplicationConsent}" growing="true" growingThreshold="10" width="100%" class='consentPageTable setTableHeight' sticky="ColumnHeaders">
         <columns>
             <Column width="150px"><header><Text text="Application Number" class="boldText"></Text></header></Column>
+            <Column width="150px"><header><Text text="Account Number" class="boldText"></Text></header></Column>
             <Column width="150px"><header><Text text="First Name" class="boldText"></Text></header></Column>
             <Column width="150px"><header><Text text="Last Name" class="boldText"></Text></header></Column>
             <Column width="150px"><header><Text text="Consent Email" class="boldText"></Text></header></Column>
             <Column width="150px"><header><Text text="Consent Given Date" class="boldText"></Text></header></Column>
             <Column width="150px"><header><Text text="Consent Auth Title" class="boldText"></Text></header></Column>
             <Column width="150px"><header><Text text="Consent Status" class="boldText"></Text></header></Column>
+            <Column width="150px"><header><Text text="Address" class="boldText"></Text></header></Column>
+            <Column visible="false" width="150px"><header><Text text="Site Contact Title" class="boldText"></Text></header></Column>
+            <Column visible="false" width="150px"><header><Text text="Address Line Two" class="boldText"></Text></header></Column>
+            <Column visible="false" width="150px"><header><Text text="City" class="boldText"></Text></header></Column>
+            <Column visible="false" width="150px"><header><Text text="State" class="boldText"></Text></header></Column>
+            <Column visible="false" width="150px"><header><Text text="ZipCode" class="boldText"></Text></header></Column>
+            <Column visible="false" width="150px"><header><Text text="Phone Number" class="boldText"></Text></header></Column>
+            <Column visible="false" width="150px"><header><Text text="Auth Person Name" class="boldText"></Text></header></Column>
+            <Column visible="false" width="150px"><header><Text text="UpdatedAt" class="boldText"></Text></header></Column>
+            <Column visible="false" width="150px"><header><Text text="CreatedAt" class="boldText"></Text></header></Column>
         </columns>
         <items>
             <ColumnListItem id="ColumnListItem">
                 <Text text="{MainModel>ApplicationNumber}"></Text>
+                <Text text="{MainModel>AccountNumber}"></Text>
                 <Text text="{MainModel>FirstName}"></Text>
                 <Text text="{MainModel>LastName}"></Text>
                 <Text text="{MainModel>EmailAddr}"></Text>
@@ -42,6 +54,16 @@
                         <core:Item key="Rejected" text="Rejected" />
                     </items>
                 </ComboBox>
+                <Text text="{MainModel>Address}"></Text>
+                <Text text="{MainModel>SiteContactTitle}"></Text>
+                <Text text="{MainModel>AddrLineTwo}"></Text>
+                <Text text="{MainModel>City}"></Text>
+                <Text text="{MainModel>State}"></Text>
+                <Text text="{MainModel>Zipcode}"></Text>
+                <Text text="{MainModel>PhoneNumber}"></Text>
+                <Text text="{MainModel>AuthPersonName}"></Text>
+                <Text text="{MainModel>AppUpdatedAt}"></Text>
+                <Text text="{MainModel>AppCreatedAt}"></Text>
             </ColumnListItem>
         </items>
         </Table>

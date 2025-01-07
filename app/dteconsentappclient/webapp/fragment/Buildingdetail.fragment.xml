@@ -51,7 +51,7 @@
 		</layout:VerticalLayout>
 		
 		<layout:VerticalLayout class="vertical-layout">
-			<Label text="Zipcode" required="true"></Label>
+			<Label text="Zip Code" required="true"></Label>
 			<Input class="inputBox" value="{locationModel>Zipcode}" type="Number" liveChange="onLiveChange" required="true"/>
 		</layout:VerticalLayout>
 	

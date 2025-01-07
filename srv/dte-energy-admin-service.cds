@@ -4,29 +4,44 @@ using {dteConsentApp as db} from '../db/schema';
 @impl : './handler/admin-handler.js'
 service DTEEnergyAdminPortal {
 
-  entity ApplicationDetail @(restrict: [{
+  entity ApplicationDetail  @(restrict: [{
     grant: ['READ', 'UPDATE', 'GenerateUrl', 'GetEnvironmentVariables'], 
     to: 'Administrator'
-    }])as projection on db.ApplicationDetail {
-      AppId,
-      AccountDetailRefId.FirstName,
-      AccountDetailRefId.LastName,
-      AccountDetailRefId.CompanyName,
-      AccountDetailRefId.CompanyAddress,
-      AccountDetailRefId.CompanyAddrLineTwo,
-      AccountDetailRefId.City,
-      AccountDetailRefId.State,
-      AccountDetailRefId.EmailAddr,
-      NumberOfTenants,
-      ApplicationStatus,
-      NoOfConsentReceived,
-      ApplicationNumber,
-      SignatureSignedBy,
-      CreatedAt as AppCreatedAt
-    } order by AppCreatedAt desc
-    actions{
-      function GenerateUrl() returns String;
-    } function GetEnvironmentVariables() returns String;
+    }]) as projection on db.ApplicationDetail {
+    AppId,
+    AccountDetailRefId.FirstName,
+    AccountDetailRefId.LastName,
+    AccountDetailRefId.CompanyName,
+    AccountDetailRefId.CompanyAddress,
+    AccountDetailRefId.CompanyAddrLineTwo,
+    AccountDetailRefId.City,
+    AccountDetailRefId.State,
+    AccountDetailRefId.Zipcode,
+    AccountDetailRefId.AcctMgrName,
+    AccountDetailRefId.AcctMgrPhNo,
+    AccountDetailRefId.EnergyPrgmParticipated,
+    AccountDetailRefId.SiteContactTitle,
+    AccountDetailRefId.SiteAddress,
+    AccountDetailRefId.SiteAddrLineTwo,
+    AccountDetailRefId.SiteCity,
+    AccountDetailRefId.SiteState,
+    AccountDetailRefId.SiteZipcode,
+    AccountDetailRefId.SitePhoneNumber,
+    AccountDetailRefId.EmailAddr,
+    AccountDetailRefId.CreatedAt as AccCreatedAt,
+    AccountDetailRefId.UpdatedAt as AccUpdatedAt,
+    NumberOfTenants,
+    ApplicationStatus,
+    NoOfConsentReceived,
+    ApplicationNumber,
+    SignatureSignedBy,
+    SignatureSignedDate,
+    UpdatedAt as AppUpdatedAt,
+    CreatedAt as AppCreatedAt
+  } order by AppCreatedAt desc
+  actions{
+    function GenerateUrl() returns String;
+  } function GetEnvironmentVariables() returns String;
 
   entity ApplicationConsent @(restrict: [{
     grant: ['READ', 'UPDATE'], 
@@ -39,6 +54,16 @@ service DTEEnergyAdminPortal {
     AuthDate,
     AuthTitle,
     ConsentStatus,
+    SiteContactTitle,
+    Address,
+    AddrLineTwo,
+    City,
+    State,
+    Zipcode,
+    AccountNumber,
+    PhoneNumber,
+    AuthPersonName,
+    UpdatedAt as AppUpdatedAt,
     AppRefId.AppId,
     AppRefId.ApplicationNumber,
     CreatedAt as AppCreatedAt
