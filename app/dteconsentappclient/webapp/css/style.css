@@ -13,10 +13,13 @@ body {
   --sapFontSemiboldDuplexFamily: 'Open Sans', sans-serif;
   --sapFontSemiBold: 600;
   --sapFontRegular: 400;
-  --sapTextMediumFontSize: 16px;
   --sapTextSmallFontSize: 14px;
+  --sapTextMediumFontSize: 16px;
+  --sapFontHighFontSize: 18px;
   --sapFontPrimaryColor: #2B2B2B;
   --sapFontSecondaryColor: #505357;
+  --sapInputHeight: 36px;
+  --sapButtonHeight: 40px;
 }
 
 .sapMTitle, .sapMText{

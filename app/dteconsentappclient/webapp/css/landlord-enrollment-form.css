@@ -23,14 +23,10 @@
 .auth-instruction{
     font-size: var(--sapTextSmallFontSize);   
 }
-.customize-button{
-    width: 50%;
-}
 .customize-button.submit-action{
     margin-bottom: 30px;
     background: #0072ce !important;
     border: none;
-    width: 30%;
 }
 .customize-button.outline-button{
     border: 1px solid #0072ce;
@@ -68,14 +64,20 @@
     background: #d6d0d0;
 } 
 .sapMInputBaseContentWrapper{
-    height: 36px !important;
+    height: var(--sapInputHeight) !important;
     border-radius: 0 !important;
+}
+.sapMBtn{
+    height: var(--sapButtonHeight) !important;
+    padding: 8px 40px !important;
 }
 .sapMBtnInner{
     border-radius: 0 !important;
     font-weight: var(--sapFontSemiBold);
+    font-size: var(--sapFontHighFontSize);
     border: none;
     outline: none;
+    padding: 0 !important;
 }
 .sapMBtnInner::before{
     border: none !important;
@@ -160,6 +162,7 @@
     border-radius: 0 !important;
 }
 .alert-title{
+    color: var(--sapFontPrimaryColor);
     font-size: 18px;
 }
 .alert-close-icon{
