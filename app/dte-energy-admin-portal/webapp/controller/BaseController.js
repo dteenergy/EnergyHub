@@ -40,6 +40,12 @@ sap.ui.define([
           };
       }
     },
+    handleSessionExpiry: async function(baseUrl) {
+      const data = await axios.get(baseUrl+`admin/service/$metadata`);
+      console.log(data.status);
+
+      if(data.status === 401) window.location.reload();
+    },
     /**
     * Handles error and display it to users
     * @param {Error} error 

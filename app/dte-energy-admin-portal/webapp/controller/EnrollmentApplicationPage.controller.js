@@ -26,6 +26,8 @@ sap.ui.define([
       this.sApplicationStatus = filteredApplicationStatus;
       this.tenantConsentFormURL = tenantConsentFormURL;
 
+      this.handleSessionExpiry(this.baseUrl);
+
       // Populate the filters with initial values if they are defined
       if(!["", undefined].includes(this.sAppNumber)) this.byId("idAppNumberFilter").setValue(this.sAppNumber);
       if(!["", undefined].includes(this.sFirstName)) this.byId("idFirstNameFilter").setValue(this.sFirstName);
@@ -71,7 +73,7 @@ sap.ui.define([
 
       // Validate the binding
       if (!oBinding) {
-        MessageBox.error("Table binding not found!")
+        console.error("Table binding not found!")
         return;
       }
 

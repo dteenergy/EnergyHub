@@ -24,6 +24,8 @@ sap.ui.define([
       this.baseUrl = baseUrl;
       this.AppId = AppId;
 
+      this.handleSessionExpiry(this.baseUrl);
+
       // Create an OData V4 model using the constructed service URL
       const model = new sap.ui.model.odata.v4.ODataModel({
         serviceUrl: `${this.baseUrl}admin/service/`,

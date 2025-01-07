@@ -39,6 +39,8 @@ sap.ui.define([
       this.sLastName = filteredLastName;
       this.sApplicationStatus = filteredApplicationStatus;
 
+      this.handleSessionExpiry(this.baseUrl);
+
       // Update UI with application number and landlord name
       this.byId("idAppNumberId").setText(ApplicationNumber);
       this.byId("idLandlordName").setText(FirstName+" "+LastName);
