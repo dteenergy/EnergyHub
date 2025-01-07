@@ -12,6 +12,7 @@ body {
   --sapFontFamilyMonospace: 'Open Sans', sans-serif; /* For Monospace Text */
   --sapFontSemiboldDuplexFamily: 'Open Sans', sans-serif;
   --sapFontBoldWeight: 600;
+  --sapTextMediumFontSize: 16px;
 }
 
 .sapMTitle, .sapMText{
@@ -29,6 +30,7 @@ body {
 }
 .sapMText {
   letter-spacing: .7px;
+  font-size: var(--sapTextMediumFontSize);
 }
 .sapMIBar.app-header{
   height: 4.5rem !important;

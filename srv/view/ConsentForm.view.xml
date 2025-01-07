@@ -41,8 +41,8 @@
 								<Text id ="instruction-two" class="sub-content" text="This form must be completed in its entirety and signed by the customer 
 																of record. " />
 								<FlexBox class="required-instruction">
-										<Text class="required-instruction-indicator" text="*" />
-										<Text  text="Indicates a required field" />
+										<Text text="*" class="required-instruction-indicator" />
+										<Text text="Indicates a required field" class="required-text-indicator" />
 								</FlexBox>
 						</FlexBox>
 

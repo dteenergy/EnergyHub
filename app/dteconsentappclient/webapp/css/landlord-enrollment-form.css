@@ -14,6 +14,9 @@
 .required-instruction-indicator{
     color: red;
 }
+.required-text-indicator{
+    font-weight: var(--sapFontBoldWeight);
+}
 .customize-button{
     width: 50%;
 }
