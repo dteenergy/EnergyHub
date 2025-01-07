@@ -86,7 +86,6 @@ body {
     text-decoration: none;
   } 
  
-
   @media only screen and (max-width: 600px) {
     .legal-info-details{
       flex-direction: column !important;
