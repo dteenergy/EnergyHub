@@ -43,11 +43,11 @@ sap.ui.define([
     handleSessionExpiry: async function(baseUrl) {
       const data = await axios.get(baseUrl+`admin/service/$metadata`);
       console.log(data);
-      console.log(data.data);
-      console.log(data.data.includes("text/html"));
       console.log(data.status);
+      console.log(data.data);
+      console.log(data.data.includes("<html>"));
 
-      if(data.status === 401 && data.data.includes("text/html")) window.location.reload();
+      if(data.status === 401 && data.data.includes("<html>")) window.location.reload();
     },
     /**
     * Handles error and display it to users
