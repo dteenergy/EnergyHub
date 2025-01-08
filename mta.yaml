@@ -27,6 +27,8 @@ modules:
     APPNUM_PREFIX_ENABLED : "N"
     APPNUM_PREFIX : ""
     TENANT_CONSENT_FORM_URL: https://www.dteenergy.com/us/en/quicklinks/energy-hub/energy-hub-tenant.html?appId=
+    ALLOWED_ORIGIN: "https://forms.dteenergy.com"
+    ALLOWED_METHODS: GET, POST, PUT, DELETE, OPTIONS
   parameters:
     memory: 256MB
   build-parameters:
@@ -59,24 +61,6 @@ modules:
       ]
     COOKIES: >
       { "SameSite":"None" }
-    httpHeaders: >
-      [
-        {
-          "X-Frame-Options": "DENY"
-        },
-        {
-          "Content-Security-Policy": "frame-ancestors iframe frame object embed 'self' https://*.hcs.cloud.sap;"
-        },
-        {
-          "Access-Control-Allow-Origin": "https://d78e4f76trial-ehconsentportal.cfapps.us10-001.hana.ondemand.com"
-        },
-        {
-          "Access-Control-Allow-Credentials": "true"
-        },
-        {
-          "Access-Control-Allow-Headers": "Authorization,Content-Type"
-        }
-      ]
   build-parameters:
     ignore: ["node_modules/"]
   requires:
@@ -214,7 +198,7 @@ resources:
   type: org.cloudfoundry.managed-service
   parameters:
     service: postgresql-db
-    service-plan: trial
+    service-plan: reference
 - name: dteConsentAppPortal_html5-app-repo-runtime
   type: org.cloudfoundry.managed-service
   parameters:
