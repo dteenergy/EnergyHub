@@ -38,7 +38,7 @@
                             </l:VerticalLayout>
 
                             <l:VerticalLayout class="vertical-layout">
-                                <Label text="Address Line 2"></Label>
+                                <Label text="Company Address Line 2"></Label>
                                 <Input class="inputBox" type="Text" value="{oEnrollModel>/AccountDetail/CompanyAddrLineTwo}"></Input>
                             </l:VerticalLayout>
 
