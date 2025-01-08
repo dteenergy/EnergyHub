@@ -220,4 +220,7 @@
     .enrollment-form-header > *{
         padding: 10px 0 10px 0 !important;
      }
+		.alert-title, .alert-close-icon{
+			font-size: 25px !important;
+		}
 }
