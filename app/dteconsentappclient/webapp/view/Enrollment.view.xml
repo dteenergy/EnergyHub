@@ -69,11 +69,13 @@
                                 <Input id="account-manager-ph" class="inputBox" type="Number" liveChange="onLiveChange" value="{oEnrollModel>/AccountDetail/AcctMgrPhoneNumber}" ></Input>
                             </l:VerticalLayout>
 
-                            <Label id="has-participate" text="Do you already participate in the DTE Energy Data Hub Program?" wrapping="true"></Label>
-                            <RadioButtonGroup id="radio-group" select="onRadioButtonSelect">
-                                <RadioButton id="yes" text="Yes" selected="true"></RadioButton>
-                                <RadioButton id="no" text="No" ></RadioButton>
-                            </RadioButtonGroup>
+                            <l:VerticalLayout id="id-Energy-prgm-participated" class="Energy-prgm-participated vertical-layout">                            
+                                <Label id="has-participate" text="Do you already participate in the DTE Energy Data Hub Program?" wrapping="true" required="true"></Label>
+                                <RadioButtonGroup id="radio-group" select="onRadioButtonSelect">
+                                    <RadioButton id="yes" text="Yes" selected="true"></RadioButton>
+                                    <RadioButton id="no" text="No" ></RadioButton>
+                                </RadioButtonGroup>
+                            </l:VerticalLayout>
                         </VBox>
 
                         <Toolbar class="hr-line" height="1px" width="100%"></Toolbar>
