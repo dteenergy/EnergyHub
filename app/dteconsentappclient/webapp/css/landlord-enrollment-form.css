@@ -33,6 +33,18 @@
 }
 .outline-button{
     border: 1px solid #0072ce;
+    .sapMBtnInner{
+        background-color: transparent;
+    }
+
+    .sapMBtnInner:hover{
+        background-color: transparent;
+    }
+}
+.outline-button:hover{
+    .sapMBtnInner{
+        background-color: transparent;
+    }
 }
 .dialog-submit-action{
     background: #0072ce !important;
