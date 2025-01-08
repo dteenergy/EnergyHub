@@ -34,7 +34,7 @@
 		</layout:VerticalLayout>
 
 		<layout:VerticalLayout class="vertical-layout">
-			<Label text="Address Line 2"></Label>
+			<Label text="Location Address Line 2"></Label>
 			<Input class="inputBox" type="Text" value="{locationModel>AddrLineTwo}"></Input>
 		</layout:VerticalLayout>
 
