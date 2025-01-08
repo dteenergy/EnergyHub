@@ -1,7 +1,7 @@
 sap.ui.define([
   "sap/ui/core/mvc/Controller",
   "sap/base/util/UriParameters",
-    "sap/m/MessageBox"
+  "sap/m/MessageBox"
 ], function (Controller, UriParameters, MessageBox) {
   "use strict";
 
@@ -42,12 +42,19 @@ sap.ui.define([
     },
     handleSessionExpiry: async function(baseUrl) {
       const data = await axios.get(baseUrl+`admin/service/$metadata`);
-      console.log(data);
-      console.log(data.status);
-      console.log(data.data);
-      console.log(data.data.includes("<html>"));
 
-      if(data.status === 200 && data.data.includes("<html>")) window.location.reload();
+      if(data.status === 200 && data.data.includes("<html>")) {
+        MessageBox.information('Your session has timed out due to inactivity. Please sign in again to continue.', {
+          actions: ["SignIn", MessageBox.Action.CANCEL],
+          emphasizedAction: "SignIn",
+          onClose: async function(oAction) {
+            if(oAction === "SignIn"){
+              const invokeHandleLogoutBus = sap.ui.getCore().getEventBus();
+              invokeHandleLogoutBus.publish("AppController", "handleSessionExpiry");
+            }
+          }
+        })
+      }
     },
     /**
     * Handles error and display it to users
