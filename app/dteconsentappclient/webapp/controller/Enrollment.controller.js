@@ -652,14 +652,14 @@ sap.ui.define([
 					 * Here checks if the error message strip was in inVisible state
 					 * If it is all inputs are valid, then open the additional location alert dialog
 					 */
-					// if(!oErrorVisibilityModelData?.isInputInValid && !oErrorVisibilityModelData?.isTermsAndConditionVerifiedStatus){
+					if(!oErrorVisibilityModelData?.isInputInValid && !oErrorVisibilityModelData?.isTermsAndConditionVerifiedStatus){
 
 					const that = this;
 
 					// Customize content of the dialog, design the VBox container
           const dialogContent = new sap.m.FlexBox({
             items: [
-              new sap.m.FormattedText({htmlText: "<p style='letter-spacing: .7px; font-size: 14px; font-weigt: 400;'> <span style='font-weight: 600; font-size: 14px;'>NOTE:</span> If you want to add another location, you must do so before submitting this form. Adding another location after submitting will require filling out a new form. </p>"}),
+              new sap.m.FormattedText({htmlText: "<p style='letter-spacing: .7px; font-size: 14px; font-weigt: 400; margin-bottom: 0;'> <span style='font-weight: 600; font-size: 14px;'>NOTE:</span> If you want to add another location, you must do so before submitting this form. Adding another location after submitting will require filling out a new form. </p>"}),
               new sap.m.Button({
                 text: '+ Add Another Location',
                 press: function(){
@@ -686,7 +686,7 @@ sap.ui.define([
 					// Custom header for the dialog
 					const dialogTitle = new sap.m.Bar({
 						contentMiddle: [
-							new sap.m.Title({ 
+							new sap.m.Text({ 
 								text: 'Additional Location Alert' 
 							}).addStyleClass("alert-title")
 						],
@@ -709,10 +709,10 @@ sap.ui.define([
             this.oConfirmationDialog = new Dialog({
 							customHeader: dialogTitle,
               content: dialogContent
-            })
+            }).addStyleClass("alert-dialog-main-container")
           }
           this.oConfirmationDialog.open();
-        	// }
+        	}
 				},
 
 				submitAction: async function(){

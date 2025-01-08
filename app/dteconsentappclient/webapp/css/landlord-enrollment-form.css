@@ -25,14 +25,14 @@
 }
 .customize-button.submit-action{
     margin-bottom: 30px;
-    background: #0072ce !important;
+    background: var(--sapButton_TextColor) !important;
     border: none;
 }
 .customize-button.outline-button{
-    border: 1px solid #0072ce;
+    border: 1px solid var(--sapButton_TextColor);
 }
 .outline-button{
-    border: 1px solid #0072ce;
+    border: 1px solid var(--sapButton_TextColor);
     .sapMBtnInner{
         background-color: transparent;
     }
@@ -47,11 +47,11 @@
     }
 }
 .dialog-submit-action{
-    background: #0072ce !important;
+    background: var(--sapButton_TextColor) !important;
     border: none; 
 }
 .sapMBtnEmphasized{
-    background: #0072ce !important;
+    background: var(--sapButton_TextColor) !important;
 }
 .enrollment-form-header{
     margin-top: 30px;
@@ -140,7 +140,7 @@
 }
 .error-message-strip{
     border-radius: 5px;
-    border: 2px solid #f53232;
+    border: 2px solid var(--sapField_RequiredColor);
     background-color: transparent;
     padding: 15px !important;
 }
@@ -153,16 +153,16 @@
 	font-size: var(--sapTextMediumFontSize);
 }
 .checkbox-error-view{
-    border: 1px solid #f53232;
+    border: 1px solid var(--sapField_RequiredColor);
 }
 .checkbox-selected{
     background: #1E3575;
 }
 .checkbox-label{
-    .sapMLabelTextWrapper{
-        font-weight: var(--sapFontRegular) !important;
-				font-size: var(--sapTextMediumFontSize) !important;
-    }
+	.sapMLabelTextWrapper{
+		font-weight: var(--sapFontRegular) !important;
+		font-size: var(--sapTextMediumFontSize) !important;
+	}
 }
 .enroll-form-container{
     margin-top: 15px;
@@ -181,19 +181,25 @@
 }
 .confirmation-dialog-title, .sapMDialogSection{
     border-radius: 0 !important;
-    /* background-color: #F6F6F6 !important; */
-    height: 3.5rem;
+}
+.confirmation-dialog-title{
+	height: 3.5rem !important;
+	padding: 10px 10px !important;
 }
 .alert-title{
     color: var(--sapFontPrimaryColor);
-    font-size: 18px;
-    margin: 20px;
+    font-size: 28px !important;
+		font-weight: var(--sapFontRegular) !important;
 }
 .alert-close-icon{
-    color: #0072CE;
+    color: var(--sapButton_TextColor);
+    font-size: 28px;
 }
 .sapMDialog{
     border-radius: 0 !important;
+}
+.alert-dialog-main-container{
+	max-width: 1024px !important;
 }
 
 @media only screen and (max-width: 600px) {
