@@ -61,6 +61,24 @@ modules:
       ]
     COOKIES: >
       { "SameSite":"None" }
+    httpHeaders: >
+      [
+        {
+          "X-Frame-Options": "DENY"
+        },
+        {
+          "Content-Security-Policy": "frame-ancestors iframe frame object embed 'self' https://*.hcs.cloud.sap;"
+        },
+        {
+          "Access-Control-Allow-Origin": "https://forms.dteenergy.com"
+        },
+        {
+          "Access-Control-Allow-Credentials": "true"
+        },
+        {
+          "Access-Control-Allow-Headers": "Authorization,Content-Type"
+        }
+      ]
   build-parameters:
     ignore: ["node_modules/"]
   requires:
