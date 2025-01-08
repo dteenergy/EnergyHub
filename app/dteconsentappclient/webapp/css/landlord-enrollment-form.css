@@ -169,10 +169,13 @@
 }
 .confirmation-dialog-title, .sapMDialogSection{
     border-radius: 0 !important;
+    /* background-color: #F6F6F6 !important; */
+    height: 3.5rem;
 }
 .alert-title{
     color: var(--sapFontPrimaryColor);
     font-size: 18px;
+    margin: 20px;
 }
 .alert-close-icon{
     color: #0072CE;

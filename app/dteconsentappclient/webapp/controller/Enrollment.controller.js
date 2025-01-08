@@ -652,7 +652,7 @@ sap.ui.define([
 					 * Here checks if the error message strip was in inVisible state
 					 * If it is all inputs are valid, then open the additional location alert dialog
 					 */
-					if(!oErrorVisibilityModelData?.isInputInValid && !oErrorVisibilityModelData?.isTermsAndConditionVerifiedStatus){
+					// if(!oErrorVisibilityModelData?.isInputInValid && !oErrorVisibilityModelData?.isTermsAndConditionVerifiedStatus){
 
 					const that = this;
 
@@ -712,7 +712,7 @@ sap.ui.define([
             })
           }
           this.oConfirmationDialog.open();
-        	}
+        	// }
 				},
 
 				submitAction: async function(){
