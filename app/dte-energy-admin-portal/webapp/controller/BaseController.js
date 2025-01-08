@@ -47,7 +47,7 @@ sap.ui.define([
       console.log(data.data);
       console.log(data.data.includes("<html>"));
 
-      if(data.status === 401 && data.data.includes("<html>")) window.location.reload();
+      if(data.status === 200 && data.data.includes("<html>")) window.location.reload();
     },
     /**
     * Handles error and display it to users
