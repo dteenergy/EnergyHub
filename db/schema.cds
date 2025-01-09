@@ -78,6 +78,7 @@ entity ApplicationConsent {
     AuthDate: Date;
     AuthTitle: String;
     ConsentStatus : consentStatus default 'New';
+    ConsentByTenantFlag: Boolean default true;
     CreatedAt: Timestamp @cds.on.insert: $now;
     UpdatedAt: Timestamp @cds.on.insert: $now  @cds.on.update: $now;
 
