@@ -19,7 +19,7 @@
       </HBox>
     </FlexBox>
     <ScrollContainer class="paddingAlignment" id="_idBuildingScrollContainer" horizontal="true" vertical="false" width="100%" height="auto">
-      <Table id="idBuildingTable" items="{MainModel>/BuildingDetail}" growing="true" growingThreshold="10" sticky="ColumnHeaders" width="100%" class="paddingAlignment setTableHeight">
+      <Table id="idBuildingTable" items="{MainModel>/BuildingDetail}" growing="true" growingThreshold="10" sticky="ColumnHeaders" width="100%" class="setTableHeight">
         <columns>
           <Column width="150px"><header><Text text="Building Name" class="boldText"></Text></header></Column>
           <Column width="150px"><header><Text text="Account Number" class="boldText"></Text></header></Column>

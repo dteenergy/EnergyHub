@@ -1,7 +1,7 @@
 <core:FragmentDefinition xmlns:f="sap.f" xmlns:core="sap.ui.core" xmlns= "sap.m" xmlns:tnt="sap.tnt" >
   <f:ShellBar id="dteLogoContainer" homeIcon="images/DTE-logo.png" class="dteLogo">
     <f:additionalContent>
-      <f:ShellBar id="dteAdminTitle" class="dteTitle" title="Admin Dashboard"></f:ShellBar>
+      <f:ShellBar id="dteAdminTitle" class="dteTitle" title="Energy Data Hub Admin Dashboard"></f:ShellBar>
     </f:additionalContent>
     <f:profile>
     <Avatar src="images/profileIcon.png" class="profile" press="handleAvatarPress"></Avatar>

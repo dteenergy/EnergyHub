@@ -63,6 +63,7 @@ service DTEEnergyAdminPortal {
     AccountNumber,
     PhoneNumber,
     AuthPersonName,
+    ConsentByTenantFlag,
     UpdatedAt as AppUpdatedAt,
     AppRefId.AppId,
     AppRefId.ApplicationNumber,
