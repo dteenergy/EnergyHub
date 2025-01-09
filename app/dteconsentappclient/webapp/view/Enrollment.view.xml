@@ -165,7 +165,7 @@
 
                         <l:VerticalLayout id="auth-date" class="vertical-layout">
                             <Label id="auth-date-label" labelFor="auth-date-value" required="true" text="Date"></Label>
-                            <Input type="Text" id="id-customer-auth-date" required="true" value="{oEnrollModel>/SignatureSignedDate}" enabled="false"></Input>
+                            <Input type="Text" id="id-customer-auth-date" required="true" value="{oEnrollModel>/SignatureSignedDate}" editable="false"></Input>
                         </l:VerticalLayout>
                     </VBox>
 

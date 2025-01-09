@@ -10,7 +10,7 @@
 
 		<l:VerticalLayout class="vertical-layout">
       <Label labelFor="auth-date-value" required="true" text="Date"></Label>
-			<Input type="Text" required="true" value="{oConsentModel>/ConsentDetail/AuthDate}" enabled="false"></Input>
+			<Input type="Text" required="true" value="{oConsentModel>/ConsentDetail/AuthDate}" editable="false"></Input>
 		</l:VerticalLayout>
 
 		<l:VerticalLayout class="vertical-layout">
