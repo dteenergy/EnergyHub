@@ -1,5 +1,3 @@
-const { c } = require("@sap/cds/lib/utils/tar");
-
 sap.ui.define([
     "sap/ui/core/UIComponent",
     "dteconsentappclient/model/models"
