@@ -405,6 +405,12 @@ sap.ui.define([
 								 * */
 								if(userInput && control?.getBindingPath("value")?.includes("PhoneNumber"))
 									if(!ChecksInputValidation.isValid(control, userInput, "PhoneNumber")) validationFlags[validationStatus] = false;	
+
+								/** If the binding path contains "Zipcode", validate the user input to ensure it is in a valid Zipcode format.
+								 *  If the Zipcode is invalid, set the corresponding validation flag to `false`.
+								 * */
+								if(userInput && control?.getBindingPath("value")?.includes("Zipcode"))
+									if(!ChecksInputValidation.isValid(control, userInput, "Zipcode")) validationFlags[validationStatus] = false;	
 							}	
 						}		
           });
@@ -428,6 +434,9 @@ sap.ui.define([
 					
 					// If the input control's binding path containes "PhoneNumber", validate the user input to ensure it is in a valid phonenumber format.
 					if(oControl?.getBindingPath("value")?.includes("PhoneNumber")) ChecksInputValidation.isValid(oControl, userInput, "PhoneNumber");					
+
+					// If the input control's binding path containes "Zipcode", validate the user input to ensure it is in a valid Zipcode format.
+					if(oControl?.getBindingPath("value")?.includes("Zipcode")) ChecksInputValidation.isValid(oControl, userInput, "Zipcode");					
 
 					// If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
 					if(oControl?.mProperties["type"] === "Email") ChecksInputValidation.isValid(oControl, userInput, "Email");

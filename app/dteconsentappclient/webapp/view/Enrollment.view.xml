@@ -56,7 +56,7 @@
 
                             <l:VerticalLayout id="zip-code" class="vertical-layout">
                                 <Label id="company-zipcode" labelFor="zipcode" text="Zip Code"></Label>
-                                <Input id="zipcode" class="inputBox" type="Number" required="true" liveChange="onLiveChange" value="{oEnrollModel>/AccountDetail/Zipcode}"/>
+                                <Input id="zipcode" class="inputBox" type="Number"  required="true" liveChange="onLiveChange" value="{oEnrollModel>/AccountDetail/Zipcode}"/>
                             </l:VerticalLayout>
 
                             <l:VerticalLayout id="acc-manager-name" class="vertical-layout">
