@@ -23,6 +23,7 @@
             <Column width="150px"><header><Text text="Account Number" class="boldText"></Text></header></Column>
             <Column width="150px"><header><Text text="First Name" class="boldText"></Text></header></Column>
             <Column width="150px"><header><Text text="Last Name" class="boldText"></Text></header></Column>
+            <Column width="150px"><header><Text text="Consent By Tenant" class="boldText"></Text></header></Column>
             <Column width="150px"><header><Text text="Consent Email" class="boldText"></Text></header></Column>
             <Column width="150px"><header><Text text="Consent Given Date" class="boldText"></Text></header></Column>
             <Column width="150px"><header><Text text="Consent Auth Title" class="boldText"></Text></header></Column>
@@ -44,6 +45,7 @@
                 <Text text="{MainModel>AccountNumber}"></Text>
                 <Text text="{MainModel>FirstName}"></Text>
                 <Text text="{MainModel>LastName}"></Text>
+                <Text text="{MainModel>ConsentByTenantFlag}"></Text>
                 <Text text="{MainModel>EmailAddr}"></Text>
                 <Text text="{MainModel>AuthDate}"></Text>
                 <Text text="{MainModel>AuthTitle}"></Text>

@@ -81,7 +81,11 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
     applicationParsedData.ApplicationNumber = applicationNumber;
     buildingParsedData?.map(detail => detail.AppRefId_AppId = AppId);
     accountParsedData.AppRefId_AppId = AppId;
-    consentParsedData.map(consent => consent.AppRefId_AppId = AppId);
+    consentParsedData.map(consent => {
+      consent.AppRefId_AppId = AppId;
+      consent.ConsentByTenantFlag = false;
+      return consent;
+    });
 
     // Insert Enrollment Form details to database
     const applicationDetailResult = await tx.run(INSERT.into(entity?.ApplicationDetail).entries(applicationParsedData));
