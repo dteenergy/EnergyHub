@@ -43,8 +43,10 @@ body {
   padding: 1rem 0 4.5rem;
 }
 
-/* .setTableHeight{
+.setTableHeight{
   min-height: 550px;
+  max-height: 550px;
   height: 100%;
   background-color: #fff;
-} */
+  overflow: scroll;
+}
