@@ -21,6 +21,8 @@ body {
   --sapButton_TextColor: #0072CE;
   --sapInputHeight: 36px;
   --sapButtonHeight: 40px;
+  --sapField_RequiredColor: #E31937;
+  --dtePrimaryColor: #1E3575;
 }
 
 .sapMTitle, .sapMText{
@@ -48,7 +50,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #1E3575 !important;
+  background-color: var(--dtePrimaryColor) !important;
 }
 .sapMText.header-title{
   color: #ffffff !important;
@@ -59,7 +61,7 @@ body {
 .custom-footer {
     display: flex;
     justify-content: center;
-    background-color: #1E3575 !important; 
+    background-color: var(--dtePrimaryColor) !important; 
     height: 14.5rem !important;
   }
   .footer-container{
