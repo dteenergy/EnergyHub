@@ -165,15 +165,7 @@
 
                         <l:VerticalLayout id="auth-date" class="vertical-layout">
                             <Label id="auth-date-label" labelFor="auth-date-value" required="true" text="Date"></Label>
-                           <DatePicker
-                                id="id-customer-auth-date"
-                                displayFormat="MM/dd/yyyy" 
-                                valueFormat="MM/dd/yyyy"
-                                value="{oEnrollModel>/SignatureSignedDate}"
-                                change="onDateChange" 
-                                liveChange="onLiveChange"
-                                required="true">
-                            </DatePicker>
+                            <Input type="Text" id="id-customer-auth-date" required="true" value="{oEnrollModel>/SignatureSignedDate}" enabled="false"></Input>
                         </l:VerticalLayout>
                     </VBox>
 

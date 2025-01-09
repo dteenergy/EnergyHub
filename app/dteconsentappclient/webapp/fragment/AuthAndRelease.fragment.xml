@@ -10,14 +10,7 @@
 
 		<l:VerticalLayout class="vertical-layout">
       <Label labelFor="auth-date-value" required="true" text="Date"></Label>
-			<DatePicker
-				displayFormat="MM/dd/yyyy"
-				valueFormat="MM/dd/yyyy" 
-				value="{oConsentModel>/ConsentDetail/AuthDate}" 
-				liveChange="onLiveChange"
-				required="true"
-				change="onDateChange">
-			</DatePicker>
+			<Input type="Text" required="true" value="{oConsentModel>/ConsentDetail/AuthDate}" enabled="false"></Input>
 		</l:VerticalLayout>
 
 		<l:VerticalLayout class="vertical-layout">

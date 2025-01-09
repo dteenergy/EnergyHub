@@ -39,7 +39,7 @@ sap.ui.define([
 					
           let oEnrollFormData = {
             SignatureSignedBy: "",
-            SignatureSignedDate: "",
+            SignatureSignedDate: FormatInputs.dateToDisplay(),
             AccountDetail: {
                 "CompanyName": "",
                 "CompanyAddress": "",
@@ -81,7 +81,7 @@ sap.ui.define([
 						"ConsentPhoneNumber": null,
 						"ConsentEmailAddr":"",
 						"AuthPersonName":"",
-						"AuthDate":"",
+						"AuthDate": FormatInputs.dateToDisplay(),
 						"AuthTitle":""
 					}
 				};
@@ -344,8 +344,8 @@ sap.ui.define([
 								"ConsentPhoneNumber":"",
 								"ConsentEmailAddr":"",
 								"AuthPersonName": consentData['ConsentDetail']['AuthPersonName'],
-								"AuthDate": consentData['ConsentDetail']['AuthPersonName'],
-								"AuthTitle": consentData['ConsentDetail']['AuthPersonName']
+								"AuthDate": consentData['ConsentDetail']['AuthDate'],
+								"AuthTitle": consentData['ConsentDetail']['AuthTitle']
 							});
 					}      
         },
@@ -382,8 +382,7 @@ sap.ui.define([
 							
 						// Filtered the input and combobox controls
 						if (control instanceof sap.m.Input && !control.getId().includes("-popup-input") || 
-								control instanceof sap.m.ComboBox || 
-								control instanceof sap.m.DatePicker ) {
+								control instanceof sap.m.ComboBox) {
 							
 							let userInput = control.getValue();
 							
@@ -406,10 +405,6 @@ sap.ui.define([
 								 * */
 								if(userInput && control?.getBindingPath("value")?.includes("PhoneNumber"))
 									if(!ChecksInputValidation.isValid(control, userInput, "PhoneNumber")) validationFlags[validationStatus] = false;	
-								
-								// If the input type is datePicker, validate the user input to ensure it is in a valid date format.
-								if(control instanceof sap.m.DatePicker) 
-									if(!ChecksInputValidation.isValid(control, userInput, "Date")) validationFlags[validationStatus] = false;
 							}	
 						}		
           });
@@ -417,20 +412,6 @@ sap.ui.define([
 					// Update the error message visibility status
 					this.setErrorMessageTripVisibility();
         },
-
-				/**
-				 * Validate the input while changes happen
-				 * @param {Object} oEvent 
-				 */
-				onDateChange: function(oEvent){
-					const oControl = oEvent.getSource();
-					oControl.setValueState("None");
-
-					/**
-					 * If the validation flag have a "false", revalidate the input fields while live change happens.
-					 */
-					if(Object.values(validationFlags).includes(false)) this.validate();
-				},
 
 				// Checks the input value on live change and remove the error state
 				onLiveChange: function(oEvent){
@@ -450,16 +431,6 @@ sap.ui.define([
 
 					// If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
 					if(oControl?.mProperties["type"] === "Email") ChecksInputValidation.isValid(oControl, userInput, "Email");
-
-					// If the input type is datePicker, validate the user input to ensure it is in a valid date format.
-					if(oControl instanceof sap.m.DatePicker) {
-						if(ChecksInputValidation.isValid(oControl, userInput, "Date")){
-								if(Object.values(validationFlags).includes(false)) {
-									this.validate();
-									return;
-								}	 
-						}else return;
-					}
 
 					/**
 					 * If the validation flag have a "false", revalidate the input fields while live change happens.
