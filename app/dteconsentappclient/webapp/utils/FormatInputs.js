@@ -16,6 +16,14 @@ sap.ui.define([],
 			// Rearrange to 'YYYY-MM-DD' and return
 			return `${year}-${month}-${day}`;
 		},
+
+		dateToDisplay: function(){
+			return new Intl.DateTimeFormat('en-US', 
+				{year: "numeric", 
+					month: "2-digit", 
+					day: "2-digit"
+				}).format(new Date());
+		}
   }
 
 });
