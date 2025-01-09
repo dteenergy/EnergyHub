@@ -43,11 +43,6 @@ body {
   padding: 1rem 0 4.5rem;
 }
 
-.scrollContainer{
-  display: flex;
-  flex-direction: row;
-}
-
 .setTableHeight{
   min-height: 550px;
   max-height: 550px;
