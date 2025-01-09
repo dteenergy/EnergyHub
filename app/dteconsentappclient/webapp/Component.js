@@ -1,3 +1,5 @@
+const { c } = require("@sap/cds/lib/utils/tar");
+
 sap.ui.define([
     "sap/ui/core/UIComponent",
     "dteconsentappclient/model/models"
@@ -18,10 +20,10 @@ sap.ui.define([
 
             
             // Attach a route matched event to change the title
-            var oRouter = this.getRouter();
+            const oRouter = this.getRouter();
             oRouter.attachRouteMatched(function (oEvent) {
-                var sRouteName = oEvent.getParameter("name");
-                var sTitle = "DTE Energy Data Hub";
+                const sRouteName = oEvent.getParameter("name");
+                let sTitle = "DTE Energy Data Hub";
 
                 // Dynamically set the title based on the route
                 if (["Home", "Enrollment"].includes(sRouteName)) {
