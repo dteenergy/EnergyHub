@@ -26,7 +26,7 @@
       <Button id="idP13nButton" icon="sap-icon://action-settings" press="setupPersonalization" tooltip="Settings"/>
     </FlexBox>
     <ScrollContainer id="_idScrollContainer" horizontal="true" vertical="false" width="100%" height="auto">
-      <Table id="idApplicationTable" items="{MainModel>/ApplicationDetail}" growing="true" growingThreshold="10" sticky="ColumnHeaders" width="100%" class="paddingAlignment setTableHeight">
+      <Table id="idApplicationTable" items="{MainModel>/}" growing="true" growingThreshold="10" sticky="ColumnHeaders" width="100%" class="paddingAlignment setTableHeight">
         <columns>
           <Column width="150px"><header><Text text="Application Number" class="boldText"></Text></header></Column>
           <Column width="150px"><header><Text text="Site Contact" class="boldText"></Text></header></Column>
@@ -97,5 +97,9 @@
           </items>
       </Table>
     </ScrollContainer>
+    <Toolbar>
+      <Button id="idPreviousButton" text="Previous" press="onPressPrevious"></Button>
+      <Button id="idNextButton" text="Next" press="onPressNext"></Button>
+    </Toolbar>
   </VBox>
 </mvc:View>

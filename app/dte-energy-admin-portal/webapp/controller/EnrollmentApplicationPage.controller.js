@@ -17,6 +17,15 @@ sap.ui.define([
      * @public
      */
     onInit: function() {
+      const that = this;
+      this.click = 0;
+      this.skip = 0;
+      this.previous;
+
+      this.previousButton = this.byId("idPreviousButton");
+      this.nextButton = this.byId("idNextButton");
+      this.previousButton.setEnabled(false);
+
       // Retrieve the base URL and filter data from the view's data
       const { baseUrl, filteredApplicationNumber, filteredApplicationStatus, filteredFirstName, filteredLastName, tenantConsentFormURL} = this.getView().getViewData();
       this.baseUrl = baseUrl;
@@ -30,19 +39,41 @@ sap.ui.define([
 
       // Populate the filters with initial values if they are defined
       if(!["", undefined].includes(this.sAppNumber)) this.byId("idAppNumberFilter").setValue(this.sAppNumber);
+      else this.sAppNumber = '';
+
       if(!["", undefined].includes(this.sFirstName)) this.byId("idFirstNameFilter").setValue(this.sFirstName);
+      else this.sFirstName = '';
+
       if(!["", undefined].includes(this.sLastName)) this.byId("idLastNameFilter").setValue(this.sLastName);
+      else this.sLastName = '';
+
       if(!["", undefined].includes(this.sApplicationStatus)) this.byId("idApplicationStatusFilter").setSelectedKey(this.sApplicationStatus);
+      else this.sApplicationStatus = undefined;
+
+      console.log(this.sAppNumber, this.sFirstName, this.sLastName, this.sApplicationStatus);
+      
       
       // Create an OData V4 model using the constructed service URL
-      const model = new sap.ui.model.odata.v4.ODataModel({
+      this.model = new sap.ui.model.odata.ODataModel({
         serviceUrl: `${this.baseUrl}admin/service/`,
         synchronizationMode: "None",
         operationMode: "Server",
       });
 
+      this.model.read("/ApplicationDetail", null, null, true, function(oData, oResponse){
+        const parsedoResponse = JSON.parse(oResponse.body)
+        const wholeDataCount = parsedoResponse.value.length;
+
+        var oODataJSONModel =  new sap.ui.model.json.JSONModel(); 
+        oODataJSONModel.setData(parsedoResponse.value);
+        
+        that.getView().setModel(oODataJSONModel, "MainModel");
+        
+        that.count = wholeDataCount - 1;
+      });
+
       // Set the newly created model as the "MainModel" for this view
-      this.getView().setModel(model, "MainModel");
+      // this.getView().setModel(this.model, "MainModel");
 
       // Initialize the Personalization Controller for the application table
       this.oPersonalizationController = new PersonalizationController({
@@ -51,6 +82,52 @@ sap.ui.define([
 
       // Apply initial filters
       this.onFilterChange();
+      this.data();
+    },
+    onPressNext: function () {
+      if(this.click < 0) {
+        this.click = 0;
+        this.click += 1;	     
+      } else this.click += 1;		
+ 
+      this.skip = this.click * 1;
+      // this.count;		
+      console.log(this.count);
+      
+      if(this.skip === this.count) this.nextButton.setEnabled(false);
+
+      if(this.skip >= 1) this.previousButton.setEnabled(true);
+
+      this.data();		
+    },
+    onPressPrevious : function() { 
+			this.click -= 1;
+
+			if(this.click <= 0) this.skip = 0;
+			else this.skip = this.click * 1; 
+
+      if(this.skip < this.count) this.nextButton.setEnabled(true);
+
+      if(this.skip === 0) this.previousButton.setEnabled(false);
+
+      this.data();
+   	},
+    data: function() {
+      const that = this;
+      let sFilter = `contains(tolower(ApplicationNumber),tolower('${this.sAppNumber}')) and contains(tolower(FirstName),tolower('${this.sFirstName}')) and contains(tolower(LastName),tolower('${this.sLastName}'))`;
+      if(this.sApplicationStatus) sFilter += `and ApplicationStatus eq '${this.sApplicationStatus}'`;
+
+      this.model.read(`/ApplicationDetail?$top=1&$skip=${this.skip}&$filter=${sFilter}`, null,null,true, function(oData, oResponse){ 
+        const parsedoResponse = JSON.parse(oResponse.body);
+        console.log(parsedoResponse);
+        
+        var oODataJSONModel2 =  new sap.ui.model.json.JSONModel();
+        const count = parsedoResponse.value.length;
+        oODataJSONModel2.setData(parsedoResponse.value);
+        // console.log(parsedoResponse.value.length);
+        
+        that.getView().setModel(oODataJSONModel2, "MainModel"); 			      
+      });
     },
     /**
      * Opens the personalization dialog for the application table.
@@ -83,29 +160,51 @@ sap.ui.define([
       this.sLastName = this.byId("idLastNameFilter").getValue(); // Last Name Filter
       this.sApplicationStatus = this.byId("idApplicationStatusFilter").getSelectedKey(); // Application Status Filter
 
+      this.skip = 0;
+
+      console.log(this.count);
+      if(this.skip < this.count) {
+        this.nextButton.setEnabled(true);
+      } else {
+        this.nextButton.setEnabled(false);
+      }
+
+      if(this.skip === 0)
+        this.previousButton.setEnabled(false);
+      else this.previousButton.setEnabled(true);
+
+      // if(this.skip === this.count) this.nextButton.setEnabled(false);
+
+      // if(this.skip >= 1) this.previousButton.setEnabled(true);
+
+      // if(this.skip < this.count) this.nextButton.setEnabled(true);
+
+      // if(this.skip === 0) this.previousButton.setEnabled(false);
+
+      this.data();
       // Create an array for filters
-      const aFilters = [];
+      // const aFilters = [];
 
-      // Add filters if values are not empty
-      if (this.sAppNumber)
-        aFilters.push(new Filter({path: "ApplicationNumber", operator: FilterOperator.Contains, value1: this.sAppNumber, caseSensitive: false}));
+      // // Add filters if values are not empty
+      // if (this.sAppNumber)
+      //   aFilters.push(new Filter({path: "ApplicationNumber", operator: FilterOperator.Contains, value1: this.sAppNumber, caseSensitive: false}));
 
-      if (this.sFirstName)
-        aFilters.push(new Filter({path: "FirstName", operator: FilterOperator.Contains, value1: this.sFirstName, caseSensitive: false}));
+      // if (this.sFirstName)
+      //   aFilters.push(new Filter({path: "FirstName", operator: FilterOperator.Contains, value1: this.sFirstName, caseSensitive: false}));
 
-      if (this.sLastName)
-        aFilters.push(new Filter({path: "LastName", operator: FilterOperator.Contains, value1: this.sLastName, caseSensitive: false}));
+      // if (this.sLastName)
+      //   aFilters.push(new Filter({path: "LastName", operator: FilterOperator.Contains, value1: this.sLastName, caseSensitive: false}));
 
-      if (this.sApplicationStatus) aFilters.push(new Filter("ApplicationStatus", FilterOperator.EQ, this.sApplicationStatus));
+      // if (this.sApplicationStatus) aFilters.push(new Filter("ApplicationStatus", FilterOperator.EQ, this.sApplicationStatus));
 
-      // Combine filters with AND logic
-      const oCombinedFilter = new Filter({
-        filters: aFilters,
-        and: true
-      });
+      // // Combine filters with AND logic
+      // const oCombinedFilter = new Filter({
+      //   filters: aFilters,
+      //   and: true
+      // });
 
-      // Apply the combined filter or clear filters
-      oBinding.filter(aFilters.length > 0 ? oCombinedFilter : []);
+      // // Apply the combined filter or clear filters
+      // oBinding.filter(aFilters.length > 0 ? oCombinedFilter : []);
     },
     /**
      * Generates a URL for the selected application and displays it in a dialog.
