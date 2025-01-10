@@ -5,7 +5,8 @@ sap.ui.define([
 	"dteconsentappclient/variable/GlobalInputValues",
 	"dteconsentappclient/utils/ConsentAddressSuggestion",
 	"dteconsentappclient/utils/ChecksInputValidation",
-	"dteconsentappclient/utils/FormatInputs"
+	"dteconsentappclient/utils/FormatInputs",
+	"dteconsentappclient/utils/DataLayer"
 ], function(
 	BaseController,
 	Fragment,
@@ -13,7 +14,8 @@ sap.ui.define([
 	GlobalInputValues,
 	ConsentAddressSuggestion,
 	ChecksInputValidation,
-	FormatInputs
+	FormatInputs,
+	DataLayer
 ) {
 	"use strict";
 
@@ -21,6 +23,8 @@ sap.ui.define([
 		tenantInformationValidation: true,
 		consentAuthDetailValidation: true
 	};
+
+	let isFirstInteraction = true;
 
 	return BaseController.extend("dteconsentappclient.controller.ConsentForm", {
         onInit () {
@@ -136,6 +140,10 @@ sap.ui.define([
 
 			// Check the input on live change and remove the error state
 			onLiveChange: function(oEvent){
+
+				// Push the "form_engaged" event to the dataLayer while the first interaction.
+				if(isFirstInteraction) DataLayer.pushEventToDataLayer("tenant_form", "form_engaged", "first touch", false);
+
 				const oControl = oEvent.getSource();
 				
 				const userInput = oEvent.getParameter("value") || oEvent.getParameter("selectedKey");
@@ -156,6 +164,8 @@ sap.ui.define([
 					if(oControl?.getBindingPath("value")?.includes("Zipcode")) ChecksInputValidation.isValid(oControl, userInput, "Zipcode");
 
 				}
+
+				isFirstInteraction = false;
 			},
 
 
@@ -263,6 +273,9 @@ sap.ui.define([
 			if(isVerified){
 				innerDiv.removeClass("checkbox-error-view");
 				oErrorVisibilityModel.setProperty('/isTermsAndConditionVerifiedStatus', false);
+
+				// Push the "accept_tc" event to the dataLayer while "terms & condition" was accepted. 
+				DataLayer.pushEventToDataLayer("tenant_form", "accept_tc", "tc accepted", false);
 			}else{
 				innerDiv.addClass("checkbox-error-view");
 				oErrorVisibilityModel.setProperty('/isTermsAndConditionVerifiedStatus', true);
@@ -276,6 +289,9 @@ sap.ui.define([
 				const consentDetails = this.getView().getModel("oConsentModel").getData()?.ConsentDetail;
 					
 					if(!oErrorVisibilityModelData?.isInputInValid && !oErrorVisibilityModelData?.isTermsAndConditionVerifiedStatus){
+
+						// Push the "form_submit" event to the dataLayer
+						DataLayer.pushEventToDataLayer("tenant_form", "form_submit", "form_submit", false);
 
 						// Url to create the enrollment application
 						const tenantConsentCreateUrl = this.SERVERHOST + `service/CreateConsentFormDetail?encrAppId=${this.applicationId}`;
