@@ -20,11 +20,6 @@ sap.ui.define([
       const setSelectedKeyBus = sap.ui.getCore().getEventBus();
       setSelectedKeyBus.subscribe("welcomePage", "setSelectedKeyEvent", this.setSelectedKeyToConsent, this);
 
-      // Get the VBox id (mainContent)
-      const oVBox = this.byId("mainContent");
-
-      // Clear the existing content
-      oVBox.destroyItems();
 
       this.getENV((envVariables)=>{
         this.tenantConsentFormURL = envVariables.tenantConsentFormURL;
@@ -41,6 +36,12 @@ sap.ui.define([
     },
 
     loadHomePageView : function (){
+       // Get the VBox id (mainContent)
+       const oVBox = this.byId("mainContent");
+
+       // Clear the existing content
+       oVBox.destroyItems();
+
        // Dynamically create and add the new view for default HomePage
        sap.ui.core.mvc.XMLView.create({
         viewData: { baseUrl: this.SERVERHOST },
