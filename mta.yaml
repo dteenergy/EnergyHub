@@ -27,7 +27,7 @@ modules:
     APPNUM_PREFIX_ENABLED : "N"
     APPNUM_PREFIX : ""
     TENANT_CONSENT_FORM_URL: https://www.dteenergy.com/us/en/quicklinks/energy-hub/energy-hub-tenant.html?appId=
-    CORS_ALLOW_ORIGINS : '["https://forms.dteenergy.com/eh/consent-portal/index.html"]'
+    CORS_ALLOW_ORIGINS : '["https://forms.dteenergy.com/eh/enrollment-portal/index.html"]'
   parameters:
     memory: 256MB
   build-parameters:
@@ -45,7 +45,7 @@ modules:
     disk-quota: 1024M
     stack: cflinuxfs4
     routes:
-      - route : ${org}-ehconsentportal.${default-domain}
+      - route : ${org}-ehenrollmentportal.${default-domain}
   properties:
     CJ_PROTECT_WHITELIST: >
       [

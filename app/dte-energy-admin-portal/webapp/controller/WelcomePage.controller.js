@@ -20,27 +20,35 @@ sap.ui.define([
       const setSelectedKeyBus = sap.ui.getCore().getEventBus();
       setSelectedKeyBus.subscribe("welcomePage", "setSelectedKeyEvent", this.setSelectedKeyToConsent, this);
 
-      // Get the VBox id (mainContent)
-      const oVBox = this.byId("mainContent");
 
-      // Clear the existing content
-      oVBox.destroyItems();
+      this.getENV((envVariables)=>{
+        this.tenantConsentFormURL = envVariables.tenantConsentFormURL;
+      });
 
-      this.getENV();
+      // After getting the env load the enrollment form page view.
+      this.loadHomePageView();
 
-      // Dynamically create and add the new view for default HomePage
-      sap.ui.core.mvc.XMLView.create({
+    },
+    // Get the env data
+    getENV: async function (callback) {
+      const envVariables = await this.GetEnvironmentVariables();
+      callback(envVariables);
+    },
+
+    loadHomePageView : function (){
+       // Get the VBox id (mainContent)
+       const oVBox = this.byId("mainContent");
+
+       // Clear the existing content
+       oVBox.destroyItems();
+
+       // Dynamically create and add the new view for default HomePage
+       sap.ui.core.mvc.XMLView.create({
         viewData: { baseUrl: this.SERVERHOST },
         viewName: `dteenergyadminportal.view.HomePage`
       }).then(function (oView) {
         oVBox.addItem(oView);
       });
-    },
-
-    // Get the env data
-    getENV: async function () {
-      const {tenantConsentFormURL} = await this.GetEnvironmentVariables();
-      this.tenantConsentFormURL = tenantConsentFormURL;
     },
     
     /**
