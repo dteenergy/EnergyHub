@@ -5,6 +5,8 @@ sap.ui.define([
 
   return BaseController.extend("dteenergyadminportal.controller.App", {
       onInit() {
+        const invokeHandleLogoutBus = sap.ui.getCore().getEventBus();
+        invokeHandleLogoutBus.subscribe("AppController", "handleSessionExpiry", this.handleLogout, this);
       },
 
       // Handle the AvatarPress

@@ -26,6 +26,8 @@ sap.ui.define([
       this.sApplicationStatus = filteredApplicationStatus;
       this.tenantConsentFormURL = tenantConsentFormURL;
 
+      this.handleSessionExpiry(this.baseUrl);
+
       // Populate the filters with initial values if they are defined
       if(!["", undefined].includes(this.sAppNumber)) this.byId("idAppNumberFilter").setValue(this.sAppNumber);
       if(!["", undefined].includes(this.sFirstName)) this.byId("idFirstNameFilter").setValue(this.sFirstName);
@@ -65,13 +67,15 @@ sap.ui.define([
      * @public
      */
     onFilterChange: function () {
+      this.handleSessionExpiry(this.baseUrl);
+      
       // Retrieve the binding of the application table's items aggregation
       const oApplicationTable = this.byId("idApplicationTable");
       const oBinding = oApplicationTable.getBinding("items");
 
       // Validate the binding
       if (!oBinding) {
-        MessageBox.error("Table binding not found!")
+        console.error("Table binding not found!")
         return;
       }
 
@@ -112,6 +116,8 @@ sap.ui.define([
      * @public
      */
     onGenerateUrlPress: async function(oEvent) {
+      this.handleSessionExpiry(this.baseUrl);
+
       // Retrieve the button and its parent list item
       const oButton = oEvent.getSource();
       const oListItem = oButton.getParent();
@@ -183,6 +189,8 @@ sap.ui.define([
     onUpdateField: async function() {
       const updateModel = this.getView().getModel("MainModel");
 
+      this.handleSessionExpiry(this.baseUrl);
+
       updateModel.submitBatch('CustomGroupId')
         .then(() => MessageToast.show("Updated successfully!"))
         .catch((err) => MessageToast.show("Updation failed : ", err))
@@ -231,7 +239,8 @@ sap.ui.define([
           baseUrl: this.baseUrl, AppId: AppId, ApplicationNumber: ApplicationNumber,
           FirstName: FirstName, LastName: LastName, filteredApplicationNumber: this.sAppNumber,
           filteredApplicationStatus: this.sApplicationStatus,
-          filteredFirstName: this.sFirstName, filteredLastName: this.sLastName
+          filteredFirstName: this.sFirstName, filteredLastName: this.sLastName,
+          tenantConsentFormURL : this.tenantConsentFormURL
         },
         viewName: `dteenergyadminportal.view.BuildingDetailPage`
       }).then(function (oView) {
@@ -276,7 +285,7 @@ sap.ui.define([
 
       // Dynamically create and add the view for consent page
       sap.ui.core.mvc.XMLView.create({
-        viewData: { baseUrl: this.baseUrl, AppId: appId },
+        viewData: { baseUrl: this.baseUrl, AppId: appId},
         viewName: `dteenergyadminportal.view.ConsentsPage`
       }).then(function (oView) {
         oVBox.addItem(oView);
