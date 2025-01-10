@@ -49,8 +49,7 @@ sap.ui.define([
           emphasizedAction: "SignIn",
           onClose: async function(oAction) {
             if(oAction === "SignIn"){
-              const invokeHandleLogoutBus = sap.ui.getCore().getEventBus();
-              invokeHandleLogoutBus.publish("AppController", "handleSessionExpiry");
+              window.location.reload();
             }
           }
         })

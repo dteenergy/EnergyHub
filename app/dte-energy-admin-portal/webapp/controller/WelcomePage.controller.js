@@ -26,21 +26,28 @@ sap.ui.define([
       // Clear the existing content
       oVBox.destroyItems();
 
-      this.getENV();
+      this.getENV((envVariables)=>{
+        this.tenantConsentFormURL = envVariables.tenantConsentFormURL;
 
-      // Dynamically create and add the new view for default HomePage
-      sap.ui.core.mvc.XMLView.create({
+        // After getting the env load the enrollment form page view.
+        this.loadHomePageView();
+      });
+
+    },
+    // Get the env data
+    getENV: async function (callback) {
+      const envVariables = await this.GetEnvironmentVariables();
+      callback(envVariables);
+    },
+
+    loadHomePageView : function (){
+       // Dynamically create and add the new view for default HomePage
+       sap.ui.core.mvc.XMLView.create({
         viewData: { baseUrl: this.SERVERHOST },
         viewName: `dteenergyadminportal.view.HomePage`
       }).then(function (oView) {
         oVBox.addItem(oView);
       });
-    },
-
-    // Get the env data
-    getENV: async function () {
-      const {tenantConsentFormURL} = await this.GetEnvironmentVariables();
-      this.tenantConsentFormURL = tenantConsentFormURL;
     },
     
     /**
