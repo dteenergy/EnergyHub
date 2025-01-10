@@ -78,6 +78,8 @@ sap.ui.define([
     * @public
     */
     onFilterChange: function () {
+      this.handleSessionExpiry(this.baseUrl);
+      
       // Retrieve the application consent table and its binding
       const oTable = this.byId("idApplicationConsentTable")
       const oBinding = oTable.getBinding("items");

@@ -67,6 +67,8 @@ sap.ui.define([
      * @public
      */
     onFilterChange: function () {
+      this.handleSessionExpiry(this.baseUrl);
+      
       // Retrieve the binding of the application table's items aggregation
       const oApplicationTable = this.byId("idApplicationTable");
       const oBinding = oApplicationTable.getBinding("items");
