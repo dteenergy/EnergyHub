@@ -5,8 +5,9 @@ sap.ui.define([
 	  "dteconsentappclient/variable/GlobalInputValues",
 		"dteconsentappclient/utils/ChecksInputValidation",
 		"dteconsentappclient/utils/FormatInputs",
+		"dteconsentappclient/utils/DataLayer",
 		"sap/m/Dialog"
-], (BaseController, Fragment, JSONModel, GlobalInputValues, ChecksInputValidation, FormatInputs, Dialog) => {
+], (BaseController, Fragment, JSONModel, GlobalInputValues, ChecksInputValidation, FormatInputs, DataLayer, Dialog) => {
     "use strict";
 
     let enrollmentDetails, 
@@ -20,6 +21,8 @@ sap.ui.define([
 					consentDetailValidation: true,
 					consentAuthDetailValidation: true
 				};
+	
+	let isFirstInteraction = true;
 
     return BaseController.extend("dteconsentappclient.controller.Enrollment", {
         onInit() {
@@ -197,6 +200,10 @@ sap.ui.define([
 							that.buildingCount += 1;
 		
 							if(count > 1){
+
+							// Push the "add_location" event to the dataLayer
+							DataLayer.pushEventToDataLayer("landlord_form", "add_location", "location added", true);	
+
 							const fullId = that.createId(id);
 							
 							// Execute the scroll of newly added location container after rendering the fragment 
@@ -221,6 +228,10 @@ sap.ui.define([
 
 			  // Remove the additional location 
 				removeBuilding: function (oEvent) {
+
+					// Push the "remove_location" event to the dataLayer
+					DataLayer.pushEventToDataLayer("landlord_form", "remove_location", "location removed", true);	
+
 					// Load the location model
 					const oLocationModel = this.getView().getModel("locationModel");
 					let locations = oLocationModel.getProperty("/locations");
@@ -229,15 +240,17 @@ sap.ui.define([
 					const oButton = oEvent.getSource();
 					const oFlexWrapper = oButton.getParent();
 					
-					const flexWrapperId = oFlexWrapper.getId().split('--')[2];
+					const flexWrapperId = oFlexWrapper.getId().split('--')[1];
 
 					// Remove the particular location from the whole container
 					const buildingDetailMainContainer = this.byId("building-detail-main-container");
 					buildingDetailMainContainer.removeItem(oFlexWrapper);
 					oFlexWrapper.destroy();
-
+					
 					// Delete the location info from the model
 					delete locations[flexWrapperId];
+
+					oLocationModel.setProperty('/locations', locations);
 					
 					// Update the location info label
 					if(buildingDetailMainContainer.getItems().length > 1){
@@ -253,19 +266,25 @@ sap.ui.define([
 					}
 			},
 
-          // Define the event handler in your controller
+          // Update the "EnergyPrgmParticipated" status based on the selected radio button value. 
           onRadioButtonSelect: function (oEvent) {
             // Get the selected button's text
             let sSelectedText = oEvent.getSource().getSelectedButton().getText();
             let sSelectedVal = false;
 
-            if(sSelectedText === 'Yes') sSelectedVal = true;
+            if(sSelectedText === 'Yes') {
+				sSelectedVal = true;
+				DataLayer.pushEventToDataLayer("landlord_form", "program_participation", "yes", false);
+			}else {
+				DataLayer.pushEventToDataLayer("landlord_form", "program_participation", "no", false);
+			}
             
             // Get the model
             let oEnrollModel = this.getView().getModel("oEnrollModel");
 
             // Update the model with the selected value
             oEnrollModel.setProperty("/AccountDetail/EnergyPrgmParticipated", sSelectedVal);
+
         },
         
         // Define model and load the Customer consent form fragment to the enrollment form
@@ -322,6 +341,9 @@ sap.ui.define([
 					 * So have to bind the data from site details to consent details
 					 */
 					if(isConsentAndSiteSame){   
+
+						// Push the "same_info" event to the dataLayer
+						DataLayer.pushEventToDataLayer("landlord_form", "same_info", "same info", true);	
 							
 						accountDetailsKeys.map((key)=>{
 							if(key.startsWith('Site')){
@@ -361,6 +383,9 @@ sap.ui.define([
 					if(isVerified){
 						innerDiv.removeClass("checkbox-error-view");
 						oErrorVisibilityModel.setProperty('/isTermsAndConditionVerifiedStatus', false);
+
+						// Push the "accept_tc" event to the dataLayer while "terms & condition" was accepted. 
+						DataLayer.pushEventToDataLayer("landlord_form", "accept_tc", "tc accepted", false);
 					}else{
 						innerDiv.addClass("checkbox-error-view");
 						oErrorVisibilityModel.setProperty('/isTermsAndConditionVerifiedStatus', true);
@@ -421,6 +446,10 @@ sap.ui.define([
 
 				// Checks the input value on live change and remove the error state
 				onLiveChange: function(oEvent){
+
+					// Push the "form_engaged" event to the dataLayer while the first interaction.
+					if(isFirstInteraction) DataLayer.pushEventToDataLayer("landlord_form", "form_engaged", "first touch", false);
+
 					const oControl = oEvent.getSource();
 		
 					const userInput = oEvent.getParameter("value") || oEvent.getParameter("selectedKey");
@@ -445,6 +474,8 @@ sap.ui.define([
 					 * If the validation flag have a "false", revalidate the input fields while live change happens.
 					 */
 					if(Object.values(validationFlags).includes(false)) this.validate();
+
+					isFirstInteraction = false;
 				},
 
 				onSuggest: function(oEvent) {
@@ -697,6 +728,10 @@ sap.ui.define([
 
 				submitAction: async function(){
 					try{
+
+						// Push the "form_submit" event to the dataLayer
+						DataLayer.pushEventToDataLayer("landlord_form", "form_submit", "form_submit", false);
+
 						// Retrieve the data from bound models
 						this.retrieveAllInputBindings();
 
@@ -746,7 +781,7 @@ sap.ui.define([
 							// Navigate to the error page
 							window.open(this.ErrorPageUrl, '_self');
 						}
-					}catch(err){						
+					}catch(err){				
 						// Navigate to the error page
 						window.open(this.ErrorPageUrl, '_self');
 					}
@@ -763,6 +798,7 @@ sap.ui.define([
 				},
 
         handleSubmit: function () {
+
 					// While submit button is pressed, validate all the fields in the form
 					this.validate();
 

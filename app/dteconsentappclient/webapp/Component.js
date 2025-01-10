@@ -21,13 +21,13 @@ sap.ui.define([
             const oRouter = this.getRouter();
             oRouter.attachRouteMatched(function (oEvent) {
                 const sRouteName = oEvent.getParameter("name");
-                let sTitle = "DTE Energy Data Hub";
+                let sTitle = "DTE Energy Hub";
 
                 // Dynamically set the title based on the route
                 if (["Home", "Enrollment"].includes(sRouteName)) {
-                    sTitle = "DTE Energy Data Hub Landlord Enrollment Application";
+                    sTitle = "DTE Energy Hub Landlord Enrollment Application";
                 } else if (sRouteName === "ConsentForm") {
-                    sTitle = "DTE Energy Data Hub Tenant Consent Form";
+                    sTitle = "DTE Energy Hub Tenant Consent Form";
                 }
 
                 document.title = sTitle;
