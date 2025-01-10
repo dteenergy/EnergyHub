@@ -41,8 +41,6 @@ sap.ui.define([
       this.sApplicationStatus = filteredApplicationStatus;
       this.tenantConsentFormURL = tenantConsentFormURL;
 
-      console.log(this.tenantConsentFormURL);
-
       this.handleSessionExpiry(this.baseUrl);
 
       // Update UI with application number and landlord name
