@@ -798,11 +798,6 @@ sap.ui.define([
 				},
 
         handleSubmit: function () {
-					dataLayer.push({ 
-						"event": "form_submit",
-						"project-category": "landlord",
-						"project": "energy-data-hub",	 
-					});
 
 					// While submit button is pressed, validate all the fields in the form
 					this.validate();
