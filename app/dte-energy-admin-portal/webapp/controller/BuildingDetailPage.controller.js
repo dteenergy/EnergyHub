@@ -29,7 +29,8 @@ sap.ui.define([
         filteredApplicationNumber,
         filteredApplicationStatus,
         filteredFirstName,
-        filteredLastName
+        filteredLastName,
+        tenantConsentFormURL
        } = this.getView().getViewData();
 
       // Set instance variables for later use
@@ -38,6 +39,9 @@ sap.ui.define([
       this.sFirstName = filteredFirstName;
       this.sLastName = filteredLastName;
       this.sApplicationStatus = filteredApplicationStatus;
+      this.tenantConsentFormURL = tenantConsentFormURL;
+
+      console.log(this.tenantConsentFormURL);
 
       this.handleSessionExpiry(this.baseUrl);
 
@@ -110,7 +114,8 @@ sap.ui.define([
         viewData: {
           baseUrl: this.baseUrl, filteredApplicationNumber: this.sAppNumber,
           filteredLastName: this.sLastName, filteredFirstName: this.sFirstName,
-          filteredApplicationStatus: this.sApplicationStatus
+          filteredApplicationStatus: this.sApplicationStatus,
+          tenantConsentFormURL: this.tenantConsentFormURL
         },
         viewName: `dteenergyadminportal.view.EnrollmentApplicationPage`
       }).then(function (oView) {

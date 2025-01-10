@@ -239,7 +239,8 @@ sap.ui.define([
           baseUrl: this.baseUrl, AppId: AppId, ApplicationNumber: ApplicationNumber,
           FirstName: FirstName, LastName: LastName, filteredApplicationNumber: this.sAppNumber,
           filteredApplicationStatus: this.sApplicationStatus,
-          filteredFirstName: this.sFirstName, filteredLastName: this.sLastName
+          filteredFirstName: this.sFirstName, filteredLastName: this.sLastName,
+          tenantConsentFormURL : this.tenantConsentFormURL
         },
         viewName: `dteenergyadminportal.view.BuildingDetailPage`
       }).then(function (oView) {
@@ -284,7 +285,7 @@ sap.ui.define([
 
       // Dynamically create and add the view for consent page
       sap.ui.core.mvc.XMLView.create({
-        viewData: { baseUrl: this.baseUrl, AppId: appId },
+        viewData: { baseUrl: this.baseUrl, AppId: appId},
         viewName: `dteenergyadminportal.view.ConsentsPage`
       }).then(function (oView) {
         oVBox.addItem(oView);
