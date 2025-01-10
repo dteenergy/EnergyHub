@@ -61,7 +61,7 @@ sap.ui.define([
 							"ConsentAccountNumber":"",
 							"ConsentEmailAddr":"",
 							"AuthPersonName":"",
-							"AuthDate":"",
+							"AuthDate": FormatInputs.dateToDisplay(),
 							"AuthTitle":"",
 							"suggestions": []
 						}
@@ -151,32 +151,13 @@ sap.ui.define([
 					
 					// If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
 					if(oControl?.mProperties["type"] === "Email") ChecksInputValidation.isValid(oControl, userInput, "Email");
+					
+					// If the input control's binding path containes "Zipcode", validate the user input to ensure it is in a valid Zipcode format.
+					if(oControl?.getBindingPath("value")?.includes("Zipcode")) ChecksInputValidation.isValid(oControl, userInput, "Zipcode");
 
-					// If the input type is datePicker, validate the user input to ensure it is in a valid date format.
-					if(oControl instanceof sap.m.DatePicker) {
-						if(ChecksInputValidation.isValid(oControl, userInput, "Date")){
-								if(Object.values(validationFlags).includes(false)) {
-									this.validate();
-									return;
-								}	 
-						}else return;
-					}
 				}
 			},
 
-				/**
-				 * Validate the input while changes happen
-				 * @param {Object} oEvent 
-				 */
-				onDateChange: function(oEvent){
-					const oControl = oEvent.getSource();
-					oControl.setValueState("None");
-
-					/**
-					 * If the validation flag have a "false", revalidate the input fields while live change happens.
-					 */
-					if(Object.values(validationFlags).includes(false)) this.validate();
-				},
 
 			/** 
 	 		* Validate tenant form details
@@ -194,8 +175,7 @@ sap.ui.define([
 					 
 				// Filtered the input and combobox controls
 				if (control instanceof sap.m.Input && !control.getId().includes("-popup-input") || 
-						control instanceof sap.m.ComboBox || 
-						control instanceof sap.m.DatePicker) {
+						control instanceof sap.m.ComboBox) {
 
 						// Get the binding path from the control
 						const bindingPath = control.getBinding('value')?.getPath() || control.getBinding("selectedKey")?.getPath();
@@ -218,9 +198,11 @@ sap.ui.define([
 								if(control?.mProperties["type"] === "Email")
 									if(!ChecksInputValidation.isValid(control, userInput, "Email")) validationFlags[validationStatus] = false;
 
-								// If the input type is datePicker, validate the user input to ensure it is in a valid date format.
-								if(control instanceof sap.m.DatePicker) 
-									if(!ChecksInputValidation.isValid(control, userInput, "Date")) validationFlags[validationStatus] = false;
+								/** If the binding path contains "Zipcode", validate the user input to ensure it is in a valid Zipcode format.
+								 *  If the Zipcode is invalid, set the corresponding validation flag to `false`.
+								 * */
+								if(userInput && control?.getBindingPath("value")?.includes("Zipcode"))
+									if(!ChecksInputValidation.isValid(control, userInput, "Zipcode")) validationFlags[validationStatus] = false;	
 							}
 						 }		
 					 }		

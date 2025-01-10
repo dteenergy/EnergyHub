@@ -39,7 +39,7 @@ sap.ui.define([
 					
           let oEnrollFormData = {
             SignatureSignedBy: "",
-            SignatureSignedDate: "",
+            SignatureSignedDate: FormatInputs.dateToDisplay(),
             AccountDetail: {
                 "CompanyName": "",
                 "CompanyAddress": "",
@@ -81,7 +81,7 @@ sap.ui.define([
 						"ConsentPhoneNumber": null,
 						"ConsentEmailAddr":"",
 						"AuthPersonName":"",
-						"AuthDate":"",
+						"AuthDate": FormatInputs.dateToDisplay(),
 						"AuthTitle":""
 					}
 				};
@@ -344,8 +344,8 @@ sap.ui.define([
 								"ConsentPhoneNumber":"",
 								"ConsentEmailAddr":"",
 								"AuthPersonName": consentData['ConsentDetail']['AuthPersonName'],
-								"AuthDate": consentData['ConsentDetail']['AuthPersonName'],
-								"AuthTitle": consentData['ConsentDetail']['AuthPersonName']
+								"AuthDate": consentData['ConsentDetail']['AuthDate'],
+								"AuthTitle": consentData['ConsentDetail']['AuthTitle']
 							});
 					}      
         },
@@ -382,8 +382,7 @@ sap.ui.define([
 							
 						// Filtered the input and combobox controls
 						if (control instanceof sap.m.Input && !control.getId().includes("-popup-input") || 
-								control instanceof sap.m.ComboBox || 
-								control instanceof sap.m.DatePicker ) {
+								control instanceof sap.m.ComboBox) {
 							
 							let userInput = control.getValue();
 							
@@ -406,10 +405,12 @@ sap.ui.define([
 								 * */
 								if(userInput && control?.getBindingPath("value")?.includes("PhoneNumber"))
 									if(!ChecksInputValidation.isValid(control, userInput, "PhoneNumber")) validationFlags[validationStatus] = false;	
-								
-								// If the input type is datePicker, validate the user input to ensure it is in a valid date format.
-								if(control instanceof sap.m.DatePicker) 
-									if(!ChecksInputValidation.isValid(control, userInput, "Date")) validationFlags[validationStatus] = false;
+
+								/** If the binding path contains "Zipcode", validate the user input to ensure it is in a valid Zipcode format.
+								 *  If the Zipcode is invalid, set the corresponding validation flag to `false`.
+								 * */
+								if(userInput && control?.getBindingPath("value")?.includes("Zipcode"))
+									if(!ChecksInputValidation.isValid(control, userInput, "Zipcode")) validationFlags[validationStatus] = false;	
 							}	
 						}		
           });
@@ -417,20 +418,6 @@ sap.ui.define([
 					// Update the error message visibility status
 					this.setErrorMessageTripVisibility();
         },
-
-				/**
-				 * Validate the input while changes happen
-				 * @param {Object} oEvent 
-				 */
-				onDateChange: function(oEvent){
-					const oControl = oEvent.getSource();
-					oControl.setValueState("None");
-
-					/**
-					 * If the validation flag have a "false", revalidate the input fields while live change happens.
-					 */
-					if(Object.values(validationFlags).includes(false)) this.validate();
-				},
 
 				// Checks the input value on live change and remove the error state
 				onLiveChange: function(oEvent){
@@ -448,18 +435,11 @@ sap.ui.define([
 					// If the input control's binding path containes "PhoneNumber", validate the user input to ensure it is in a valid phonenumber format.
 					if(oControl?.getBindingPath("value")?.includes("PhoneNumber")) ChecksInputValidation.isValid(oControl, userInput, "PhoneNumber");					
 
+					// If the input control's binding path containes "Zipcode", validate the user input to ensure it is in a valid Zipcode format.
+					if(oControl?.getBindingPath("value")?.includes("Zipcode")) ChecksInputValidation.isValid(oControl, userInput, "Zipcode");					
+
 					// If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
 					if(oControl?.mProperties["type"] === "Email") ChecksInputValidation.isValid(oControl, userInput, "Email");
-
-					// If the input type is datePicker, validate the user input to ensure it is in a valid date format.
-					if(oControl instanceof sap.m.DatePicker) {
-						if(ChecksInputValidation.isValid(oControl, userInput, "Date")){
-								if(Object.values(validationFlags).includes(false)) {
-									this.validate();
-									return;
-								}	 
-						}else return;
-					}
 
 					/**
 					 * If the validation flag have a "false", revalidate the input fields while live change happens.
@@ -659,7 +639,7 @@ sap.ui.define([
 					// Customize content of the dialog, design the VBox container
           const dialogContent = new sap.m.FlexBox({
             items: [
-              new sap.m.FormattedText({htmlText: "<p style='letter-spacing: .7px; font-size: 14px; font-weigt: 400;'> <span style='font-weight: 600; font-size: 14px;'>NOTE:</span> If you want to add another location, you must do so before submitting this form. Adding another location after submitting will require filling out a new form. </p>"}),
+              new sap.m.FormattedText({htmlText: "<p style='letter-spacing: .7px; font-size: 14px; font-weigt: 400; margin-bottom: 0;'> <span style='font-weight: 600; font-size: 14px;'>NOTE:</span> If you want to add another location, you must do so before submitting this form. Adding another location after submitting will require filling out a new form. </p>"}),
               new sap.m.Button({
                 text: '+ Add Another Location',
                 press: function(){
@@ -686,7 +666,7 @@ sap.ui.define([
 					// Custom header for the dialog
 					const dialogTitle = new sap.m.Bar({
 						contentMiddle: [
-							new sap.m.Title({ 
+							new sap.m.Text({ 
 								text: 'Additional Location Alert' 
 							}).addStyleClass("alert-title")
 						],
@@ -709,7 +689,7 @@ sap.ui.define([
             this.oConfirmationDialog = new Dialog({
 							customHeader: dialogTitle,
               content: dialogContent
-            })
+            }).addStyleClass("alert-dialog-main-container")
           }
           this.oConfirmationDialog.open();
         	}

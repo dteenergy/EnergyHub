@@ -143,14 +143,16 @@
           "transition": "slide",
           "clearControlAggregation": false,
           "viewId": "ConsentFormEntryPoint",
-          "viewName": "ConsentFormEntryPoint"
+          "viewName": "ConsentFormEntryPoint",
+          "title": "DTE Energy Data Hub Tenant Consent Form"
         },
         "EnrollmentForm": {
           "viewType": "XML",
           "transition": "slide",
           "clearControlAggregation": false,
           "viewId": "EnrollmentFormEntryPoint",
-          "viewName": "EnrollmentFormEntryPoint"
+          "viewName": "EnrollmentFormEntryPoint",
+          "title": "DTE Energy Data Hub Landlord Enrollment Application"
         }
       }
     },
@@ -162,7 +164,7 @@
     "config": {
       "routerConfig": {
         "localApi": {
-          "uri": "https://port4004-workspaces-ws-mjfnp.us20.applicationstudio.cloud.sap/"
+          "uri": "https://port4004-workspaces-ws-v8ppn.us20.applicationstudio.cloud.sap/"
         },
         "productionApi": {
           "uri": ""

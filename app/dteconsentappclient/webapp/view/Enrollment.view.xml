@@ -38,7 +38,7 @@
                             </l:VerticalLayout>
 
                             <l:VerticalLayout class="vertical-layout">
-                                <Label text="Address Line 2"></Label>
+                                <Label text="Company Address Line 2"></Label>
                                 <Input class="inputBox" type="Text" value="{oEnrollModel>/AccountDetail/CompanyAddrLineTwo}"></Input>
                             </l:VerticalLayout>
 
@@ -56,7 +56,7 @@
 
                             <l:VerticalLayout id="zip-code" class="vertical-layout">
                                 <Label id="company-zipcode" labelFor="zipcode" text="Zip Code"></Label>
-                                <Input id="zipcode" class="inputBox" type="Number" required="true" liveChange="onLiveChange" value="{oEnrollModel>/AccountDetail/Zipcode}"/>
+                                <Input id="zipcode" class="inputBox" type="Number"  required="true" liveChange="onLiveChange" value="{oEnrollModel>/AccountDetail/Zipcode}"/>
                             </l:VerticalLayout>
 
                             <l:VerticalLayout id="acc-manager-name" class="vertical-layout">
@@ -69,11 +69,13 @@
                                 <Input id="account-manager-ph" class="inputBox" type="Number" liveChange="onLiveChange" value="{oEnrollModel>/AccountDetail/AcctMgrPhoneNumber}" ></Input>
                             </l:VerticalLayout>
 
-                            <Label id="has-participate" text="Do you already participate in the DTE Energy Data Hub Program?" wrapping="true"></Label>
-                            <RadioButtonGroup id="radio-group" select="onRadioButtonSelect">
-                                <RadioButton id="yes" text="Yes" selected="true"></RadioButton>
-                                <RadioButton id="no" text="No" ></RadioButton>
-                            </RadioButtonGroup>
+                            <l:VerticalLayout id="id-Energy-prgm-participated" class="Energy-prgm-participated vertical-layout">                            
+                                <Label id="has-participate" text="Do you already participate in the DTE Energy Data Hub Program?" wrapping="true" required="true"></Label>
+                                <RadioButtonGroup id="radio-group" select="onRadioButtonSelect">
+                                    <RadioButton id="yes" text="Yes" selected="true"></RadioButton>
+                                    <RadioButton id="no" text="No" ></RadioButton>
+                                </RadioButtonGroup>
+                            </l:VerticalLayout>
                         </VBox>
 
                         <Toolbar class="hr-line" height="1px" width="100%"></Toolbar>
@@ -163,15 +165,7 @@
 
                         <l:VerticalLayout id="auth-date" class="vertical-layout">
                             <Label id="auth-date-label" labelFor="auth-date-value" required="true" text="Date"></Label>
-                           <DatePicker
-                                id="id-customer-auth-date"
-                                displayFormat="MM/dd/yyyy" 
-                                valueFormat="MM/dd/yyyy"
-                                value="{oEnrollModel>/SignatureSignedDate}"
-                                change="onDateChange" 
-                                liveChange="onLiveChange"
-                                required="true">
-                            </DatePicker>
+                            <Input type="Text" id="id-customer-auth-date" required="true" value="{oEnrollModel>/SignatureSignedDate}" editable="false"></Input>
                         </l:VerticalLayout>
                     </VBox>
 
