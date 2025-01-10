@@ -28,10 +28,10 @@ sap.ui.define([
 
       this.getENV((envVariables)=>{
         this.tenantConsentFormURL = envVariables.tenantConsentFormURL;
-
-        // After getting the env load the enrollment form page view.
-        this.loadHomePageView();
       });
+
+      // After getting the env load the enrollment form page view.
+      this.loadHomePageView();
 
     },
     // Get the env data
