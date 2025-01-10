@@ -1,5 +1,5 @@
 {
-  "welcomeFile": "/eh/consent-portal/index.html",
+  "welcomeFile": "/eh/enrollment-portal/index.html",
   "authenticationMethod": "route",
   "logout": {
     "logoutEndpoint": "/eh/admin/do/logout",
@@ -22,14 +22,14 @@
       "scope": ["$XSAPPNAME.Administrator"]
     },
     {
-      "source": "^/eh/consent-portal/service/(.*)$",
+      "source": "^/eh/enrollment-portal/service/(.*)$",
       "target": "/service/$1",
       "destination": "dteConsentAppPortal-srv",
       "authenticationType": "none",
       "csrfProtection": false
     },
     {
-      "source": "^/eh/consent-portal/(.*)$",
+      "source": "^/eh/enrollment-portal/(.*)$",
       "target": "/dteconsentappclient/$1",
       "service": "html5-apps-repo-rt",
       "authenticationType": "none"

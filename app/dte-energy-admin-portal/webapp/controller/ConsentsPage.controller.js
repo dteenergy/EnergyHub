@@ -24,6 +24,8 @@ sap.ui.define([
       this.baseUrl = baseUrl;
       this.AppId = AppId;
 
+      this.handleSessionExpiry(this.baseUrl);
+
       // Create an OData V4 model using the constructed service URL
       const model = new sap.ui.model.odata.v4.ODataModel({
         serviceUrl: `${this.baseUrl}admin/service/`,
@@ -76,6 +78,8 @@ sap.ui.define([
     * @public
     */
     onFilterChange: function () {
+      this.handleSessionExpiry(this.baseUrl);
+      
       // Retrieve the application consent table and its binding
       const oTable = this.byId("idApplicationConsentTable")
       const oBinding = oTable.getBinding("items");
@@ -123,6 +127,8 @@ sap.ui.define([
     */
     handleResponse: function () {
       const updateModel = this.getView().getModel("MainModel");
+
+      this.handleSessionExpiry(this.baseUrl);
 
       updateModel.submitBatch('CustomGroupId')
         .then(() => MessageToast.show("Updated successfully!"))

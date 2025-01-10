@@ -1,7 +1,7 @@
 sap.ui.define([
   "sap/ui/core/mvc/Controller",
   "sap/base/util/UriParameters",
-    "sap/m/MessageBox"
+  "sap/m/MessageBox"
 ], function (Controller, UriParameters, MessageBox) {
   "use strict";
 
@@ -38,6 +38,21 @@ sap.ui.define([
               url: this.getOwnerComponent().getManifestObject()._oBaseUri._parts.path,
               headers: {}
           };
+      }
+    },
+    handleSessionExpiry: async function(baseUrl) {
+      const data = await axios.get(baseUrl+`admin/service/$metadata`);
+
+      if(data.status === 200 && data.data.includes("<html>")) {
+        MessageBox.information('Your session has timed out due to inactivity. Please sign in again to continue.', {
+          actions: ["SignIn", MessageBox.Action.CANCEL],
+          emphasizedAction: "SignIn",
+          onClose: async function(oAction) {
+            if(oAction === "SignIn"){
+              window.location.reload();
+            }
+          }
+        })
       }
     },
     /**
