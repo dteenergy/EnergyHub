@@ -1,5 +1,5 @@
 {
-  "welcomeFile": "/eh/enrollment-portal/index.html",
+  "welcomeFile": "/eh/enrollment-portal/landlord.html",
   "authenticationMethod": "route",
   "logout": {
     "logoutEndpoint": "/eh/admin/do/logout",
@@ -27,6 +27,18 @@
       "destination": "dteConsentAppPortal-srv",
       "authenticationType": "none",
       "csrfProtection": false
+    },
+    {
+      "source": "^/eh/enrollment-portal/landlord.html$",
+      "target": "/dteconsentappclient/index.html#landlord/enrollment",
+      "service": "html5-apps-repo-rt",
+      "authenticationType": "none"
+    },
+    {
+      "source": "^/eh/enrollment-portal/tenant.html$",
+      "target": "/dteconsentappclient/index.html#tenant/consent$1",
+      "service": "html5-apps-repo-rt",
+      "authenticationType": "none"
     },
     {
       "source": "^/eh/enrollment-portal/(.*)$",
