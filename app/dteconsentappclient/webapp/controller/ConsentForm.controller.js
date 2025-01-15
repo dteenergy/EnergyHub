@@ -159,10 +159,7 @@ sap.ui.define([
 				}else{
 					oControl.setValueState("None");
 					
-					// If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
-					if(oControl?.mProperties["type"] === "Email") ChecksInputValidation.isValid(oControl, userInput, "Email");
-					
-					// Retrieve the binding path from the control.
+					// Retrieve the bindingpath from the control.
 					const bindingPath =  oControl?.getBindingPath("value");
 
 					// If the binding path contains one of the listed regex keyword, validate the user input against the regex.
@@ -207,12 +204,8 @@ sap.ui.define([
 								}
 							}else{
 								control.setValueState("None");
-								/** If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
-								 *  If the email is invalid, set the corresponding validation flag to `false`.
-								 * */
-								if(control?.mProperties["type"] === "Email")
-									if(!ChecksInputValidation.isValid(control, userInput, "Email")) validationFlags[validationFlag] = false;
-
+								
+								// Retrieve the bindingpath from the control.
 								const bindingPath = control?.getBindingPath("value");
 								
 								/**

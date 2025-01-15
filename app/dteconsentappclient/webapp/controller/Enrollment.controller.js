@@ -430,12 +430,8 @@ sap.ui.define([
 								}
 							} else{								
 								control.setValueState("None");
-								/** If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
-								 *  If the email is invalid, set the corresponding validation flag to `false`.
-								 * */
-								if(control?.mProperties["type"] === "Email") 
-									if(!ChecksInputValidation.isValid(control, userInput, "Email")) validationFlags[validationFlag] = false;
 
+								// Retrieve the bindingpath from the control. 
 								const bindingPath = control?.getBindingPath("value");
 								
 								/**
@@ -471,15 +467,12 @@ sap.ui.define([
 						oControl.setValueState("Error");
 					}
 
-					// Retrieve the binding path from the control.
+					// Retrieve the bindingpath from the control.
 					const bindingPath =  oControl?.getBindingPath("value");
 
 					// If the binding path contains one of the listed regex keyword, validate the user input against the regex.
 					const matchedKey = Object.keys(RegexAndMessage.regex).find((key)=> bindingPath?.includes(key));
 					if(matchedKey) ChecksInputValidation.isValid(oControl, userInput, matchedKey);					
-
-					// If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
-					if(oControl?.mProperties["type"] === "Email") ChecksInputValidation.isValid(oControl, userInput, "Email");
 
 					/**
 					 * If the validation flag have a "false", revalidate the input fields while live change happens.

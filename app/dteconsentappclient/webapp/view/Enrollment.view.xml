@@ -61,7 +61,7 @@
 
                             <l:VerticalLayout id="acc-manager-name" class="vertical-layout">
                                 <Label id="company-account-manager-name" labelFor="account-manager-name" text="DTE Energy Account Manager Name (if applicable)" wrapping="true"></Label>
-                                <Input id="account-manager-name" class="inputBox" type="Text" value="{oEnrollModel>/AccountDetail/AcctMgrName}"></Input>
+                                <Input id="account-manager-name" class="inputBox" type="Text" value="{oEnrollModel>/AccountDetail/AcctMgrName}" liveChange="onLiveChange"></Input>
                             </l:VerticalLayout>
 
                             <l:VerticalLayout id="acc-manager-ph" class="vertical-layout">
