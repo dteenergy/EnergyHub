@@ -3,22 +3,11 @@ sap.ui.define([
     "sap/ui/core/Fragment",
     "sap/ui/model/json/JSONModel",
 	  "dteconsentappclient/variable/GlobalInputValues",
-		"dteconsentappclient/variable/RegexAndMessage",
 		"dteconsentappclient/utils/ChecksInputValidation",
 		"dteconsentappclient/utils/FormatInputs",
 		"dteconsentappclient/utils/DataLayer",
 		"sap/m/Dialog"
-], (
-		BaseController,
-		Fragment, 
-		JSONModel, 
-		GlobalInputValues,
-		RegexAndMessage, 
-		ChecksInputValidation, 
-		FormatInputs, 
-		DataLayer, 
-		Dialog
-	) => {
+], (BaseController, Fragment, JSONModel, GlobalInputValues, ChecksInputValidation, FormatInputs, DataLayer, Dialog) => {
     "use strict";
 
     let enrollmentDetails, 
@@ -407,11 +396,11 @@ sap.ui.define([
 				 * Validate account details site and auth details
 				 * @param {String} sContainerId Container Id
 				 * @param {Boolean} isShowError Have to add value state or not
-				 * @param {String} validationFlag
+				 * @param {String} validationStatus
 				 */
-        validateFormDetails: function(sContainerId, isShowError, validationFlag){
+        validateFormDetails: function(sContainerId, isShowError, validationStatus){
 					const container = this.byId(sContainerId);	
-					validationFlags[validationFlag] = true;
+					validationFlags[validationStatus] = true;
 					
 					// To get the aggregated objects from the given container
 					container.findAggregatedObjects(true, (control) => {
@@ -426,22 +415,27 @@ sap.ui.define([
 							if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) {
 								if(isShowError){
 									control.setValueState("Error");
-									validationFlags[validationFlag] = false
+									validationFlags[validationStatus] = false
 								}
 							} else{								
 								control.setValueState("None");
-
-								// Retrieve the bindingpath from the control. 
-								const bindingPath = control?.getBindingPath("value");
+								/** If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
+								 *  If the email is invalid, set the corresponding validation flag to `false`.
+								 * */
+								if(control?.mProperties["type"] === "Email") 
+									if(!ChecksInputValidation.isValid(control, userInput, "Email")) validationFlags[validationStatus] = false;
 								
-								/**
-								 * If the binding path contains one of the listed regex keyword, validate the user input against the regex.
-								 * If the user input is invalid, set the corresponding validation flag to `false`.
-								 */
-								const matchedKey = Object.keys(RegexAndMessage.regex).find((key)=> bindingPath?.includes(key));
-								if(userInput && matchedKey) {
-									if(!ChecksInputValidation.isValid(control, userInput, matchedKey)) validationFlags[validationFlag] = false;
-								}	
+								/** If the binding path contains "PhoneNumber", validate the user input to ensure it is in a valid phonenumber format.
+								 *  If the phonenumber is invalid, set the corresponding validation flag to `false`.
+								 * */
+								if(userInput && control?.getBindingPath("value")?.includes("PhoneNumber"))
+									if(!ChecksInputValidation.isValid(control, userInput, "PhoneNumber")) validationFlags[validationStatus] = false;	
+
+								/** If the binding path contains "Zipcode", validate the user input to ensure it is in a valid Zipcode format.
+								 *  If the Zipcode is invalid, set the corresponding validation flag to `false`.
+								 * */
+								if(userInput && control?.getBindingPath("value")?.includes("Zipcode"))
+									if(!ChecksInputValidation.isValid(control, userInput, "Zipcode")) validationFlags[validationStatus] = false;	
 							}	
 						}		
           });
@@ -466,13 +460,15 @@ sap.ui.define([
 					}else{
 						oControl.setValueState("Error");
 					}
+					
+					// If the input control's binding path containes "PhoneNumber", validate the user input to ensure it is in a valid phonenumber format.
+					if(oControl?.getBindingPath("value")?.includes("PhoneNumber")) ChecksInputValidation.isValid(oControl, userInput, "PhoneNumber");					
 
-					// Retrieve the bindingpath from the control.
-					const bindingPath =  oControl?.getBindingPath("value");
+					// If the input control's binding path containes "Zipcode", validate the user input to ensure it is in a valid Zipcode format.
+					if(oControl?.getBindingPath("value")?.includes("Zipcode")) ChecksInputValidation.isValid(oControl, userInput, "Zipcode");					
 
-					// If the binding path contains one of the listed regex keyword, validate the user input against the regex.
-					const matchedKey = Object.keys(RegexAndMessage.regex).find((key)=> bindingPath?.includes(key));
-					if(matchedKey) ChecksInputValidation.isValid(oControl, userInput, matchedKey);					
+					// If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
+					if(oControl?.mProperties["type"] === "Email") ChecksInputValidation.isValid(oControl, userInput, "Email");
 
 					/**
 					 * If the validation flag have a "false", revalidate the input fields while live change happens.
@@ -576,19 +572,15 @@ sap.ui.define([
 						}
 
 						// After set the address property revalidate the whole container input data
-						if(!validationFlags["locationDetailsValidation"]) this.validateBuildingDetails("building-detail-main-container", "locationDetailsValidation");
+						if(!validationFlags["locationDetailsValidation"]) this.validateBuildingDetails("building-detail-main-container");
 					}
 				},
 
-				/**
-				 * Validate the building information
-				 * @param {String} sContainerId 
-				 * @param {String} validationFlag 
-				 */
-				validateBuildingDetails: function(sContainerId, validationFlag){
+				// Validate the building information
+				validateBuildingDetails: function(sContainerId){
 					
 					const container = this.byId(sContainerId);
-					validationFlags[validationFlag] = true;
+					validationFlags["locationDetailsValidation"] = true;
 
 					/**
 					 * Building info have a list of items(one or more buildings)
@@ -609,19 +601,7 @@ sap.ui.define([
 									if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) {
 										control.setValueState("Error");
 										validationFlags["locationDetailsValidation"] = false;
-									}else {
-										control.setValueState("None");
-										const bindingPath = control?.getBindingPath("value");
-								
-										/**
-										 * If the binding path contains one of the listed regex keyword, validate the user input against the regex.
-										 * If the user input is invalid, set the corresponding validation flag to `false`.
-										 */
-										const matchedKey = Object.keys(RegexAndMessage.regex).find((key)=> bindingPath?.includes(key));
-										if(userInput && matchedKey) {
-											if(!ChecksInputValidation.isValid(control, userInput, matchedKey)) validationFlags[validationFlag] = false;
-										}	
-									}
+									}else control.setValueState("None");
 								}		
 							}
 						})
@@ -810,7 +790,7 @@ sap.ui.define([
 				validate: function(){
 					this.validateFormDetails("account-info-container", true, "accountDetailsValidation");
 					this.validateFormDetails("site-contact-info-container", true, "siteDetailsValidation");
-					this.validateBuildingDetails("building-detail-main-container", "locationDetailsValidation");
+					this.validateBuildingDetails("building-detail-main-container");
 					this.validateFormDetails("auth-info-container", true, "customerAuthDetailValidation");
 					this.validateFormDetails("enrollment-consent-section", true, "consentDetailValidation");
 					this.validateFormDetails("customer-auth-and-release-container", true, "consentAuthDetailValidation");
