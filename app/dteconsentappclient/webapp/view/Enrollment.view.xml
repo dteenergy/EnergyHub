@@ -39,7 +39,7 @@
 
                             <l:VerticalLayout class="vertical-layout">
                                 <Label text="Company Address Line 2"></Label>
-                                <Input class="inputBox" type="Text" value="{oEnrollModel>/AccountDetail/CompanyAddrLineTwo}"></Input>
+                                <Input class="inputBox" type="Text" value="{oEnrollModel>/AccountDetail/CompanyAddrLineTwo}" liveChange="onLiveChange"></Input>
                             </l:VerticalLayout>
 
                             <l:VerticalLayout class="vertical-layout">
@@ -107,7 +107,7 @@
 
                         <l:VerticalLayout class="vertical-layout">
                             <Label text="Address Line 2"></Label>
-                            <Input class="inputBox" type="Text" value="{oEnrollModel>/AccountDetail/SiteAddrLineTwo}"></Input>
+                            <Input class="inputBox" type="Text" value="{oEnrollModel>/AccountDetail/SiteAddrLineTwo}" liveChange="onLiveChange"></Input>
                         </l:VerticalLayout>
                         
                         <l:VerticalLayout id="site-contact-city" class="vertical-layout">
