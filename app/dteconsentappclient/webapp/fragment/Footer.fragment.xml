@@ -17,7 +17,7 @@
 							<Text text="|" class="vertical-line"></Text>
 							<Link id="contact" class="legal-info-links" href="https://www.dteenergy.com/us/en/quicklinks/contact-us.html" text="Contact Us" target="_blank"></Link>
 					</FlexBox>
-					<Text id="idUserFooterText" class="footerText" text="© 2024 DTE Energy. All rights reserved" />
+					<Text id="idUserFooterText" class="footerText" text="© 2025 DTE Energy. All rights reserved" />
 			</FlexBox>
     </VBox>
 
