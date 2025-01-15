@@ -7,12 +7,12 @@ sap.ui.define([], function(){
 			PhoneNumber: /^(?!0000000000$)\d{10}$/,
       Zipcode: /^(?!00000$)\d{5}$/,
       AccountNumber: /^(91|92)[0-9]{10}$/,
-      City: /^[a-zA-Z][a-zA-Z\s]{0,49}$/,
-      Name: /^[a-zA-Z][a-zA-Z\s]{0,49}$/,
-      Address: /^[a-zA-Z0-9][a-zA-Z0-9\s,./-]{0,49}$/,
-      AddrLineTwo: /^[a-zA-Z0-9][a-zA-Z0-9\s,./-]{0,49}$/,
-      Title: /^[a-zA-Z][a-zA-Z\s]{0,49}$/,
-      SignedBy: /^[a-zA-Z][a-zA-Z\s]{0,49}$/,
+      City: /^[a-zA-Z][a-zA-Z\s]{0,48}[a-zA-Z]$/,
+      Name: /^[a-zA-Z][a-zA-Z\s]{0,48}[a-zA-Z]$/,
+      Address: /^[a-zA-Z0-9][a-zA-Z0-9\s,./-]{0,48}[a-zA-Z0-9,/.-]$/,
+      AddrLineTwo: /^[a-zA-Z0-9][a-zA-Z0-9\s,./-]{0,48}[a-zA-Z0-9,/.-]$/,
+      Title: /^[a-zA-Z][a-zA-Z\s]{0,48}[a-zA-Z]$/,
+      SignedBy: /^[a-zA-Z][a-zA-Z\s]{0,48}[a-zA-Z]$/,
 		};
 
     const validationMessage = {
