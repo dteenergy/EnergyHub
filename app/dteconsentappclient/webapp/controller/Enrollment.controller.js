@@ -461,10 +461,10 @@ sap.ui.define([
 					const userInput = oEvent.getParameter("value") || oEvent.getParameter("selectedKey");
 
 					// Validates if a field has value, if it is remove the error state
-					if(userInput?.trim() !== "" && oControl?.mProperties['required']) {
-						oControl.setValueState("None");
-					}else{
+					if(userInput?.trim() === "" || !userInput && oControl?.mProperties['required']) {
 						oControl.setValueState("Error");
+					}else{
+						oControl.setValueState("None");
 					}
 
 					// Retrieve the bindingpath from the control.
