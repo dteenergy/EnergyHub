@@ -3,7 +3,6 @@ sap.ui.define([
 	"sap/ui/core/Fragment",
   "sap/ui/model/json/JSONModel",
 	"dteconsentappclient/variable/GlobalInputValues",
-	"dteconsentappclient/variable/RegexAndMessage",
 	"dteconsentappclient/utils/ConsentAddressSuggestion",
 	"dteconsentappclient/utils/ChecksInputValidation",
 	"dteconsentappclient/utils/FormatInputs",
@@ -13,7 +12,6 @@ sap.ui.define([
 	Fragment,
 	JSONModel,
 	GlobalInputValues,
-	RegexAndMessage,
 	ConsentAddressSuggestion,
 	ChecksInputValidation,
 	FormatInputs,
@@ -159,12 +157,12 @@ sap.ui.define([
 				}else{
 					oControl.setValueState("None");
 					
-					// Retrieve the bindingpath from the control.
-					const bindingPath =  oControl?.getBindingPath("value");
+					// If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
+					if(oControl?.mProperties["type"] === "Email") ChecksInputValidation.isValid(oControl, userInput, "Email");
+					
+					// If the input control's binding path containes "Zipcode", validate the user input to ensure it is in a valid Zipcode format.
+					if(oControl?.getBindingPath("value")?.includes("Zipcode")) ChecksInputValidation.isValid(oControl, userInput, "Zipcode");
 
-					// If the binding path contains one of the listed regex keyword, validate the user input against the regex.
-					const matchedKey = Object.keys(RegexAndMessage.regex).find((key)=> bindingPath?.includes(key));
-					if(matchedKey) ChecksInputValidation.isValid(oControl, userInput, matchedKey);	
 				}
 
 				isFirstInteraction = false;
@@ -175,12 +173,12 @@ sap.ui.define([
 	 		* Validate tenant form details
 			* @param {String} sContainerId Container Id
 			* @param {Boolean} isShowError Have to add value state or not
-			* @param {String} validationFlag 
+			* @param {String} validationStatus 
 			*/
-		 validateFormDetails: function(sContainerId, isShowError, validationFlag){
+		 validateFormDetails: function(sContainerId, isShowError, validationStatus){
 
 			const container = this.byId(sContainerId);
-			validationFlags[validationFlag] = true;
+			validationFlags[validationStatus] = true;
 			 
 			// To get the aggregated objects from the given container
 			container.findAggregatedObjects(true, (control) => {
@@ -200,22 +198,21 @@ sap.ui.define([
 							if((!userInput || userInput?.trim() === "") && control?.mProperties['required']) {
 								if(isShowError){
 									control.setValueState("Error");
-									validationFlags[validationFlag] = false;
+									validationFlags[validationStatus] = false;
 								}
 							}else{
 								control.setValueState("None");
-								
-								// Retrieve the bindingpath from the control.
-								const bindingPath = control?.getBindingPath("value");
-								
-								/**
-								 * If the binding path contains one of the listed regex keyword, validate the user input against the regex.
-								 * If the user input is invalid, set the corresponding validation flag to `false`.
-								 */
-								const matchedKey = Object.keys(RegexAndMessage.regex).find((key)=> bindingPath?.includes(key));
-								if(userInput && matchedKey) {
-									if(!ChecksInputValidation.isValid(control, userInput, matchedKey)) validationFlags[validationFlag] = false;
-								}	
+								/** If the input control's type is "Email", validate the user input to ensure it is in a valid email format.
+								 *  If the email is invalid, set the corresponding validation flag to `false`.
+								 * */
+								if(control?.mProperties["type"] === "Email")
+									if(!ChecksInputValidation.isValid(control, userInput, "Email")) validationFlags[validationStatus] = false;
+
+								/** If the binding path contains "Zipcode", validate the user input to ensure it is in a valid Zipcode format.
+								 *  If the Zipcode is invalid, set the corresponding validation flag to `false`.
+								 * */
+								if(userInput && control?.getBindingPath("value")?.includes("Zipcode"))
+									if(!ChecksInputValidation.isValid(control, userInput, "Zipcode")) validationFlags[validationStatus] = false;	
 							}
 						 }		
 					 }		
