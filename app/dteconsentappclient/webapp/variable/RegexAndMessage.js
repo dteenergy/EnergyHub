@@ -20,12 +20,12 @@ sap.ui.define([], function(){
       PhoneNumber: "Please provide a proper Phone Number",
       Zipcode: "Please provide a proper Zip Code",
       AccountNumber: "Please provide a proper Account Number",
-      City: "Please provide a valid city name",
-      Name: "Please provide a valid Name",
-      Address: "Plese provide a valid address",
-      AddrLineTwo: "Plese provide a valid address",
-      Title: "Plese provide proper Title",
-      SignedBy: "Please provide a valid Name"
+      City: "Please provide a proper city name",
+      Name: "Please provide a proper Name",
+      Address: "Please provide a proper address",
+      AddrLineTwo: "Please provide a proper address",
+      Title: "Please provide proper Title",
+      SignedBy: "Please provide a proper Name"
     }
 
   return {regex, validationMessage}
