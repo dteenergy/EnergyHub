@@ -26,7 +26,7 @@ const properties = {
     'examples':['Alabama']
   },
   'Zipcode':{
-    'title':'Zipcode',
+    'title':'AccountZipcode',
     'type':'string',
     'pattern':'^(?!00000$)\\d{5}$',
     'examples':['98765']

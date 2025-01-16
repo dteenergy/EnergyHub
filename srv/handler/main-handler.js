@@ -2,135 +2,138 @@ const cds = require('@sap/cds');
 const path = require('path');
 const fs = require('fs');
 const handlebars = require('handlebars')
-const {Readable} = require ('stream');
-
+const { Readable } = require('stream');
 
 const createEnrollmentFormDetail = require('./create-enrollment-form-action');
 const createConsentFormDetail = require('./create-consent-form-action');
 const { valueEncrypt, valueDecrypt } = require('./encrypt-and-decrypt-id');
 const validateApplicationId = require('./validate-app-id');
+
+// Import the AJV validation method for JSON schema validation
 const ajvMethod = require('../ajvValidation/ajv-validation');
-const {accountDetailSchema} = require('../ajvValidation/accountDetailValidation');
-const {applicationDetailSchema} = require('../ajvValidation/applicationDetailValidation');
+
+// Import JSON schemas for different validation scenarios
+const { accountDetailSchema } = require('../ajvValidation/accountDetailValidation');
+const { applicationDetailSchema } = require('../ajvValidation/applicationDetailValidation');
+const { buildingDetailSchema } = require('../ajvValidation/BuildingDetailValidation');
+const { consentDetailSchema } = require('../ajvValidation/consentDetailValidation');
 
 module.exports = cds.service.impl(async function (srv) {
 	srv.on('CreateEnrollmentFormDetail', async (req) => {
-		console.log(req, 1);
-		console.log(req.data, 2);
-		if(req.data) {
-			const { ApplicationDetail, BuildingDetail, AccountDetail, ConsentDetail } = req?.data;
 
-			// Parse the String Payload
-			const applicationParsedData = JSON.parse(ApplicationDetail);
-			const buildingParsedData = JSON.parse(BuildingDetail);
-			const accountParsedData = JSON.parse(AccountDetail);
-			const consentParsedData = JSON.parse(ConsentDetail);
-
-      console.log(applicationParsedData, buildingParsedData, accountParsedData, consentParsedData);
-
-      ajvMethod.ajvValidation(accountParsedData, accountDetailSchema);
-      ajvMethod.ajvValidation(applicationParsedData, applicationDetailSchema);
-      // ajvMethod.ajvValidation(accountParsedData, accountDetailSchema);
-      // ajvMethod.ajvValidation(accountParsedData, accountDetailSchema);
-		}
-		
 		// Initialize the transaction
 		const tx = cds.tx(req);
+
 		try {
+			// Check if request data is available
+			if (req.data) {
+				const { ApplicationDetail, BuildingDetail, AccountDetail, ConsentDetail } = req?.data;
+
+				// Parse JSON strings into JavaScript objects for validation
+				const applicationParsedData = JSON.parse(ApplicationDetail);
+				const buildingParsedData = JSON.parse(BuildingDetail);
+				const accountParsedData = JSON.parse(AccountDetail);
+				const consentParsedData = JSON.parse(ConsentDetail);
+
+				// Perform AJV schema validation for each data type
+				ajvMethod.ajvValidation(accountParsedData, accountDetailSchema);
+				ajvMethod.ajvValidation(applicationParsedData, applicationDetailSchema);
+				ajvMethod.ajvValidation(buildingParsedData, buildingDetailSchema);
+				ajvMethod.ajvValidation(consentParsedData, consentDetailSchema);
+			}
+
 			// Method to create the Enrollment Form details
 			const res = createEnrollmentFormDetail(req, this.entities, tx)
 
 			return res;
-		} catch (e) {
-			return { 'error': 'Failed to create Enrollment Form' }
+		} catch (error) {
+
+			// Return a detailed error message if available, else return a generic error
+			if (error[0]?.message) return { 'error': error }
+			else return { 'error': 'Failed to create Enrollment Form' }
 		}
 	}),
 
-		// Validate the Application Id
-		srv.on('validateApplicationId', async (req) => {
-			const res = req._.res;
-			try {
-				// Method to validate the app id.
-				const validationRes = await validateApplicationId(req, this.entities);
+	// Validate the Application Id
+	srv.on('validateApplicationId', async (req) => {
+		const res = req._.res;
+		try {
+			// Method to validate the app id.
+			const validationRes = await validateApplicationId(req, this.entities);
 
-				if(validationRes.statusCode != 200) {
-					throw {statusCode: 500, error: 'Unexcept error happended'}
-				}
-				
-				// Read consent form view XML file
-				const fileName = 'ConsentForm.view.xml';
-				const filePath = path.join(__dirname, '../view', fileName);
-				const consentFormViewBuffer = fs.readFileSync(filePath).toString();
-	
-				// Templating
-				const template = handlebars.compile(consentFormViewBuffer);
-				const result = template();
+			if (validationRes.statusCode != 200)
+				throw { statusCode: 500, error: 'Unexcept error happended' }
 
-				res.setHeader('Content-disposition', `attachment; filename=${fileName}`);
-				res.setHeader('Content-type', 'application/xml');
+			// Read consent form view XML file
+			const fileName = 'ConsentForm.view.xml';
+			const filePath = path.join(__dirname, '../view', fileName);
+			const consentFormViewBuffer = fs.readFileSync(filePath).toString();
 
-				return result;
-			} catch (e) {
-				if (e.statusCode) {
-					res.status(e.statusCode)
-					return e.message 
-				}
-				res.status(500);
-				return e.message;
+			// Templating
+			const template = handlebars.compile(consentFormViewBuffer);
+			const result = template();
+
+			res.setHeader('Content-disposition', `attachment; filename=${fileName}`);
+			res.setHeader('Content-type', 'application/xml');
+
+			return result;
+		} catch (e) {
+			if (e.statusCode) {
+				res.status(e.statusCode)
+				return e.message
 			}
-		}),
+			res.status(500);
+			return e.message;
+		}
+	}),
 
-		srv.on('CreateConsentFormDetail', async (req) => {
-			const tx = cds.tx(req);
-			try {
-				// Method to validate the app id.
-				const validationStatus = await validateApplicationId(req, this.entities);
+	srv.on('CreateConsentFormDetail', async (req) => {
+		const tx = cds.tx(req);
+		try {
+			// Method to validate the app id.
+			const validationStatus = await validateApplicationId(req, this.entities);
 
-				// If the Validation statusCode => 200
-				if (validationStatus.statusCode === 200) {
-					// Store the Encrypted Application Id
-					const encryptedAppId = req?._.req?.query?.encrAppId;
+			// If the Validation statusCode => 200
+			if (validationStatus.statusCode === 200) {
+				// Store the Encrypted Application Id
+				const encryptedAppId = req?._.req?.query?.encrAppId;
 
-					// Decrypt the AppId
-					const decryptedAppId = await valueDecrypt(encryptedAppId);
+				// Decrypt the AppId
+				const decryptedAppId = await valueDecrypt(encryptedAppId);
 
-					// Method to create the Consent Form details
-					const consentResponse = await createConsentFormDetail(req, this.entities, tx, decryptedAppId);
+				// Method to create the Consent Form details
+				const consentResponse = await createConsentFormDetail(req, this.entities, tx, decryptedAppId);
 
-					return consentResponse;
+				return consentResponse;
 
-				}
-				throw validationStatus;
-
-			} catch (e) {
-				if (e.statusCode) {
-					return { statusCode: e.statusCode, message: e.message };
-				} else
-					return {
-						statusCode: 500, message: e.message
-					}
 			}
-		}),
+			throw validationStatus;
 
-		// Testing Purpose
-		srv.on('AppIdEncrypt', async (req) => {
-			const encrAppId = req._.req.query.encrAppId;
-			// Encrypt the AppId
-			const encryptedData = await valueEncrypt(encrAppId);
+		} catch (e) {
+			if (e.statusCode) return { statusCode: e.statusCode, message: e.message };
+			else return { statusCode: 500, message: e.message }
+		}
+	}),
 
-			// Decrypt the AppId
-			const decryptedData = await valueDecrypt(encryptedData);
+	// Testing Purpose
+	srv.on('AppIdEncrypt', async (req) => {
+		const encrAppId = req._.req.query.encrAppId;
+		// Encrypt the AppId
+		const encryptedData = await valueEncrypt(encrAppId);
 
-			return { "Encrypted": encryptedData, "Decrypted": decryptedData }
-		});
+		// Decrypt the AppId
+		const decryptedData = await valueDecrypt(encryptedData);
 
-    // Get environment variable (Navigation page url and address validation url)
-		srv.on('getEnvironmentVariables', (req) => {
-			return {
-				DTEAddressValidationUrl: process.env.DTE_ADDRESS_VALIDATION_URL,
-				LandlordConfirmationPageUrl: process.env.LANDLORD_CONFIRMATION_PAGE_URL,
-				TenantConfirmationPageUrl: process.env.TENANT_CONFIRMATION_PAGE_URL,
-				ErrorPageUrl: process.env.ERROR_PAGE_URL
-			}
-		});
+		return { "Encrypted": encryptedData, "Decrypted": decryptedData }
+	});
+
+	// Get environment variable (Navigation page url and address validation url)
+	srv.on('getEnvironmentVariables', (req) => {
+		return {
+			DTEAddressValidationUrl: process.env.DTE_ADDRESS_VALIDATION_URL,
+			LandlordConfirmationPageUrl: process.env.LANDLORD_CONFIRMATION_PAGE_URL,
+			TenantConfirmationPageUrl: process.env.TENANT_CONFIRMATION_PAGE_URL,
+			ErrorPageUrl: process.env.ERROR_PAGE_URL
+		}
+	});
 })

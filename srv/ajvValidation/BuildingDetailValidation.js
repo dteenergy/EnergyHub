@@ -1,7 +1,7 @@
 const properties = {
   'BuildingName':{
     'title':'BuildingName',
-    'type':'',
+    'type':'string',
     'examples':['Castle']
   },
   'AccountNumber':{
@@ -18,21 +18,24 @@ const properties = {
   'City':{
     'title':'City',
     'type':'string',
+    'pattern':'^[a-zA-Z][a-zA-Z\\s]{0,99}$',
     'examples':['EAST TAWAS']
   },
   'State':{
     'title':'State',
     'type':'string',
     'examples':['Michigan']
-  },'Zipcode':{
-    'title':'Zipcode',
+  },
+  'Zipcode':{
+    'title':'BuildingZipcode',
     'type':'string',
+    'pattern':'^(?!00000$)\\d{5}$',
     'examples':['98765']
   },
   'AddrLineTwo':{
     'title':'AddrLineTwo',
     'type':'string',
-    'examples':['DTE 1']
+    'examples':['DTE 1', '']
   }
 }
 
@@ -46,3 +49,5 @@ const buildingDetailSchema = {
     'properties':properties
   }
 }
+
+module.exports = { buildingDetailSchema };
