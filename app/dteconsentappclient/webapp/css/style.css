@@ -62,7 +62,7 @@ body {
     display: flex;
     justify-content: center;
     background-color: var(--dtePrimaryColor) !important; 
-    height: 14.5rem !important;
+    height: 6.063rem !important;
   }
   .footer-container{
     padding-top: 30px;
@@ -87,10 +87,11 @@ body {
     color: #73767B;
   }
   .footerText{
-    font-size: 11px;
+    font-size: 12px;
     padding: 15px 0 15px 0;
     color: #ffffff;
     text-align: center;
+    line-height: 16.34px;
   }
   .social-media-container > *{
     padding-right: 10px;
@@ -104,9 +105,6 @@ body {
       flex-direction: column !important;
       justify-content: center;
       align-items: center;
-    }
-    .custom-footer {
-      height: 17.5rem !important;
     }
     .legal-info-links{
       padding-bottom: 10px;
