@@ -2,6 +2,7 @@ const cds = require('@sap/cds');
 const path = require('path');
 const fs = require('fs');
 const handlebars = require('handlebars')
+const { Readable } = require('stream');
 
 const createEnrollmentFormDetail = require('./create-enrollment-form-action');
 const createConsentFormDetail = require('./create-consent-form-action');
