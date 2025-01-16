@@ -37,6 +37,7 @@
           <Column width="150px"><header><Text text="Number of Consents Recieved" class="boldText"></Text></header></Column>
           <Column width="150px"><header><Text text="Signed By" class="boldText"></Text></header></Column>
           <Column width="150px"><header><Text text="Email Address" class="boldText"></Text></header></Column>
+          <Column width="150px"><header><Text text="Energy Program Participated" class="boldText"></Text></header></Column>
           <Column width="150px"><header><Text text="Consent Link" class="boldText"></Text></header></Column>
           <Column visible="false" width="150px"><header><Text text="Application CreatedAt" class="boldText"></Text></header></Column>
           <Column visible="false" width="150px"><header><Text text="Application UpdatedAt" class="boldText"></Text></header></Column>
@@ -45,7 +46,6 @@
           <Column visible="false" width="150px"><header><Text text="Account ZipCode" class="boldText"></Text></header></Column>
           <Column visible="false" width="150px"><header><Text text="Account Manager Name" class="boldText"></Text></header></Column>
           <Column visible="false" width="150px"><header><Text text="Account Manager PhoneNo" class="boldText"></Text></header></Column>
-          <Column visible="false" width="150px"><header><Text text="Energy Program Participated" class="boldText"></Text></header></Column>
           <Column visible="false" width="150px"><header><Text text="Site Contact Title" class="boldText"></Text></header></Column>
           <Column visible="false" width="150px"><header><Text text="Site Address" class="boldText"></Text></header></Column>
           <Column visible="false" width="150px"><header><Text text="Site Address Line Two" class="boldText"></Text></header></Column>
@@ -75,6 +75,7 @@
               <Link text="{MainModel>NoOfConsentReceived}" press="navToConsentPage"></Link>
               <Text text="{MainModel>SignatureSignedBy}"></Text>
               <Text text="{MainModel>EmailAddr}"></Text>
+              <Text text="{MainModel>EnergyPrgmParticipated}"></Text>
               <Button text="Generate" press="onGenerateUrlPress"></Button>
               <Text text="{MainModel>AppCreatedAt}"></Text>
               <Text text="{MainModel>AppUpdatedAt}"></Text>
@@ -83,7 +84,6 @@
               <Text text="{MainModel>Zipcode}"></Text>
               <Text text="{MainModel>AcctMgrName}"></Text>
               <Text text="{MainModel>AcctMgrPhNo}"></Text>
-              <Text text="{MainModel>EnergyPrgmParticipated}"></Text>
               <Text text="{MainModel>SiteContactTitle}"></Text>
               <Text text="{MainModel>SiteAddress}"></Text>
               <Text text="{MainModel>SiteAddrLineTwo}"></Text>
