@@ -2,7 +2,6 @@ const cds = require('@sap/cds');
 const path = require('path');
 const fs = require('fs');
 const handlebars = require('handlebars')
-const { Readable } = require('stream');
 
 const createEnrollmentFormDetail = require('./create-enrollment-form-action');
 const createConsentFormDetail = require('./create-consent-form-action');
@@ -54,78 +53,78 @@ module.exports = cds.service.impl(async function (srv) {
 		}
 	}),
 
-	// Validate the Application Id
-	srv.on('validateApplicationId', async (req) => {
-		const res = req._.res;
-		try {
-			// Method to validate the app id.
-			const validationRes = await validateApplicationId(req, this.entities);
+		// Validate the Application Id
+		srv.on('validateApplicationId', async (req) => {
+			const res = req._.res;
+			try {
+				// Method to validate the app id.
+				const validationRes = await validateApplicationId(req, this.entities);
 
-			if (validationRes.statusCode != 200)
-				throw { statusCode: 500, error: 'Unexcept error happended' }
+				if (validationRes.statusCode != 200)
+					throw { statusCode: 500, error: 'Unexcept error happended' }
 
-			// Read consent form view XML file
-			const fileName = 'ConsentForm.view.xml';
-			const filePath = path.join(__dirname, '../view', fileName);
-			const consentFormViewBuffer = fs.readFileSync(filePath).toString();
+				// Read consent form view XML file
+				const fileName = 'ConsentForm.view.xml';
+				const filePath = path.join(__dirname, '../view', fileName);
+				const consentFormViewBuffer = fs.readFileSync(filePath).toString();
 
-			// Templating
-			const template = handlebars.compile(consentFormViewBuffer);
-			const result = template();
+				// Templating
+				const template = handlebars.compile(consentFormViewBuffer);
+				const result = template();
 
-			res.setHeader('Content-disposition', `attachment; filename=${fileName}`);
-			res.setHeader('Content-type', 'application/xml');
+				res.setHeader('Content-disposition', `attachment; filename=${fileName}`);
+				res.setHeader('Content-type', 'application/xml');
 
-			return result;
-		} catch (e) {
-			if (e.statusCode) {
-				res.status(e.statusCode)
-				return e.message
+				return result;
+			} catch (e) {
+				if (e.statusCode) {
+					res.status(e.statusCode)
+					return e.message
+				}
+				res.status(500);
+				return e.message;
 			}
-			res.status(500);
-			return e.message;
-		}
-	}),
+		}),
 
-	srv.on('CreateConsentFormDetail', async (req) => {
-		const tx = cds.tx(req);
-		try {
-			// Method to validate the app id.
-			const validationStatus = await validateApplicationId(req, this.entities);
+		srv.on('CreateConsentFormDetail', async (req) => {
+			const tx = cds.tx(req);
+			try {
+				// Method to validate the app id.
+				const validationStatus = await validateApplicationId(req, this.entities);
 
-			// If the Validation statusCode => 200
-			if (validationStatus.statusCode === 200) {
-				// Store the Encrypted Application Id
-				const encryptedAppId = req?._.req?.query?.encrAppId;
+				// If the Validation statusCode => 200
+				if (validationStatus.statusCode === 200) {
+					// Store the Encrypted Application Id
+					const encryptedAppId = req?._.req?.query?.encrAppId;
 
-				// Decrypt the AppId
-				const decryptedAppId = await valueDecrypt(encryptedAppId);
+					// Decrypt the AppId
+					const decryptedAppId = await valueDecrypt(encryptedAppId);
 
-				// Method to create the Consent Form details
-				const consentResponse = await createConsentFormDetail(req, this.entities, tx, decryptedAppId);
+					// Method to create the Consent Form details
+					const consentResponse = await createConsentFormDetail(req, this.entities, tx, decryptedAppId);
 
-				return consentResponse;
+					return consentResponse;
 
+				}
+				throw validationStatus;
+
+			} catch (e) {
+				if (e.statusCode) return { statusCode: e.statusCode, message: e.message };
+				else return { statusCode: 500, message: e.message }
 			}
-			throw validationStatus;
+		}),
 
-		} catch (e) {
-			if (e.statusCode) return { statusCode: e.statusCode, message: e.message };
-			else return { statusCode: 500, message: e.message }
-		}
-	}),
+		// Testing Purpose
+		srv.on('AppIdEncrypt', async (req) => {
+			const encrAppId = req._.req.query.encrAppId;
+			// Encrypt the AppId
+			const encryptedData = await valueEncrypt(encrAppId);
 
-	// Testing Purpose
-	srv.on('AppIdEncrypt', async (req) => {
-		const encrAppId = req._.req.query.encrAppId;
-		// Encrypt the AppId
-		const encryptedData = await valueEncrypt(encrAppId);
+			// Decrypt the AppId
+			const decryptedData = await valueDecrypt(encryptedData);
 
-		// Decrypt the AppId
-		const decryptedData = await valueDecrypt(encryptedData);
-
-		return { "Encrypted": encryptedData, "Decrypted": decryptedData }
-	});
+			return { "Encrypted": encryptedData, "Decrypted": decryptedData }
+		});
 
 	// Get environment variable (Navigation page url and address validation url)
 	srv.on('getEnvironmentVariables', (req) => {

@@ -57,9 +57,7 @@
           "users": {
             "test@gmail.com": {
               "password": "test@123",
-              "roles": [
-                "Administrator"
-              ]
+              "roles": ["Administrator"]
             }
           }
         }
