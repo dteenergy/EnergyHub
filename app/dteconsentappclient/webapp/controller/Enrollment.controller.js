@@ -469,10 +469,10 @@ sap.ui.define([
 
 					// Retrieve the bindingpath from the control.
 					const bindingPath =  oControl?.getBindingPath("value");
-
+					
 					// If the binding path contains one of the listed regex keyword, validate the user input against the regex.
 					const matchedKey = Object.keys(RegexAndMessage.regex).find((key)=> bindingPath?.includes(key));
-					if(matchedKey) ChecksInputValidation.isValid(oControl, userInput, matchedKey);					
+					if(matchedKey && userInput) ChecksInputValidation.isValid(oControl, userInput, matchedKey);					
 
 					/**
 					 * If the validation flag have a "false", revalidate the input fields while live change happens.
