@@ -46,11 +46,14 @@ body {
   font-size: var(--sapTextMediumFontSize);
 }
 .sapMIBar.app-header{
-  height: 4.5rem !important;
+  height: 6rem !important;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: var(--dtePrimaryColor) !important;
+}
+.dte-logo{
+  height: 2rem !important;
 }
 .sapMText.header-title{
   color: #ffffff !important;
@@ -85,3 +88,12 @@ body {
   .sapMLnk:hover {
     text-decoration: none;
   } 
+
+  @media only screen and (max-width: 600px) {
+    .sapMIBar.app-header{
+      height: 2.875rem !important;
+    }
+    .dte-logo{
+      height: 1.5rem !important;
+    }
+  }
