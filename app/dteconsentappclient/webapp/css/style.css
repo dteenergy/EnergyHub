@@ -65,14 +65,10 @@ body {
     height: 6.063rem !important;
   }
   .footer-container{
-    padding-top: 30px;
     flex-direction: column;
     justify-content: center;
     align-items: center;
   }
-  .footer-container > *{
-    padding-bottom: 10px;
-  } 
   .sapMLnkText{
     letter-spacing: .7px;
     color: #ffffff;
