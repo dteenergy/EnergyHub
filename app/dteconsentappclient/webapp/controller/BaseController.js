@@ -63,20 +63,6 @@ sap.ui.define([
   
           MessageBox.error(`${errorCode}, ${errorMessage}`);
       },
-
-      // Handle navigation based on social media image pressed
-      onSocialMediaPress: function(oEvent){
-        // Retrieve the data from the model
-        const mediaDetails = this.getView().getModel('socialMediaModel').getData();
-        
-        // Filter the social media details, which one is pressed based on alt property
-        const salt = oEvent.getSource().getAlt();
-        const filteredData = mediaDetails?.sMediaDetails.filter((mediaDetail)=> mediaDetail.alt === salt);
-        
-        // Open the link in the new tab
-        window.open(filteredData[0]['src'], '_blank');
-      },
-
       // Get environment variable (Navigation page url and address validation url)
       getEnvironmentVariables: async function(){
         try{
