@@ -9,9 +9,31 @@ const createEnrollmentFormDetail = require('./create-enrollment-form-action');
 const createConsentFormDetail = require('./create-consent-form-action');
 const { valueEncrypt, valueDecrypt } = require('./encrypt-and-decrypt-id');
 const validateApplicationId = require('./validate-app-id');
+const ajvMethod = require('../ajvValidation/ajv-validation');
+const {accountDetailSchema} = require('../ajvValidation/accountDetailValidation');
+const {applicationDetailSchema} = require('../ajvValidation/applicationDetailValidation');
 
 module.exports = cds.service.impl(async function (srv) {
 	srv.on('CreateEnrollmentFormDetail', async (req) => {
+		console.log(req, 1);
+		console.log(req.data, 2);
+		if(req.data) {
+			const { ApplicationDetail, BuildingDetail, AccountDetail, ConsentDetail } = req?.data;
+
+			// Parse the String Payload
+			const applicationParsedData = JSON.parse(ApplicationDetail);
+			const buildingParsedData = JSON.parse(BuildingDetail);
+			const accountParsedData = JSON.parse(AccountDetail);
+			const consentParsedData = JSON.parse(ConsentDetail);
+
+      console.log(applicationParsedData, buildingParsedData, accountParsedData, consentParsedData);
+
+      ajvMethod.ajvValidation(accountParsedData, accountDetailSchema);
+      ajvMethod.ajvValidation(applicationParsedData, applicationDetailSchema);
+      // ajvMethod.ajvValidation(accountParsedData, accountDetailSchema);
+      // ajvMethod.ajvValidation(accountParsedData, accountDetailSchema);
+		}
+		
 		// Initialize the transaction
 		const tx = cds.tx(req);
 		try {
