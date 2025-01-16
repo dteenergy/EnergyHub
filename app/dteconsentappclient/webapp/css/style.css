@@ -73,18 +73,10 @@ body {
   .footer-container > *{
     padding-bottom: 10px;
   } 
-  .legal-info-links{
-    padding: 0 10px;
-    font-size: 14px;
-    text-decoration: none;
-  }
   .sapMLnkText{
     letter-spacing: .7px;
     color: #ffffff;
     font-weight: 100;
-  }
-  .vertical-line{
-    color: #73767B;
   }
   .footerText{
     font-size: 12px;
@@ -93,23 +85,7 @@ body {
     text-align: center;
     line-height: 16.34px;
   }
-  .social-media-container > *{
-    padding-right: 10px;
-  } 
+ 
   .sapMLnk:hover {
     text-decoration: none;
   } 
- 
-  @media only screen and (max-width: 600px) {
-    .legal-info-details{
-      flex-direction: column !important;
-      justify-content: center;
-      align-items: center;
-    }
-    .legal-info-links{
-      padding-bottom: 10px;
-    }
-    .vertical-line{
-      display: none;
-    }
-  }
