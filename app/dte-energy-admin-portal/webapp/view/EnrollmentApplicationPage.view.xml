@@ -64,7 +64,7 @@
               <Text text="{parts: [{path: 'MainModel>CompanyAddress'}, {path: 'MainModel>CompanyAddrLineTwo'}, {path: 'MainModel>City'}, {path: 'MainModel>State'}], formatter: '.formatCompanyAddress'}"></Text>
               <ComboBox
                 selectedKey="{MainModel>ApplicationStatus}"
-                selectionChange="" change="onUpdateField">
+                selectionChange="" change="onUpdateStatus">
                 <items>
                   <core:Item key="New" text="New" />
                   <core:Item key="Accepted" text="Accepted" />

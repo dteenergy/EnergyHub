@@ -94,4 +94,6 @@ type appStatus : String enum {
 
 type consentStatus : String enum {
     New;
+    Rejected;
+    Accepted;
 }

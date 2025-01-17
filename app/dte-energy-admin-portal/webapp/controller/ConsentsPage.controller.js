@@ -120,19 +120,39 @@ sap.ui.define([
     },
 
     /**
-    * Submits batch updates to the backend for saving changes to the application consent fields.
-    * And display the message(success/error).
-    *
-    * @public
-    */
-    handleResponse: function () {
-      const updateModel = this.getView().getModel("MainModel");
+     * Handles the update of application status triggered by a ComboBox selection.
+     *
+     * @param {sap.ui.base.Event} oEvent - The event object triggered by the ComboBox selection.
+     */
+    handleResponse: function (oEvent) {
+      const oSource = oEvent.getSource(); // The ComboBox triggering the event
+      const sNewValue = oSource.getSelectedKey(); // Get the new selected key
+      const oContext = oSource.getBindingContext("MainModel"); // Get the row context
+      const updateModel = this.getView().getModel("MainModel"); // Get the OData V4 model
 
-      this.handleSessionExpiry(this.baseUrl);
+      if (!sNewValue) {
+        // If no value is selected, set the ComboBox to an error state
+        oSource.setValueState("Error");
+        oSource.setValueStateText("Please select a valid Application Status.");
+        return; // Stop further processing
+      }
+    
+      // Clear any previous error state
+      oSource.setValueState("None");
 
-      updateModel.submitBatch('CustomGroupId')
-        .then(() => MessageToast.show("Updated successfully!"))
-        .catch((err) => MessageToast.show("Updation failed : ", err))
+      // Update the backend with the new value
+      oContext.setProperty("ApplicationStatus", sNewValue); // Set the property locally
+
+      // Submit the changes to the backend
+      updateModel.submitBatch("batchGroupId").then(() => {
+        sap.m.MessageToast.show("Consent status updated successfully!");
+      }).catch((oError) => {
+        // Parse and display the error from the backend
+        const sErrorMessage = JSON.parse(oError.responseText).error.message;
+        oSource.setValueState("Error");
+        oSource.setValueStateText(sErrorMessage);
+        sap.m.MessageBox.error(sErrorMessage);
+      });
     }
   });
 });

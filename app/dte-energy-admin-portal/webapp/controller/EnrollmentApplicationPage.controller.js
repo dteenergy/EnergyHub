@@ -181,7 +181,7 @@ sap.ui.define([
       });
     },
     /**
-     * Submits batch updates to the backend for saving changes to the application fields.
+     * Submits batch updates to the backend for saving changes to the NumberOfConsent field.
      * And display the message(success/error).
      *
      * @public
@@ -192,8 +192,43 @@ sap.ui.define([
       this.handleSessionExpiry(this.baseUrl);
 
       updateModel.submitBatch('CustomGroupId')
-        .then(() => MessageToast.show("Updated successfully!"))
+        .then(() => MessageToast.show("Number of tenants updated successfully!"))
         .catch((err) => MessageToast.show("Updation failed : ", err))
+    },
+    /**
+     * Handles the update of application status triggered by a ComboBox selection.
+     *
+     * @param {sap.ui.base.Event} oEvent - The event object triggered by the ComboBox selection.
+     */
+    onUpdateStatus: async function(oEvent) {
+      const oSource = oEvent.getSource(); // The ComboBox triggering the event
+      const sNewValue = oSource.getSelectedKey(); // Get the new selected key
+      const oContext = oSource.getBindingContext("MainModel"); // Get the row context
+      const updateModel = this.getView().getModel("MainModel"); // Get the OData V4 model
+
+      if (!sNewValue) {
+        // If no value is selected, set the ComboBox to an error state
+        oSource.setValueState("Error");
+        oSource.setValueStateText("Please select a valid Application Status.");
+        return; // Stop further processing
+      }
+    
+      // Clear any previous error state
+      oSource.setValueState("None");
+
+      // Update the backend with the new value
+      oContext.setProperty("ApplicationStatus", sNewValue); // Set the property locally
+
+      // Submit the changes to the backend
+      updateModel.submitBatch("batchGroupId").then(() => {
+        sap.m.MessageToast.show("Application status updated successfully!");
+      }).catch((oError) => {
+        // Parse and display the error from the backend
+        const sErrorMessage = JSON.parse(oError.responseText).error.message;
+        oSource.setValueState("Error");
+        oSource.setValueStateText(sErrorMessage);
+        sap.m.MessageBox.error(sErrorMessage);
+      });
     },
     /**
      * Formats the company address into a single string based on the provided components.
