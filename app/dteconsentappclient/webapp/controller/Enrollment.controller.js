@@ -274,7 +274,10 @@ sap.ui.define([
 								}
 							})
 						})
-					}
+					};
+
+				// Re-validate the building details
+				this.validateBuildingDetails("building-detail-main-container", "locationDetailsValidation");
 			},
 
           // Update the "EnergyPrgmParticipated" status based on the selected radio button value. 
