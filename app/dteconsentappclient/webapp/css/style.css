@@ -84,13 +84,13 @@ body {
     text-align: center;
     line-height: 16.34px;
   }
+ 
   .sapMLnk:hover {
     text-decoration: none;
   }
-  div[style="display: none;"] > div[id^="ZN_"] {
-    height: 0 !important;
-    overflow: hidden;
-  }
+  #ZN_4JH3fX4Yv5pRFL8{
+    height: 0%;
+  } 
 
   @media only screen and (max-width: 600px) {
     .sapMIBar.app-header{
