@@ -50,6 +50,7 @@ sap.ui.define([
 					this.LandlordConfirmationPageUrl = envVariables.LandlordConfirmationPageUrl;
 					this.ErrorPageUrl = envVariables.ErrorPageUrl;
 					this.DTEAddressValidationUrl = envVariables.DTEAddressValidationUrl;
+					this.RecaptchaSiteKey = envVariables.RecaptchaSiteKey;
 					
           let oEnrollFormData = {
             SignatureSignedBy: "",
@@ -686,7 +687,7 @@ sap.ui.define([
 					 * Here checks if the error message strip was in inVisible state
 					 * If it is all inputs are valid, then open the additional location alert dialog
 					 */
-					if(!oErrorVisibilityModelData?.isInputInValid && !oErrorVisibilityModelData?.isTermsAndConditionVerifiedStatus){
+					// if(!oErrorVisibilityModelData?.isInputInValid && !oErrorVisibilityModelData?.isTermsAndConditionVerifiedStatus){
 
 					const that = this;
 
@@ -702,6 +703,24 @@ sap.ui.define([
                 }
               }).addStyleClass("outline-button"),
               new sap.m.Text({text: 'I don’t have another location.'}),
+							
+							new sap.ui.core.HTML(that.createId("recaptchaPlaceholder"),{
+								content: "<div id='recaptcha-container'></div>", // Placeholder div for reCAPTCHA
+								afterRendering: function () {
+									// Check if the reCAPTCHA library is loaded
+									if (window.grecaptcha) {
+										grecaptcha.render("recaptcha-container", {
+											sitekey: that.RecaptchaSiteKey, // Replace with your Google reCAPTCHA Site Key
+											theme: "light", // Optional: 'light' or 'dark'
+											// callback: this._onRecaptchaSuccess.bind(this), // Callback for success
+										});
+									} else {
+										console.error("reCAPTCHA script not loaded!");
+									}
+								}
+								// .bind(this) // Bind the `this` context to your controller
+							}),
+
               new sap.m.Button({
                 text: 'Continue Submission',
                 press: function(){
@@ -729,6 +748,9 @@ sap.ui.define([
 										src: 'sap-icon://decline',
 										decorative: false,
 										press: function () {
+												const recaptchaElement = that.byId("recaptchaPlaceholder");
+												// recaptchaElement.removeAllContent();
+												recaptchaElement.destroy();
 												that.oConfirmationDialog.close();
 										}
 								}).addStyleClass("alert-close-icon")
@@ -746,7 +768,7 @@ sap.ui.define([
             }).addStyleClass("alert-dialog-main-container")
           }
           this.oConfirmationDialog.open();
-        	}
+        	// }
 				},
 
 				submitAction: async function(){
