@@ -11,6 +11,7 @@
     "@sap/cds-dk": "^8.4.2",
     "@sap/xsenv": "^5.4.0",
     "@sap/xssec": "^4",
+    "axios": "^1.7.9",
     "cors": "^2.8.5",
     "crypto-js": "^4.2.0",
     "express": "^4",
@@ -54,7 +55,9 @@
           "users": {
             "test@gmail.com": {
               "password": "test@123",
-              "roles": ["Administrator"]
+              "roles": [
+                "Administrator"
+              ]
             }
           }
         }

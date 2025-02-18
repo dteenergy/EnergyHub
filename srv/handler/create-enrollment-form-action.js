@@ -1,6 +1,9 @@
 const cds = require('@sap/cds');
 const { v4: uuidv4 } = require('uuid');
+
+const sharepoint = require('../utils/sharepoint-api');
 const { emptyField } = require("./regex-and-error-message");
+
 
 /**
  * Function: Create the Enrollment form details
@@ -11,7 +14,7 @@ const { emptyField } = require("./regex-and-error-message");
 const createEnrollmentFormDetail = async (req, entity, tx) => {
 
   try {
-    const { ApplicationDetail, BuildingDetail, AccountDetail, ConsentDetail } = req?.data;
+    const { ApplicationDetail, BuildingDetail, AccountDetail, ConsentDetail, Attachment } = req?.data;
     
     // Get the flag and prefix for the application number from environment variables
     const prefixFlag = process.env.APPNUM_PREFIX_ENABLED;
@@ -55,6 +58,12 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
       const incrementedNumberStr = '000000001';
       applicationNumber = prefixFlag === 'Y' ? appNumPrefix.concat(incrementedNumberStr) : incrementedNumberStr;
     }
+
+    //Upload to sharepoint
+    const response = await sharepoint.uploadFile(Attachment, `${applicationNumber}.xlsx`);
+
+    console.log('Sharepoint', response);
+    
 
     // Generate a unique AppId using uuid
     const AppId = uuidv4();

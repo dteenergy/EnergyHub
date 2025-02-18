@@ -13,7 +13,8 @@ service DTEConsentAppPortal {
         ApplicationDetail : String,
         BuildingDetail : String,
         AccountDetail : String,
-        ConsentDetail : String
+        ConsentDetail : String,
+        Attachment : LargeBinary
     ) returns String;
 
     action CreateConsentFormDetail(
