@@ -11,7 +11,7 @@ entity ApplicationDetail{
     AttachmentURL : String;
     Comment : String;
     AssignedTo : String;
-    UpdatedBy : String;
+    UpdatedBy : String  @cds.on.insert: $user @cds.on.update: $user;
     CreatedAt: Timestamp @cds.on.insert: $now;
     UpdatedAt: Timestamp @cds.on.insert: $now  @cds.on.update: $now;
 
