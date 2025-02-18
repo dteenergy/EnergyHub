@@ -66,7 +66,7 @@ entity AccountDetail {
     AppRefId : Association to ApplicationDetail;
 }
 
-// Application Detail Entity
+// Application Consent Entity
 entity ApplicationConsent {
     key ApplicationConsentId : UUID;
     FirstName : String not null;
