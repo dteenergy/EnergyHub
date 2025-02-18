@@ -1,15 +1,11 @@
 // This file contains Sharepoint APIs
-
 const axios = require('axios');
 const FormData = require('form-data');
 
 const getAccessToken = async () => {
     try {
         const data = new FormData();
-        data.append('grant_type', 'client_credentials');
-        data.append('client_id', 'f25d540b-7298-42fb-8b44-3f0f7ab8425f@8e61d5fe-7749-4e76-88ee-6d8799ae8143');
-        data.append('client_secret', 'a9Z8Q~7gqufvj4hFS17EktTPKdM2BWRjLj1AHaTj');
-        data.append('resource', '00000003-0000-0ff1-ce00-000000000000/dteenergy.sharepoint.com@8e61d5fe-7749-4e76-88ee-6d8799ae8143');
+       
 
         let config = {
             method: 'get',
