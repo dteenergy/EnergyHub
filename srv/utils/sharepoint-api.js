@@ -1,26 +1,47 @@
 // This file contains Sharepoint APIs
 const axios = require('axios');
 const FormData = require('form-data');
+const dotenv = require('dotenv');
+const dotenvExpand = require('dotenv-expand');
 
+//Expand .env configuration to support variables
+const dotenvConfig = dotenv.config();
+dotenvExpand.expand(dotenvConfig);
+
+
+//Sharepoint Config detail
+const spClientID = process.env.SP_CLIENT_ID;
+const spClientSecret = process.env.SP_CLIENT_SECRET;
+const spTenantID =  process.env.SP_TENENT_ID
+const spDomain = process.env.SP_DOMAIN 
+const spresource = process.env.SP_RESOURCE;
+const spFolderPath = process.env.SP_FOLDER_PATH;
+
+/**
+ * Get Sharepoint API access token
+ * @returns {object} token
+ */
 const getAccessToken = async () => {
     try {
+        //Request Body
         const data = new FormData();
         data.append('grant_type', 'client_credentials');
-        data.append('client_id', process.env.SP_CLIENT_ID);
-        data.append('client_secret', process.env.SP_CLIENT_SECRET);
-        data.append('resource', process.env.SP_RESOURCE);
+        data.append('client_id', spClientID);
+        data.append('client_secret', spClientSecret);
+        data.append('resource', spresource);
 
-        let config = {
+        //HTTP request config
+        const config = {
             method: 'get',
             maxBodyLength: Infinity,
-            url: 'https://accounts.accesscontrol.windows.net/8e61d5fe-7749-4e76-88ee-6d8799ae8143/tokens/OAuth/2/',
+            url: `https://accounts.accesscontrol.windows.net/${spTenantID}/tokens/OAuth/2/`,
             headers: {
-                // 'Cookie': 'esctx=PAQABBwEAAABVrSpeuWamRam2jAF1XRQErpxuVR_f9h0-tECnUvA-uWKQYbuNuaHiQEeeptk785U7IeVCDnkY8U-7btMaSdC1_nQveJZI03C6DK0R6uOCBjhlrbHAIksS17fg4SupMfGWNa-b1VQ55RwI3Lh_bpjn3O5mKwMJ_a2uL4cxDf1n5Me5y8o2g4qU28dBEHRhRB4gAA; fpc=Apjsce9O8bRFrWA4m2W6O_4xGIqcAQAAABdCRt8OAAAA; stsservicecookie=estsfd; x-ms-gateway-slice=estsfd',
                 ...data.getHeaders()
             },
             data: data
         };
-
+    
+        // Call sharepoint OAuth API to get access token
         const response = await axios.request(config)
 
         return response.data;
@@ -31,22 +52,25 @@ const getAccessToken = async () => {
 }
 
 /**
- * 
- * @param {*} fileContent 
- * @param {*} fileName 
- * @returns 
+ * Upload file to Sharepoint
+ * @param {String} fileContent File Content Bas464
+ * @param {String} fileName File Name
+ * @returns {object}
  */
 const uploadFile = async (fileContent, fileName) => {
     try {
 
+        //Get access token
         const {token_type, access_token} = await getAccessToken();
 
+        // Convert base64 to buffer
         const data = Buffer.from(fileContent,'base64');
 
-        let config = {
+        // Http request config
+        const config = {
             method: 'post',
             maxBodyLength: Infinity,
-            url: `https://dteenergy.sharepoint.com/sites/kosha/_api/web/GetFolderByServerRelativePath(decodedurl=\'/sites/kosha/Shared%20Documents/Test\')/Files/add(url='${fileName}', overwrite=true)`,
+            url: `https://${spDomain}/sites/kosha/_api/web/GetFolderByServerRelativePath(decodedurl='${spFolderPath}')/Files/add(url='${fileName}', overwrite=true)`,
             headers: {
                 'Authorization': `${token_type} ${access_token}`,
                 'Accept': 'application/json',
@@ -54,10 +78,8 @@ const uploadFile = async (fileContent, fileName) => {
             },
             data: data
         };
-
-        console.log(config);
         
-
+        //Call sharepoint file upload API
         const response = await axios.request(config)
 
         return response.data

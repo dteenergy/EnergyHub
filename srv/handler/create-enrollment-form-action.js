@@ -61,8 +61,9 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
 
     //Upload to sharepoint
     const response = await sharepoint.uploadFile(Attachment, `${applicationNumber}.xlsx`);
+    const attachmentURL = response.ServerRelativeUrl;
 
-    console.log('Sharepoint', response);
+    console.log('Sharepoint', response.ServerRelativeUrl);
     
 
     // Generate a unique AppId using uuid
@@ -88,6 +89,7 @@ const createEnrollmentFormDetail = async (req, entity, tx) => {
     // Assign AppId to Application Detail, Building Detail, Account Detail and Application Consent 
     applicationParsedData.AppId = AppId;
     applicationParsedData.ApplicationNumber = applicationNumber;
+    applicationParsedData.AttachmentURL = attachmentURL;
     buildingParsedData?.map(detail => detail.AppRefId_AppId = AppId);
     accountParsedData.AppRefId_AppId = AppId;
     consentParsedData.map(consent => {
