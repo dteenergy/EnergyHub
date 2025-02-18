@@ -4,12 +4,7 @@ const FormData = require('form-data');
 
 const getAccessToken = async () => {
     try {
-        const data = new FormData();
-        data.append('grant_type', 'client_credentials');
-        data.append('client_id', process.env.SP_CLIENT_ID);
-        data.append('client_secret', process.env.SP_CLIENT_SECRET);
-        data.append('resource', process.env.SP_RESOURCE);
-
+       
         let config = {
             method: 'get',
             maxBodyLength: Infinity,
