@@ -6,16 +6,16 @@ const getAccessToken = async () => {
     try {
         const data = new FormData();
         data.append('grant_type', 'client_credentials');
-        data.append('client_id', 'f25d540b-7298-42fb-8b44-3f0f7ab8425f@8e61d5fe-7749-4e76-88ee-6d8799ae8143');
-        data.append('client_secret', 'a9Z8Q~7gqufvj4hFS17EktTPKdM2BWRjLj1AHaTj');
-        data.append('resource', '');
+        data.append('client_id', process.env.SP_CLIENT_ID);
+        data.append('client_secret', process.env.SP_CLIENT_SECRET);
+        data.append('resource', process.env.SP_RESOURCE);
 
         let config = {
             method: 'get',
             maxBodyLength: Infinity,
             url: 'https://accounts.accesscontrol.windows.net/8e61d5fe-7749-4e76-88ee-6d8799ae8143/tokens/OAuth/2/',
             headers: {
-                'Cookie': 'esctx=PAQABBwEAAABVrSpeuWamRam2jAF1XRQErpxuVR_f9h0-tECnUvA-uWKQYbuNuaHiQEeeptk785U7IeVCDnkY8U-7btMaSdC1_nQveJZI03C6DK0R6uOCBjhlrbHAIksS17fg4SupMfGWNa-b1VQ55RwI3Lh_bpjn3O5mKwMJ_a2uL4cxDf1n5Me5y8o2g4qU28dBEHRhRB4gAA; fpc=Apjsce9O8bRFrWA4m2W6O_4xGIqcAQAAABdCRt8OAAAA; stsservicecookie=estsfd; x-ms-gateway-slice=estsfd',
+                // 'Cookie': 'esctx=PAQABBwEAAABVrSpeuWamRam2jAF1XRQErpxuVR_f9h0-tECnUvA-uWKQYbuNuaHiQEeeptk785U7IeVCDnkY8U-7btMaSdC1_nQveJZI03C6DK0R6uOCBjhlrbHAIksS17fg4SupMfGWNa-b1VQ55RwI3Lh_bpjn3O5mKwMJ_a2uL4cxDf1n5Me5y8o2g4qU28dBEHRhRB4gAA; fpc=Apjsce9O8bRFrWA4m2W6O_4xGIqcAQAAABdCRt8OAAAA; stsservicecookie=estsfd; x-ms-gateway-slice=estsfd',
                 ...data.getHeaders()
             },
             data: data
