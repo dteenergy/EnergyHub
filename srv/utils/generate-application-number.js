@@ -1,4 +1,8 @@
-
+/**
+ * Generate Application Number
+ * @param {cds.entity} entity 
+ * @returns {string} Application Number
+ */
 const generateAppNumber = async (entity) => {
     try {
         // Get the flag and prefix for the application number from environment variables

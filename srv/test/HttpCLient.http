@@ -1,7 +1,14 @@
 POST /service/CreateEnrollmentFormDetail HTTP/1.1
-Host: localhost:40211
+Host: localhost:35887
 Content-Type: application/json
 Content-Length: 1300
+
+# {
+#     "AccountDetail": "{\"CompanyName\":\"Test\",\"CompanyAddress\":\"Big Company\",\"City\":\"P City\",\"State\":\"tamilnadu\",\"Zipcode\":\"36652\",\"AcctMgrName\":\"Company Testing\",\"AcctMgrPhNo\":\"175895462\",\"FirstName\":\"Anuj\",\"LastName\":\"M\",\"SiteContactTitle\":\"Demo TitleContent\",\"SiteAddress\":\"85 street\",\"SiteCity\":\"Y City\",\"SiteState\":\"tamilnadu\",\"SiteZipcode\":\"123456\",\"SitePhoneNumber\":\"1152486\",\"EmailAddr\":\"company1@gmail.com\",\"EnergyPrgmParticipated\":true}",
+#     "BuildingDetail": "[{\"BuildingName\":\"Building 1 Building\",\"AccountNumber\":\"1122335\",\"Address\":\"9550, N Haggerty Rd, Plymouth, MI, 48170\",\"City\":\"Detroit\",\"State\":\"MI\",\"Zipcode\":\"48226\"}]",
+#     "ApplicationDetail": "{\"SignatureSignedBy\":\"App Test 1 \",\"SignatureSignedDate\":\"2024-12-11\"}",
+#     "ConsentDetail": "[{\"FirstName\":\"Consent 1\",\"LastName\":\"Doe\",\"SiteContactTitle\":\"Manager\",\"Address\":\"123 Main Street\",\"City\":\"New York\",\"State\":\"NY\",\"Zipcode\":\"10001\",\"AccountNumber\":\"ACC123456\",\"PhoneNumber\":\"123-456-7890\",\"EmailAddr\":\"Consent 1.doe@example.com\",\"AuthPersonName\":\"Jane Smith\",\"AuthDate\":\"2024-12-11\",\"AuthTitle\":\"Supervisor\",\"SiteContactTitle\":\"Contact for site management\"}]"
+# }
 
 {
     "AccountDetail": "{\"CompanyName\":\"Test\",\"CompanyAddress\":\"Big Company\",\"City\":\"P City\",\"State\":\"tamilnadu\",\"Zipcode\":\"36652\",\"AcctMgrName\":\"Company Testing\",\"AcctMgrPhNo\":\"175895462\",\"FirstName\":\"Anuj\",\"LastName\":\"M\",\"SiteContactTitle\":\"Demo TitleContent\",\"SiteAddress\":\"85 street\",\"SiteCity\":\"Y City\",\"SiteState\":\"tamilnadu\",\"SiteZipcode\":\"123456\",\"SitePhoneNumber\":\"1152486\",\"EmailAddr\":\"company1@gmail.com\",\"EnergyPrgmParticipated\":true}",
