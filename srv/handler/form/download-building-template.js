@@ -9,7 +9,7 @@ const downloadBuildingTemplate = async (req) => {
         const templateFileContent = await fs.readFileSync(filePath,{encoding:'base64url'});
 
         return {
-            'statusCode' : '200',
+            'statusCode' : '00',
             'file' : templateFileContent
           }
     } catch (error) {
