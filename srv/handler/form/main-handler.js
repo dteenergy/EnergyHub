@@ -9,11 +9,14 @@ const createEnrollmentFormDetail = require('./create-enrollment-form-action');
 const createConsentFormDetail = require('./create-consent-form-action');
 const { valueEncrypt, valueDecrypt } = require('../../utils/encrypt-and-decrypt-id');
 const validateApplicationId = require('./validate-app-id');
+const { downloadBuildingTemplate } = require('./download-building-template');
 
 module.exports = cds.service.impl(async function (srv) {
 
 	// Landlord enrollment form create action
 	srv.on('CreateEnrollmentFormDetail', createEnrollmentFormDetail);
+
+	srv.on('DownloadBuildingTemplate', downloadBuildingTemplate);
 
 	// Validate the Application Id
 	srv.on('validateApplicationId', async (req) => {
@@ -82,18 +85,6 @@ module.exports = cds.service.impl(async function (srv) {
 					}
 			}
 		}),
-
-		// Testing Purpose
-		srv.on('AppIdEncrypt', async (req) => {
-			const encrAppId = req._.req.query.encrAppId;
-			// Encrypt the AppId
-			const encryptedData = await valueEncrypt(encrAppId);
-
-			// Decrypt the AppId
-			const decryptedData = await valueDecrypt(encryptedData);
-
-			return { "Encrypted": encryptedData, "Decrypted": decryptedData }
-		});
 
 	// Get environment variable (Navigation page url and address validation url)
 	srv.on('getEnvironmentVariables', (req) => {

@@ -23,10 +23,10 @@ service DTEConsentAppPortal {
 
     // Validate the Application Id
     function validateApplicationId () returns String;
-    
-    // Testing AppId Encrypt Function
-    function AppIdEncrypt() returns String;
 
     // Get environment variable (AEM Navigation page url and address validation url)
     function getEnvironmentVariables () returns String;
+
+    // Download building Details excle template
+    function DownloadBuildingTemplate () returns LargeBinary;
 };
