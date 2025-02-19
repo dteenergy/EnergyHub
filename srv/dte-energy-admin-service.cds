@@ -34,6 +34,7 @@ service DTEEnergyAdminPortal {
     ApplicationStatus,
     NoOfConsentReceived,
     ApplicationNumber,
+    LinkId,
     SignatureSignedBy,
     SignatureSignedDate,
     UpdatedAt as AppUpdatedAt,
