@@ -67,6 +67,7 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
             SELECT.from(ApplicationConsent)
               .where({ AppId: el.AppId, ConsentStatus: ['New', 'Accepted'], ConsentByTenantFlag: true })
           )
+          console.log(el.LinkId)
           
           el.NoOfConsentReceived = ConsentDetail?.length;
         }

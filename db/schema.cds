@@ -1,18 +1,21 @@
 namespace dteConsentApp;
-@assert.unique: {
-    ApplicationNumber: [ApplicationNumber],
-}
 
+//Application Detail Entity
 entity ApplicationDetail{
     key AppId: UUID;
     ApplicationStatus : appStatus default 'New';
     NumberOfTenants : Integer;
     SignatureSignedBy : String not null;
     SignatureSignedDate : Date not null;
+    ApplicationNumber : String not null;
+    AttachmentURL : String;
+    Comment : String;
+    AssignedTo : String;
+    LinkId: String;
+    UpdatedBy : String  @cds.on.insert: $user @cds.on.update: $user;
     CreatedAt: Timestamp @cds.on.insert: $now;
     UpdatedAt: Timestamp @cds.on.insert: $now  @cds.on.update: $now;
-    ApplicationNumber : String not null;
-    LinkId: String;
+
     virtual NoOfConsentReceived : Integer;
 
     AccountDetailRefId : Association to one AccountDetail on AccountDetailRefId.AppRefId = $self;
@@ -20,6 +23,7 @@ entity ApplicationDetail{
     ApplicationConsentRefId : Association to many ApplicationConsent on ApplicationConsentRefId.AppRefId = $self;
 }
 
+// Building Detail Entity
 entity BuildingDetail {
     key BuildingId : UUID;
     BuildingName : String not null;
@@ -35,6 +39,7 @@ entity BuildingDetail {
     AppRefId : Association to one ApplicationDetail;
 }
 
+// Account Detail Entity
 entity AccountDetail {
     key AccountDetailId : UUID;
     CompanyName : String not null;
@@ -62,6 +67,7 @@ entity AccountDetail {
     AppRefId : Association to ApplicationDetail;
 }
 
+// Application Consent Entity
 entity ApplicationConsent {
     key ApplicationConsentId : UUID;
     FirstName : String not null;
@@ -86,7 +92,12 @@ entity ApplicationConsent {
     AppRefId : Association to ApplicationDetail;
 }
 
-// aspects
+//Defining Unique Number
+@assert.unique: {
+    ApplicationNumber: [ApplicationNumber],
+}
+
+// Defining Custom Data types
 type appStatus : String enum {
     New;
     Rejected;
