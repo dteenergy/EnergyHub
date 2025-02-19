@@ -28,7 +28,7 @@ module.exports = cds.service.impl(async function (srv) {
 
 			// Read consent form view XML file
 			const fileName = 'ConsentForm.view.xml';
-			const filePath = path.join(__dirname, '../view', fileName);
+			const filePath = path.join(__dirname, '../../view', fileName);
 			const consentFormViewBuffer = fs.readFileSync(filePath).toString();
 
 			// Templating
@@ -40,6 +40,8 @@ module.exports = cds.service.impl(async function (srv) {
 
 			return result;
 		} catch (e) {
+			console.log(e);
+			
 			if (e.statusCode) {
 				res.status(e.statusCode)
 				return e.message

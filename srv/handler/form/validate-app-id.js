@@ -8,6 +8,7 @@ const { valueDecrypt } = require("../../utils/encrypt-and-decrypt-id");
  */
 const validateApplicationId = async (req, entity) => {
 	try {
+		
 		// Get the encrypted app id
 		const encrAppId = req?._.req?.query?.encrAppId;
 
@@ -23,7 +24,7 @@ const validateApplicationId = async (req, entity) => {
 		if (applicationDetail?.length === 0) throw { statusCode: 404, message: 'Application Detail not found for the Id' }
 
 		return { statusCode: 200, message: 'Application Details are available.' }
-	} catch(e){
+	} catch(e){		
 		if(e.statusCode) {
 			return {statusCode : e.statusCode, message: e.message}
 		} else {
