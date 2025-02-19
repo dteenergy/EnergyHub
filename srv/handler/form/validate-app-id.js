@@ -1,4 +1,4 @@
-const { valueDecrypt } = require("./encrypt-and-decrypt-id");
+const { valueDecrypt } = require("../../utils/encrypt-and-decrypt-id");
 
 /**
  * Validate the Application Id

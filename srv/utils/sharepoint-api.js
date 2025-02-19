@@ -1,13 +1,6 @@
 // This file contains Sharepoint APIs
 const axios = require('axios');
 const FormData = require('form-data');
-const dotenv = require('dotenv');
-const dotenvExpand = require('dotenv-expand');
-
-//Expand .env configuration to support variables
-const dotenvConfig = dotenv.config();
-dotenvExpand.expand(dotenvConfig);
-
 
 //Sharepoint Config detail
 const spClientID = process.env.SP_CLIENT_ID;

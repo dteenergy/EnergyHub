@@ -7,11 +7,13 @@ const {Readable} = require ('stream');
 
 const createEnrollmentFormDetail = require('./create-enrollment-form-action');
 const createConsentFormDetail = require('./create-consent-form-action');
-const { valueEncrypt, valueDecrypt } = require('./encrypt-and-decrypt-id');
+const { valueEncrypt, valueDecrypt } = require('../../utils/encrypt-and-decrypt-id');
 const validateApplicationId = require('./validate-app-id');
 
 module.exports = cds.service.impl(async function (srv) {
+	
 	srv.on('CreateEnrollmentFormDetail', async (req) => {
+		
 		// Initialize the transaction
 		const tx = cds.tx(req);
 		try {
