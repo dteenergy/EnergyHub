@@ -10,6 +10,20 @@
         <Button text="Close" press="onCloseDialog" />
     </endButton>
   </Dialog>
+  <Dialog id="idLinkDialog" title="Select Parent Application" afterClose="onCloseDialog">
+    <VBox class="sapUiSmallMargin">
+        <Text text="Select the Parent Application to link with the selected applications:" />
+        <Select id="idParentSelect" items="{SelectedRowsModel>/}">
+            <core:Item key="{SelectedRowsModel>AppId}" text="{SelectedRowsModel>ApplicationNumber}" />
+        </Select>
+    </VBox>
+    <beginButton>
+        <Button text="Confirm" press="onConfirmLink" />
+    </beginButton>
+    <endButton>
+        <Button text="Cancel" press="onCloseDialog" />
+    </endButton>
+    </Dialog>
   <VBox id="idApplicationVBox">
     <FlexBox id="idToolBar" wrap="Wrap" justifyContent="End" class="paddingAlignment">
       <SearchField id="idAppNumberFilter" placeholder="Search for Application Number..." liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
@@ -23,10 +37,11 @@
           <core:Item key="Rejected" text="Rejected"/>
         </items>
       </ComboBox>
+      <Button id="idLinkButton" text="Link" press="handleLinkPress" tooltip="Settings"/>
       <Button id="idP13nButton" icon="sap-icon://action-settings" press="setupPersonalization" tooltip="Settings"/>
     </FlexBox>
     <ScrollContainer id="_idScrollContainer" horizontal="true" vertical="false" width="100%" height="auto" class="paddingAlignment">
-      <Table id="idApplicationTable" items="{MainModel>/ApplicationDetail}" growing="true" growingThreshold="10" sticky="ColumnHeaders" width="100%" class="setTableHeight">
+      <Table id="idApplicationTable" mode="MultiSelect" items="{MainModel>/ApplicationDetail}" growing="true" growingThreshold="10" sticky="ColumnHeaders" width="100%" class="setTableHeight">
         <columns>
           <Column width="150px"><header><Text text="Application Number" class="boldText"></Text></header></Column>
           <Column width="150px"><header><Text text="Site Contact" class="boldText"></Text></header></Column>

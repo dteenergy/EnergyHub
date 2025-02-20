@@ -4,8 +4,14 @@ sap.ui.define([
   "sap/ui/model/Filter",
   "sap/ui/model/FilterOperator",
   "sap/m/MessageBox",
-  "sap/m/MessageToast"
-], (BaseController, PersonalizationController, Filter, FilterOperator, MessageBox, MessageToast) => {
+  "sap/m/MessageToast",
+  "sap/m/Dialog",
+  "sap/m/Button",
+  "sap/m/Text",
+  "sap/m/VBox",
+  "sap/m/Select",
+  "sap/ui/core/Item"
+], (BaseController, PersonalizationController, Filter, FilterOperator, MessageBox, MessageToast, Dialog, Button, Text, VBox, Select, Item) => {
   "use strict";
 
   return BaseController.extend("dteenergyadminportal.controller.EnrollmentApplicationPage", {
@@ -25,6 +31,7 @@ sap.ui.define([
       this.sLastName = filteredLastName;
       this.sApplicationStatus = filteredApplicationStatus;
       this.tenantConsentFormURL = tenantConsentFormURL;
+      console.log(this.baseUrl)
 
       this.handleSessionExpiry(this.baseUrl);
 
@@ -51,6 +58,25 @@ sap.ui.define([
 
       // Apply initial filters
       this.onFilterChange();
+
+      // // Retrieve the dialog by its ID
+      // var oDialog = this.byId("idLinkDialog");
+
+      // // Create the Confirm button
+      // var oConfirmButton = new Button({
+      //     text: "Confirm",
+      //     press: this.onConfirmLink.bind(this)
+      // });
+
+      // // Create the Cancel button
+      // var oCancelButton = new Button({
+      //     text: "Cancel",
+      //     press: this.onCloseDialog.bind(this)
+      // });
+
+      // // Add buttons to the dialog
+      // oDialog.setBeginButton(oConfirmButton);
+      // oDialog.setEndButton(oCancelButton);
     },
     /**
      * Opens the personalization dialog for the application table.
@@ -109,7 +135,55 @@ sap.ui.define([
       // Apply the combined filter or clear filters
       oBinding.filter(aFilters.length > 0 ? oCombinedFilter : []);
     },
-    /**
+    handleLinkPress: async function() {
+      const oTable = this.getView().byId('idApplicationTable');
+      const aSelectedRows = oTable.getSelectedItems();
+      if(aSelectedRows.length < 2) {
+        sap.m.MessageToast.show("Please select at least two application.");
+        return;
+      }
+      
+      const aSelectedData = aSelectedRows.map(function (oItem) {
+        return oItem.getBindingContext("MainModel").getObject();
+      });
+
+      // Create a local JSON model with selected rows only
+      var oSelectedRowsModel = new sap.ui.model.json.JSONModel(aSelectedData);
+      console.log(aSelectedData);
+      this._aSelectedRows = aSelectedData;
+
+      // Set model to dropdown
+      this.byId('idLinkDialog').setModel(oSelectedRowsModel, "SelectedRowsModel");
+
+      // Open dialog
+      this.byId('idLinkDialog').open();
+    },
+    onConfirmLink: async function () {
+      // Handle the confirm action
+      var oDialog = this.byId("idLinkDialog");
+      var oSelect = this.byId("idParentSelect");
+      var sSelectedKey = oSelect.getSelectedKey();
+      var sParentAppNumber = oSelect.getSelectedItem().getText();
+      console.log(this.baseUrl, sSelectedKey, this._aSelectedRows);
+
+      const selectedApplication = this._aSelectedRows.map(row => row.AppId);
+      const finalResult = {selectedAppId: sSelectedKey, selectedApplication: selectedApplication};
+      console.log(finalResult);
+      // this._aSelectedRows.map(async row => {
+      //   console.log(row);
+      //   console.log(row.AppId);
+      //   console.log(this.baseUrl)
+      //   await axios.post(this.baseUrl+`admin/service/UpdateLinkId`, {LinkId: sParentAppNumber}).then(res => res.data).then(data => console.log(data)).catch(error => console.log('error'+ error))
+      // });
+
+      await axios.post(this.baseUrl+`admin/service/UpdateLinkId`, finalResult).then(res => res.data).then(data => console.log(data)).catch(error => console.log('error'+ error))
+
+      oDialog.close();
+    },
+    onCloseDialog: function () {
+      this.byId('idLinkDialog').close();
+    },
+    /** 
      * Generates a URL for the selected application and displays it in a dialog.
      *
      * @param {sap.ui.base.Event} oEvent - The event triggered by button press.
