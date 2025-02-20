@@ -352,8 +352,12 @@ sap.ui.define([
 						window.open(this.ErrorPageUrl, '_self');
 					}
 				}catch(err){
-					// Navigate to the error page
-					window.open(this.ErrorPageUrl, '_self');
+					console.log(err);
+					if(err?.response?.status === 403) {
+						grecaptcha.reset();
+						this.isRecaptchaVerified = false;
+						this.errorVisibilityModel.setProperty('/recaptchaErrorMessageVisibilityStatus', true);
+					} else window.open(this.ErrorPageUrl, '_self'); // Navigate to the error page
 				}	
 			}
 		},

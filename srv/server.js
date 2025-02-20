@@ -2,6 +2,8 @@ const cds = require('@sap/cds');
 const dotenv = require('dotenv');
 const dotenvExpand = require('dotenv-expand');
 
+const {verifyRecaptcha} = require('./middleware/verify-recaptcha');
+
 //Expand .env configuration to support variables
 const dotenvConfig = dotenv.config();
 dotenvExpand.expand(dotenvConfig);
@@ -29,6 +31,20 @@ cds.on('bootstrap', async (app) => {
       else return res.status(403).send('Forbidden');
     }
   });
-})
+
+  app.use(async(req, res, next)=> {
+    
+    try {
+      const response = await verifyRecaptcha(req);
+      console.log(response, "response");
+      
+      if (response) next();
+      else res.status(403).send('Recaptcha verification failed');
+    } catch (err) {
+      res.status(500).send("Internal server error");
+    }
+
+  });
+});
 
 module.exports = cds.server;
