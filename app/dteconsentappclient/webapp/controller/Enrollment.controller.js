@@ -802,10 +802,9 @@ sap.ui.define([
 								"AuthTitle": consentDetails['AuthTitle'],
 							}])
 						};
-
-						const headers = { 'X-Recaptcha-Token': this.recaptchaToken };
 	
-						// Post request to create a enrollment application
+						// Post request to create a enrollment application.
+						const headers = { 'X-Recaptcha-Token': this.recaptchaToken };  // Pass the recaptcha token in headers.
 						const {data} = await axios.post(enrollmentCreateUrl, enrollmentFormDetails, {headers});
 						
 						// If get the success(200) response then navigate to the confirmation page
