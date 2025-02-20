@@ -93,7 +93,8 @@ module.exports = cds.service.impl(async function (srv) {
 			DTEAddressValidationUrl: process.env.DTE_ADDRESS_VALIDATION_URL,
 			LandlordConfirmationPageUrl: process.env.LANDLORD_CONFIRMATION_PAGE_URL,
 			TenantConfirmationPageUrl: process.env.TENANT_CONFIRMATION_PAGE_URL,
-			ErrorPageUrl: process.env.ERROR_PAGE_URL
+			ErrorPageUrl: process.env.ERROR_PAGE_URL,
+			RecaptchaSiteKey: process.env.RECAPTCHA_SITE_KEY
 		}
 	});
 })

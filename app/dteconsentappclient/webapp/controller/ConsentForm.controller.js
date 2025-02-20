@@ -7,6 +7,7 @@ sap.ui.define([
 	"dteconsentappclient/utils/ConsentAddressSuggestion",
 	"dteconsentappclient/utils/ChecksInputValidation",
 	"dteconsentappclient/utils/FormatInputs",
+	"dteconsentappclient/utils/RenderRecaptcha",
 	"dteconsentappclient/utils/DataLayer"
 ], function(
 	BaseController,
@@ -17,6 +18,7 @@ sap.ui.define([
 	ConsentAddressSuggestion,
 	ChecksInputValidation,
 	FormatInputs,
+	RenderRecaptcha,
 	DataLayer
 ) {
 	"use strict";
@@ -36,7 +38,8 @@ sap.ui.define([
 								url, 
 								TenantConfirmationPageUrl, 
 								ErrorPageUrl, 
-								DTEAddressValidationUrl
+								DTEAddressValidationUrl,
+								RecaptchaSiteKey
 							} = this.getView().getViewData();
 					
 					// Get the required properties from the parent view
@@ -44,7 +47,8 @@ sap.ui.define([
 					this.SERVERHOST = url;
 					this.TenantConfirmationPageUrl = TenantConfirmationPageUrl;
 					this.ErrorPageUrl = ErrorPageUrl;	
-					this.DTEAddressValidationUrl = DTEAddressValidationUrl
+					this.DTEAddressValidationUrl = DTEAddressValidationUrl;
+					this.RecaptchaSiteKey = RecaptchaSiteKey;
 					
 					//Initialize Model for this view
 					this.initializeModel();
@@ -88,9 +92,17 @@ sap.ui.define([
 					// Model to hold the visibility status of error message
 					const oErrorVisibilityModel = new JSONModel({
 						"isInputInValid":false,
-						"isTermsAndConditionVerifiedStatus":false
+						"isTermsAndConditionVerifiedStatus":false,
+						"recaptchaErrorMessageVisibilityStatus":false
 					});
 					this.getView().setModel(oErrorVisibilityModel, "oErrorVisibilityModel");
+					this.errorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
+				},
+
+				// After ConsentForm view is rendered, load and render the reCAPTCHA component 
+				onAfterRendering: function(){
+					// To render recaptcha and obtain varification token
+					RenderRecaptcha.renderRecaptcha(this);
 				},
 
         // Define model and load the Customer Auth and Release section fragment to the enrollment form
@@ -291,7 +303,17 @@ sap.ui.define([
 					
 				const consentDetails = this.getView().getModel("oConsentModel").getData()?.ConsentDetail;
 					
-					if(!oErrorVisibilityModelData?.isInputInValid && !oErrorVisibilityModelData?.isTermsAndConditionVerifiedStatus){
+				/**
+				 * Checks if the error message strip was in inVisible state
+				 * If it is all inputs are valid, proceed to recaptcha verification
+				 */
+				if(!oErrorVisibilityModelData?.isInputInValid && !oErrorVisibilityModelData?.isTermsAndConditionVerifiedStatus){
+
+					// If recaptcha is not verified display the error message and stop the further process.
+					if(!this.isRecaptchaVerified) {
+						this.errorVisibilityModel.setProperty('/recaptchaErrorMessageVisibilityStatus', true);
+						return;
+					}
 
 						// Push the "form_submit" event to the dataLayer
 						DataLayer.pushEventToDataLayer("tenant_form", "form_submit", "form_submit", false);
@@ -317,8 +339,10 @@ sap.ui.define([
 						}
 				
 				try{		
+					
 					// Post request to create a tenant consent.
-					const {data} = await axios.post(tenantConsentCreateUrl, tenantConsentFormDetails);
+					const headers = { 'X-Recaptcha-Token': this.recaptchaToken };  // Pass the recaptcha token in headers.
+					const {data} = await axios.post(tenantConsentCreateUrl, tenantConsentFormDetails, {headers});
 						
 					if(data.value.statusCode === 200){
 						// Navigate to the tenant confirmation page
