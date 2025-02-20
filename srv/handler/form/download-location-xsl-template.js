@@ -1,15 +1,19 @@
 const fs = require('fs');
 const path = require('path');
 
-const downloadBuildingTemplate = async (req) => {
+/**
+ * Download landlord location spreadsheet template
+ * @param {Request} req 
+ * @returns {object}  
+ */
+const downloadLocationXSLTemplate = async (req) => {
     try {
-        const res = req._.res;
-
-        const filePath = path.join(__dirname,'../../template/BuildingDetail.xlsx');
+        // Read location template spreadsheet
+        const filePath = path.join(__dirname,'../../template/Location.xlsx');
         const templateFileContent = await fs.readFileSync(filePath,{encoding:'base64url'});
 
         return {
-            'statusCode' : '00',
+            'statusCode' : '200',
             'file' : templateFileContent
           }
     } catch (error) {
@@ -21,5 +25,5 @@ const downloadBuildingTemplate = async (req) => {
 }
 
 module.exports = {
-    downloadBuildingTemplate
+    downloadLocationXSLTemplate
 }

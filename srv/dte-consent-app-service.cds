@@ -27,6 +27,6 @@ service DTEConsentAppPortal {
     // Get environment variable (AEM Navigation page url and address validation url)
     function getEnvironmentVariables () returns String;
 
-    // Download building Details excle template
-    function DownloadBuildingTemplate () returns LargeBinary;
+    // Download landlord location template spreadsheet template
+    function DownloadLocationXSLTemplate () returns LargeBinary;
 };
