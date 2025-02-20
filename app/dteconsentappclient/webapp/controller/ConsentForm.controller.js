@@ -99,7 +99,7 @@ sap.ui.define([
 					this.errorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
 				},
 
-				// After the Enrollment view is rendered, load and render the reCAPTCHA component 
+				// After ConsentForm view is rendered, load and render the reCAPTCHA component 
 				onAfterRendering: function(){
 					// To render recaptcha and obtain varification token
 					RenderRecaptcha.renderRecaptcha(this);

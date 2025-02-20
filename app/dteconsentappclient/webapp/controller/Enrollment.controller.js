@@ -686,9 +686,6 @@ sap.ui.define([
 					if(Object.values(validationFlags).includes(false)) 
 						oErrorVisibilityModel.setProperty('/isInputInValid', true);
 					else oErrorVisibilityModel.setProperty('/isInputInValid', false);
-
-					// if(!this.isRecaptchaVerified) oErrorVisibilityModel.setProperty('/isRecaptchaUnverfied', true);
-					// else oErrorVisibilityModel.setProperty('/isRecaptchaUnverfied', false);
 				},
 
 				// To open the additional location alert dialog
@@ -696,7 +693,7 @@ sap.ui.define([
 
 					const that = this;
 
-					// Customize content of the dialog, design the VBox container
+					// Customize content of the dialog for additional location alert
           const dialogContent = new sap.m.FlexBox({
             items: [
               new sap.m.FormattedText({htmlText: "<p style='letter-spacing: .7px; font-size: 14px; font-weigt: 400; margin-bottom: 0;'> <span style='font-weight: 600; font-size: 14px;'>NOTE:</span> If you want to add another location, you must do so before submitting this form. Adding another location after submitting will require filling out a new form. </p>"}),
@@ -807,7 +804,6 @@ sap.ui.define([
 						};
 
 						const headers = { 'X-Recaptcha-Token': this.recaptchaToken };
-						console.log(headers);
 	
 						// Post request to create a enrollment application
 						const {data} = await axios.post(enrollmentCreateUrl, enrollmentFormDetails, {headers});
