@@ -1,5 +1,5 @@
 const cds = require('@sap/cds');
-const { generateConsentUrl } = require('../form/generate-consent-url');
+const { generateConsentUrl } = require('./generate-consent-url');
 
 module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
   const { ApplicationConsent, ApplicationDetail } = this.entities;
