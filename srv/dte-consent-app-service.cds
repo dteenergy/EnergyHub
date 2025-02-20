@@ -1,6 +1,6 @@
 using {dteConsentApp as db} from '../db/schema';
 
-@impl: './handler/main-handler.js'
+@impl: './handler/form/main-handler.js'
 @path : '/service'
 service DTEConsentAppPortal {
     // Entity Projections or Action configuration
@@ -13,7 +13,8 @@ service DTEConsentAppPortal {
         ApplicationDetail : String,
         BuildingDetail : String,
         AccountDetail : String,
-        ConsentDetail : String
+        ConsentDetail : String,
+        Attachment : LargeBinary
     ) returns String;
 
     action CreateConsentFormDetail(

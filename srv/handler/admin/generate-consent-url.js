@@ -1,4 +1,4 @@
-const { valueEncrypt } = require("./encrypt-and-decrypt-id");
+const { valueEncrypt } = require("../../utils/encrypt-and-decrypt-id");
 
 /**
  * Method to generate the consent url with the encrypted appId

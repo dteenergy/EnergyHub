@@ -1,5 +1,5 @@
-const { validateWithRegex } = require("./regex-and-error-message");
-const {emptyField} = require('./regex-and-error-message');
+const { validateWithRegex } = require("../../utils/regex-and-error-message");
+const {emptyField} = require('../../utils/regex-and-error-message');
 
 /**
  * Function: Create the Consent form details
