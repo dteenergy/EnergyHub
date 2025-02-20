@@ -15,6 +15,7 @@ sap.ui.define([
 						this.LandlordConfirmationPageUrl = envVariables.LandlordConfirmationPageUrl;
 						this.ErrorPageUrl = envVariables.ErrorPageUrl;
 						this.DTEAddressValidationUrl = envVariables.DTEAddressValidationUrl;
+						this.RecaptchaSiteKey = envVariables.RecaptchaSiteKey;
 
 						// After getting the env load the enrollment form page view.
 						this.loadEnrollmentView();
@@ -36,7 +37,8 @@ sap.ui.define([
 							viewData: {serverHost: this.SERVERHOST, envVariables:{
 								LandlordConfirmationPageUrl: this.LandlordConfirmationPageUrl,
 								ErrorPageUrl: this.ErrorPageUrl,
-								DTEAddressValidationUrl: this.DTEAddressValidationUrl
+								DTEAddressValidationUrl: this.DTEAddressValidationUrl,
+								RecaptchaSiteKey: this.RecaptchaSiteKey
 							}}
 					}).then(function(oView) {
 							// Render the created view into the App view

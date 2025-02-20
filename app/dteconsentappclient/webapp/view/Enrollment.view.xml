@@ -188,6 +188,10 @@
                         <Title id="auth-and-release-title" text="Customer Authorization and Release" class="form-segment-heading" titleStyle="H6" wrapping="true" />
                     </VBox>
 
+					<!-- Embeds the Recaptcha fragment -->
+                    <core:Fragment fragmentName="dteconsentappclient.fragment.Recaptcha" type="XML" />
+
+                    <!-- Container to display the error message for invalid inputs -->
                     <VBox id="message-strip-container" class="message-strip-container">
                         <MessageStrip
                             text="Complete these fields to continue."
@@ -202,6 +206,14 @@
                             type="Error"
                             showIcon="true"
                             visible="{oErrorVisibilityModel>/isTermsAndConditionVerifiedStatus}"
+                            class="error-message-strip"
+                        >
+                        </MessageStrip>
+                        <MessageStrip
+                            text="Please verify the Recaptcha"
+                            type="Error"
+                            showIcon="true"
+                            visible="{oErrorVisibilityModel>/recaptchaErrorMessageVisibilityStatus}"
                             class="error-message-strip"
                         >
                         </MessageStrip>
