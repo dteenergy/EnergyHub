@@ -7,7 +7,6 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
   // Method to Generate the Consent URL
   srv.on('GenerateUrl', 'ApplicationDetail', async ({ params: [id] }) => {
     // Get the AppId
-    console.log(id, 'id')
     const appId = id.AppId;
 
     try {
@@ -27,20 +26,28 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
 
   }),
 
+  /**
+   * Event handler for the 'UpdateLinkId' event.
+   * This handler updates the LinkId of multiple applications based on the provided data.
+   *
+   * @param {string} req.data.selectedAppNumber - The parent application number to set as LinkId.
+   * @param {string[]} req.data.selectedApplication - An array of application IDs to be updated.
+   * @returns {Promise<Object>} A promise that resolves to an object containing a message and a status code.
+   */
   srv.on('UpdateLinkId', async (req) => {
-    console.log(req, 'req')
+    // Destructure the necessary data from the request object
     const {selectedAppNumber, selectedApplication} = req.data;
-    // const AppId = id.AppId;
+
     try {
+      // Call the updateLinkId function to perform the update operation
       const updateLinkedId = await updateLinkId(selectedAppNumber, selectedApplication);
-      console.log(updateLinkedId)
-      return updateLinkedId;
+      return updateLinkedId; // Return the result of the update operation
     } catch (error) {
+      // Handle any errors that occur during the update operation
       if(error?.code) return {message: error?.message, code: error?.code};
       else return {message: e?.message, code: 500};
     }
-    return 'Success';
-  })
+  }),
 
   // Method to add the NoOfConsentReceived Field.
   srv.after('READ', 'ApplicationDetail', async (data) => {
