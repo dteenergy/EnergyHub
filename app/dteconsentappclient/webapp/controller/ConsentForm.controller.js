@@ -339,9 +339,9 @@ sap.ui.define([
 						}
 				
 				try{		
-					const headers = { 'X-Recaptcha-Token': this.recaptchaToken };
 					
 					// Post request to create a tenant consent.
+					const headers = { 'X-Recaptcha-Token': this.recaptchaToken };  // Pass the recaptcha token in headers.
 					const {data} = await axios.post(tenantConsentCreateUrl, tenantConsentFormDetails, {headers});
 						
 					if(data.value.statusCode === 200){
