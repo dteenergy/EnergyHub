@@ -7,21 +7,21 @@
       <Button width="30%" icon="sap-icon://copy" press="onCopyLink" tooltip="Copy Link" />
     </HBox>
     <endButton>
-        <Button text="Close" press="onCloseDialog" />
+      <Button text="Close" press="onCloseDialog" />
     </endButton>
   </Dialog>
-  <Dialog id="idLinkDialog" title="Select Parent Application" afterClose="onCloseDialog">
+  <Dialog id="idLinkDialog" title="Select Parent Application" afterClose="onLinkCloseDialog">
     <VBox class="sapUiSmallMargin">
-        <Text text="Select the Parent Application to link with the selected applications:" />
-        <Select id="idParentSelect" items="{SelectedRowsModel>/}">
-            <core:Item key="{SelectedRowsModel>AppId}" text="{SelectedRowsModel>ApplicationNumber}" />
-        </Select>
+      <Text text="Select the Parent Application to link with the selected applications:" />
+      <Select id="idParentSelect" items="{SelectedRowsModel>/}">
+        <core:Item key="{SelectedRowsModel>AppId}" text="{SelectedRowsModel>ApplicationNumber}" />
+      </Select>
     </VBox>
     <beginButton>
-        <Button text="Confirm" press="onConfirmLink" />
+      <Button text="Cancel" type="Default" press="onLinkCloseDialog" />
     </beginButton>
     <endButton>
-        <Button text="Cancel" press="onCloseDialog" />
+      <Button text="Confirm" type="Emphasized" press="onConfirmLink" />
     </endButton>
     </Dialog>
   <VBox id="idApplicationVBox">
@@ -37,7 +37,7 @@
           <core:Item key="Rejected" text="Rejected"/>
         </items>
       </ComboBox>
-      <Button id="idLinkButton" text="Link" press="handleLinkPress" tooltip="Settings"/>
+      <Button id="idLinkButton" type="Emphasized" class="rightPaddingAlignment" text="Link" press="handleLinkPress" tooltip="Settings"/>
       <Button id="idP13nButton" icon="sap-icon://action-settings" press="setupPersonalization" tooltip="Settings"/>
     </FlexBox>
     <ScrollContainer id="_idScrollContainer" horizontal="true" vertical="false" width="100%" height="auto" class="paddingAlignment">

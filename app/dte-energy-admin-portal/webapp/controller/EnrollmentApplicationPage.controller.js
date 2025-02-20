@@ -31,7 +31,6 @@ sap.ui.define([
       this.sLastName = filteredLastName;
       this.sApplicationStatus = filteredApplicationStatus;
       this.tenantConsentFormURL = tenantConsentFormURL;
-      console.log(this.baseUrl)
 
       this.handleSessionExpiry(this.baseUrl);
 
@@ -42,14 +41,14 @@ sap.ui.define([
       if(!["", undefined].includes(this.sApplicationStatus)) this.byId("idApplicationStatusFilter").setSelectedKey(this.sApplicationStatus);
       
       // Create an OData V4 model using the constructed service URL
-      const model = new sap.ui.model.odata.v4.ODataModel({
+      this.model = new sap.ui.model.odata.v4.ODataModel({
         serviceUrl: `${this.baseUrl}admin/service/`,
         synchronizationMode: "None",
         operationMode: "Server",
       });
 
       // Set the newly created model as the "MainModel" for this view
-      this.getView().setModel(model, "MainModel");
+      this.getView().setModel(this.model, "MainModel");
 
       // Initialize the Personalization Controller for the application table
       this.oPersonalizationController = new PersonalizationController({
@@ -58,25 +57,6 @@ sap.ui.define([
 
       // Apply initial filters
       this.onFilterChange();
-
-      // // Retrieve the dialog by its ID
-      // var oDialog = this.byId("idLinkDialog");
-
-      // // Create the Confirm button
-      // var oConfirmButton = new Button({
-      //     text: "Confirm",
-      //     press: this.onConfirmLink.bind(this)
-      // });
-
-      // // Create the Cancel button
-      // var oCancelButton = new Button({
-      //     text: "Cancel",
-      //     press: this.onCloseDialog.bind(this)
-      // });
-
-      // // Add buttons to the dialog
-      // oDialog.setBeginButton(oConfirmButton);
-      // oDialog.setEndButton(oCancelButton);
     },
     /**
      * Opens the personalization dialog for the application table.
@@ -135,53 +115,85 @@ sap.ui.define([
       // Apply the combined filter or clear filters
       oBinding.filter(aFilters.length > 0 ? oCombinedFilter : []);
     },
+    /**
+     * Handles the press event of a link, opening a dialog to link selected applications.
+     * Ensures that at least two applications are selected before proceeding.
+     * 
+     * @async
+     * @function
+     */
     handleLinkPress: async function() {
+      // Retrieve the table control by its ID
       const oTable = this.getView().byId('idApplicationTable');
+
+      // Get the selected items (rows) from the table
       const aSelectedRows = oTable.getSelectedItems();
+
+      // Check if fewer than two rows are selected
       if(aSelectedRows.length < 2) {
-        sap.m.MessageToast.show("Please select at least two application.");
+        // Show a message toast to inform the user to select at least two applications
+        MessageToast.show("Please select at least two application.");
         return;
       }
-      
+
+      // Map the selected rows to their corresponding data objects
       const aSelectedData = aSelectedRows.map(function (oItem) {
         return oItem.getBindingContext("MainModel").getObject();
       });
 
       // Create a local JSON model with selected rows only
       var oSelectedRowsModel = new sap.ui.model.json.JSONModel(aSelectedData);
-      console.log(aSelectedData);
       this._aSelectedRows = aSelectedData;
 
-      // Set model to dropdown
+      // Set the created JSON model to the dialog for data binding
       this.byId('idLinkDialog').setModel(oSelectedRowsModel, "SelectedRowsModel");
 
-      // Open dialog
+      // Open the dialog to allow the user to link the selected applications
       this.byId('idLinkDialog').open();
     },
+    /**
+     * Handles the confirmation action for linking selected applications to a parent application.
+     * This function gathers selected application IDs, sends them to the server for linking
+     *
+     * @async
+     * @function
+     * @returns {Promise<void>} A promise that resolves when the linking process is complete.
+     */
     onConfirmLink: async function () {
       // Handle the confirm action
+      const oModel = this.getView().getModel("MainModel");
       var oDialog = this.byId("idLinkDialog");
       var oSelect = this.byId("idParentSelect");
-      var sSelectedKey = oSelect.getSelectedKey();
       var sParentAppNumber = oSelect.getSelectedItem().getText();
-      console.log(this.baseUrl, sSelectedKey, this._aSelectedRows);
 
+      // Map the selected rows to extract their application IDs
       const selectedApplication = this._aSelectedRows.map(row => row.AppId);
-      const finalResult = {selectedAppId: sSelectedKey, selectedApplication: selectedApplication};
-      console.log(finalResult);
-      // this._aSelectedRows.map(async row => {
-      //   console.log(row);
-      //   console.log(row.AppId);
-      //   console.log(this.baseUrl)
-      //   await axios.post(this.baseUrl+`admin/service/UpdateLinkId`, {LinkId: sParentAppNumber}).then(res => res.data).then(data => console.log(data)).catch(error => console.log('error'+ error))
-      // });
+      // Prepare the final result object to be sent to the server
+      const finalResult = {selectedAppNumber: sParentAppNumber, selectedApplication: selectedApplication};
 
-      await axios.post(this.baseUrl+`admin/service/UpdateLinkId`, finalResult).then(res => res.data).then(data => console.log(data)).catch(error => console.log('error'+ error))
+      // Send the linking data to the server using a POST request
+      await axios.post(this.baseUrl+`admin/service/UpdateLinkId`, finalResult)
+        .then(res => res.data)
+        .then(data => {
+          // If the server responds with a success code, show a success message
+          if(data?.value?.code === 200) {
+            MessageToast.show(data?.value?.message);
+            this.onInit(); // Reinitialize the view to reflect changes
+          }
+
+          // Clear selections in the application table
+          const oTable = this.byId("idApplicationTable");
+          oTable.removeSelections(true);
+        })
+        .catch(error => console.error('error'+ error))
 
       oDialog.close();
     },
-    onCloseDialog: function () {
-      this.byId('idLinkDialog').close();
+    onLinkCloseDialog: function () {
+      var oDialog = this.byId("idLinkDialog");
+      const oTable = this.byId("idApplicationTable");
+      oTable.removeSelections(true);
+      oDialog.close();
     },
     /** 
      * Generates a URL for the selected application and displays it in a dialog.

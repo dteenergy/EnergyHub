@@ -1,6 +1,6 @@
 const cds = require('@sap/cds');
 const { generateConsentUrl } = require('./generate-consent-url');
-const { updateLinkId } = require('./update-linkId');
+const { updateLinkId } = require('../../utils/update-linkId');
 
 module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
   const { ApplicationConsent, ApplicationDetail } = this.entities;
@@ -29,14 +29,16 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
 
   srv.on('UpdateLinkId', async (req) => {
     console.log(req, 'req')
+    const {selectedAppNumber, selectedApplication} = req.data;
     // const AppId = id.AppId;
-    // try {
-    //   const updateLinkedId = await updateLinkId(AppId, ApplicationDetail);
-    //   console.log(updateLinkedId)
-    // } catch (error) {
-    //   if(error?.code) return {message: error?.message, code: error?.code};
-    //   else return {message: e?.message, code: 500};
-    // }
+    try {
+      const updateLinkedId = await updateLinkId(selectedAppNumber, selectedApplication);
+      console.log(updateLinkedId)
+      return updateLinkedId;
+    } catch (error) {
+      if(error?.code) return {message: error?.message, code: error?.code};
+      else return {message: e?.message, code: 500};
+    }
     return 'Success';
   })
 

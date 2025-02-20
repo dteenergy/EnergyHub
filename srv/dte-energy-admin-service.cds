@@ -94,7 +94,7 @@ service DTEEnergyAdminPortal {
     }]) as projection on db.AccountDetail;
 
   action UpdateLinkId(
-    selectedAppId: String,
+    selectedAppNumber: String,
     selectedApplication: selectedApp
   ) returns String;
   
