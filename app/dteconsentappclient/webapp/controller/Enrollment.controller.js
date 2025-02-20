@@ -7,6 +7,7 @@ sap.ui.define([
 		"dteconsentappclient/utils/ChecksInputValidation",
 		"dteconsentappclient/utils/FormatInputs",
 		"dteconsentappclient/utils/DataLayer",
+		"dteconsentappclient/utils/RenderRecaptcha",
 		"sap/m/Dialog"
 ], (
 		BaseController,
@@ -17,6 +18,7 @@ sap.ui.define([
 		ChecksInputValidation, 
 		FormatInputs, 
 		DataLayer, 
+		RenderRecaptcha,
 		Dialog
 	) => {
     "use strict";
@@ -113,9 +115,11 @@ sap.ui.define([
 				// Model to hold the visibility status of error message
 				const oErrorVisibilityModel = new JSONModel({
 					"isInputInValid":false,
-					"isTermsAndConditionVerifiedStatus":false
+					"isTermsAndConditionVerifiedStatus":false,
+					"recaptchaErrorMessageVisibilityStatus": false
 				});
 				this.getView().setModel(oErrorVisibilityModel, "oErrorVisibilityModel");
+				this.errorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
 
 				// Model to set the list of US states
 				const ostateValuesModel = new JSONModel(GlobalInputValues.usStates);
@@ -130,6 +134,12 @@ sap.ui.define([
         this.loadConsentForm();
         this.loadAuthAndRelease();
       },
+
+			// After the Enrollment view is rendered, load and render the reCAPTCHA component 
+			onAfterRendering: function(){
+				// To render recaptcha and obtain varification token
+				RenderRecaptcha.renderRecaptcha(this);
+			},
 
         /**
 				 * Add additional location(Building) container
@@ -676,18 +686,13 @@ sap.ui.define([
 					if(Object.values(validationFlags).includes(false)) 
 						oErrorVisibilityModel.setProperty('/isInputInValid', true);
 					else oErrorVisibilityModel.setProperty('/isInputInValid', false);
+
+					// if(!this.isRecaptchaVerified) oErrorVisibilityModel.setProperty('/isRecaptchaUnverfied', true);
+					// else oErrorVisibilityModel.setProperty('/isRecaptchaUnverfied', false);
 				},
 
 				// To open the additional location alert dialog
 				additionalLocationAlert: function(){
-					const oErrorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
-          const oErrorVisibilityModelData = oErrorVisibilityModel.getData();
-					
-					/**
-					 * Here checks if the error message strip was in inVisible state
-					 * If it is all inputs are valid, then open the additional location alert dialog
-					 */
-					// if(!oErrorVisibilityModelData?.isInputInValid && !oErrorVisibilityModelData?.isTermsAndConditionVerifiedStatus){
 
 					const that = this;
 
@@ -695,7 +700,8 @@ sap.ui.define([
           const dialogContent = new sap.m.FlexBox({
             items: [
               new sap.m.FormattedText({htmlText: "<p style='letter-spacing: .7px; font-size: 14px; font-weigt: 400; margin-bottom: 0;'> <span style='font-weight: 600; font-size: 14px;'>NOTE:</span> If you want to add another location, you must do so before submitting this form. Adding another location after submitting will require filling out a new form. </p>"}),
-              new sap.m.Button({
+              
+							new sap.m.Button({
                 text: '+ Add Another Location',
                 press: function(){
                   that.onAddAnotherLocation(),
@@ -703,30 +709,18 @@ sap.ui.define([
                 }
               }).addStyleClass("outline-button"),
               new sap.m.Text({text: 'I don’t have another location.'}),
-							
-							new sap.ui.core.HTML(that.createId("recaptchaPlaceholder"),{
-								content: "<div id='recaptcha-container'></div>", // Placeholder div for reCAPTCHA
-								afterRendering: function () {
-									// Check if the reCAPTCHA library is loaded
-									if (window.grecaptcha) {
-										grecaptcha.render("recaptcha-container", {
-											sitekey: that.RecaptchaSiteKey, // Replace with your Google reCAPTCHA Site Key
-											theme: "light", // Optional: 'light' or 'dark'
-											// callback: this._onRecaptchaSuccess.bind(this), // Callback for success
-										});
-									} else {
-										console.error("reCAPTCHA script not loaded!");
-									}
-								}
-								// .bind(this) // Bind the `this` context to your controller
-							}),
 
               new sap.m.Button({
                 text: 'Continue Submission',
-                press: function(){
-									// To call the backend service and store the data
-                  that.submitAction(),
-                  that.oConfirmationDialog.close()
+                press: function(){	
+									/**
+									 * If recaptcha is verified, proceed the submit process,
+									 * If not, Display the error mesaage to verify the recaptcha
+									 */
+									if(that.isRecaptchaVerified) that.submitAction(); // To call the backend service and store the data
+									else that.errorVisibilityModel.setProperty('/recaptchaErrorMessageVisibilityStatus', true);
+                  
+									that.oConfirmationDialog.close();
                 },
                 type: sap.m.ButtonType.Emphasized
               }).addStyleClass("dialog-submit-action")
@@ -748,9 +742,6 @@ sap.ui.define([
 										src: 'sap-icon://decline',
 										decorative: false,
 										press: function () {
-												const recaptchaElement = that.byId("recaptchaPlaceholder");
-												// recaptchaElement.removeAllContent();
-												recaptchaElement.destroy();
 												that.oConfirmationDialog.close();
 										}
 								}).addStyleClass("alert-close-icon")
@@ -767,8 +758,8 @@ sap.ui.define([
               content: dialogContent
             }).addStyleClass("alert-dialog-main-container")
           }
+
           this.oConfirmationDialog.open();
-        	// }
 				},
 
 				submitAction: async function(){
@@ -814,9 +805,12 @@ sap.ui.define([
 								"AuthTitle": consentDetails['AuthTitle'],
 							}])
 						};
-						
+
+						const headers = { 'X-Recaptcha-Token': this.recaptchaToken };
+						console.log(headers);
+	
 						// Post request to create a enrollment application
-						const {data} = await axios.post(enrollmentCreateUrl, enrollmentFormDetails);
+						const {data} = await axios.post(enrollmentCreateUrl, enrollmentFormDetails, {headers});
 						
 						// If get the success(200) response then navigate to the confirmation page
 						if(data.value.statusCode === 200){
@@ -850,8 +844,18 @@ sap.ui.define([
 					// Update the error message trip visibility status once validation is done
 					this.setErrorMessageTripVisibility();
 
-					// Dialog to additional location alert
-					this.additionalLocationAlert();
+					// const oErrorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
+          const oErrorVisibilityModelData = this.errorVisibilityModel.getData();
+					
+					/**
+					 * Checks if the error message strip was in inVisible state
+					 * If it is all inputs are valid, proceed to recaptcha verification
+					 */
+					if(!oErrorVisibilityModelData?.isInputInValid && !oErrorVisibilityModelData?.isTermsAndConditionVerifiedStatus){
+
+						if(this.isRecaptchaVerified) this.additionalLocationAlert(); // Dialog to additional location alert
+						else this.errorVisibilityModel.setProperty('/recaptchaErrorMessageVisibilityStatus', true); // Show recaptcha error message
+					}
         },
 
     });
