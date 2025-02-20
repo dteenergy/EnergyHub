@@ -1,7 +1,7 @@
 using {dteConsentApp as db} from '../db/schema';
 
 @path : '/admin/service'
-@impl : './handler/admin-handler.js'
+@impl : './handler/admin/admin-handler.js'
 service DTEEnergyAdminPortal {
 
   entity ApplicationDetail  @(restrict: [{

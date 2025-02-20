@@ -105,7 +105,7 @@
 .auth-contact-info-container > *,
 .consent-form-container > *,
 .customer-release-header > *,
-.customer-auth-and-release > *,
+/* .customer-auth-and-release > *, */
 .enrollment-consent-section > *,
 .auth-and-release-container > *,
 .message-strip-container > *,
@@ -200,6 +200,9 @@
 }
 .alert-dialog-main-container{
 	max-width: 1024px !important;
+}
+.recaptcha-container{
+    margin-bottom: 20px;
 }
 
 @media only screen and (max-width: 600px) {
