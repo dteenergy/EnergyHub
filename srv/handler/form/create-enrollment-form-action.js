@@ -14,7 +14,6 @@ const { entities } = require('@sap/cds');
  * @returns {object} Message
  */
 const createEnrollmentFormDetail = async (req) => {
-console.log("is enter");
 
   try {
     // Initialize the transaction

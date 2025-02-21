@@ -18,9 +18,11 @@ const verifyRecaptcha = async (req, res, next) => {
   const recaptchaSecretKey = process.env.RECAPTCHA_SECRET_KEY;
 
   try{
-    console.log(originalUrl);
-    
-    // Checks the request route is not in the excluded list
+
+    /**
+     * Checks the request route is in excluded list OR the request is not for the form service,
+     * If it is it should pypass the recaptcha verification.
+     * */
     if(!originalUrl.startsWith("/service") || excludePaths.includes(originalUrl.split("?")[0])) return next();
     
     const recaptchaToken = req.get("X-Recaptcha-Token");

@@ -129,6 +129,7 @@ sap.ui.define([
 				const oLocationStateModel = new JSONModel(GlobalInputValues.locationStates);
 				this.getView().setModel(oLocationStateModel, "oLocationStateModel");
 
+				// Retrieve the Recaptcha error strip element by its Id
 				this.recaptchaErrorStrip = this.byId("enrollment-recaptcha-error-strip");
 
 				// Load the initial fragment

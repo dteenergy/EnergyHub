@@ -98,6 +98,7 @@ sap.ui.define([
 					this.getView().setModel(oErrorVisibilityModel, "oErrorVisibilityModel");
 					this.errorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
 
+					// Retrieve the Recaptcha error strip element by its Id
 					this.recaptchaErrorStrip = this.byId("tenant-recaptcha-error-strip");
 				},
 
