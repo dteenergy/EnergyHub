@@ -57,6 +57,81 @@ sap.ui.define([
 
       // Apply initial filters
       this.onFilterChange();
+
+      var oTable = this.byId("idApplicationTable");
+
+      // Attach event handler to 'updateFinished' event
+      oTable.attachEventOnce("updateFinished", this.onTableUpdateFinished, this);
+    },
+    onTableUpdateFinished: function() {
+      var oTable = this.byId("idApplicationTable");
+      var aItems = oTable.getItems();
+      console.log(aItems)
+  
+      aItems.forEach(function(oItem) {
+        var oContext = oItem.getBindingContext("MainModel");
+        console.log(oContext)
+        if (oContext) {
+          var sApplicationNumber = oContext.getProperty("ApplicationNumber");
+          var sLinkId = oContext.getProperty("LinkId");
+          console.log(sApplicationNumber, sLinkId)
+
+          // Check if LinkId is present and not equal to ApplicationNumber
+          if (sLinkId) {
+            console.log(sLinkId)
+            if(sLinkId !== sApplicationNumber){
+              console.log(sLinkId !== sApplicationNumber)
+              var oApplicationNumberText = oItem.getCells().find(function(oCell) {
+                return oCell.getId().includes("idApplicationNumber");
+              });
+              console.log(oApplicationNumberText)
+            }
+
+            // Apply the indentation class
+            if (oApplicationNumberText) {
+              console.log('yessssss')
+              oApplicationNumberText.addStyleClass("indentText");
+            }
+          }
+        }
+      });
+    },
+    // onAfterRendering: function () {
+    //   // var oTable = this.byId("idApplicationTable");
+    //   // var aItems = oTable.getItems();
+
+    //   // aItems.forEach(function (oItem) {
+    //   //   var oContext = oItem.getBindingContext("MainModel");
+    //   //   var sApplicationNumber = oContext.getProperty("ApplicationNumber");
+    //   //   var sLinkId = oContext.getProperty("LinkId");
+
+    //   //   if (sLinkId && (sLinkId !== sApplicationNumber)) {
+    //   //     const appNumberId = this.byId('idApplicationNumber');
+    //   //     appNumberId.addStyleClass('indentedRow')
+    //   //   }
+    //   // });
+
+    //   var oTable = this.byId("idApplicationTable");
+    //   var oItems = oTable.getItems();
+    //   console.log('qwertyui',)
+
+    //   oItems.forEach(function(oItem) {
+    //       var oContext = oItem.getBindingContext("MainModel");
+    //       var sApplicationNumber = oContext.getProperty("ApplicationNumber");
+    //       var sLinkId = oContext.getProperty("LinkId");
+
+    //       console.log(sApplicationNumber, sLinkId)
+
+    //       // Check if LinkId is present and differs from ApplicationNumber
+    //       if (sLinkId && sLinkId !== sApplicationNumber) {
+    //         console.log('helloo')
+    //           var oText = oItem.getCells()[0]; // Assuming the first cell contains the ApplicationNumber Text control
+    //           oText.addStyleClass("indentedText");
+    //       }
+    //   });
+    // },
+    applyIndentation: function(LinkId, ApplicationNumber) {
+      return LinkId !== ApplicationNumber ? "indentedText" : "";
     },
     /**
      * Opens the personalization dialog for the application table.

@@ -74,7 +74,7 @@
         </columns>
           <items>
             <ColumnListItem id="idColumnListItem" type="Navigation" press="navToBuildingDetailPage">
-              <Text text="{MainModel>ApplicationNumber}"></Text>
+              <Text id="idApplicationNumber" text="{MainModel>ApplicationNumber}"></Text>
               <Text text="{MainModel>FirstName} {MainModel>LastName}"></Text>
               <Text text="{MainModel>CompanyName}"></Text>
               <Text text="{parts: [{path: 'MainModel>CompanyAddress'}, {path: 'MainModel>CompanyAddrLineTwo'}, {path: 'MainModel>City'}, {path: 'MainModel>State'}], formatter: '.formatCompanyAddress'}"></Text>
