@@ -8,13 +8,14 @@ service DTEConsentAppPortal {
     entity AccountDetail as projection on db.AccountDetail;
     entity BuildingDetail as projection on db.BuildingDetail;
     entity ApplicationConsent as projection on db.ApplicationConsent;
+    entity Attachment as projection on db.Attachment;
     
     action CreateEnrollmentFormDetail(
-        ApplicationDetail : String,
-        BuildingDetail : String,
-        AccountDetail : String,
-        ConsentDetail : String,
-        Attachment : LargeBinary
+        ApplicationDetail : ApplicationDetail @mandatory,
+        BuildingDetail : array of BuildingDetail ,
+        AccountDetail : AccountDetail @mandatory,
+        ConsentDetail : array of ApplicationConsent,
+        Attachment : Attachment
     ) returns String;
 
     action CreateConsentFormDetail(

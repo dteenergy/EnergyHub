@@ -1,4 +1,5 @@
 // This file contains Sharepoint APIs
+const cdsTypes = require('@sap/cds');
 const axios = require('axios');
 const FormData = require('form-data');
 
@@ -7,12 +8,13 @@ const spClientID = process.env.SP_CLIENT_ID;
 const spClientSecret = process.env.SP_CLIENT_SECRET;
 const spTenantID =  process.env.SP_TENENT_ID
 const spDomain = process.env.SP_DOMAIN 
-const spresource = process.env.SP_RESOURCE;
+const spSite = process.env.SP_SITE;
+const spResource = process.env.SP_RESOURCE;
 const spFolderPath = process.env.SP_FOLDER_PATH;
 
 /**
  * Get Sharepoint API access token
- * @returns {object} token
+ * @returns {Object} token
  */
 const getAccessToken = async () => {
     try {
@@ -21,7 +23,7 @@ const getAccessToken = async () => {
         data.append('grant_type', 'client_credentials');
         data.append('client_id', spClientID);
         data.append('client_secret', spClientSecret);
-        data.append('resource', spresource);
+        data.append('resource', spResource);
 
         //HTTP request config
         const config = {
@@ -46,24 +48,25 @@ const getAccessToken = async () => {
 
 /**
  * Upload file to Sharepoint
- * @param {String} fileContent File Content Bas464
- * @param {String} fileName File Name
+ * @param {object} attachment
  * @returns {object}
  */
-const uploadFile = async (fileContent, fileName) => {
+const uploadFile = async (attachment) => {
     try {
 
+        // console.log(cdsTypes);
+        
         //Get access token
         const {token_type, access_token} = await getAccessToken();
 
         // Convert base64 to buffer
-        const data = Buffer.from(fileContent,'base64');
+        const data = Buffer.from(attachment.fileContent,'base64');
 
         // Http request config
         const config = {
             method: 'post',
             maxBodyLength: Infinity,
-            url: `https://${spDomain}/sites/kosha/_api/web/GetFolderByServerRelativePath(decodedurl='${spFolderPath}')/Files/add(url='${fileName}', overwrite=true)`,
+            url: `https://${spDomain}${spSite}/_api/web/GetFolderByServerRelativePath(decodedurl='${spFolderPath}')/Files/add(url='${attachment.fileName}', overwrite=true)`,
             headers: {
                 'Authorization': `${token_type} ${access_token}`,
                 'Accept': 'application/json',

@@ -781,20 +781,31 @@ sap.ui.define([
 				const enrollmentCreateUrl = this.SERVERHOST + 'service/CreateEnrollmentFormDetail';
 
 				// Format the location details
-				const formattedLocationDetails = Object.values(locationDetails['locations']);
-				formattedLocationDetails.forEach((item) => delete item.suggestions);
+				const locationList = Object.values(locationDetails['locations']);
+				const formattedLocationDetails = locationList.map(item =>{
+					delete item.suggestions
+					return{
+						...item,
+						Zipcode: String(item.Zipcode) // Convert to string
+					}
+				});
+				// Format Account Detail
+				const {SiteFirstName, SiteLastName, SiteEmailAddr, AcctMgrPhoneNumber, ...otherAccountDetails} = enrollmentDetails.AccountDetail;
 
 				const enrollmentFormDetails = {
-					AccountDetail: JSON.stringify({
-						...enrollmentDetails['AccountDetail'],
-						FirstName: enrollmentDetails['AccountDetail']['SiteFirstName'],
-						LastName: enrollmentDetails['AccountDetail']['SiteLastName'],
-						EmailAddr: enrollmentDetails['AccountDetail']['SiteEmailAddr'],
-						AcctMgrPhNo: enrollmentDetails['AccountDetail']['AcctMgrPhoneNumber']
-					}),
-					BuildingDetail: JSON.stringify(formattedLocationDetails),
-					ApplicationDetail: JSON.stringify({ 'SignatureSignedBy': enrollmentDetails['SignatureSignedBy'], 'SignatureSignedDate': FormatInputs.convertDateFormat(enrollmentDetails['SignatureSignedDate']) }),
-					ConsentDetail: JSON.stringify([{
+					AccountDetail: {
+						...otherAccountDetails,
+						FirstName: SiteFirstName,
+						LastName: SiteLastName,
+						EmailAddr: SiteEmailAddr,
+						AcctMgrPhNo: AcctMgrPhoneNumber
+					},
+					BuildingDetail: formattedLocationDetails,
+					ApplicationDetail: { 
+						'SignatureSignedBy': enrollmentDetails['SignatureSignedBy'], 
+						'SignatureSignedDate': FormatInputs.convertDateFormat(enrollmentDetails['SignatureSignedDate']) 
+					},
+					ConsentDetail: [{
 						"FirstName": consentDetails['ConsentFirstName'],
 						"LastName": consentDetails['ConsentLastName'],
 						"SiteContactTitle": consentDetails['ConsentContactTitle'],
@@ -809,10 +820,10 @@ sap.ui.define([
 						"AuthPersonName": consentDetails['AuthPersonName'],
 						"AuthDate": FormatInputs.convertDateFormat(consentDetails['AuthDate']),
 						"AuthTitle": consentDetails['AuthTitle'],
-					}]),
-					Attachment : JSON.stringify(this.attachment)
+					}],
+					Attachment : this.attachment
 				};
-
+				
 				// Post request to create a enrollment application.
 				const headers = { 'X-Recaptcha-Token': this.recaptchaToken };  // Pass the recaptcha token in headers.
 				const { data } = await axios.post(enrollmentCreateUrl, enrollmentFormDetails, { headers });
@@ -823,11 +834,11 @@ sap.ui.define([
 					window.open(this.LandlordConfirmationPageUrl, '_self');
 				} else {
 					// Navigate to the error page
-					window.open(this.ErrorPageUrl, '_self');
+					// window.open(this.ErrorPageUrl, '_self');
 				}
 			} catch (err) {
 				// Navigate to the error page
-				window.open(this.ErrorPageUrl, '_self');
+				// window.open(this.ErrorPageUrl, '_self');
 			}
 		},
 
