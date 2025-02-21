@@ -1,0 +1,21 @@
+<c:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:c="sap.ui.core"
+>
+    <FlexBox
+        alignContent="Stretch"
+        alignItems="Stretch"
+        backgroundDesign="Transparent"
+        direction="Row"
+        displayInline="false"
+        fitContainer="false"
+        justifyContent="Start"
+        renderType="Div"
+        width="100%"
+        wrap="NoWrap"
+    >
+        <items>
+            <Button id="idUploadLocationButton"  text=" + Upload Location" press="onUploadLocationButtonPress" class="customize-button outline-button" ></Button>
+        </items>
+    </FlexBox>
+</c:FragmentDefinition>

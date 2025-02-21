@@ -16,6 +16,8 @@ const { entities } = require('@sap/cds');
 const createEnrollmentFormDetail = async (req) => {
 
   try {
+    console.log(req.data);
+    
     // Initialize the transaction
     const tx = cds.tx(req);
     const entity = entities;
@@ -34,8 +36,8 @@ const createEnrollmentFormDetail = async (req) => {
 
      //Upload to sharepoint
     if(Attachment){
-      const response = await sharepoint.uploadFile(Attachment, `${applicationNumber}.xlsx`);
-      applicationParsedData.AttachmentURL = response.ServerRelativeUrl;
+      // const response = await sharepoint.uploadFile(Attachment, `${applicationNumber}.xlsx`);
+      // applicationParsedData.AttachmentURL = response.ServerRelativeUrl;
     }
 
     // Check the building details fields contains the empty value
