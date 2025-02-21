@@ -9,6 +9,7 @@ const {emptyField} = require('../../utils/regex-and-error-message');
  * decrAppId => string
  */
 const createConsentFormDetail = async (req, entity, tx, decrAppId) => {
+console.log("is enter");
 
   try {
     const { ConsentDetail } = req?.data;

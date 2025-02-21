@@ -32,19 +32,8 @@ cds.on('bootstrap', async (app) => {
     }
   });
 
-  app.use(async(req, res, next)=> {
-    
-    try {
-      const response = await verifyRecaptcha(req);
-      console.log(response, "response");
-      
-      if (response) next();
-      else res.status(403).send('Recaptcha verification failed');
-    } catch (err) {
-      res.status(500).send("Internal server error");
-    }
-
-  });
+  // To verify reCATCHA token
+  app.use(verifyRecaptcha);
 });
 
 module.exports = cds.server;

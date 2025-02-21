@@ -145,7 +145,7 @@
 								>
 								</MessageStrip>
 								<MessageStrip
-										text="Please verify the Recaptcha to continue"
+										id = "tenant-recaptcha-error-strip"
 										type="Error"
 										showIcon="true"
 										visible="{oErrorVisibilityModel>/recaptchaErrorMessageVisibilityStatus}"

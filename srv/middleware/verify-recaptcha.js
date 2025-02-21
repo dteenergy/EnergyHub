@@ -1,33 +1,41 @@
 const axios= require('axios');
 
 /**
- * Verify recatcha token
- * @param {} Http request 
- * @returns {Boolean}
+ * To verify reCAPTCHA token
+ * @param {Request} req 
+ * @param {Response} res
+ * @param {Function} next
+ * @returns {void} proceed to the next function
  * 
- * @throws {Error}
+ * @throws {Error} Returns error for verification failed or unexpected error
  */
-const verifyRecaptcha = async (req) => {
+const verifyRecaptcha = async (req, res, next) => {
   
+  // List of paths that should pypass the reCAPTCHA verification process
   const excludePaths = ["/service/getEnvironmentVariables", "/service/validateApplicationId"];
+  
   const originalUrl = req.originalUrl;
   const recaptchaSecretKey = process.env.RECAPTCHA_SECRET_KEY;
+
+  try{
+    console.log(originalUrl);
+    
+    // Checks the request route is not in the excluded list
+    if(!originalUrl.startsWith("/service") || excludePaths.includes(originalUrl.split("?")[0])) return next();
+    
+    const recaptchaToken = req.get("X-Recaptcha-Token");
+    
+    const url = `https://www.google.com/recaptcha/api/siteverify?secret=${recaptchaSecretKey}&response=${recaptchaToken}`;
+
+    // Request to reCATCHA server to verify the user response
+    const response = await axios.post(url);
+    
+    if(!response.data?.success) return res.status(403).json({"message":"Recaptcha verification failed"});
+    next();
   
-    try{
-      
-      if(originalUrl.startsWith('/service') && !excludePaths.includes(originalUrl.split("?")[0])){
-        const recaptchaToken = req.get("X-Recaptcha-Token");
-
-        const url = `https://www.google.com/recaptcha/api/siteverify?secret=${recaptchaSecretKey}&response=${recaptchaToken}`;
-
-        const response = await axios.post(url);
-        
-        return !response.data?.success;
-      } else true;
-
-    } catch(err){
-        throw err;
-    }
+  } catch(err){
+    res.status(500).json({"message":"Internal server error"});
+  }
 };
 
 module.exports = {verifyRecaptcha};

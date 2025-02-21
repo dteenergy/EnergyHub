@@ -97,6 +97,8 @@ sap.ui.define([
 					});
 					this.getView().setModel(oErrorVisibilityModel, "oErrorVisibilityModel");
 					this.errorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
+
+					this.recaptchaErrorStrip = this.byId("tenant-recaptcha-error-strip");
 				},
 
 				// After ConsentForm view is rendered, load and render the reCAPTCHA component 
@@ -312,6 +314,7 @@ sap.ui.define([
 					// If recaptcha is not verified display the error message and stop the further process.
 					if(!this.isRecaptchaVerified) {
 						this.errorVisibilityModel.setProperty('/recaptchaErrorMessageVisibilityStatus', true);
+						this.recaptchaErrorStrip.setText("Please verify the Recaptcha to continue");
 						return;
 					}
 
@@ -352,11 +355,19 @@ sap.ui.define([
 						window.open(this.ErrorPageUrl, '_self');
 					}
 				}catch(err){
-					console.log(err);
+
+					/**
+					  * If reCAPTCHA verification fails:
+						* - Reset the reCAPTCHA widget
+						* - Mark reCAPTCHA as not verified
+						* - Display an error message strip to inform the user
+					 */
 					if(err?.response?.status === 403) {
 						grecaptcha.reset();
 						this.isRecaptchaVerified = false;
 						this.errorVisibilityModel.setProperty('/recaptchaErrorMessageVisibilityStatus', true);
+						this.recaptchaErrorStrip.setText("ReCATCHA verfication failed. Please try again.")
+
 					} else window.open(this.ErrorPageUrl, '_self'); // Navigate to the error page
 				}	
 			}

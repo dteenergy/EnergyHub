@@ -129,6 +129,8 @@ sap.ui.define([
 				const oLocationStateModel = new JSONModel(GlobalInputValues.locationStates);
 				this.getView().setModel(oLocationStateModel, "oLocationStateModel");
 
+				this.recaptchaErrorStrip = this.byId("enrollment-recaptcha-error-strip");
+
 				// Load the initial fragment
         this.onAddAnotherLocation();
         this.loadConsentForm();
@@ -816,8 +818,20 @@ sap.ui.define([
 							window.open(this.ErrorPageUrl, '_self');
 						}
 					}catch(err){				
-						// Navigate to the error page
-						window.open(this.ErrorPageUrl, '_self');
+						
+						/**
+					  * If reCAPTCHA verification fails:
+						* - Reset the reCAPTCHA widget
+						* - Mark reCAPTCHA as not verified
+						* - Display an error message strip to inform the user
+					 	*/
+						if(err?.response?.status === 403) {
+							grecaptcha.reset();
+							this.isRecaptchaVerified = false;
+							this.errorVisibilityModel.setProperty('/recaptchaErrorMessageVisibilityStatus', true);
+							this.recaptchaErrorStrip.setText("ReCATCHA verfication failed. Please try again.");
+	
+						} else window.open(this.ErrorPageUrl, '_self'); // Navigate to the error page
 					}
 				},
 
@@ -849,7 +863,10 @@ sap.ui.define([
 					if(!oErrorVisibilityModelData?.isInputInValid && !oErrorVisibilityModelData?.isTermsAndConditionVerifiedStatus){
 
 						if(this.isRecaptchaVerified) this.additionalLocationAlert(); // Dialog to additional location alert
-						else this.errorVisibilityModel.setProperty('/recaptchaErrorMessageVisibilityStatus', true); // Show recaptcha error message
+						else {
+							this.errorVisibilityModel.setProperty('/recaptchaErrorMessageVisibilityStatus', true); // Show recaptcha error message
+							this.recaptchaErrorStrip.setText("Please verify the Recaptcha to continue");
+						}
 					}
         },
 
