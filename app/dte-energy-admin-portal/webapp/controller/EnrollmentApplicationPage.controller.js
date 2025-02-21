@@ -5,13 +5,8 @@ sap.ui.define([
   "sap/ui/model/FilterOperator",
   "sap/m/MessageBox",
   "sap/m/MessageToast",
-  "sap/m/Dialog",
-  "sap/m/Button",
-  "sap/m/Text",
-  "sap/m/VBox",
-  "sap/m/Select",
-  "sap/ui/core/Item"
-], (BaseController, PersonalizationController, Filter, FilterOperator, MessageBox, MessageToast, Dialog, Button, Text, VBox, Select, Item) => {
+  "dteenergyadminportal/utils/LinkEHApplication"
+], (BaseController, PersonalizationController, Filter, FilterOperator, MessageBox, MessageToast, LinkEHApplication) => {
   "use strict";
 
   return BaseController.extend("dteenergyadminportal.controller.EnrollmentApplicationPage", {
@@ -116,84 +111,37 @@ sap.ui.define([
       oBinding.filter(aFilters.length > 0 ? oCombinedFilter : []);
     },
     /**
-     * Handles the press event of a link, opening a dialog to link selected applications.
-     * Ensures that at least two applications are selected before proceeding.
-     * 
-     * @async
+     * Handles the press event for linking applications.
+     * Delegates the action to the LinkEHApplication's HandleLinkPress method.
+     *
      * @function
+     * @memberof YourControllerName
      */
-    handleLinkPress: async function() {
-      // Retrieve the table control by its ID
-      const oTable = this.getView().byId('idApplicationTable');
-
-      // Get the selected items (rows) from the table
-      const aSelectedRows = oTable.getSelectedItems();
-
-      // Check if fewer than two rows are selected
-      if(aSelectedRows.length < 2) {
-        // Show a message toast to inform the user to select at least two applications
-        MessageToast.show("Please select at least two application.");
-        return;
-      }
-
-      // Map the selected rows to their corresponding data objects
-      const aSelectedData = aSelectedRows.map(function (oItem) {
-        return oItem.getBindingContext("MainModel").getObject();
-      });
-
-      // Create a local JSON model with selected rows only
-      var oSelectedRowsModel = new sap.ui.model.json.JSONModel(aSelectedData);
-      this._aSelectedRows = aSelectedData;
-
-      // Set the created JSON model to the dialog for data binding
-      this.byId('idLinkDialog').setModel(oSelectedRowsModel, "SelectedRowsModel");
-
-      // Open the dialog to allow the user to link the selected applications
-      this.byId('idLinkDialog').open();
+    handleLinkPress: function () {
+      const that = this;
+      LinkEHApplication.HandleLinkPress(that);
     },
     /**
-     * Handles the confirmation action for linking selected applications to a parent application.
-     * This function gathers selected application IDs, sends them to the server for linking
+     * Handles the confirmation action for linking applications.
+     * Delegates the action to the LinkEHApplication's OnConfirmLink method.
      *
-     * @async
      * @function
-     * @returns {Promise<void>} A promise that resolves when the linking process is complete.
+     * @memberof YourControllerName
      */
-    onConfirmLink: async function () {
-      // Handle the confirm action
-      const oModel = this.getView().getModel("MainModel");
-      var oDialog = this.byId("idLinkDialog");
-      var oSelect = this.byId("idParentSelect");
-      var sParentAppNumber = oSelect.getSelectedItem().getText();
-
-      // Map the selected rows to extract their application IDs
-      const selectedApplication = this._aSelectedRows.map(row => row.AppId);
-      // Prepare the final result object to be sent to the server
-      const finalResult = {selectedAppNumber: sParentAppNumber, selectedApplication: selectedApplication};
-
-      // Send the linking data to the server using a POST request
-      await axios.post(this.baseUrl+`admin/service/UpdateLinkId`, finalResult)
-        .then(res => res.data)
-        .then(data => {
-          // If the server responds with a success code, show a success message
-          if(data?.value?.code === 200) {
-            MessageToast.show(data?.value?.message);
-            this.onInit(); // Reinitialize the view to reflect changes
-          }
-
-          // Clear selections in the application table
-          const oTable = this.byId("idApplicationTable");
-          oTable.removeSelections(true);
-        })
-        .catch(error => console.error('error'+ error))
-
-      oDialog.close();
+    onConfirmLink: function () {
+      const that = this;
+      LinkEHApplication.OnConfirmLink(that);
     },
+    /**
+     * Handles the action to close the link dialog.
+     * Delegates the action to the LinkEHApplication's OnLinkCloseDialog method.
+     *
+     * @function
+     * @memberof YourControllerName
+     */
     onLinkCloseDialog: function () {
-      var oDialog = this.byId("idLinkDialog");
-      const oTable = this.byId("idApplicationTable");
-      oTable.removeSelections(true);
-      oDialog.close();
+      const that = this;
+      LinkEHApplication.OnLinkCloseDialog
     },
     /** 
      * Generates a URL for the selected application and displays it in a dialog.
@@ -256,8 +204,8 @@ sap.ui.define([
      */
     onCopyLink: function() {
       // Get the link from the input box
-      var linkInputBox = this.byId("linkInput");
-      var sLink = linkInputBox.getText();
+      const linkInputBox = this.byId("linkInput");
+      const sLink = linkInputBox.getText();
   
       // Copy the link to clipboard
       navigator.clipboard.writeText(sLink).then(function() {

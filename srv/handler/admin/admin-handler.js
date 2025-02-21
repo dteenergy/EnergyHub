@@ -1,6 +1,6 @@
 const cds = require('@sap/cds');
 const { generateConsentUrl } = require('./generate-consent-url');
-const { updateLinkId } = require('../../utils/update-linkId');
+const { LinkApplications } = require('../../utils/update-linkId');
 
 module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
   const { ApplicationConsent, ApplicationDetail } = this.entities;
@@ -34,18 +34,18 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
    * @param {string[]} req.data.selectedApplication - An array of application IDs to be updated.
    * @returns {Promise<Object>} A promise that resolves to an object containing a message and a status code.
    */
-  srv.on('UpdateLinkId', async (req) => {
+  srv.on('Link', async (req) => {
     // Destructure the necessary data from the request object
-    const {selectedAppNumber, selectedApplication} = req.data;
+    const {selectedAppNumber, selectedApplicationNumbers} = req.data;
 
     try {
       // Call the updateLinkId function to perform the update operation
-      const updateLinkedId = await updateLinkId(selectedAppNumber, selectedApplication);
-      return updateLinkedId; // Return the result of the update operation
+      const ack = await LinkApplications(selectedAppNumber, selectedApplicationNumbers);
+      return ack; // Return the result of the update operation
     } catch (error) {
       // Handle any errors that occur during the update operation
-      if(error?.code) return {message: error?.message, code: error?.code};
-      else return {message: e?.message, code: 500};
+      if(error?.code) return {message: error?.message, statusCode: error?.code};
+      else return {message: e?.message, statusCode: 500};
     }
   }),
 

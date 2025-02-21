@@ -23,7 +23,7 @@
     <endButton>
       <Button text="Confirm" type="Emphasized" press="onConfirmLink" />
     </endButton>
-    </Dialog>
+  </Dialog>
   <VBox id="idApplicationVBox">
     <FlexBox id="idToolBar" wrap="Wrap" justifyContent="End" class="paddingAlignment">
       <SearchField id="idAppNumberFilter" placeholder="Search for Application Number..." liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
