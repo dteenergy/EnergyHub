@@ -52,10 +52,7 @@ const getAccessToken = async () => {
  * @returns {object}
  */
 const uploadFile = async (attachment) => {
-    try {
-
-        // console.log(cdsTypes);
-        
+    try {        
         //Get access token
         const {token_type, access_token} = await getAccessToken();
 

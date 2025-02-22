@@ -15,7 +15,7 @@
         wrap="NoWrap"
     >
         <items>
-            <Button id="idUploadLocationButton"  text=" + Upload Location" press="onUploadLocationButtonPress" class="customize-button outline-button" ></Button>
+            <Button id="idUploadSpreadsheetButton"  text=" + Upload Spreadsheet" press="onUploadSpreadsheetButtonPress" class="customize-button outline-button" ></Button>
         </items>
     </FlexBox>
 </c:FragmentDefinition>

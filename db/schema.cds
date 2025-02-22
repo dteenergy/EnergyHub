@@ -27,11 +27,11 @@ entity ApplicationDetail{
 entity BuildingDetail {
     key BuildingId : UUID;
     BuildingName : String not null @mandatory;
-    AccountNumber : String not null @mandatory;
+    AccountNumber : AccountNumber not null @mandatory;
     Address : String not null @mandatory;
-    City : String not null @mandatory;
+    City : City not null @mandatory;
     State : String not null @mandatory;
-    Zipcode: String not null @mandatory;
+    Zipcode: Zipcode not null @mandatory;
     AddrLineTwo: String;
     CreatedAt: Timestamp @cds.on.insert: $now;
     UpdatedAt: Timestamp @cds.on.insert: $now  @cds.on.update: $now;
@@ -45,22 +45,22 @@ entity AccountDetail {
     CompanyName : String not null @mandatory;
     CompanyAddress : String not null @mandatory;
     CompanyAddrLineTwo: String;
-    City : String not null @mandatory;
+    City : City not null @mandatory;
     State : String not null @mandatory;
-    Zipcode : String not null @mandatory;
+    Zipcode : Zipcode not null @mandatory;
     AcctMgrName : String;
-    AcctMgrPhNo: String;
+    AcctMgrPhNo: PhoneNumber;
     EnergyPrgmParticipated : Boolean default false;
     FirstName : String not null @mandatory; 
     LastName : String not null @mandatory; 
     SiteContactTitle : String not null @mandatory;
     SiteAddress : String not null @mandatory;
     SiteAddrLineTwo: String;
-    SiteCity : String not null @mandatory;
+    SiteCity : City not null @mandatory;
     SiteState : String not null @mandatory;
-    SiteZipcode : String not null @mandatory;
-    SitePhoneNumber : String not null @mandatory;
-    EmailAddr : String not null @mandatory;
+    SiteZipcode : Zipcode not null @mandatory;
+    SitePhoneNumber : PhoneNumber not null @mandatory;
+    EmailAddr : Email not null @mandatory;
     CreatedAt: Timestamp @cds.on.insert: $now;
     UpdatedAt: Timestamp @cds.on.insert: $now  @cds.on.update: $now;
 
@@ -75,12 +75,12 @@ entity ApplicationConsent {
     SiteContactTitle : String @mandatory;
     Address: String not null @mandatory;
     AddrLineTwo: String;
-    City: String not null @mandatory;
+    City: City not null @mandatory;
     State: String not null @mandatory;
-    Zipcode : String not null @mandatory;
-    AccountNumber : String not null @mandatory;
-    PhoneNumber : String;
-    EmailAddr: String;
+    Zipcode : Zipcode not null @mandatory;
+    AccountNumber : AccountNumber not null @mandatory;
+    PhoneNumber : PhoneNumber;
+    EmailAddr: Email;
     AuthPersonName : String;
     AuthDate: Date;
     AuthTitle: String;
@@ -93,7 +93,7 @@ entity ApplicationConsent {
 }
 
 entity Attachment{
-    fileName: String @mandatory;
+    fileName: String @assert.format : '\.xlsx$' @mandatory;
     fileType: String @mandatory;
     fileContent : LargeBinary @mandatory;
 }
@@ -104,6 +104,11 @@ entity Attachment{
 }
 
 // Defining Custom Data types
+type Email : String @assert.format : '^(?=.{1,255}$)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+type PhoneNumber : String @assert.format : '^(?!0000000000$)\d{10}$';
+type City : String @assert.format : '^[a-zA-Z][a-zA-Z\s]{0,99}$';
+type Zipcode : String @assert.format : '^(?!00000$)\d{5}$';
+type AccountNumber : String @assert.format : '^(91|92)[0-9]{10}$';
 type appStatus : String enum {
     New;
     Rejected;
@@ -113,5 +118,8 @@ type appStatus : String enum {
 type consentStatus : String enum {
     New;
 }
+
+
+
 
 

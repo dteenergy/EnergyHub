@@ -2,7 +2,6 @@ const cds = require('@sap/cds');
 const { v4: uuidv4 } = require('uuid');
 
 const sharepoint = require('../../utils/sharepoint-api');
-const { emptyField } = require("../../utils/regex-and-error-message");
 const { generateAppNumber } = require('../../utils/generate-application-number');
 const { entities } = require('@sap/cds');
 
@@ -16,8 +15,6 @@ const { entities } = require('@sap/cds');
 const createEnrollmentFormDetail = async (req) => {
 
   try {
-    console.log(req.data);
-    
     // Initialize the transaction
     const tx = cds.tx(req);
     const entity = entities;
@@ -25,6 +22,8 @@ const createEnrollmentFormDetail = async (req) => {
     const { ApplicationDetail, BuildingDetail, AccountDetail, ConsentDetail, Attachment } = req?.data;
 
     // Array empty validation
+    if(BuildingDetail.length === 0) return {statusCode :'400', message:'At least one BuildingDetail is required.'}
+    if(ConsentDetail.length === 0) return {statusCode :'400', message:'At least one ConsentDetail is required.'}
 
     // Generate Application number
     const applicationNumber = await generateAppNumber(entity);
@@ -32,9 +31,9 @@ const createEnrollmentFormDetail = async (req) => {
 
      //Upload attachment to sharepoint
     if(Attachment){
-      Attachment.fileName = `${applicationNumber}-${Attachment.fileName}`
+      Attachment.fileName = `${applicationNumber}-${Attachment.fileName}`; //Append application to file name
       const response = await sharepoint.uploadFile(Attachment);
-      ApplicationDetail.AttachmentURL = response.ServerRelativeUrl;
+      ApplicationDetail.AttachmentURL = response.ServerRelativeUrl; // insert attachment loaction in Application Detail entity
     }
 
     // Assign AppId to Application Detail, Building Detail, Account Detail and Application Consent 
@@ -56,10 +55,9 @@ const createEnrollmentFormDetail = async (req) => {
     const consentDetailResult = await tx.run(INSERT.into(entity?.ApplicationConsent).entries(ConsentDetail));
 
     // Check Enrollment Form Details inserted successfully.
-    const isInsertSuccessfull = (applicationDetailResult?.results?.length > 0) && (buildingDetailResult?.results?.length > 0) &&
-      (accountDetailResult?.results?.length > 0) && (consentDetailResult?.results?.length > 0)
+    const isInsertSuccessfull = (applicationDetailResult?.results?.length > 0) && (buildingDetailResult?.results?.length > 0) 
+                                && (accountDetailResult?.results?.length > 0) && (consentDetailResult?.results?.length > 0)
     if (isInsertSuccessfull) return { statusCode: 200, message: "Thank you! Your DTE Energy Data Hub enrollment is confirmed. " };
-
   } catch (error) {
     console.log("Enrollment Form Creation Error :", error);
     return {

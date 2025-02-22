@@ -8,7 +8,7 @@ sap.ui.define([
 	"dteconsentappclient/utils/FormatInputs",
 	"dteconsentappclient/utils/DataLayer",
 	"dteconsentappclient/utils/RenderRecaptcha",
-	"dteconsentappclient/utils/UploadLocationDialog",
+	"dteconsentappclient/utils/UploadSpreadsheetDialog",
 	"sap/m/Dialog"
 ], (
 	BaseController,
@@ -296,7 +296,7 @@ sap.ui.define([
 		getAttachment : function(){
 			UploadLocationDialog.readFile(this);
 		},
-		onUploadLocationButtonPress : function () {
+		onUploadSpreadsheetButtonPress : function () {
 			UploadLocationDialog.render(this);
 		},
 
@@ -834,11 +834,11 @@ sap.ui.define([
 					window.open(this.LandlordConfirmationPageUrl, '_self');
 				} else {
 					// Navigate to the error page
-					// window.open(this.ErrorPageUrl, '_self');
+					window.open(this.ErrorPageUrl, '_self');
 				}
 			} catch (err) {
 				// Navigate to the error page
-				// window.open(this.ErrorPageUrl, '_self');
+				window.open(this.ErrorPageUrl, '_self');
 			}
 		},
 

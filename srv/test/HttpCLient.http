@@ -34,15 +34,6 @@ Content-Length: 1300
             "State": "Michigan",
             "Zipcode": "48226",
             "AddrLineTwo": "# ESOC"
-        },
-        {
-            "BuildingName": "Roy Tower",
-            "AccountNumber": "913647646577",
-            "Address": "1, ENERGY PLZ",
-            "City": "Detroit",
-            "State": "Michigan",
-            "Zipcode": "48226",
-            "AddrLineTwo": "# ESOC"
         }
     ],
     "ApplicationDetail": {
