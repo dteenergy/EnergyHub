@@ -26,10 +26,12 @@ const verifyRecaptcha = async (req, res, next) => {
     if(!originalUrl.startsWith("/service") || excludePaths.includes(originalUrl.split("?")[0])) return next();
     
     const recaptchaToken = req.get("X-Recaptcha-Token");
+
+    if(!recaptchaToken) return res.status(403).json({"message": "Forbidden"});
     
     const url = `https://www.google.com/recaptcha/api/siteverify?secret=${recaptchaSecretKey}&response=${recaptchaToken}`;
 
-    // Request to reCATCHA server to verify the user response
+    // Request to reCATCHA server to verify the user response.
     const response = await axios.post(url);
     
     if(!response.data?.success) return res.status(403).json({"message":"Recaptcha verification failed"});
