@@ -4,7 +4,7 @@ const { entities } = require('@sap/cds');
 /**
  * Links multiple applications to a specified parent application by updating their LinkId.
  *
- * @param {Object} req - The request object containing data for linking applications.
+ * @param {Request} req - The request object containing data for linking applications.
  * @returns {Promise<Object>} A promise that resolves to an object containing a message and statusCode.
  */
 const LinkApplications = async (req) => {
