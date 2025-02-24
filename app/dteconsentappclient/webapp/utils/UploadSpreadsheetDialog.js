@@ -9,14 +9,14 @@ sap.ui.define([
     return {
         /**
          * Render upload spreadsheet dialog
-         * @param {this} that 
+         * @param {Controller} that => Parent controller this instance
          */
         render: function (that) {
 
             // Customize content of the dialog for Upload Spreadsheet
             const dialogContent = new sap.m.FlexBox({
                 items: [
-                    new sap.m.FormattedText({ htmlText: "<p style='letter-spacing: .7px; font-size: 14px; font-weigt: 400; margin-bottom: 0;'> Lorem Ipsum has been the industry's standard dummy text ever since  </p>" }),
+                    new sap.m.FormattedText({ htmlText: "<p style='letter-spacing: .7px; font-size: 14px; font-weigt: 400; margin-bottom: 0;'> Lorem ipsum dolor sit amet consectetur. Neque bibendum ultrices sit mattis sit elit. </p>" }),
 
                     // File Uploader element
                     new FileUploader({
@@ -30,21 +30,22 @@ sap.ui.define([
                             oFileUploader.setValueStateText("Only .xlsx files are allowed!");
                         },
                         change: function (oEvent) {
-                            that.spreadsheet = oEvent.getParameter("files")[0];
+                            that.spreadsheet = oEvent.getParameter("files")[0];                          
 
                             // Reset value state on valid file selection
                             const oFileUploader = oEvent.getSource();
                             oFileUploader.setValueState("None");
-                        }
-                    }),
+                        },
+                        width: '100%'
+                    }).addStyleClass("upload-dialog-file-uploader"),
 
                     // Upload buttton element
                     new sap.m.Button({
                         text: 'Upload',
                         type: sap.m.ButtonType.Emphasized,
-                        press: function () {
+                        press: function () {                            
                             //Allow upload press, only when spreadsheet file selected 
-                            if(that.spreadsheet){
+                            if (that.spreadsheet) {
                                 that.oUploadDialog.close();
                                 that.getAttachment();
                             }
@@ -82,7 +83,7 @@ sap.ui.define([
                 that.oUploadDialog = new Dialog({
                     customHeader: dialogTitle,
                     content: dialogContent
-                }).addStyleClass("alert-dialog-main-container")
+                }).addStyleClass("upload-dialog-main-container");
             }
 
             that.oUploadDialog.open();
@@ -90,21 +91,44 @@ sap.ui.define([
 
         /**
          * Read spreadsheet content
-         * @param {this} that 
+         * @param {Controller} that => Parent controller this instance
          */
         readFile: function (that) {
-            console.log(that.spreadSheet);
             const reader = new FileReader();
+            
+            // Read spreadsheet to create attachment JSON
             reader.onload = (e) => {
-                console.log(e.target.result.split(",")[1]);
-                const content = e.target.result.split(",")[1];
+                const content = e.target.result.split(",")[1]; // split base64 content
                 that.attachment = {
-                    fileName: that.spreadSheet.name,
-                    fileType: that.spreadSheet.type,
+                    fileName: that.spreadsheet.name,
+                    fileType: that.spreadsheet.type,
                     fileContent: content
                 };
             };
-            reader.readAsDataURL(that.spreadSheet);
+            reader.readAsDataURL(that.spreadsheet);
+        },
+        /**
+         * Download spreadsheet template
+         * @param {Controller} that => Parent controller this instance
+         */
+        downloadSpreadsheetTemplate: async function (that) {
+            try {
+                // Url to create the enrollment application
+                const downloadSpreadsheetTemplateUrl = that.SERVERHOST + 'service/DownloadSpreadsheetTemplate';
+
+                // Post request to create a enrollment application.
+                const { data } = await axios.get(downloadSpreadsheetTemplateUrl);
+                
+                // Save spreadsheet template in client system
+                const file =`data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${data.value.file}`;
+                const a = document.createElement('a');
+                a.download = 'Data.xlsx';
+                a.href = file;
+                a.click();
+
+            } catch (error) {
+                that.errorHandler(error);
+            }
         }
     };
 });

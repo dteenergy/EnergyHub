@@ -20,7 +20,7 @@ sap.ui.define([
 	FormatInputs,
 	DataLayer,
 	RenderRecaptcha,
-	UploadLocationDialog,
+	UploadSpreadsheetDialog,
 	Dialog
 ) => {
 	"use strict";
@@ -294,12 +294,30 @@ sap.ui.define([
 			this.validateBuildingDetails("building-detail-main-container", "locationDetailsValidation");
 		},
 
-		getAttachment : function(){
-			UploadLocationDialog.readFile(this);
-		},
+	//<--------------- Start : Upload Spreadsheet Dialog Handlers --------->
+
+		/**
+		 * Upload spreadsheet button press event handler
+		 */
 		onUploadSpreadsheetButtonPress : function () {
-			UploadLocationDialog.render(this);
+			UploadSpreadsheetDialog.render(this);
 		},
+		/**
+		 * Get attachment object from file buffer
+		 */
+		getAttachment : function(){
+			UploadSpreadsheetDialog.readFile(this);
+		},
+		/**
+		 * Download template link press event handler
+		 */
+		onDownloadTemplateLinkPress: function () {
+			UploadSpreadsheetDialog.downloadSpreadsheetTemplate(this)
+		},
+
+		
+	//<---------------End : Upload Spreadsheet Dialog Handlers --------->
+
 
 		// Update the "EnergyPrgmParticipated" status based on the selected radio button value. 
 		onRadioButtonSelect: function (oEvent) {

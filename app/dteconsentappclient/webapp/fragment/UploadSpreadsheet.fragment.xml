@@ -24,6 +24,7 @@
             <Link
 				text="Download Template"
                 emphasized="true"
+                press="onDownloadTemplateLinkPress"
                 class="customize-link"
             />
         </items>
