@@ -149,7 +149,7 @@
                         </VBox>
                     </VBox>
 
-                    <Button id="add-building-detail" text=" + Add Another Location" press="onAddAnotherLocation" class="customize-button outline-button" ></Button>
+                    <Button id="add-building-detail" text=" + Add Another Location" press="onAddAnotherLocation" class="customize-button outline-button ehApplication" ></Button>
 
                     <!-- Upload Spreadsheet -->
                     <core:Fragment fragmentName="dteconsentappclient.fragment.UploadSpreadsheet" type="XML"></core:Fragment>

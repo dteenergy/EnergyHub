@@ -31,6 +31,14 @@
 .customize-button.outline-button{
     border: 1px solid var(--sapButton_TextColor);
 }
+.customize-button.outline-button.ehApplication{
+    min-width: 300px;
+}
+.customize-link {
+    .sapMLnkText{
+        color: var(--sapButton_TextColor) !important;
+    }
+}
 .outline-button{
     border: 1px solid var(--sapButton_TextColor);
     .sapMBtnInner{
