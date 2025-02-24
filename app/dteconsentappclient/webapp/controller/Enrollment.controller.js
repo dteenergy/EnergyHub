@@ -122,6 +122,13 @@ sap.ui.define([
 			});
 			this.getView().setModel(oErrorVisibilityModel, "oErrorVisibilityModel");
 			this.errorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
+			// Model to set the list of US states
+			const ostateValuesModel = new JSONModel(GlobalInputValues.usStates);
+			this.getView().setModel(ostateValuesModel, "ostateValuesModel");
+
+			// Model to set the location available state list 
+			const oLocationStateModel = new JSONModel(GlobalInputValues.locationStates);
+			this.getView().setModel(oLocationStateModel, "oLocationStateModel");
 
 				// Retrieve the Recaptcha error strip element by its Id
 				this.recaptchaErrorStrip = this.byId("enrollment-recaptcha-error-strip");
@@ -146,7 +153,6 @@ sap.ui.define([
 				 */
         onAddAnotherLocation: function(){
 					const oView = this.getView();
-					
 			const oLocationModel = oView.getModel("locationModel");
 			let locations = oLocationModel.getProperty("/locations");
 
