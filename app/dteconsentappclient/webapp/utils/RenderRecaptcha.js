@@ -27,7 +27,7 @@ sap.ui.define([],
 
           "expired-callback": () => {
             that.isRecaptchaVerified = false;
-            that.recaptchaErrorStrip.setText("Please verify the Recaptcha to continue");
+            that.recaptchaErrorStrip.setText("Please verify the reCAPTCHA to continue");
             that.recaptchaToken = null;
           }
         })

@@ -9,7 +9,7 @@ const axios= require('axios');
  * 
  * @throws {Error} Returns error for verification failed or unexpected error
  */
-const verifyRecaptcha = async (req, res, next) => {
+const verifyReCAPTCHA = async (req, res, next) => {
   
   // List of paths that should pypass the reCAPTCHA verification process
   const excludePaths = ["/service/getEnvironmentVariables", "/service/validateApplicationId"];
@@ -21,7 +21,7 @@ const verifyRecaptcha = async (req, res, next) => {
 
     /**
      * Checks the request route is in excluded list OR the request is not for the form service,
-     * If it is it should pypass the recaptcha verification.
+     * If it is, it should pypass the recaptcha verification.
      * */
     if(!originalUrl.startsWith("/service") || excludePaths.includes(originalUrl.split("?")[0])) return next();
     
@@ -34,7 +34,7 @@ const verifyRecaptcha = async (req, res, next) => {
     // Request to reCATCHA server to verify the user response.
     const response = await axios.post(url);
     
-    if(!response.data?.success) return res.status(403).json({"message":"Recaptcha verification failed"});
+    if(!response.data?.success) return res.status(403).json({"message":"ReCAPTCHA verification failed"});
     next();
   
   } catch(err){
@@ -42,4 +42,4 @@ const verifyRecaptcha = async (req, res, next) => {
   }
 };
 
-module.exports = {verifyRecaptcha};
+module.exports = {verifyReCAPTCHA};

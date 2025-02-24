@@ -830,7 +830,7 @@ sap.ui.define([
 							grecaptcha.reset();
 							this.isRecaptchaVerified = false;
 							this.errorVisibilityModel.setProperty('/recaptchaErrorMessageVisibilityStatus', true);
-							this.recaptchaErrorStrip.setText("ReCATCHA verfication failed. Please try again.");
+							this.recaptchaErrorStrip.setText("ReCAPTCHA verfication failed. Please try again.");
 	
 						} else window.open(this.ErrorPageUrl, '_self'); // Navigate to the error page
 					}

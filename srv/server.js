@@ -2,7 +2,7 @@ const cds = require('@sap/cds');
 const dotenv = require('dotenv');
 const dotenvExpand = require('dotenv-expand');
 
-const {verifyRecaptcha} = require('./middleware/verify-recaptcha');
+const {verifyReCAPTCHA} = require('./middleware/verify-recaptcha');
 
 //Expand .env configuration to support variables
 const dotenvConfig = dotenv.config();
@@ -33,7 +33,7 @@ cds.on('bootstrap', async (app) => {
   });
 
   // To verify reCATCHA token
-  app.use(verifyRecaptcha);
+  app.use(verifyReCAPTCHA);
 });
 
 module.exports = cds.server;
