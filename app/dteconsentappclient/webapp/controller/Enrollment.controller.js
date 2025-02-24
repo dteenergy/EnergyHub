@@ -8,6 +8,7 @@ sap.ui.define([
 		"dteconsentappclient/utils/FormatInputs",
 		"dteconsentappclient/utils/DataLayer",
 		"dteconsentappclient/utils/RenderRecaptcha",
+		"dteconsentappclient/utils/ConfirmationDialog",
 		"sap/m/Dialog"
 ], (
 		BaseController,
@@ -19,6 +20,7 @@ sap.ui.define([
 		FormatInputs, 
 		DataLayer, 
 		RenderRecaptcha,
+		ConfirmationDialog,
 		Dialog
 	) => {
     "use strict";
@@ -812,8 +814,8 @@ sap.ui.define([
 						
 						// If get the success(200) response then navigate to the confirmation page
 						if(data.value.statusCode === 200){
-							// Navigate to the landlord confirmation page
-							window.open(this.LandlordConfirmationPageUrl, '_self');
+							this.applicationNumber = data.value.applicationNumber;
+							ConfirmationDialog.finalPopup(this, 'Landlord');
 						}else{
 							// Navigate to the error page
 							window.open(this.ErrorPageUrl, '_self');

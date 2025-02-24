@@ -8,6 +8,7 @@ sap.ui.define([
 	"dteconsentappclient/utils/ChecksInputValidation",
 	"dteconsentappclient/utils/FormatInputs",
 	"dteconsentappclient/utils/RenderRecaptcha",
+	"dteconsentappclient/utils/ConfirmationDialog",
 	"dteconsentappclient/utils/DataLayer"
 ], function(
 	BaseController,
@@ -19,6 +20,7 @@ sap.ui.define([
 	ChecksInputValidation,
 	FormatInputs,
 	RenderRecaptcha,
+	ConfirmationDialog,
 	DataLayer
 ) {
 	"use strict";
@@ -349,8 +351,7 @@ sap.ui.define([
 					const {data} = await axios.post(tenantConsentCreateUrl, tenantConsentFormDetails, {headers});
 						
 					if(data.value.statusCode === 200){
-						// Navigate to the tenant confirmation page
-						window.open(this.TenantConfirmationPageUrl, '_self');
+						ConfirmationDialog.finalPopup(this, 'Tenant');
 					}else{
 						// Navigate to the error page
 						window.open(this.ErrorPageUrl, '_self');
