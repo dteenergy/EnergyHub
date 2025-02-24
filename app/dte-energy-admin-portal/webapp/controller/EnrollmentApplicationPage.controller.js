@@ -112,36 +112,36 @@ sap.ui.define([
     },
     /**
      * Handles the press event for linking applications.
-     * Delegates the action to the LinkEHApplication's HandleLinkPress method.
+     * Delegates the action to the LinkEHApplication's handleLinkPress method.
      *
      * @function
      * @memberof YourControllerName
      */
     handleLinkPress: function () {
       const that = this;
-      LinkEHApplication.HandleLinkPress(that);
+      LinkEHApplication.handleLinkPress(that);
     },
     /**
      * Handles the confirmation action for linking applications.
-     * Delegates the action to the LinkEHApplication's OnConfirmLink method.
+     * Delegates the action to the LinkEHApplication's onConfirmLink method.
      *
      * @function
      * @memberof YourControllerName
      */
     onConfirmLink: function () {
       const that = this;
-      LinkEHApplication.OnConfirmLink(that);
+      LinkEHApplication.onConfirmLink(that);
     },
     /**
      * Handles the action to close the link dialog.
-     * Delegates the action to the LinkEHApplication's OnLinkCloseDialog method.
+     * Delegates the action to the LinkEHApplication's onLinkCloseDialog method.
      *
      * @function
      * @memberof YourControllerName
      */
     onLinkCloseDialog: function () {
       const that = this;
-      LinkEHApplication.OnLinkCloseDialog
+      LinkEHApplication.onLinkCloseDialog
     },
     /** 
      * Generates a URL for the selected application and displays it in a dialog.

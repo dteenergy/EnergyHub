@@ -9,8 +9,9 @@ sap.ui.define([
      * 
      * @async
      * @function
+     * @param {sap.ui.core.mvc.Controller} that - The current controller instance.
      */
-    HandleLinkPress: async function (that) {
+    handleLinkPress: async function (that) {
       // Retrieve the table control by its ID
       const oTable = that.getView().byId('idApplicationTable');
 
@@ -45,9 +46,9 @@ sap.ui.define([
      *
      * @async
      * @function
-     * @returns {Promise<void>} A promise that resolves when the linking process is complete.
+     * @param {sap.ui.core.mvc.Controller} that - The current controller instance.
      */
-    OnConfirmLink: async function (that) {
+    onConfirmLink: async function (that) {
       const oDialog = that.byId("idLinkDialog");
       const oSelect = that.byId("idParentSelect");
       const sParentAppNumber = oSelect.getSelectedItem().getText();
@@ -75,10 +76,9 @@ sap.ui.define([
     /**
      * Closes the link dialog and clears any selections in the application table.
      *
-     * @param {Object} that - The context (`this`) of the calling function,
-     * typically the controller instance.
+     * @param {sap.ui.core.mvc.Controller} that - The current controller instance.
      */
-    OnLinkCloseDialog: function (that) {
+    onLinkCloseDialog: function (that) {
       const oDialog = that.byId("idLinkDialog");
       const oTable = that.byId("idApplicationTable");
       oTable.removeSelections(true);

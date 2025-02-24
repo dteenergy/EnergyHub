@@ -2,17 +2,15 @@ const cds = require('@sap/cds');
 const { entities } = require('@sap/cds');
 
 /**
- * Updates the LinkId of multiple applications in the ApplicationDetail entity.
- * Sets the LinkId to the provided parent application number for all applications
- * whose AppId is included in the selectedApplicationNumbers array.
+ * Links multiple applications to a specified parent application by updating their LinkId.
  *
- * @async
- * @function
- * @param {string} selectedAppNumber - The parent application number to set as LinkId.
- * @param {string[]} selectedApplicationNumbers - An array of application IDs to be updated.
- * @returns {Promise<Object>} An object containing a message and a status code.
+ * @param {Object} req - The request object containing data for linking applications.
+ * @returns {Promise<Object>} A promise that resolves to an object containing a message and statusCode.
  */
-const LinkApplications = async (selectedAppNumber, selectedApplicationNumbers) => {
+const LinkApplications = async (req) => {
+  // Destructure selectedAppNumber and selectedApplicationNumbers from the request data
+  const {selectedAppNumber, selectedApplicationNumbers} = req.data;
+
   // Access the CDS entities
   const entity = entities;
 
@@ -28,8 +26,7 @@ const LinkApplications = async (selectedAppNumber, selectedApplicationNumbers) =
     if(result === 0) return {message: 'No records found for the provided AppIds', statusCode: 404};
     else return {message: 'Successfully updated!', statusCode:200};
   } catch (error) {
-    // Log the error and return a failure message
-    console.error('Error updating LinkId:', error);
+    // Handle any errors that occurred during the update operation
     return { message: 'An error occurred while updating LinkId', statusCode: 500 };
   }
 };
