@@ -210,7 +210,7 @@
                         >
                         </MessageStrip>
                         <MessageStrip
-                            text="Please verify the Recaptcha"
+                            id = "enrollment-recaptcha-error-strip"
                             type="Error"
                             showIcon="true"
                             visible="{oErrorVisibilityModel>/recaptchaErrorMessageVisibilityStatus}"
