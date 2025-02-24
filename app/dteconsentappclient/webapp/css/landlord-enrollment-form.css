@@ -31,7 +31,7 @@
 .customize-button.outline-button{
     border: 1px solid var(--sapButton_TextColor);
 }
-.customize-button.outline-button.ehApplication{
+.customize-button.outline-button.eh-Application{
     min-width: 300px;
 }
 .customize-link {
@@ -117,7 +117,8 @@
 .enrollment-consent-section > *,
 .auth-and-release-container > *,
 .message-strip-container > *,
-.confirmation-dialog-content > *{
+.confirmation-dialog-content > *,
+.location-info-btn-container > *{
     padding-bottom: 20px;
 }
 .account-info-container > *:last-child {
