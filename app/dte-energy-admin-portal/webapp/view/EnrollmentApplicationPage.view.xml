@@ -1,6 +1,7 @@
 <mvc:View xmlns:tnt="sap.tnt" controllerName="dteenergyadminportal.controller.EnrollmentApplicationPage"
-  xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
-  xmlns="sap.m">
+  xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns="sap.m">
+
+  <!-- Dialog for displaying a generated link with a copy button -->
   <Dialog id="linkDialog" title="Generated Link">
     <HBox justifyContent="SpaceAround" alignItems="Center" width="500px" class="linkHBox">
       <FlexBox width="70%"><Text id="linkInput" text="" width="100%" /></FlexBox>
@@ -10,6 +11,8 @@
       <Button text="Close" press="onCloseDialog" />
     </endButton>
   </Dialog>
+
+  <!-- Dialog for selecting a parent application to link with selected applications -->
   <Dialog id="idLinkDialog" title="Select Parent Application" afterClose="onLinkCloseDialog">
     <VBox class="sapUiSmallMargin">
       <Text text="Select the Parent Application to link with the selected applications:" />
@@ -23,7 +26,9 @@
     <endButton>
       <Button text="Confirm" type="Emphasized" press="onConfirmLink" />
     </endButton>
-    </Dialog>
+  </Dialog>
+
+  <!-- Main container for the application table and its toolbar -->
   <VBox id="idApplicationVBox">
     <FlexBox id="idToolBar" wrap="Wrap" justifyContent="End" class="paddingAlignment">
       <SearchField id="idAppNumberFilter" placeholder="Search for Application Number..." liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
@@ -41,6 +46,7 @@
       <Button id="idP13nButton" icon="sap-icon://action-settings" press="setupPersonalization" tooltip="Settings"/>
     </FlexBox>
     <ScrollContainer id="_idScrollContainer" horizontal="true" vertical="false" width="100%" height="auto" class="paddingAlignment">
+      <!-- Table displaying application details with multiple columns -->
       <Table id="idApplicationTable" mode="MultiSelect" items="{MainModel>/ApplicationDetail}" growing="true" growingThreshold="10" sticky="ColumnHeaders" width="100%" class="setTableHeight">
         <columns>
           <Column width="150px"><header><Text text="Application Number" class="boldText"></Text></header></Column>
@@ -55,6 +61,7 @@
           <Column width="150px"><header><Text text="Email Address" class="boldText"></Text></header></Column>
           <Column width="150px"><header><Text text="Energy Program Participated" class="boldText"></Text></header></Column>
           <Column width="150px"><header><Text text="Consent Link" class="boldText"></Text></header></Column>
+          <!-- Additional columns marked as invisible -->
           <Column visible="false" width="150px"><header><Text text="Application CreatedAt" class="boldText"></Text></header></Column>
           <Column visible="false" width="150px"><header><Text text="Application UpdatedAt" class="boldText"></Text></header></Column>
           <Column visible="false" width="150px"><header><Text text="Signed Date" class="boldText"></Text></header></Column>

@@ -93,13 +93,12 @@ service DTEEnergyAdminPortal {
     to: 'Administrator'
     }]) as projection on db.AccountDetail;
 
-  action UpdateLinkId(
+  action Link(
     selectedAppNumber: String,
-    selectedApplication: selectedApp
+    selectedApplicationNumbers: array of String
   ) returns String;
   
 }
-type selectedApp: array of String;
 
 annotate DTEEnergyAdminPortal with @requires: [
   'authenticated-user',
