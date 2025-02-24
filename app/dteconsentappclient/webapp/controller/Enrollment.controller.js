@@ -866,7 +866,7 @@ sap.ui.define([
 						if(this.isRecaptchaVerified) this.additionalLocationAlert(); // Dialog to additional location alert
 						else {
 							this.errorVisibilityModel.setProperty('/recaptchaErrorMessageVisibilityStatus', true); // Show recaptcha error message
-							this.recaptchaErrorStrip.setText("Please verify the Recaptcha to continue");
+							this.recaptchaErrorStrip.setText("Please verify the reCAPTCHA to continue.");
 						}
 					}
         },

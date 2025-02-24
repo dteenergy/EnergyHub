@@ -315,7 +315,7 @@ sap.ui.define([
 					// If recaptcha is not verified display the error message and stop the further process.
 					if(!this.isRecaptchaVerified) {
 						this.errorVisibilityModel.setProperty('/recaptchaErrorMessageVisibilityStatus', true);
-						this.recaptchaErrorStrip.setText("Please verify the Recaptcha to continue");
+						this.recaptchaErrorStrip.setText("Please verify the reCAPTCHA to continue");
 						return;
 					}
 
