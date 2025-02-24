@@ -9,15 +9,15 @@ const createEnrollmentFormDetail = require('./create-enrollment-form-action');
 const createConsentFormDetail = require('./create-consent-form-action');
 const { valueEncrypt, valueDecrypt } = require('../../utils/encrypt-and-decrypt-id');
 const validateApplicationId = require('./validate-app-id');
-const { downloadLocationXSLTemplate } = require('./download-location-xsl-template');
+const { downloadSpreadsheetTemplate } = require('./download-spreadsheet-template');
 
 module.exports = cds.service.impl(async function (srv) {
 
 	// Landlord enrollment form create action
 	srv.on('CreateEnrollmentFormDetail', createEnrollmentFormDetail);
 
-	// Download Landlord Location Spreadsheet Template
-	srv.on('DownloadLocationXSLTemplate', downloadLocationXSLTemplate);
+	// Download Spreadsheet Template
+	srv.on('DownloadSpreadsheetTemplate', downloadSpreadsheetTemplate);
 
 	// Validate the Application Id
 	srv.on('validateApplicationId', async (req) => {

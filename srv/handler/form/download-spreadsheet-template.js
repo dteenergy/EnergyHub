@@ -2,14 +2,14 @@ const fs = require('fs');
 const path = require('path');
 
 /**
- * Download landlord location spreadsheet template
+ * Download landlord spreadsheet template
  * @param {Request} req 
  * @returns {object}  
  */
-const downloadLocationXSLTemplate = async (req) => {
+const downloadSpreadsheetTemplate = async (req) => {
     try {
-        // Read location template spreadsheet
-        const filePath = path.join(__dirname,'../../template/Location.xlsx');
+        // Read spreadsheet template 
+        const filePath = path.join(__dirname,'../../template/Data.xlsx');
         const templateFileContent = await fs.readFileSync(filePath,{encoding:'base64url'});
 
         return {
@@ -25,5 +25,5 @@ const downloadLocationXSLTemplate = async (req) => {
 }
 
 module.exports = {
-    downloadLocationXSLTemplate
+    downloadSpreadsheetTemplate
 }
