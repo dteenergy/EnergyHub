@@ -214,6 +214,25 @@
     margin-bottom: 20px;
 }
 
+/* Upload Spreadsheet dialog */
+.upload-dialog-main-container{
+    max-width: 700px !important;
+}
+.upload-dialog-content{
+    padding: 30px 25px;
+}
+.upload-dialog-file-uploader-lable{
+    font-size: 14px !important;
+}
+.upload-dialog-file-uploader{
+    max-width: 640px !important;
+    padding-bottom: 10px !important;
+    .sapMBtnBase {
+        border: 1px solid var(--sapButton_TextColor);
+        margin-left: 23px !important;
+    }
+}
+
 @media only screen and (max-width: 600px) {
     .state-and-code{
         flex-direction: column;

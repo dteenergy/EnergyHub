@@ -13,14 +13,19 @@ sap.ui.define([
          */
         render: function (that) {
 
-            // Customize content of the dialog for Upload Spreadsheet
-            const dialogContent = new sap.m.FlexBox({
+            const fileUpload = new sap.m.FlexBox({
+                direction:'Column',
+                width: '100%',
                 items: [
-                    new sap.m.FormattedText({ htmlText: "<p style='letter-spacing: .7px; font-size: 14px; font-weigt: 400; margin-bottom: 0;'> Lorem ipsum dolor sit amet consectetur. Neque bibendum ultrices sit mattis sit elit. </p>" }),
+                    new sap.m.Text({
+                        text: 'Select File',
+                    }).addStyleClass('upload-dialog-file-uploader-lable'),
 
-                    // File Uploader element
-                    new FileUploader({
+
+                     // File Uploader element
+                     new FileUploader({
                         fileType: ['xlsx'],
+                        buttonText: 'Browse',
                         typeMissmatch: function (oEvent) {
                             // Get the source FileUploader control
                             const oFileUploader = oEvent.getSource();
@@ -38,7 +43,16 @@ sap.ui.define([
                         },
                         width: '100%'
                     }).addStyleClass("upload-dialog-file-uploader"),
+                ]
+            }) 
 
+            // Customize content of the dialog for Upload Spreadsheet
+            const dialogContent = new sap.m.FlexBox({
+                items: [
+                    new sap.m.FormattedText({ htmlText: "<p style='letter-spacing: .7px; font-size: 14px; font-weigt: 400; margin-bottom: 0;'> Lorem ipsum dolor sit amet consectetur. Neque bibendum ultrices sit mattis sit elit. </p>" }),
+
+                    fileUpload,
+                    
                     // Upload buttton element
                     new sap.m.Button({
                         text: 'Upload',
@@ -55,7 +69,7 @@ sap.ui.define([
             });
 
             // Add the class for the dialog content
-            dialogContent.addStyleClass("upload-dialog-content");
+            dialogContent.addStyleClass("confirmation-dialog-content upload-dialog-content");
 
             // Custom header for the dialog
             const dialogTitle = new sap.m.Bar({
