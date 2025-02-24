@@ -11,10 +11,10 @@ const LinkApplications = async (req) => {
   // Destructure selectedAppNumber and selectedApplicationNumbers from the request data
   const {selectedAppNumber, selectedApplicationNumbers} = req.data;
 
-  // Access the CDS entities
-  const entity = entities;
-
   try {
+    // Access the CDS entities
+    const entity = entities;
+
     // Execute the update operation on the ApplicationDetail entity
     const result = await cds.run(
       UPDATE(entity.ApplicationDetail)

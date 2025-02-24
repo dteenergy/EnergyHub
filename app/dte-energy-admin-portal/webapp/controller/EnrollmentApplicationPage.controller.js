@@ -113,9 +113,6 @@ sap.ui.define([
     /**
      * Handles the press event for linking applications.
      * Delegates the action to the LinkEHApplication's handleLinkPress method.
-     *
-     * @function
-     * @memberof YourControllerName
      */
     handleLinkPress: function () {
       const that = this;
@@ -124,9 +121,6 @@ sap.ui.define([
     /**
      * Handles the confirmation action for linking applications.
      * Delegates the action to the LinkEHApplication's onConfirmLink method.
-     *
-     * @function
-     * @memberof YourControllerName
      */
     onConfirmLink: function () {
       const that = this;
@@ -135,9 +129,6 @@ sap.ui.define([
     /**
      * Handles the action to close the link dialog.
      * Delegates the action to the LinkEHApplication's onLinkCloseDialog method.
-     *
-     * @function
-     * @memberof YourControllerName
      */
     onLinkCloseDialog: function () {
       const that = this;
