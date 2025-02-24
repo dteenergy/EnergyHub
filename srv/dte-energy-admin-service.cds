@@ -39,7 +39,7 @@ service DTEEnergyAdminPortal {
     SignatureSignedDate,
     UpdatedAt as AppUpdatedAt,
     CreatedAt as AppCreatedAt
-  } order by AppCreatedAt desc
+  } order by ApplicationNumber, LinkId
   actions{
     function GenerateUrl() returns String;
   } function GetEnvironmentVariables() returns String;
@@ -92,6 +92,11 @@ service DTEEnergyAdminPortal {
     grant: ['READ'], 
     to: 'Administrator'
     }]) as projection on db.AccountDetail;
+
+  action Link(
+    selectedAppNumber: String,
+    selectedApplicationNumbers: array of String
+  ) returns String;
   
 }
 

@@ -1,5 +1,6 @@
 const cds = require('@sap/cds');
 const { generateConsentUrl } = require('./generate-consent-url');
+const { LinkApplications } = require('../../utils/link-applications');
 
 module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
   const { ApplicationConsent, ApplicationDetail } = this.entities;
@@ -25,6 +26,9 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
 
   }),
 
+  // Register the 'Link' event handler with the LinkApplications function
+  srv.on('Link', LinkApplications),
+
   // Method to add the NoOfConsentReceived Field.
   srv.after('READ', 'ApplicationDetail', async (data) => {
     try {
@@ -39,7 +43,15 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
           
           el.NoOfConsentReceived = ConsentDetail?.length;
         }
+        // Sorting logic: First by ApplicationNumber, then by LinkId
+        data.sort((a, b) => {
+          if (a.ApplicationNumber === b.ApplicationNumber) {
+            return (a.LinkId || "").localeCompare(b.LinkId || "");
+          }
+          return a.ApplicationNumber.localeCompare(b.ApplicationNumber);
+        })
       }
+
     } catch (e) {
       return {message:e?.message, code:500}
     }

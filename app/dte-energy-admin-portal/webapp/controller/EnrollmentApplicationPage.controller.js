@@ -4,8 +4,9 @@ sap.ui.define([
   "sap/ui/model/Filter",
   "sap/ui/model/FilterOperator",
   "sap/m/MessageBox",
-  "sap/m/MessageToast"
-], (BaseController, PersonalizationController, Filter, FilterOperator, MessageBox, MessageToast) => {
+  "sap/m/MessageToast",
+  "dteenergyadminportal/utils/LinkEHApplication"
+], (BaseController, PersonalizationController, Filter, FilterOperator, MessageBox, MessageToast, LinkEHApplication) => {
   "use strict";
 
   return BaseController.extend("dteenergyadminportal.controller.EnrollmentApplicationPage", {
@@ -35,14 +36,14 @@ sap.ui.define([
       if(!["", undefined].includes(this.sApplicationStatus)) this.byId("idApplicationStatusFilter").setSelectedKey(this.sApplicationStatus);
       
       // Create an OData V4 model using the constructed service URL
-      const model = new sap.ui.model.odata.v4.ODataModel({
+      this.model = new sap.ui.model.odata.v4.ODataModel({
         serviceUrl: `${this.baseUrl}admin/service/`,
         synchronizationMode: "None",
         operationMode: "Server",
       });
 
       // Set the newly created model as the "MainModel" for this view
-      this.getView().setModel(model, "MainModel");
+      this.getView().setModel(this.model, "MainModel");
 
       // Initialize the Personalization Controller for the application table
       this.oPersonalizationController = new PersonalizationController({
@@ -110,6 +111,30 @@ sap.ui.define([
       oBinding.filter(aFilters.length > 0 ? oCombinedFilter : []);
     },
     /**
+     * Handles the press event for linking applications.
+     * Delegates the action to the LinkEHApplication's handleLinkPress method.
+     */
+    handleLinkPress: function () {
+      const that = this;
+      LinkEHApplication.handleLinkPress(that);
+    },
+    /**
+     * Handles the confirmation action for linking applications.
+     * Delegates the action to the LinkEHApplication's onConfirmLink method.
+     */
+    onConfirmLink: function () {
+      const that = this;
+      LinkEHApplication.onConfirmLink(that);
+    },
+    /**
+     * Handles the action to close the link dialog.
+     * Delegates the action to the LinkEHApplication's onLinkCloseDialog method.
+     */
+    onLinkCloseDialog: function () {
+      const that = this;
+      LinkEHApplication.onLinkCloseDialog
+    },
+    /** 
      * Generates a URL for the selected application and displays it in a dialog.
      *
      * @param {sap.ui.base.Event} oEvent - The event triggered by button press.
@@ -170,8 +195,8 @@ sap.ui.define([
      */
     onCopyLink: function() {
       // Get the link from the input box
-      var linkInputBox = this.byId("linkInput");
-      var sLink = linkInputBox.getText();
+      const linkInputBox = this.byId("linkInput");
+      const sLink = linkInputBox.getText();
   
       // Copy the link to clipboard
       navigator.clipboard.writeText(sLink).then(function() {
