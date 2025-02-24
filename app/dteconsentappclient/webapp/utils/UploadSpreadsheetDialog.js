@@ -55,7 +55,7 @@ sap.ui.define([
             });
 
             // Add the class for the dialog content
-            dialogContent.addStyleClass("confirmation-dialog-content");
+            dialogContent.addStyleClass("upload-dialog-content");
 
             // Custom header for the dialog
             const dialogTitle = new sap.m.Bar({
