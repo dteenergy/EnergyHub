@@ -7,7 +7,7 @@ const handlebars = require('handlebars')
 
 const createEnrollmentFormDetail = require('./create-enrollment-form-action');
 const createConsentFormDetail = require('./create-consent-form-action');
-const { valueEncrypt, valueDecrypt } = require('../../utils/encrypt-and-decrypt-id');
+const { valueDecrypt } = require('../../utils/encrypt-and-decrypt-id');
 const validateApplicationId = require('./validate-app-id');
 const { downloadSpreadsheetTemplate } = require('./download-spreadsheet-template');
 

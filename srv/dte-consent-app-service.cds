@@ -28,5 +28,5 @@ service DTEConsentAppPortal {
     function getEnvironmentVariables () returns String;
 
     // Download landlord location template spreadsheet template
-    function DownloadLocationXSLTemplate () returns LargeBinary;
+    function DownloadSpreadsheetTemplate () returns LargeBinary;
 };
