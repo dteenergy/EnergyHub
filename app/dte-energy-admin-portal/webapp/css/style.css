@@ -50,3 +50,16 @@ body {
   background-color: #fff;
   overflow: scroll;
 }
+
+/* Style for parent application rows */
+.parentApp{
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* Style for child application rows (indented) */
+.indentRow{
+  padding-left: 20px !important;
+  font-size: 12px;
+  color: gray;
+}

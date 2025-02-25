@@ -12,67 +12,76 @@ sap.ui.define([
 
   return {
 
-    finalPopup: function (that, persona){
-    const popupContent = {
-      "Landlord": {"title": "Confirmation","text": `Thank you for your applying for access to DTE’s Energy Data Hub. 
+    /**
+     * Displays a confirmation dialog based on the user type (Landlord or Tenant).
+     * @param {} that - Calling context
+     * @param {string} userType - Type of user, either "Landlord" or "Tenant".
+     */
+    showConfirmationDialog: function (that, userType){
+    
+      const confirmationMessages = {
+      "Landlord": {"dialogTitle": "Confirmation","message": `Thank you for your applying for access to DTE’s Energy Data Hub. 
         Your application ${that.applicationNumber} has been received and an email including the 
-        application number will be sent to you shortly for your records.`, "thankyouPage": that.LandlordConfirmationPageUrl},
-      "Tenant": {"title": "Confirmation","text": `Thank you for submitting the tenant consent form for 
+        application number will be sent to you shortly for your records.`, "thankyouPageURL": that.LandlordConfirmationPageUrl},
+      "Tenant": {"dialogTitle": "Confirmation","message": `Thank you for submitting the tenant consent form for 
         the DTE Energy Data Hub. Your submission has been received. A confirmation email will be 
-        sent to you shortly.`, "thankyouPage": that.TenantConfirmationPageUrl}
+        sent to you shortly.`, "thankyouPageURL": that.TenantConfirmationPageUrl}
     }
 
-    const {title, text, thankyouPage} = popupContent[persona];
+     // Extract the appropriate dialog details based on the userType
+    const {dialogTitle, message, thankyouPageURL} = confirmationMessages[userType];
 
-    if(!that.confirmationPopup){
+    if(!that.oConfirmationDialog){
 
-      // Custom header for the dialog
-					const dialogTitle = new Bar({
-						contentMiddle: [
-							new Text({ 
-								text:  popupContent[persona]["title"]
-							}).addStyleClass("alert-title")
-						],
-						contentRight: [
-								new sap.ui.core.Icon({
-										src: 'sap-icon://decline',
-										decorative: false,
-										press: function () {
-											that.confirmationPopup.close();
-                      
-                      // Navigate to according thank you page.
-                      window.open(popupContent[persona]["thankyouPage"], "_self");
-										}
-								}).addStyleClass("alert-close-icon")
-						]
-				}).addStyleClass("confirmation-dialog-title");
+      // Custom dialog header with a title and a close icon.
+      const dialogHeaderContainer = new Bar({
+        contentMiddle: [
+          new Text({ 
+            text: dialogTitle
+          }).addStyleClass("alert-title")
+        ],
+        contentRight: [
+            new sap.ui.core.Icon({
+                src: 'sap-icon://decline',
+                decorative: false,
+                press: function () {	
+                  that.oConfirmationDialog.close();
+                  // Navigate to corresponding  thank you page.
+                  window.location.href = thankyouPageURL;
+                }
+            }).addStyleClass("alert-close-icon")
+        ]
+      }).addStyleClass("confirmation-dialog-title");
 
-        const dialogContent = new FlexBox({
-          items: [
-            new Text ({ text: popupContent[persona]["text"]}),
-            
-            new Button({
-              type: ButtonType.Emphasized,
-              text: "OK",
-              press: function () {
-                that.confirmationPopup.close();
-                // Navigate to according thank you page.
-                // window.location.href = popupContent[persona]["thankyouPage"];
-                window.open(popupContent[persona]["thankyouPage"], "_self");
-              }
-            })
-          ]
-        }).addStyleClass("confirmation-dialog-content");
+      // Dialog content to display a confirmation message with OK button.
+      const dialogContentContainer = new FlexBox({
+        items: [
+          new Text ({ text: message}),
+          
+          new Button({
+            type: ButtonType.Emphasized,
+            text: "OK",
+            press: function () {
+              that.oConfirmationDialog.close();
+              // Navigate to corresponding thank you page.
+              window.location.href = thankyouPageURL;
+            }
+          }).addStyleClass("dialog-submit-action")
+        ]
+      }).addStyleClass("confirmation-dialog-content");
 
-     that.confirmationPopup = new Dialog({
+      // Initialize the confirmation dialog.
+      that.oConfirmationDialog = new Dialog({
 
-      customHeader: dialogTitle,      
-      content: dialogContent
+        customHeader: dialogHeaderContainer,      
+        content: dialogContentContainer
 
-     }).addStyleClass("alert-dialog-main-container")
+      }).addStyleClass("dialog-main-container");
+
     } 
 
-    that.confirmationPopup.open();
+    // Open the dialog.
+    that.oConfirmationDialog.open();
   },
   }
 });

@@ -19,15 +19,37 @@ modules:
     properties:
       srv-url: ${default-url}
   properties:
-    CRYPTOJS_SECRET_KEY : "@dteEneHub*123*Forms" 
-    DTE_ADDRESS_VALIDATION_URL : https://api.customer.sites.dteenergy.com/public/premises/
-    TENANT_CONFIRMATION_PAGE_URL : https://www.dteenergy.com/us/en/quicklinks/energy-hub/energy-hub-tenant-confirmation.html
-    LANDLORD_CONFIRMATION_PAGE_URL : https://www.dteenergy.com/us/en/quicklinks/energy-hub/energy-hub-landlord-confirmation.html
-    ERROR_PAGE_URL : https://www.dteenergy.com/us/en/quicklinks/energy-hub/energy-hub-error.html
-    APPNUM_PREFIX_ENABLED : "N"
-    APPNUM_PREFIX : ""
+    #CryptoJs 
+    CRYPTOJS_SECRET_KEY: "@dteEneHub*123*Forms" 
+
+    # External URLs for redirect
+    DTE_ADDRESS_VALIDATION_URL: https://api.customer.sites.dteenergy.com/public/premises/
+    TENANT_CONFIRMATION_PAGE_URL: https://www.dteenergy.com/us/en/quicklinks/energy-hub/energy-hub-tenant-confirmation.html
+    LANDLORD_CONFIRMATION_PAGE_URL: https://www.dteenergy.com/us/en/quicklinks/energy-hub/energy-hub-landlord-confirmation.html
+    ERROR_PAGE_URL: https://www.dteenergy.com/us/en/quicklinks/energy-hub/energy-hub-error.html
     TENANT_CONSENT_FORM_URL: https://www.dteenergy.com/us/en/quicklinks/energy-hub/energy-hub-tenant.html?appId=
-    CORS_ALLOW_ORIGINS : '["https://forms.dteenergy.com/eh/enrollment-portal/index.html"]'
+
+    # Application Number configuration
+    APPNUM_PREFIX_ENABLED: "Y"
+    APPNUM_PREFIX: "EH"
+
+    CORS_ALLOW_ORIGINS: '["https://forms.dteenergy.com/eh/enrollment-portal/index.html"]'
+
+    # ReCAPTCHA
+    RECAPTCHA_SITE_KEY: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
+    RECAPTCHA_SECRET_KEY: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
+
+    # Sharepoint
+    SP_CLIENT_ID: b7b42dea-9ff9-492f-8f9b-78590ed44896@8e61d5fe-7749-4e76-88ee-6d8799ae8143
+    SP_CLIENT_SECRET: 1n08Q~~Itb_tQXm-sTquoaCfPp2eNSSKIFlCVc23
+    SP_TENENT_ID: 8e61d5fe-7749-4e76-88ee-6d8799ae8143
+    SP_DOMAIN: dteenergy.sharepoint.com
+    SP_RESOURCE: 00000003-0000-0ff1-ce00-000000000000/${SP_DOMAIN}@${SP_TENENT_ID}
+    SP_SITE: /teams/EnergyPartnershipServicesEnergySmartTeam 
+    SP_SITE_CONTENT_LIST: EHEnroll
+    SP_FOLDER_NAME: Fiori-dev
+    SP_FOLDER_PATH: ${SP_SITE}/${SP_SITE_CONTENT_LIST}/${SP_FOLDER_NAME}
+
   parameters:
     memory: 256MB
   build-parameters:

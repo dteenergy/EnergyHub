@@ -41,35 +41,39 @@ sap.ui.define([
       that.byId('idLinkDialog').open();
     },
     /**
-     * Handles the confirmation action for linking selected applications to a parent application.
-     * This function gathers selected application IDs, sends them to the server for linking
+     * Handles the confirmation of linking selected applications to a parent application.
+     * This function is triggered when the user clicks the "Confirm" button in the linking dialog.
      *
      * @async
      * @function
-     * @param {sap.ui.core.mvc.Controller} that - The current controller instance.
+     * @param {sap.ui.core.mvc.Controller} that - Reference to the current controller instance.
      */
     onConfirmLink: async function (that) {
+      const oModel = that.getView().getModel('MainModel');
       const oDialog = that.byId("idLinkDialog");
       const oSelect = that.byId("idParentSelect");
       const sParentAppNumber = oSelect.getSelectedItem().getText();
 
       // Map the selected rows to extract their application IDs
       const selectedApplicationNumbers = that._aSelectedRows.map(row => row.ApplicationNumber);
-      // Prepare the linking information to be sent to the server
-      const linkingInfo = {selectedAppNumber: sParentAppNumber, selectedApplicationNumbers: selectedApplicationNumbers};
 
-      // Send the linking info to the server using a POST request
-      await axios.post(that.baseUrl+`admin/service/Link`, linkingInfo)
-        .then(res => res.data)
-        .then(data => {
-          MessageToast.show(data?.value?.message);
-          that.onInit(); // Reinitialize the view to reflect changes
+      // Bind the context to the 'Link' function import with the specified parameters
+      const oFunctionContext = oModel.bindContext('/Link(...)');
+      oFunctionContext.setParameter("selectedAppNumber", sParentAppNumber);
+      oFunctionContext.setParameter( "selectedApplicationNumbers", selectedApplicationNumbers);
 
-          // Clear selections in the application table
-          const oTable = that.byId("idApplicationTable");
-          oTable.removeSelections(true);
-        })
-        .catch(error => BaseController.errorHandler(error))
+      try {
+        // Execute the function import to perform the linking operation
+        await oFunctionContext.execute();
+        MessageToast.show('Successfully updated!');
+        that.onInit(); // Reinitialize the view to reflect changes
+
+        // Clear selections in the application table
+        const oTable = that.byId("idApplicationTable");
+        oTable.removeSelections(true);
+      } catch (error) {
+        BaseController.errorHandler(error)
+      }
 
       oDialog.close();
     },
