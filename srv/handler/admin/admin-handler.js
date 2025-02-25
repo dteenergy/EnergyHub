@@ -1,7 +1,7 @@
 const cds = require('@sap/cds');
 const { generateConsentUrl } = require('./generate-consent-url');
-const { LinkApplications } = require('../../utils/link-applications');
-const { readApplicationDetail } = require('../../utils/sort-application-detail');
+const { LinkApplications } = require('./link-applications');
+const { readApplicationDetail } = require('./sort-application-detail');
 
 module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
   const { ApplicationConsent, ApplicationDetail } = this.entities;
