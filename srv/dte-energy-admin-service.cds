@@ -39,7 +39,7 @@ service DTEEnergyAdminPortal {
     SignatureSignedDate,
     UpdatedAt as AppUpdatedAt,
     CreatedAt as AppCreatedAt
-  } order by ApplicationNumber, LinkId
+  }
   actions{
     function GenerateUrl() returns String;
   } function GetEnvironmentVariables() returns String;

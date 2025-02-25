@@ -81,7 +81,14 @@
         </columns>
           <items>
             <ColumnListItem id="idColumnListItem" type="Navigation" press="navToBuildingDetailPage">
-              <Text text="{MainModel>ApplicationNumber}"></Text>
+              <!-- 
+                This core:HTML control dynamically formats the ApplicationNumber based on the LinkId.  
+                - It binds two properties from the MainModel: LinkId and ApplicationNumber.  
+                - The formatter function (.formatApplicationNumber) applies the necessary formatting  
+                  and indentation based on the relationship between LinkId and ApplicationNumber.  
+                - The formatted content is injected into the HTML control.  
+              -->
+              <core:HTML content="{parts: [{path: 'MainModel>LinkId'}, {path: 'MainModel>ApplicationNumber'}], formatter: '.formatApplicationNumber'}" />
               <Text text="{MainModel>FirstName} {MainModel>LastName}"></Text>
               <Text text="{MainModel>CompanyName}"></Text>
               <Text text="{parts: [{path: 'MainModel>CompanyAddress'}, {path: 'MainModel>CompanyAddrLineTwo'}, {path: 'MainModel>City'}, {path: 'MainModel>State'}], formatter: '.formatCompanyAddress'}"></Text>
