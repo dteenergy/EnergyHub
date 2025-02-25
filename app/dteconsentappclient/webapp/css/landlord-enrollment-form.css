@@ -219,7 +219,10 @@
     max-width: 700px !important;
 }
 .upload-dialog-content{
-    padding: 30px 25px;
+    padding: 15px;
+}
+.upload-dialog-content:last-child{
+    padding-bottom: 0px;
 }
 .upload-dialog-file-uploader-lable{
     font-size: 14px !important;
