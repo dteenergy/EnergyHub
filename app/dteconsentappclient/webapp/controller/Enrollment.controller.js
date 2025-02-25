@@ -858,7 +858,10 @@ sap.ui.define([
 				 * - Display the confirmation dialog for the Landlord user type.
 				 */
 				if (data.value.statusCode === 200) {
+					
 					this.applicationNumber = data.value.applicationNumber;
+					console.log(data.value.applicationNumber);
+					
 					ConfirmationDialog.showConfirmationDialog(this, 'Landlord');
 				} else {
 					// Navigate to the error page

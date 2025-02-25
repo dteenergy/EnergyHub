@@ -4,8 +4,9 @@ sap.ui.define([
   "sap/m/Button",
   "sap/m/Bar",
   "sap/m/FlexBox",
+  "sap/m/FormattedText",
   "sap/m/library"
-], function(Dialog, Text, Button, Bar, FlexBox, Library){
+], function(Dialog, Text, Button, Bar, FlexBox,FormattedText, Library){
   "use strict";
 
   const ButtonType = Library.ButtonType;
@@ -20,12 +21,12 @@ sap.ui.define([
     showConfirmationDialog: function (that, userType){
     
       const confirmationMessages = {
-      "Landlord": {"dialogTitle": "Confirmation","message": `Thank you for your applying for access to DTE’s Energy Data Hub. 
-        Your application ${that.applicationNumber} has been received and an email including the 
-        application number will be sent to you shortly for your records.`, "thankyouPageURL": that.LandlordConfirmationPageUrl},
-      "Tenant": {"dialogTitle": "Confirmation","message": `Thank you for submitting the tenant consent form for 
-        the DTE Energy Data Hub. Your submission has been received. A confirmation email will be 
-        sent to you shortly.`, "thankyouPageURL": that.TenantConfirmationPageUrl}
+      "Landlord": {"dialogTitle": "Confirmation","message":`<p style='letter-spacing: .7px; font-size: 14px; font-weigt: 400; margin-bottom: 0;'> 
+        Thank you for your applying for access to DTE’s Energy Data Hub. Your application <span style='font-weight: 600; font-size: 14px;'>${that.applicationNumber}</span> 
+        has been received and an email including the application number will be sent to you shortly for your records.</p>`, "thankyouPageURL": that.LandlordConfirmationPageUrl},
+      "Tenant": {"dialogTitle": "Confirmation","message": `<p style='letter-spacing: .7px; font-size: 14px; font-weigt: 400; margin-bottom: 0;'> 
+        Thank you for submitting the tenant consent form for the DTE Energy Data Hub. Your submission has been received. A confirmation email will be sent to you shortly. </p>`,
+        "thankyouPageURL": that.TenantConfirmationPageUrl}
     }
 
      // Extract the appropriate dialog details based on the userType
@@ -56,7 +57,7 @@ sap.ui.define([
       // Dialog content to display a confirmation message with OK button.
       const dialogContentContainer = new FlexBox({
         items: [
-          new Text ({ text: message}),
+          new FormattedText({ htmlText: message }),
           
           new Button({
             type: ButtonType.Emphasized,
