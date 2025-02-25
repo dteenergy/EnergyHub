@@ -81,7 +81,7 @@
         </columns>
           <items>
             <ColumnListItem id="idColumnListItem" type="Navigation" press="navToBuildingDetailPage">
-              <Text id="idApplicationNumber" text="{MainModel>ApplicationNumber}"></Text>
+              <core:HTML content="{parts: [{path: 'MainModel>LinkId'}, {path: 'MainModel>ApplicationNumber'}], formatter: '.formatApplicationNumber'}" />
               <Text text="{MainModel>FirstName} {MainModel>LastName}"></Text>
               <Text text="{MainModel>CompanyName}"></Text>
               <Text text="{parts: [{path: 'MainModel>CompanyAddress'}, {path: 'MainModel>CompanyAddrLineTwo'}, {path: 'MainModel>City'}, {path: 'MainModel>State'}], formatter: '.formatCompanyAddress'}"></Text>

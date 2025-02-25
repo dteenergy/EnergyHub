@@ -51,7 +51,13 @@ body {
   overflow: scroll;
 }
 
-.indentedText{
+.parentApp{
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.indentRow{
   padding-left: 20px !important;
-  background-color: red !important;
+  font-size: 12px;
+  color: gray;
 }

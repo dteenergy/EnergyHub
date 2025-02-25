@@ -26,6 +26,46 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
 
   }),
 
+  // Method to sort the Applications
+  srv.on('READ', 'ApplicationDetail', async (req) => {
+    // Clone the original query
+    const query = req.query;
+
+    // Add a computed column 'SortKey' to determine the sorting order of applications
+    query.SELECT.columns.push({
+      xpr: [
+        'case',
+        'when', { ref: ['LinkId'] }, 'is', 'null', // If 'LinkId' is NULL, use 'ApplicationNumber' as the sort key
+        'then', { ref: ['ApplicationNumber'] },
+        'else', { ref: ['LinkId'] }, // Otherwise, use 'LinkId' to maintain hierarchical sorting
+        'end'
+      ],
+      as: 'SortKey' // Assign alias 'SortKey' to the computed column
+    });
+
+    // Add another computed column 'Parenting' to differentiate parent applications from child applications
+    query.SELECT.columns.push({
+      xpr: [
+        'case',
+        'when', { ref: ['LinkId'] }, '=', { ref: ['ApplicationNumber'] }, // If 'LinkId' matches 'ApplicationNumber', it is a parent application
+        'then', '1', // Mark parent applications with '1'
+        'else', '0', // Otherwise, it is a child application
+        'end'
+      ],
+      as: 'Parenting' // Assign alias 'Parenting' to the computed column
+    });
+
+    /**
+     * Apply sorting:
+     * First, sort by 'SortKey' in ascending order to group related applications together
+     * Then, sort by 'Parenting' in descending order to ensure parents appear before children
+     */
+    query.SELECT.orderBy = [{ ref: ['SortKey'], sort: 'asc' }, { ref: ['Parenting'], sort: 'desc'  }];
+
+    // Execute the modified query and return the results
+    return await cds.tx(req).run(query);
+  }),
+
   // Register the 'Link' event handler with the LinkApplications function
   srv.on('Link', LinkApplications),
 
@@ -43,13 +83,6 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
           
           el.NoOfConsentReceived = ConsentDetail?.length;
         }
-        // Sorting logic: First by ApplicationNumber, then by LinkId
-        data.sort((a, b) => {
-          if (a.ApplicationNumber === b.ApplicationNumber) {
-            return (a.LinkId || "").localeCompare(b.LinkId || "");
-          }
-          return a.ApplicationNumber.localeCompare(b.ApplicationNumber);
-        })
       }
 
     } catch (e) {
