@@ -2,7 +2,6 @@ const cds = require('@sap/cds');
 const { v4: uuidv4 } = require('uuid');
 
 const sharepoint = require('../../utils/sharepoint-api');
-const { emptyField } = require("../../utils/regex-and-error-message");
 const { generateAppNumber } = require('../../utils/generate-application-number');
 const { entities } = require('@sap/cds');
 
@@ -22,59 +21,43 @@ const createEnrollmentFormDetail = async (req) => {
 
     const { ApplicationDetail, BuildingDetail, AccountDetail, ConsentDetail, Attachment } = req?.data;
 
-    // Parse the String Payload
-    const applicationParsedData = JSON.parse(ApplicationDetail);
-    const buildingParsedData = JSON.parse(BuildingDetail);
-    const accountParsedData = JSON.parse(AccountDetail);
-    const consentParsedData = JSON.parse(ConsentDetail);
+    // Array empty validation
+    if(BuildingDetail.length === 0) return {statusCode :'400', message:'At least one BuildingDetail is required.'}
+    if(ConsentDetail.length === 0) return {statusCode :'400', message:'At least one ConsentDetail is required.'}
 
     // Generate Application number
     const applicationNumber = await generateAppNumber(entity);
-    applicationParsedData.ApplicationNumber = applicationNumber;
+    ApplicationDetail.ApplicationNumber = applicationNumber;
 
-     //Upload to sharepoint
+     //Upload attachment to sharepoint
     if(Attachment){
-      const response = await sharepoint.uploadFile(Attachment, `${applicationNumber}.xlsx`);
-      applicationParsedData.AttachmentURL = response.ServerRelativeUrl;
+      Attachment.fileName = `${applicationNumber}-${Attachment.fileName}`; //Append application to file name
+      const response = await sharepoint.uploadFile(Attachment);
+      ApplicationDetail.AttachmentURL = response.ServerRelativeUrl; // insert attachment loaction in Application Detail entity
     }
-
-    // Check the building details fields contains the empty value
-    const excludedFields = ['AddrLineTwo'];
-
-    const buildingDetailFieldCheck = buildingParsedData?.map(buildingDetail => {
-      return Object.keys(buildingDetail)
-        .filter(key => !excludedFields.includes(key))
-        .some(key => buildingDetail[key] === "");
-    });
-
-    const isEmpty = (Object.keys(applicationParsedData)?.length === 0) || (buildingParsedData?.length === 0) ||
-      (buildingDetailFieldCheck.includes(true)) || (Object.keys(accountParsedData)?.length === 0) ||
-      (consentParsedData?.length === 0);
-    if (isEmpty) return { 'statusCode': 400, 'message': emptyField?.message };
 
     // Assign AppId to Application Detail, Building Detail, Account Detail and Application Consent 
     const AppId = uuidv4();
 
-    applicationParsedData.AppId = AppId;
-    buildingParsedData?.map(detail => detail.AppRefId_AppId = AppId);
-    accountParsedData.AppRefId_AppId = AppId;
-    consentParsedData.map(consent => {
-      consent.AppRefId_AppId = AppId;
-      consent.ConsentByTenantFlag = false;
-      return consent;
-    });
+    ApplicationDetail.AppId = AppId;
+    BuildingDetail?.map(detail => detail.AppRefId_AppId = AppId);
+    AccountDetail.AppRefId_AppId = AppId;
+    ConsentDetail.map(consent => ({
+      ...consent,
+      AppRefId_AppId : AppId,
+      ConsentByTenantFlag : false
+    }));
 
     // Insert Enrollment Form details to database
-    const applicationDetailResult = await tx.run(INSERT.into(entity?.ApplicationDetail).entries(applicationParsedData));
-    const buildingDetailResult = await tx.run(INSERT.into(entity?.BuildingDetail).entries(buildingParsedData));
-    const accountDetailResult = await tx.run(INSERT.into(entity?.AccountDetail).entries(accountParsedData));
-    const consentDetailResult = await tx.run(INSERT.into(entity?.ApplicationConsent).entries(consentParsedData));
+    const applicationDetailResult = await tx.run(INSERT.into(entity?.ApplicationDetail).entries(ApplicationDetail));
+    const buildingDetailResult = await tx.run(INSERT.into(entity?.BuildingDetail).entries(BuildingDetail));
+    const accountDetailResult = await tx.run(INSERT.into(entity?.AccountDetail).entries(AccountDetail));
+    const consentDetailResult = await tx.run(INSERT.into(entity?.ApplicationConsent).entries(ConsentDetail));
 
     // Check Enrollment Form Details inserted successfully.
-    const isInsertSuccessfull = (applicationDetailResult?.results?.length > 0) && (buildingDetailResult?.results?.length > 0) &&
-      (accountDetailResult?.results?.length > 0) && (consentDetailResult?.results?.length > 0)
+    const isInsertSuccessfull = (applicationDetailResult?.results?.length > 0) && (buildingDetailResult?.results?.length > 0) 
+                                && (accountDetailResult?.results?.length > 0) && (consentDetailResult?.results?.length > 0)
     if (isInsertSuccessfull) return { statusCode: 200, message: "Thank you! Your DTE Energy Data Hub enrollment is confirmed. " };
-
   } catch (error) {
     console.log("Enrollment Form Creation Error :", error);
     return {

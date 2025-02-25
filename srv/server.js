@@ -25,7 +25,7 @@ cds.on('bootstrap', async (app) => {
     // Check incoming path is service path
     const isServicePath = /^\/service(\/.*)?$/.test(req.path);
     if (!isServicePath) return next();
-    else {
+    else {      
       // Allow access service When req header's referer in CORS_ALLOW_ORIGINS 
       if (corsAllowOrigins.includes(req.headers.referer)) return next();
       else return res.status(403).send('Forbidden');

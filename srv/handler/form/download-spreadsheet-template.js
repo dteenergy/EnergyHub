@@ -14,13 +14,13 @@ const downloadSpreadsheetTemplate = async (req) => {
 
         return {
             'statusCode' : '200',
-            'file' : templateFileContent
+            'file' : Buffer.from(templateFileContent,'base64')
           }
     } catch (error) {
-        return {
+        req.error({
             'statusCode' : '500',
             'message' : error.message
-          }
+          });
     }
 }
 
