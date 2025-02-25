@@ -19,7 +19,7 @@
                 id="idUploadSpreadsheetButton"
                 text=" + Upload Spreadsheet"
                 press="onUploadSpreadsheetButtonPress"
-                class="customize-button outline-button eh-Application"
+                class="customize-button outline-button upload-btn"
             />
             <Link
 				text="Download Template"

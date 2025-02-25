@@ -58,8 +58,7 @@ sap.ui.define([
             const errorResponseType = Object?.keys(errorResponse)[0];
             
             errorCode = error.response.status;
-            console.log(error);
-            
+          
             errorMessage =`${errorResponseType}: ${errorResponse[errorResponseType].message}`;
           }
   

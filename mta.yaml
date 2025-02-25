@@ -30,8 +30,8 @@ modules:
     TENANT_CONSENT_FORM_URL: https://www.dteenergy.com/us/en/quicklinks/energy-hub/energy-hub-tenant.html?appId=
 
     # Application Number configuration
-    APPNUM_PREFIX_ENABLED: "N"
-    APPNUM_PREFIX: ""
+    APPNUM_PREFIX_ENABLED: "Y"
+    APPNUM_PREFIX: "EH"
 
     CORS_ALLOW_ORIGINS: '["https://forms.dteenergy.com/eh/enrollment-portal/index.html"]'
 

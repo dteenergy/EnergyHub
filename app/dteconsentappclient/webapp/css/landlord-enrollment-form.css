@@ -31,7 +31,7 @@
 .customize-button.outline-button{
     border: 1px solid var(--sapButton_TextColor);
 }
-.customize-button.outline-button.eh-Application{
+.customize-button.outline-button.upload-btn{
     min-width: 300px;
 }
 .customize-link {
@@ -225,7 +225,7 @@
     padding-bottom: 0px;
 }
 .upload-dialog-file-uploader-lable{
-    font-size: 14px !important;
+    font-size: var(--sapTextSmallFontSize) !important;
 }
 .upload-dialog-file-uploader{
     max-width: 640px !important;
