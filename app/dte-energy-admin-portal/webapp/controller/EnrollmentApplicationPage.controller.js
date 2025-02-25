@@ -54,6 +54,33 @@ sap.ui.define([
       this.onFilterChange();
     },
     /**
+     * Determines the CSS class for an application row based on its LinkId and ApplicationNumber.
+     *
+     * @param {string} LinkId - The ID to which the application is linked.
+     * @param {string} ApplicationNumber - The unique identifier of the current application.
+     * @returns {string} - The CSS class name to apply for indentation styling.
+     */
+    getIndentClass: function(LinkId, ApplicationNumber) {
+      if(LinkId && (LinkId !== ApplicationNumber))
+        return 'indentRow';
+      else if(LinkId && (LinkId === ApplicationNumber))
+        return 'parentApp';
+      else '';
+    },
+    /**
+     * Formats the ApplicationNumber by wrapping it in a span with a dynamic CSS class.
+     * The function helps in visually distinguishing parent and child applications in the UI.
+     *
+     * @param {string} LinkId - The ID to which the application is linked.
+     * @param {string} ApplicationNumber - The unique identifier of the current application.
+     * @returns {string} - An HTML string with the formatted ApplicationNumber wrapped in a span.
+     */
+    formatApplicationNumber: function (LinkId, ApplicationNumber) {
+      const sClass = this.getIndentClass(LinkId, ApplicationNumber);
+      const sText = ApplicationNumber || ''; // Fallback to empty string if ApplicationNumber is undefined
+      return '<span class="'+sClass+'">' + sText + '</span>';
+    },
+    /**
      * Opens the personalization dialog for the application table.
      *
      * @public
