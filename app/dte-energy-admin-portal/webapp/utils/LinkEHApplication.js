@@ -43,7 +43,7 @@ sap.ui.define([
         }).join(", ");
 
         // Show a warning message toast
-        MessageToast.show(`The following applications are already linked: ${sLinkedAppNumbers}. Please unlinked applications.`);
+        MessageBox.warning(`The following applications are already linked: ${sLinkedAppNumbers}. Please unlinked applications.`);
         return;
       }
 
@@ -82,9 +82,9 @@ sap.ui.define([
       try {
         // Execute the function import to perform the linking operation
         await oFunctionContext.execute();
+
         // Get the response from the backend
         const oResponse = oFunctionContext.getBoundContext().getObject();
-        console.log(oResponse)
 
         // Check the response message and handle accordingly
         if (oResponse.value.statusCode === 200) {
