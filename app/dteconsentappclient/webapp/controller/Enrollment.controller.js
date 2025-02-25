@@ -824,7 +824,7 @@ sap.ui.define([
 						'SignatureSignedBy': enrollmentDetails['SignatureSignedBy'], 
 						'SignatureSignedDate': FormatInputs.convertDateFormat(enrollmentDetails['SignatureSignedDate']) 
 					},
-					ConsentDetail: [{
+					ConsentDetail: {
 						"FirstName": consentDetails['ConsentFirstName'],
 						"LastName": consentDetails['ConsentLastName'],
 						"SiteContactTitle": consentDetails['ConsentContactTitle'],
@@ -839,7 +839,7 @@ sap.ui.define([
 						"AuthPersonName": consentDetails['AuthPersonName'],
 						"AuthDate": FormatInputs.convertDateFormat(consentDetails['AuthDate']),
 						"AuthTitle": consentDetails['AuthTitle'],
-					}],
+					},
 					Attachment : this.attachment
 				};
 				

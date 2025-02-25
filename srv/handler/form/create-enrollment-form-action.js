@@ -20,10 +20,14 @@ const createEnrollmentFormDetail = async (req) => {
     const entity = entities;
 
     const { ApplicationDetail, BuildingDetail, AccountDetail, ConsentDetail, Attachment } = req?.data;
-
+    console.log(ConsentDetail);
+    
     // Array empty validation
     if(BuildingDetail.length === 0) return {statusCode :'400', message:'At least one BuildingDetail is required.'}
-    if(ConsentDetail.length === 0) return {statusCode :'400', message:'At least one ConsentDetail is required.'}
+    console.log(typeof(ConsentDetail));
+    
+    //Avoid too many consent detail creation request.
+    if(Array.isArray(ConsentDetail)) return {statusCode :'400', message:'Too many consent details'};
 
     // Generate Application number
     const applicationNumber = await generateAppNumber(entity);
@@ -42,12 +46,9 @@ const createEnrollmentFormDetail = async (req) => {
     ApplicationDetail.AppId = AppId;
     BuildingDetail?.map(detail => detail.AppRefId_AppId = AppId);
     AccountDetail.AppRefId_AppId = AppId;
-    ConsentDetail.map(consent => ({
-      ...consent,
-      AppRefId_AppId : AppId,
-      ConsentByTenantFlag : false
-    }));
-
+    ConsentDetail.AppRefId_AppId = AppId;
+    ConsentDetail.ConsentByTenantFlag = false;
+      
     // Insert Enrollment Form details to database
     const applicationDetailResult = await tx.run(INSERT.into(entity?.ApplicationDetail).entries(ApplicationDetail));
     const buildingDetailResult = await tx.run(INSERT.into(entity?.BuildingDetail).entries(BuildingDetail));

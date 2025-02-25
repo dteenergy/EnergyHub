@@ -72,7 +72,7 @@ entity ApplicationConsent {
     key ApplicationConsentId : UUID;
     FirstName : String not null @mandatory;
     LastName : String not null @mandatory;
-    SiteContactTitle : String @mandatory;
+    SiteContactTitle : String;
     Address: String not null @mandatory;
     AddrLineTwo: String;
     City: City not null @mandatory;
