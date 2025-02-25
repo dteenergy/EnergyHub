@@ -149,7 +149,14 @@
                         </VBox>
                     </VBox>
 
-                    <Button id="add-building-detail" text=" + Add Another Location" press="onAddAnotherLocation" class="customize-button outline-button" ></Button>
+                   <!-- Location information Button -->
+                   <VBox id="location-info-btn-container" fitContainer="true" width="100%" class="location-info-btn-container">
+                        <!-- Add Another Location Button -->
+                        <Button id="add-building-detail" text=" + Add Another Location" press="onAddAnotherLocation" class="customize-button outline-button eh-Application" ></Button>
+
+                        <!-- Upload Spreadsheet -->
+                        <core:Fragment fragmentName="dteconsentappclient.fragment.UploadSpreadsheet" type="XML"></core:Fragment>
+                   </VBox>
 
                     <!-- Enrollment form customer authorization -->
                     <VBox id="auth-info-container" fitContainer="true" width="100%" class="auth-contact-info-container">

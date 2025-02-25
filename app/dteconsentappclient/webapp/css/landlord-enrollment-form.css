@@ -31,6 +31,14 @@
 .customize-button.outline-button{
     border: 1px solid var(--sapButton_TextColor);
 }
+.customize-button.outline-button.upload-btn{
+    min-width: 300px;
+}
+.customize-link {
+    .sapMLnkText{
+        color: var(--sapButton_TextColor) !important;
+    }
+}
 .outline-button{
     border: 1px solid var(--sapButton_TextColor);
     .sapMBtnInner{
@@ -109,7 +117,8 @@
 .enrollment-consent-section > *,
 .auth-and-release-container > *,
 .message-strip-container > *,
-.confirmation-dialog-content > *{
+.confirmation-dialog-content > *,
+.location-info-btn-container > *{
     padding-bottom: 20px;
 }
 .account-info-container > *:last-child {
@@ -203,6 +212,28 @@
 }
 .recaptcha-container{
     margin-bottom: 20px;
+}
+
+/* Upload Spreadsheet dialog */
+.upload-dialog-main-container{
+    max-width: 700px !important;
+}
+.upload-dialog-content{
+    padding: 15px;
+}
+.upload-dialog-content:last-child{
+    padding-bottom: 0px;
+}
+.upload-dialog-file-uploader-lable{
+    font-size: var(--sapTextSmallFontSize) !important;
+}
+.upload-dialog-file-uploader{
+    max-width: 640px !important;
+    padding-bottom: 10px !important;
+    .sapMBtnBase {
+        border: 1px solid var(--sapButton_TextColor);
+        margin-left: 23px !important;
+    }
 }
 
 @media only screen and (max-width: 600px) {

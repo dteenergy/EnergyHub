@@ -1,0 +1,32 @@
+<c:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:c="sap.ui.core"
+>
+    <FlexBox
+        alignContent="Stretch"
+        alignItems="Stretch"
+        backgroundDesign="Transparent"
+        direction="Column"
+        displayInline="false"
+        fitContainer="false"
+        justifyContent="Start"
+        renderType="Div"
+        width="100%"
+        wrap="NoWrap"
+    >
+        <items>
+            <Button
+                id="idUploadSpreadsheetButton"
+                text=" + Upload Spreadsheet"
+                press="onUploadSpreadsheetButtonPress"
+                class="customize-button outline-button upload-btn"
+            />
+            <Link
+				text="Download Template"
+                emphasized="true"
+                press="onDownloadTemplateLinkPress"
+                class="customize-link"
+            />
+        </items>
+    </FlexBox>
+</c:FragmentDefinition>
