@@ -1,10 +1,11 @@
 const cds = require('@sap/cds');
 const { generateConsentUrl } = require('./generate-consent-url');
 const { LinkApplications } = require('../../utils/link-applications');
-const { sortApplicationDetail } = require('../../utils/sort-application-detail');
+const { readApplicationDetail } = require('../../utils/sort-application-detail');
 
 module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
   const { ApplicationConsent, ApplicationDetail } = this.entities;
+
   // Method to Generate the Consent URL
   srv.on('GenerateUrl', 'ApplicationDetail', async ({ params: [id] }) => {
     // Get the AppId
@@ -18,7 +19,7 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
       return { generatedUrl };
     } catch (e) {
 
-      if (e?.code) {        
+      if (e?.code) {
         return { message: e?.message, code: e?.code }
       } else {
         return { message: e?.message, code: 500 }
@@ -27,8 +28,8 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
 
   }),
 
-  // Method to sort the Applications
-  srv.on('READ', 'ApplicationDetail', sortApplicationDetail),
+  // Method to read the Applications
+  srv.on('READ', 'ApplicationDetail', readApplicationDetail),
 
   // Register the 'Link' event handler with the LinkApplications function
   srv.on('Link', LinkApplications),

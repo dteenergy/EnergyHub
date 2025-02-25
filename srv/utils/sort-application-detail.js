@@ -1,7 +1,7 @@
 const cds = require('@sap/cds');
 
 /**
- * Sorts ApplicationDetail records by hierarchy.
+ * Read and sort the ApplicationDetail records by hierarchy.
  * - SortKey: Groups related applications (LinkId or ApplicationNumber).
  * - Parenting: Identifies parents (1) and children (0).
  * - Sorting: First by SortKey (asc), then by Parenting (desc).
@@ -9,7 +9,7 @@ const cds = require('@sap/cds');
  * @param {Request} req - CDS request object.
  * @returns {Promise<Array<Object>>} - Sorted application details.
  */
-const sortApplicationDetail = async (req) => {
+const readApplicationDetail = async (req) => {
   // Clone the original query
   const query = req.query;
 
@@ -48,4 +48,4 @@ const sortApplicationDetail = async (req) => {
   return await cds.tx(req).run(query);
 };
 
-module.exports = { sortApplicationDetail }
+module.exports = { readApplicationDetail }
