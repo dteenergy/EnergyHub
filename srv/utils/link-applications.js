@@ -8,7 +8,6 @@ const { entities } = require('@sap/cds');
  * @returns {Promise<Object>} A promise that resolves to an object containing a message and statusCode.
  */
 const LinkApplications = async (req) => {
-  console.log(req)
   // Destructure selectedAppNumber and selectedApplicationNumbers from the request data
   const {selectedAppNumber, selectedApplicationNumbers} = req.data;
 
