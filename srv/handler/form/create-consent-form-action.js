@@ -13,23 +13,14 @@ const createConsentFormDetail = async (req, entity, tx, decrAppId) => {
   try {
     const { ConsentDetail } = req?.data;
 
-    // Parse the String Payload
-    const consentDetailParsedData = JSON.parse(ConsentDetail);
-
-    // Check the Consent details fields contains the empty value.
-    const excludedFields = ['AuthTitle', 'AddrLineTwo'];
-    const consentDetailFieldCheck = Object.keys(consentDetailParsedData).filter((key=> !excludedFields.includes(key))).some(key => consentDetailParsedData[key] === '');
-    if (consentDetailFieldCheck)
-      throw { statusCode: 400, message: emptyField?.message}
-
-    // Validate the Sensitive field information from consentDetailParsedData.
-    validateWithRegex(consentDetailParsedData?.EmailAddr, 'email');
+    //Avoid too many consent detail creation request.
+    if(Array.isArray(ConsentDetail)) return {statusCode :'400', message:'Too many consent details'};
 
     // Assign AppId to ApplicationConsent
-    consentDetailParsedData.AppRefId_AppId = decrAppId;
+    ConsentDetail.AppRefId_AppId = decrAppId;
 
     // Insert Consent Form details to database
-    const consentDetailResponse = await tx.run(INSERT.into(entity.ApplicationConsent).entries(consentDetailParsedData));
+    const consentDetailResponse = await tx.run(INSERT.into(entity.ApplicationConsent).entries(ConsentDetail));
 
     // Check Consent Form Details inserted successfully
     if (consentDetailResponse?.results?.length > 0)

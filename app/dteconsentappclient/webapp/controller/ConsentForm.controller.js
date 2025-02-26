@@ -328,7 +328,7 @@ sap.ui.define([
 						const tenantConsentCreateUrl = this.SERVERHOST + `service/CreateConsentFormDetail?encrAppId=${this.applicationId}`;
 
 						const tenantConsentFormDetails = {
-							ConsentDetail: JSON.stringify({
+							ConsentDetail: {
 								"FirstName": consentDetails['ConsentFirstName'],
 								"LastName": consentDetails['ConsentLastName'],
 								"Address": consentDetails['ConsentAddress'],
@@ -341,7 +341,7 @@ sap.ui.define([
 								"AuthPersonName": consentDetails['AuthPersonName'],
 								"AuthDate": FormatInputs.convertDateFormat(consentDetails['AuthDate']),
 								"AuthTitle": consentDetails['AuthTitle'],
-							})
+							}
 						}
 				
 				try{		

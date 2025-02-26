@@ -1,0 +1,24 @@
+POST /service/CreateConsentFormDetail?encrAppId=U2FsdGVkX1/pfxbR/6DlyCob/W138O2TiDKWlkvvk91xpfYdyk1NKqPRD3XZxjE3S+4NNw95HYQtKpegB67tCw== HTTP/1.1
+Host: localhost:4004
+Content-Type: application/json
+Content-Length: 1300
+
+{
+    "ConsentDetail": [{
+        "FirstName": "Matt",
+        "LastName": "Damon",
+        "SiteContactTitle": "mr",
+        "Address": "1 Energy Plaza",
+        "AddrLineTwo": "",
+        "City": "Detroit",
+        "State": "Michigan",
+        "Zipcode": "48226",
+        "AccountNumber": "916464546555",
+        "PhoneNumber": "0687698986",
+        "EmailAddr": "TEST@gmail.com",
+        "AuthPersonName": "samsu",
+        "AuthDate": "2025-02-21",
+        "AuthTitle": ""
+    }]
+}
+

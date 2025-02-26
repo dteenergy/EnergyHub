@@ -14,12 +14,12 @@ service DTEConsentAppPortal {
         ApplicationDetail : ApplicationDetail @mandatory,
         BuildingDetail : array of BuildingDetail ,
         AccountDetail : AccountDetail @mandatory,
-        ConsentDetail : array of ApplicationConsent,
+        ConsentDetail : ApplicationConsent @mandatory,
         Attachment : Attachment
     ) returns String;
 
     action CreateConsentFormDetail(
-        ConsentDetail : String
+        ConsentDetail : ApplicationConsent @mandatory
     ) returns String;
 
     // Validate the Application Id
