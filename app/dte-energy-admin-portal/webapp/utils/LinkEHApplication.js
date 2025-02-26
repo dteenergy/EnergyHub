@@ -1,7 +1,8 @@
 sap.ui.define([
   "sap/m/MessageToast",
+  "sap/m/MessageBox",
   "dteenergyadminportal/controller/BaseController"
-], function (MessageToast, BaseController) {
+], function (MessageToast, MessageBox, BaseController) {
   return {
     /**
      * Handles the press event of a link, opening a dialog to link selected applications.
@@ -29,6 +30,22 @@ sap.ui.define([
       const aSelectedData = aSelectedRows.map(function (oItem) {
         return oItem.getBindingContext("MainModel").getObject();
       });
+
+      // Check if any selected application already has a LinkId
+      const aLinkedApplications = aSelectedData.filter(function (oData) {
+        return oData.LinkId; // Assuming LinkId is a truthy value when present
+      });
+
+      if (aLinkedApplications.length > 0) {
+        // Construct a message listing the linked application numbers
+        const sLinkedAppNumbers = aLinkedApplications.map(function (oData) {
+          return oData.ApplicationNumber;
+        }).join(", ");
+
+        // Show a warning message toast
+        MessageBox.warning(`The following applications are already linked: ${sLinkedAppNumbers}. Please unlink applications for perform further actions.`);
+        return;
+      }
 
       // Create a local JSON model with selected rows only
       const oSelectedRowsModel = new sap.ui.model.json.JSONModel(aSelectedData);
@@ -65,12 +82,21 @@ sap.ui.define([
       try {
         // Execute the function import to perform the linking operation
         await oFunctionContext.execute();
-        MessageToast.show('Successfully updated!');
-        that.onInit(); // Reinitialize the view to reflect changes
 
-        // Clear selections in the application table
-        const oTable = that.byId("idApplicationTable");
-        oTable.removeSelections(true);
+        // Get the response from the backend
+        const oResponse = oFunctionContext.getBoundContext().getObject();
+
+        // Check the response message and handle accordingly
+        if (oResponse.value.statusCode === 200) {
+          MessageToast.show(oResponse.value.message); // Show success message
+          that.onInit(); // Reinitialize the view to reflect changes
+
+          // Clear selections in the application table
+          const oTable = that.byId("idApplicationTable");
+          oTable.removeSelections(true);
+        } else if(oResponse.value.statusCode === 400) {
+          MessageBox.warning(oResponse.value.message); // Show warning if status is not 200
+        }
       } catch (error) {
         BaseController.errorHandler(error)
       }
