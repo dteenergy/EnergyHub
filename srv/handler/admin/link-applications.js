@@ -29,7 +29,7 @@ const LinkApplications = async (req) => {
     if (alreadyLinkedApplications.length > 0) {
       const linkedAppNumbers = alreadyLinkedApplications.map(app => app.ApplicationNumber).join(", ");
       return {
-        message: `The following applications are already linked: ${linkedAppNumbers}. Please unlinked applications.`,
+        message: `The following applications are already linked: ${linkedAppNumbers}. Please unlink applications for perform further actions.`,
         statusCode: 400
       };
     };
