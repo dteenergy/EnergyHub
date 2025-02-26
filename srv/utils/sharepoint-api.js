@@ -47,7 +47,7 @@ const getAccessToken = async () => {
 }
 
 /**
- * Upload file to Sharepoint
+ * Upload file to Sharepoint Folder
  * @param {object} attachment
  * @returns {object}
  */
@@ -82,9 +82,45 @@ const uploadFile = async (attachment) => {
     }
 }
 
+/**
+ * Get file from Sharepoint Folder
+ * @param {object} attachmentURL
+ * @returns {object}
+ */
+const getFile = async (attachmentURL) => {
+    try {        
+        //Get access token
+        const {token_type, access_token} = await getAccessToken();
+
+        // Http request config
+        const config = {
+            method: 'get',
+            maxBodyLength: Infinity,
+            url: `https://${spDomain}${spSite}/_api/web/GetFileByServerRelativePath(decodedurl='${attachmentURL}')/$value`,
+            headers: {
+                'Authorization': `${token_type} ${access_token}`,
+                'Accept': 'application/json',
+                'Content-Type': 'text/plain'
+            }
+        };
+        
+        //Call sharepoint get file API
+        const response = await axios.request(config)
+        const fileContent = Buffer.from(response.data, 'base64url');
+        return fileContent;
+    } catch (error) {
+        console.error("Sharepoint Get File Error:", error.message);
+        throw (error);
+    }
+}
+
+
+
+
 module.exports = {
     getAccessToken,
-    uploadFile
+    uploadFile,
+    getFile
 }
 
 

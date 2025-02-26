@@ -5,7 +5,7 @@ using {dteConsentApp as db} from '../db/schema';
 service DTEEnergyAdminPortal {
 
   entity ApplicationDetail  @(restrict: [{
-    grant: ['READ', 'UPDATE', 'GenerateUrl', 'GetEnvironmentVariables'], 
+    grant: ['READ', 'UPDATE', 'GenerateUrl', 'GetEnvironmentVariables','DownloadAttachment'], 
     to: 'Administrator'
     }]) as projection on db.ApplicationDetail {
     AppId,
