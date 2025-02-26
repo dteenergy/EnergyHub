@@ -1,7 +1,7 @@
 // This file contains Sharepoint APIs
-const cdsTypes = require('@sap/cds');
 const axios = require('axios');
 const FormData = require('form-data');
+const fs = require('fs');
 
 //Sharepoint Config detail
 const spClientID = process.env.SP_CLIENT_ID;
@@ -67,7 +67,7 @@ const uploadFile = async (attachment) => {
             headers: {
                 'Authorization': `${token_type} ${access_token}`,
                 'Accept': 'application/json',
-                'Content-Type': 'text/plain'
+                'Content-Type': 'application/octet-stream'
             },
             data: data
         };
@@ -96,17 +96,23 @@ const getFile = async (attachmentURL) => {
         const config = {
             method: 'get',
             maxBodyLength: Infinity,
+            encoding: null,
+            responseType: 'arraybuffer',
             url: `https://${spDomain}${spSite}/_api/web/GetFileByServerRelativePath(decodedurl='${attachmentURL}')/$value`,
             headers: {
                 'Authorization': `${token_type} ${access_token}`,
-                'Accept': 'application/json',
-                'Content-Type': 'text/plain'
+                'Accept': 'application/json;odata=verbos',
+                'Content-Type': 'application/octet-stream',
             }
         };
         
         //Call sharepoint get file API
-        const response = await axios.request(config)
-        const fileContent = Buffer.from(response.data, 'base64url');
+        const response = await axios.request(config);
+        
+        const fileBase64 = Buffer.from(response.data).toString('base64');
+
+        const fileContent = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${fileBase64}`
+        
         return fileContent;
     } catch (error) {
         console.error("Sharepoint Get File Error:", error.message);

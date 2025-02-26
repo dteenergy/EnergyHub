@@ -236,7 +236,12 @@ sap.ui.define([
         // Make an API call to generate the URL
         const {data} = await axios.get(this.baseUrl+`admin/service/ApplicationDetail(${appId})/DownloadAttachment`);        
 
-        console.log(data);
+         // Save spreadsheet template in client system
+         const file = data.value.file.fileContent;
+         const a = document.createElement('a');
+         a.download = data.value.file.fileName;
+         a.href = file;
+         a.click();
 
       } catch (error) {
         BaseController.errorHandler(error)

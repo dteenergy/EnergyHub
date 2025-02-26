@@ -11,10 +11,17 @@ const downloadAttachment = async(req) =>{
       const [result] = await SELECT.from(ApplicationDetail).where({ 'AppId': AppId }).columns(['AttachmentURL']);
       if(!result?.AttachmentURL) throw ('Unexcepted Error');
 
+      //Split file name 
+      const fileName = `${result.AttachmentURL}`.split('/').slice(-1)[0];
+      console.log(`${result.AttachmentURL}`.split('/').slice(-1)[0]);
+      
       // Get file from sharepoint folder
       const response = await sharepoint.getFile(result.AttachmentURL);
 
-      return ({statusCode: '200', message:response});
+      return ({statusCode: '200', file :{
+        fileName: fileName ,
+        fileContent : response
+      }});
     } catch (error) {
       return({statusCode:500, message:error?.message})
     }
