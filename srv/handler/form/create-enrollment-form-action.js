@@ -18,6 +18,7 @@ const createEnrollmentFormDetail = async (req) => {
     // Initialize the transaction
     const tx = cds.tx(req);
     const entity = entities;
+console.log(req.data);
 
     const { ApplicationDetail, BuildingDetail, AccountDetail, ConsentDetail, Attachment } = req?.data;
     

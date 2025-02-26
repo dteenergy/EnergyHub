@@ -101,7 +101,7 @@ sap.ui.define([
 					"ConsentAccountNumber": "",
 					"ConsentPhoneNumber": null,
 					"ConsentEmailAddr": "",
-					"AuthPersonName": "",
+					"AuthPersonName": "DTE Implementation Team",
 					"AuthDate": FormatInputs.dateToDisplay(),
 					"AuthTitle": ""
 				}
@@ -816,13 +816,16 @@ sap.ui.define([
 				// Format Account Detail
 				const {SiteFirstName, SiteLastName, SiteEmailAddr, AcctMgrPhoneNumber, ...otherAccountDetails} = enrollmentDetails.AccountDetail;
 
-				const enrollmentFormDetails = {
+				console.log(this.Attachment);
+				
+
+				let enrollmentFormDetails = {
 					AccountDetail: {
 						...otherAccountDetails,
 						FirstName: SiteFirstName,
 						LastName: SiteLastName,
 						EmailAddr: SiteEmailAddr,
-						AcctMgrPhNo: AcctMgrPhoneNumber
+						AcctMgrPhNo: AcctMgrPhoneNumber ? AcctMgrPhoneNumber : undefined
 					},
 					BuildingDetail: formattedLocationDetails,
 					ApplicationDetail: { 

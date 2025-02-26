@@ -72,7 +72,7 @@ sap.ui.define([
 							"ConsentZipcode": null,
 							"ConsentAccountNumber":"",
 							"ConsentEmailAddr":"",
-							"AuthPersonName":"",
+							"AuthPersonName":"DTE Implementation Team",
 							"AuthDate": FormatInputs.dateToDisplay(),
 							"AuthTitle":"",
 							"suggestions": []
@@ -328,7 +328,7 @@ sap.ui.define([
 						const tenantConsentCreateUrl = this.SERVERHOST + `service/CreateConsentFormDetail?encrAppId=${this.applicationId}`;
 
 						const tenantConsentFormDetails = {
-							ConsentDetail: {
+							ConsentDetail: JSON.stringify({
 								"FirstName": consentDetails['ConsentFirstName'],
 								"LastName": consentDetails['ConsentLastName'],
 								"Address": consentDetails['ConsentAddress'],
@@ -341,7 +341,7 @@ sap.ui.define([
 								"AuthPersonName": consentDetails['AuthPersonName'],
 								"AuthDate": FormatInputs.convertDateFormat(consentDetails['AuthDate']),
 								"AuthTitle": consentDetails['AuthTitle'],
-							}
+							})
 						}
 				
 				try{		
