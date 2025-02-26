@@ -859,9 +859,7 @@ sap.ui.define([
 				 */
 				if (data.value.statusCode === 200) {
 					
-					this.applicationNumber = data.value.applicationNumber;
-					console.log(data.value.applicationNumber);
-					
+					this.applicationNumber = data.value.applicationNumber;					
 					ConfirmationDialog.showConfirmationDialog(this, 'Landlord');
 				} else {
 					// Navigate to the error page

@@ -15,11 +15,11 @@ sap.ui.define([
 
     /**
      * Displays a confirmation dialog based on the user type (Landlord or Tenant).
-     * @param {} that - Calling context
+     * @param {object} that - Calling context
      * @param {string} userType - Type of user, either "Landlord" or "Tenant".
      */
     showConfirmationDialog: function (that, userType){
-    
+          
       const confirmationMessages = {
       "Landlord": {"dialogTitle": "Confirmation","message":`<p style='letter-spacing: .7px; font-size: 14px; font-weigt: 400; margin-bottom: 0;'> 
         Thank you for your applying for access to DTE’s Energy Data Hub. Your application <span style='font-weight: 600; font-size: 14px;'>${that.applicationNumber}</span> 
