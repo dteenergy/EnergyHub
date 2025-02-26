@@ -20,11 +20,9 @@ const createEnrollmentFormDetail = async (req) => {
     const entity = entities;
 
     const { ApplicationDetail, BuildingDetail, AccountDetail, ConsentDetail, Attachment } = req?.data;
-    console.log(ConsentDetail);
     
     // Array empty validation
     if(BuildingDetail.length === 0) return {statusCode :'400', message:'At least one BuildingDetail is required.'}
-    console.log(typeof(ConsentDetail));
     
     //Avoid too many consent detail creation request.
     if(Array.isArray(ConsentDetail)) return {statusCode :'400', message:'Too many consent details'};

@@ -80,9 +80,9 @@ entity ApplicationConsent {
     Zipcode : Zipcode not null @mandatory;
     AccountNumber : AccountNumber not null @mandatory;
     PhoneNumber : PhoneNumber;
-    EmailAddr: Email;
-    AuthPersonName : String;
-    AuthDate: Date;
+    EmailAddr: Email @mandatory;
+    AuthPersonName : String @mandatory;
+    AuthDate: Date @mandatory;
     AuthTitle: String;
     ConsentStatus : consentStatus default 'New';
     ConsentByTenantFlag: Boolean default true;
