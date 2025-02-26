@@ -98,7 +98,7 @@ sap.ui.define([
                 that.oUploadDialog = new Dialog({
                     customHeader: dialogTitle,
                     content: dialogContent
-                }).addStyleClass("upload-dialog-main-container");
+                }).addStyleClass("dialog-main-container");
             }
 
             that.oUploadDialog.open();

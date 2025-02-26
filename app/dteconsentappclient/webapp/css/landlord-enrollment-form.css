@@ -113,7 +113,6 @@
 .auth-contact-info-container > *,
 .consent-form-container > *,
 .customer-release-header > *,
-/* .customer-auth-and-release > *, */
 .enrollment-consent-section > *,
 .auth-and-release-container > *,
 .message-strip-container > *,
@@ -215,7 +214,7 @@
 }
 
 /* Upload Spreadsheet dialog */
-.upload-dialog-main-container{
+.dialog-main-container{
     max-width: 700px !important;
 }
 .upload-dialog-content{

@@ -159,7 +159,7 @@ sap.ui.define([
      */
     onLinkCloseDialog: function () {
       const that = this;
-      LinkEHApplication.onLinkCloseDialog
+      LinkEHApplication.onLinkCloseDialog(that);
     },
     /** 
      * Generates a URL for the selected application and displays it in a dialog.

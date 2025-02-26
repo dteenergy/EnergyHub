@@ -8,6 +8,7 @@ sap.ui.define([
 	"dteconsentappclient/utils/ChecksInputValidation",
 	"dteconsentappclient/utils/FormatInputs",
 	"dteconsentappclient/utils/RenderRecaptcha",
+	"dteconsentappclient/utils/ConfirmationDialog",
 	"dteconsentappclient/utils/DataLayer"
 ], function(
 	BaseController,
@@ -19,6 +20,7 @@ sap.ui.define([
 	ChecksInputValidation,
 	FormatInputs,
 	RenderRecaptcha,
+	ConfirmationDialog,
 	DataLayer
 ) {
 	"use strict";
@@ -348,12 +350,15 @@ sap.ui.define([
 					const headers = { 'X-Recaptcha-Token': this.recaptchaToken };  // Pass the recaptcha token in headers.
 					const {data} = await axios.post(tenantConsentCreateUrl, tenantConsentFormDetails, {headers});
 						
+					/**
+					* If get the success(200) response:
+					* - Display the confirmation dialog for the Tenant user type.  
+					*/
 					if(data.value.statusCode === 200){
-						// Navigate to the tenant confirmation page
-						window.open(this.TenantConfirmationPageUrl, '_self');
+						ConfirmationDialog.showConfirmationDialog(this, 'Tenant');
 					}else{
 						// Navigate to the error page
-						window.open(this.ErrorPageUrl, '_self');
+						window.location.href = this.ErrorPageUrl;
 					}
 				}catch(err){
 
@@ -369,7 +374,7 @@ sap.ui.define([
 						this.errorVisibilityModel.setProperty('/recaptchaErrorMessageVisibilityStatus', true);
 						this.recaptchaErrorStrip.setText("ReCAPTCHA verfication failed. Please try again.")
 
-					} else window.open(this.ErrorPageUrl, '_self'); // Navigate to the error page
+					} else window.location.href = this.ErrorPageUrl; // Navigate to the error page
 				}	
 			}
 		},
