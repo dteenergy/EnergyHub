@@ -28,6 +28,13 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
 
   }),
 
+  srv.on('DownloadAttachment', 'ApplicationDetail', async() =>{
+    console.log(req.params);
+
+    return {params : req.params}
+    
+  });
+
   // Method to read the Applications
   srv.on('READ', 'ApplicationDetail', readApplicationDetail),
 
