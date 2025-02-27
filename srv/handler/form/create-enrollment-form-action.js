@@ -20,10 +20,12 @@ const createEnrollmentFormDetail = async (req) => {
     const entity = entities;
 
     const { ApplicationDetail, BuildingDetail, AccountDetail, ConsentDetail, Attachment } = req?.data;
-
+    
     // Array empty validation
     if(BuildingDetail.length === 0) return {statusCode :'400', message:'At least one BuildingDetail is required.'}
-    if(ConsentDetail.length === 0) return {statusCode :'400', message:'At least one ConsentDetail is required.'}
+    
+    //Avoid too many consent detail creation request.
+    if(Array.isArray(ConsentDetail)) return {statusCode :'400', message:'Too many consent details'};
 
     // Generate Application number
     const applicationNumber = await generateAppNumber(entity);
@@ -42,12 +44,9 @@ const createEnrollmentFormDetail = async (req) => {
     ApplicationDetail.AppId = AppId;
     BuildingDetail?.map(detail => detail.AppRefId_AppId = AppId);
     AccountDetail.AppRefId_AppId = AppId;
-    ConsentDetail.map(consent => ({
-      ...consent,
-      AppRefId_AppId : AppId,
-      ConsentByTenantFlag : false
-    }));
-
+    ConsentDetail.AppRefId_AppId = AppId;
+    ConsentDetail.ConsentByTenantFlag = false;
+      
     // Insert Enrollment Form details to database
     const applicationDetailResult = await tx.run(INSERT.into(entity?.ApplicationDetail).entries(ApplicationDetail));
     const buildingDetailResult = await tx.run(INSERT.into(entity?.BuildingDetail).entries(BuildingDetail));
@@ -55,9 +54,10 @@ const createEnrollmentFormDetail = async (req) => {
     const consentDetailResult = await tx.run(INSERT.into(entity?.ApplicationConsent).entries(ConsentDetail));
 
     // Check Enrollment Form Details inserted successfully.
-    const isInsertSuccessfull = (applicationDetailResult?.results?.length > 0) && (buildingDetailResult?.results?.length > 0) 
-                                && (accountDetailResult?.results?.length > 0) && (consentDetailResult?.results?.length > 0)
-    if (isInsertSuccessfull) return { statusCode: 200, message: "Thank you! Your DTE Energy Data Hub enrollment is confirmed. " };
+    const isInsertSuccessfull = (applicationDetailResult?.results?.length > 0) && (buildingDetailResult?.results?.length > 0) &&
+      (accountDetailResult?.results?.length > 0) && (consentDetailResult?.results?.length > 0)
+    if (isInsertSuccessfull) return { "statusCode": 200, "message": "Thank you! Your DTE Energy Data Hub enrollment is confirmed.", "applicationNumber": applicationNumber};
+
   } catch (error) {
     console.log("Enrollment Form Creation Error :", error);
     return {
