@@ -72,7 +72,7 @@ entity ApplicationConsent {
     key ApplicationConsentId : UUID;
     FirstName : String not null @mandatory;
     LastName : String not null @mandatory;
-    SiteContactTitle : String @mandatory;
+    SiteContactTitle : String;
     Address: String not null @mandatory;
     AddrLineTwo: String;
     City: City not null @mandatory;
@@ -80,9 +80,9 @@ entity ApplicationConsent {
     Zipcode : Zipcode not null @mandatory;
     AccountNumber : AccountNumber not null @mandatory;
     PhoneNumber : PhoneNumber;
-    EmailAddr: Email;
-    AuthPersonName : String;
-    AuthDate: Date;
+    EmailAddr: Email @mandatory;
+    AuthPersonName : String @mandatory;
+    AuthDate: Date @mandatory;
     AuthTitle: String;
     ConsentStatus : consentStatus default 'New';
     ConsentByTenantFlag: Boolean default true;
@@ -93,6 +93,7 @@ entity ApplicationConsent {
 }
 
 entity Attachment{
+    key AttachmentId : UUID;
     fileName: String @assert.format : '\.xlsx$' @mandatory;
     fileType: String @mandatory;
     fileContent : LargeBinary @mandatory;

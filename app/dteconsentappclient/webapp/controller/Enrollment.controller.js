@@ -9,6 +9,7 @@ sap.ui.define([
 	"dteconsentappclient/utils/DataLayer",
 	"dteconsentappclient/utils/RenderRecaptcha",
 	"dteconsentappclient/utils/UploadSpreadsheetDialog",
+	"dteconsentappclient/utils/ConfirmationDialog",
 	"sap/m/Dialog"
 ], (
 	BaseController,
@@ -21,6 +22,7 @@ sap.ui.define([
 	DataLayer,
 	RenderRecaptcha,
 	UploadSpreadsheetDialog,
+	ConfirmationDialog,
 	Dialog
 ) => {
 	"use strict";
@@ -743,9 +745,12 @@ sap.ui.define([
 							 * If not, Display the error mesaage to verify the recaptcha
 							 */
 							if (that.isRecaptchaVerified) that.submitAction(); // To call the backend service and store the data
-							else that.errorVisibilityModel.setProperty('/recaptchaErrorMessageVisibilityStatus', true);
+							else {
+								that.errorVisibilityModel.setProperty('/recaptchaErrorMessageVisibilityStatus', true);
+								that.recaptchaErrorStrip.setText("Please verify the reCAPTCHA to continue");
+							}
 
-							that.oConfirmationDialog.close();
+							that.oAdditionalLocationAlertDialog.close();
 						},
 						type: sap.m.ButtonType.Emphasized
 					}).addStyleClass("dialog-submit-action")
@@ -767,7 +772,7 @@ sap.ui.define([
 						src: 'sap-icon://decline',
 						decorative: false,
 						press: function () {
-							that.oConfirmationDialog.close();
+							that.oAdditionalLocationAlertDialog.close();
 						}
 					}).addStyleClass("alert-close-icon")
 				]
@@ -777,14 +782,14 @@ sap.ui.define([
 			dialogTitle.addStyleClass("confirmation-dialog-title");
 
 			// Open the additional location alert dialog while submit pressed
-			if (!this.oConfirmationDialog) {
-				this.oConfirmationDialog = new Dialog({
+			if (!this.oAdditionalLocationAlertDialog) {
+				this.oAdditionalLocationAlertDialog = new Dialog({
 					customHeader: dialogTitle,
 					content: dialogContent
 				}).addStyleClass("alert-dialog-main-container")
 			}
 
-			this.oConfirmationDialog.open();
+			this.oAdditionalLocationAlertDialog.open();
 		},
 
 		submitAction: async function () {
@@ -824,7 +829,7 @@ sap.ui.define([
 						'SignatureSignedBy': enrollmentDetails['SignatureSignedBy'], 
 						'SignatureSignedDate': FormatInputs.convertDateFormat(enrollmentDetails['SignatureSignedDate']) 
 					},
-					ConsentDetail: [{
+					ConsentDetail: {
 						"FirstName": consentDetails['ConsentFirstName'],
 						"LastName": consentDetails['ConsentLastName'],
 						"SiteContactTitle": consentDetails['ConsentContactTitle'],
@@ -839,25 +844,41 @@ sap.ui.define([
 						"AuthPersonName": consentDetails['AuthPersonName'],
 						"AuthDate": FormatInputs.convertDateFormat(consentDetails['AuthDate']),
 						"AuthTitle": consentDetails['AuthTitle'],
-					}],
+					},
 					Attachment : this.attachment
 				};
 				
 				// Post request to create a enrollment application.
 				const headers = { 'X-Recaptcha-Token': this.recaptchaToken };  // Pass the recaptcha token in headers.
 				const { data } = await axios.post(enrollmentCreateUrl, enrollmentFormDetails, { headers });
-
-				// If get the success(200) response then navigate to the confirmation page
+				
+				/**
+				 * If get the success(200) response:
+				 * - Store the application number from the response
+				 * - Display the confirmation dialog for the Landlord user type.
+				 */
 				if (data.value.statusCode === 200) {
-					// Navigate to the landlord confirmation page
-					window.open(this.LandlordConfirmationPageUrl, '_self');
+					
+					this.applicationNumber = data.value.applicationNumber;					
+					ConfirmationDialog.showConfirmationDialog(this, 'Landlord');
 				} else {
 					// Navigate to the error page
-					window.open(this.ErrorPageUrl, '_self');
+					window.location.href = this.ErrorPageUrl;
 				}
 			} catch (err) {
-				// Navigate to the error page
-				window.open(this.ErrorPageUrl, '_self');
+				/**
+				* If reCAPTCHA verification fails:
+				* - Reset the reCAPTCHA widget
+				* - Mark reCAPTCHA as not verified
+				* - Display an error message strip to inform the user
+				*/
+				if(err?.response?.status === 403) {
+				grecaptcha.reset();
+				this.isRecaptchaVerified = false;
+				this.errorVisibilityModel.setProperty('/recaptchaErrorMessageVisibilityStatus', true);
+				this.recaptchaErrorStrip.setText("ReCAPTCHA verfication failed. Please try again.");
+
+				} else window.location.href = this.ErrorPageUrl; // Navigate to the error page
 			}
 		},
 
@@ -879,7 +900,6 @@ sap.ui.define([
 			// Update the error message trip visibility status once validation is done
 			this.setErrorMessageTripVisibility();
 
-			// const oErrorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
 			const oErrorVisibilityModelData = this.errorVisibilityModel.getData();
 
 			/**
@@ -889,7 +909,10 @@ sap.ui.define([
 			if (!oErrorVisibilityModelData?.isInputInValid && !oErrorVisibilityModelData?.isTermsAndConditionVerifiedStatus) {
 
 				if (this.isRecaptchaVerified) this.additionalLocationAlert(); // Dialog to additional location alert
-				else this.errorVisibilityModel.setProperty('/recaptchaErrorMessageVisibilityStatus', true); // Show recaptcha error message
+				else {
+					this.errorVisibilityModel.setProperty('/recaptchaErrorMessageVisibilityStatus', true); // Show recaptcha error message
+					this.recaptchaErrorStrip.setText("Please verify the reCAPTCHA to continue.");
+				}
 			}
 		}
 

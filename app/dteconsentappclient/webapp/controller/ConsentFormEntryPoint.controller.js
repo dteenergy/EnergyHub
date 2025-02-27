@@ -79,11 +79,11 @@ sap.ui.define([
                     }.bind(this));
                 }else{
                     // Navigate to the error page
-					window.open(this.ErrorPageUrl, '_self');
+					window.location.href = this.ErrorPageUrl;
                 }
             }catch(err){
                 // Navigate to the error page
-				window.open(this.ErrorPageUrl, '_self');
+				window.location.href = this.ErrorPageUrl;
             }
         }
 
