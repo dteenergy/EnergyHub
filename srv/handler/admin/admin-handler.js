@@ -2,6 +2,7 @@ const cds = require('@sap/cds');
 const { generateConsentUrl } = require('./generate-consent-url');
 const { LinkApplications } = require('./link-applications');
 const { readApplicationDetail } = require('./read-application-detail');
+const { downloadAttachment } = require('./download-attachment');
 
 module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
   const { ApplicationConsent, ApplicationDetail } = this.entities;
@@ -27,6 +28,9 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
     }
 
   }),
+
+  // Handler to download attachment
+  srv.on('DownloadAttachment', 'ApplicationDetail', downloadAttachment);
 
   // Method to read the Applications
   srv.on('READ', 'ApplicationDetail', readApplicationDetail),
