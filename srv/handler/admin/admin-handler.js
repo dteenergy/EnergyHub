@@ -44,17 +44,24 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
       // If data contains value
       if (Array.isArray(data)) {
         for (const el of data) {
+          el.hasAttachment = false;
           // Check the ReferenceId with the AppId and ConsentStatus
           const ConsentDetail = await cds.run(
             SELECT.from(ApplicationConsent)
               .where({ AppId: el.AppId, ConsentStatus: ['New', 'Accepted'], ConsentByTenantFlag: true })
-          )
-          
+          );
           el.NoOfConsentReceived = ConsentDetail?.length;
+
+          // Check the application has attachement
+          const [appDetail] = await cds.run( SELECT.from(ApplicationDetail).where({ 'AppId': el.AppId }).columns(['AttachmentURL']));
+          
+          if(appDetail?.AttachmentURL) el.hasAttachment = true;
         }
       }
 
     } catch (e) {
+      console.log(e);
+      
       return {message:e?.message, code:500}
     }
   });
