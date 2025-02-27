@@ -4,13 +4,17 @@ const axios = require('axios');
 const FormData = require('form-data');
 
 //Sharepoint Config detail
-const spClientID = process.env.SP_CLIENT_ID;
-const spClientSecret = process.env.SP_CLIENT_SECRET;
-const spTenantID =  process.env.SP_TENENT_ID
-const spDomain = process.env.SP_DOMAIN 
-const spSite = process.env.SP_SITE;
-const spResource = process.env.SP_RESOURCE;
-const spFolderPath = process.env.SP_FOLDER_PATH;
+const spConfig = {
+    tenantId :  process.env.SP_TENENT_ID,
+    clientId :`${process.env.SP_CLIENT_ID}@${process.env.SP_TENENT_ID}`,
+    clientSecret : process.env.SP_CLIENT_SECRET,
+    domain : process.env.SP_DOMAIN,
+    resource : `${process.env.SP_RESOURCE_ID}/${process.env.SP_DOMAIN }@${process.env.SP_TENENT_ID}`,
+    site : process.env.SP_SITE,
+    folderPath : `${process.env.SP_SITE}/${process.env.SP_SITE_CONTENT_LIST}/${process.env.SP_FOLDER_NAME}`
+};
+
+console.log(JSON.stringify(spConfig));
 
 /**
  * Get Sharepoint API access token
@@ -21,15 +25,15 @@ const getAccessToken = async () => {
         //Request Body
         const data = new FormData();
         data.append('grant_type', 'client_credentials');
-        data.append('client_id', spClientID);
-        data.append('client_secret', spClientSecret);
-        data.append('resource', spResource);
+        data.append('client_id', spConfig.clientId);
+        data.append('client_secret', spConfig.clientSecret);
+        data.append('resource', spConfig.resource);
 
         //HTTP request config
         const config = {
             method: 'get',
             maxBodyLength: Infinity,
-            url: `https://accounts.accesscontrol.windows.net/${spTenantID}/tokens/OAuth/2/`,
+            url: `https://accounts.accesscontrol.windows.net/${spConfig.tenantId}/tokens/OAuth/2/`,
             headers: {
                 ...data.getHeaders()
             },
@@ -63,7 +67,7 @@ const uploadFile = async (attachment) => {
         const config = {
             method: 'post',
             maxBodyLength: Infinity,
-            url: `https://${spDomain}${spSite}/_api/web/GetFolderByServerRelativePath(decodedurl='${spFolderPath}')/Files/add(url='${attachment.fileName}', overwrite=true)`,
+            url: `https://${spConfig.domain}${spConfig.site}/_api/web/GetFolderByServerRelativePath(decodedurl='${spConfig.folderPath}')/Files/add(url='${attachment.fileName}', overwrite=true)`,
             headers: {
                 'Authorization': `${token_type} ${access_token}`,
                 'Accept': 'application/json',
