@@ -207,6 +207,11 @@ sap.ui.define([
       }
     },
 
+    /**
+     * Handles Attachment button's press event
+     * @param {*} oEvent 
+     * @returns 
+     */
     onDownloadAttachmentPress : async function (oEvent) {
       this.handleSessionExpiry(this.baseUrl);
 
@@ -237,12 +242,10 @@ sap.ui.define([
         const {data} = await axios.get(this.baseUrl+`admin/service/ApplicationDetail(${appId})/DownloadAttachment`);        
 
          // Save spreadsheet template in client system
-         const file = data.value.file.fileContent;
          const a = document.createElement('a');
-         a.download = data.value.file.fileName;
-         a.href = file;
+         a.download = data.value.file.name;
+         a.href = data.value.file.url;
          a.click();
-
       } catch (error) {
         BaseController.errorHandler(error)
       }

@@ -1,7 +1,6 @@
 // This file contains Sharepoint APIs
 const axios = require('axios');
 const FormData = require('form-data');
-const fs = require('fs');
 
 //Sharepoint Config detail
 const spClientID = process.env.SP_CLIENT_ID;
@@ -85,7 +84,7 @@ const uploadFile = async (attachment) => {
 /**
  * Get file from Sharepoint Folder
  * @param {object} attachmentURL
- * @returns {object}
+ * @returns {object} name, url => file
  */
 const getFile = async (attachmentURL) => {
     try {        
@@ -108,12 +107,15 @@ const getFile = async (attachmentURL) => {
         
         //Call sharepoint get file API
         const response = await axios.request(config);
-        
-        const fileBase64 = Buffer.from(response.data).toString('base64');
 
-        const fileContent = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${fileBase64}`
-        
-        return fileContent;
+        const fileBase64 = Buffer.from(response.data).toString('base64'); // Convert buffer into base64
+        const fileURL = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${fileBase64}`; // Create file URL
+        const fileName = `${attachmentURL}`.split('/').slice(-1)[0];  //Split file name
+
+        return {
+            name : fileName,
+            url : fileURL
+        };
     } catch (error) {
         console.error("Sharepoint Get File Error:", error.message);
         throw (error);

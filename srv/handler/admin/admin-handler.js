@@ -29,6 +29,7 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
 
   }),
 
+  // Handler to download attachment
   srv.on('DownloadAttachment', 'ApplicationDetail', downloadAttachment);
 
   // Method to read the Applications
