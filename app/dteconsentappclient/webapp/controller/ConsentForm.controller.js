@@ -72,7 +72,7 @@ sap.ui.define([
 							"ConsentZipcode": null,
 							"ConsentAccountNumber":"",
 							"ConsentEmailAddr":"",
-							"AuthPersonName":"",
+							"AuthPersonName":"DTE Implementation Team",
 							"AuthDate": FormatInputs.dateToDisplay(),
 							"AuthTitle":"",
 							"suggestions": []
