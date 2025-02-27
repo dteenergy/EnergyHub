@@ -98,11 +98,6 @@ service DTEEnergyAdminPortal {
     selectedAppNumber: String,
     selectedApplicationNumbers: array of String
   ) returns String;
-
-  action FetchBuildingDetail(
-    parentAppId: String,
-    childAppIds: array of String
-  ) returns array of BuildingDetail;
   
 }
 

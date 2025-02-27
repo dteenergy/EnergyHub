@@ -19,7 +19,6 @@ sap.ui.define([
      * @public
      */
     onInit: async function () {
-      let sortedBuildingDetail = [];
       // Destructure view data properties
       const {
         baseUrl,
