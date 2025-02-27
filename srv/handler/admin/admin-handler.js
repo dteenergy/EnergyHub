@@ -2,6 +2,7 @@ const cds = require('@sap/cds');
 const { generateConsentUrl } = require('./generate-consent-url');
 const { LinkApplications } = require('./link-applications');
 const { readApplicationDetail } = require('./read-application-detail');
+const { readBuildingDetail } = require('./read-building-detail');
 
 module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
   const { ApplicationConsent, ApplicationDetail } = this.entities;
@@ -27,6 +28,9 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
     }
 
   }),
+
+  // Method to read the Building detail
+  srv.on('FetchBuildingDetail', readBuildingDetail);
 
   // Method to read the Applications
   srv.on('READ', 'ApplicationDetail', readApplicationDetail),

@@ -279,6 +279,23 @@ sap.ui.define([
       const LastName = oContext.getProperty("LastName");
       const ApplicationNumber = oContext.getProperty("ApplicationNumber");
 
+      const selectedLinkId = oContext.getProperty("LinkId");
+
+      // Get the model data
+      const oModel = this.getView().getModel("MainModel");
+      // Fetch all data asynchronously
+      const aData = await oModel.bindList("/ApplicationDetail").requestContexts(0, 10000); // Fetch first 1000 records
+      const aAllRecords = await Promise.all(aData.map(ctx => ctx.requestObject()));
+
+      // Ensure data exists
+      if (!aAllRecords || aAllRecords.length === 0) {
+          console.error("No data retrieved from OData model.");
+          return;
+      }
+
+      const filteredAppId = this.filterRecords(aAllRecords, AppId, selectedLinkId, ApplicationNumber);
+      console.log(filteredAppId);
+
       // Get the VBox id (EnrollmentApplicationPage)
       const oVBox = this.byId("idApplicationVBox");
 
@@ -292,12 +309,27 @@ sap.ui.define([
           FirstName: FirstName, LastName: LastName, filteredApplicationNumber: this.sAppNumber,
           filteredApplicationStatus: this.sApplicationStatus,
           filteredFirstName: this.sFirstName, filteredLastName: this.sLastName,
-          tenantConsentFormURL : this.tenantConsentFormURL
+          tenantConsentFormURL : this.tenantConsentFormURL, filteredAppIds: filteredAppId
         },
         viewName: `dteenergyadminportal.view.BuildingDetailPage`
       }).then(function (oView) {
         oVBox.addItem(oView);
       });
+    },
+    filterRecords: function (aAllRecords, AppId, selectedLinkId, ApplicationNumber) {
+      if(selectedLinkId) {
+        let aFilteredAllRecords = [];
+        // Filter records where LinkId matches selected LinkId
+        aFilteredAllRecords = aAllRecords.filter(item => item.LinkId === selectedLinkId).filter(item => (item.LinkId === ApplicationNumber)).map(item => item.AppId);
+
+        if(aFilteredAllRecords.length === 0) {
+          console.log(aAllRecords.filter(item => item.LinkId === selectedLinkId).filter(item => (item.ApplicationNumber === ApplicationNumber)))
+          aFilteredAllRecords = aAllRecords.filter(item => item.LinkId === selectedLinkId).filter(item => (item.ApplicationNumber === ApplicationNumber)).map(item => item.AppId);
+          return aFilteredAllRecords
+        }
+        return aFilteredAllRecords;
+
+      } else return [AppId];
     },
     /**
      * Navigates to the Consent Page dynamically, based on the selected application's AppId.

@@ -18,7 +18,8 @@ sap.ui.define([
      *
      * @public
      */
-    onInit() {
+    onInit: async function () {
+      let sortedBuildingDetail = [];
       // Destructure view data properties
       const {
         baseUrl,
@@ -30,7 +31,8 @@ sap.ui.define([
         filteredApplicationStatus,
         filteredFirstName,
         filteredLastName,
-        tenantConsentFormURL
+        tenantConsentFormURL,
+        filteredAppIds
        } = this.getView().getViewData();
 
       // Set instance variables for later use
@@ -40,6 +42,7 @@ sap.ui.define([
       this.sLastName = filteredLastName;
       this.sApplicationStatus = filteredApplicationStatus;
       this.tenantConsentFormURL = tenantConsentFormURL;
+      const childAppIds = filteredAppIds.filter(appId => appId !== AppId);
 
       this.handleSessionExpiry(this.baseUrl);
 
@@ -67,10 +70,90 @@ sap.ui.define([
       // Apply a filter to display only relevant building details for the given AppId
       const oTable = this.byId("idBuildingTable");
       const oBinding = oTable.getBinding("items");
-      const oFilter = new sap.ui.model.Filter("AppId", "EQ", AppId);
+      // const oFilter = new sap.ui.model.Filter("AppId", "EQ", AppId);
 
-      // Apply the filter if the table binding exists
-      if (oBinding) oBinding.filter([oFilter]);
+      // // Apply the filter if the table binding exists
+      // if (oBinding) oBinding.filter([oFilter]);
+      console.log(AppId);
+      console.log(filteredAppIds);
+      console.log(childAppIds);
+      console.log(childAppIds.length);
+      
+      // const oPayload = {
+      //   ApplicationNumber: "D0000000002",
+      //   filteredAppIds: ["D0000000001", "D0000000002", "D0000000003"]
+      // };
+      
+      // // Call backend using create method
+      // oModel.create("/BuildingDetail", oPayload, {
+      //     success: function(oData) {
+      //         console.log("Data received:", oData);
+      //     },
+      //     error: function(oError) {
+      //         console.error("Error fetching data:", oError);
+      //     }
+      // });
+      // if(childAppIds.length > 0) {
+      //   const oModel = this.getView().getModel("MainModel");
+      //   const oFunctionContext = oModel.bindContext('/FetchBuildingDetail(...)');
+      //   oFunctionContext.setParameter("parentAppId", AppId);
+      //   oFunctionContext.setParameter("childAppIds", childAppIds);
+      //   try {
+      //     await oFunctionContext.execute();
+      //     const oResponse = oFunctionContext.getBoundContext().getObject();
+      //     console.log(oResponse);
+      //     sortedBuildingDetail = oResponse.value;
+      //   } catch (error) {
+      //     console.log(error)
+      //     // BaseController.errorHandler(error);
+      //   }
+      // }
+      
+
+      // const aFilters = filteredAppIds.map(appId => new sap.ui.model.Filter("AppId", sap.ui.model.FilterOperator.EQ, appId));
+
+      // Get ApplicationNumber (Parent) first
+      // const parentAppId = ApplicationNumber; // "D0000000002"
+
+      // Maintain the order of child records in filteredAppIds
+      const aSorters = new sap.ui.model.Sorter("AppId", false, (oContext) => {
+        const sAppId = oContext.getProperty("AppId");
+
+        // Ensure Parent (AppId) is sorted first, then child AppIds in ascending order
+        if (sAppId === AppId) {
+            return { key: "A", text: "-1" }; // Parent first
+        }
+        else return {key: "B", text: "1"};
+
+        // // Maintain order of remaining child AppIds
+        // const index = filteredAppIds.indexOf(sAppId);
+        // return { key: "B", text: index !== -1 ? index.toString() : "999" }; // Children next in order
+      });
+
+      // if(sortedBuildingDetail.length > 0){
+
+      // } else {
+        // Apply filters to show only relevant AppIds
+      const aFilters = filteredAppIds.map(appId => 
+          new sap.ui.model.Filter("AppId", sap.ui.model.FilterOperator.EQ, appId)
+      );
+      // }
+      
+      
+      // Apply filtering and sorting
+      if (oBinding) {
+          oBinding.filter(new sap.ui.model.Filter({
+              filters: aFilters,
+              and: false
+          }));
+          oBinding.sort([
+            new sap.ui.model.Sorter("ApplicationNumber", false, (oContext) => {
+              return oContext.getProperty("ApplicationNumber") === ApplicationNumber ? -1 : 1;
+          }),
+          new sap.ui.model.Sorter("ApplicationNumber", false)
+          ]); // Apply sorting
+      }
+    
     },
     /**
      * Opens the personalization dialog for the building table.

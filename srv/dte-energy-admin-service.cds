@@ -86,6 +86,7 @@ service DTEEnergyAdminPortal {
     AppRefId.AppId,
     AppRefId.AccountDetailRefId.FirstName,
     AppRefId.AccountDetailRefId.LastName,
+    AppRefId.ApplicationNumber
   };
 
   entity AccountDetail @(restrict: [{
@@ -97,6 +98,11 @@ service DTEEnergyAdminPortal {
     selectedAppNumber: String,
     selectedApplicationNumbers: array of String
   ) returns String;
+
+  action FetchBuildingDetail(
+    parentAppId: String,
+    childAppIds: array of String
+  ) returns array of BuildingDetail;
   
 }
 
