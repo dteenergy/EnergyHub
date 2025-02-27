@@ -278,23 +278,26 @@ sap.ui.define([
       const FirstName = oContext.getProperty("FirstName");
       const LastName = oContext.getProperty("LastName");
       const ApplicationNumber = oContext.getProperty("ApplicationNumber");
-
       const selectedLinkId = oContext.getProperty("LinkId");
 
       // Get the model data
       const oModel = this.getView().getModel("MainModel");
+
       // Fetch all data asynchronously
-      const aData = await oModel.bindList("/ApplicationDetail").requestContexts(0, 10000); // Fetch first 1000 records
+      const aData = await oModel.bindList("/ApplicationDetail").requestContexts(0, 10000);
       const aAllRecords = await Promise.all(aData.map(ctx => ctx.requestObject()));
 
       // Ensure data exists
       if (!aAllRecords || aAllRecords.length === 0) {
-          console.error("No data retrieved from OData model.");
-          return;
+        console.error("No data retrieved from OData model.");
+        return;
       }
 
+      /**
+       *  Call the filterRecords function to get the filtered list of AppIds 
+       *  based on the selected LinkId and ApplicationNumber.
+       */
       const filteredAppId = this.filterRecords(aAllRecords, AppId, selectedLinkId, ApplicationNumber);
-      console.log(filteredAppId);
 
       // Get the VBox id (EnrollmentApplicationPage)
       const oVBox = this.byId("idApplicationVBox");
@@ -316,20 +319,35 @@ sap.ui.define([
         oVBox.addItem(oView);
       });
     },
+    /**
+     * Filters application records based on the selected `LinkId` and `ApplicationNumber`.
+     * 
+     * - If `selectedLinkId` is provided, it filters records where `LinkId` matches `selectedLinkId`,
+     *   then filters the records where `LinkId` equals `ApplicationNumber` and extracts `AppId`.
+     * 
+     * - If no matching records are found, it tries filtering by `ApplicationNumber` instead,
+     *   then if `selectedLinkId` is not provided, it returns the given `AppId` in an array.
+     *
+     * @param {Array<Object>} aAllRecords - List of all application records.
+     * @param {string} AppId - Default application ID to return if no filtering occurs.
+     * @param {string} selectedLinkId - The LinkId selected for filtering.
+     * @param {string} ApplicationNumber - The application number used for further filtering.
+     * @returns {Array<string>} - Array of filtered `AppId`s.
+     */
     filterRecords: function (aAllRecords, AppId, selectedLinkId, ApplicationNumber) {
       if(selectedLinkId) {
         let aFilteredAllRecords = [];
         // Filter records where LinkId matches selected LinkId
         aFilteredAllRecords = aAllRecords.filter(item => item.LinkId === selectedLinkId).filter(item => (item.LinkId === ApplicationNumber)).map(item => item.AppId);
 
+        // If no records are found, attempt filtering by ApplicationNumber instead
         if(aFilteredAllRecords.length === 0) {
-          console.log(aAllRecords.filter(item => item.LinkId === selectedLinkId).filter(item => (item.ApplicationNumber === ApplicationNumber)))
           aFilteredAllRecords = aAllRecords.filter(item => item.LinkId === selectedLinkId).filter(item => (item.ApplicationNumber === ApplicationNumber)).map(item => item.AppId);
           return aFilteredAllRecords
         }
         return aFilteredAllRecords;
 
-      } else return [AppId];
+      } else return [AppId]; // If no selectedLinkId, return the given AppId as an array
     },
     /**
      * Navigates to the Consent Page dynamically, based on the selected application's AppId.
