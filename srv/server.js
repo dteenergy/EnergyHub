@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const dotenvExpand = require('dotenv-expand');
 
 const {verifyReCAPTCHA} = require('./middleware/verify-recaptcha');
+const {sendEmail} = require('./utils/send-email');
 
 //Expand .env configuration to support variables
 const dotenvConfig = dotenv.config();
@@ -34,6 +35,8 @@ cds.on('bootstrap', async (app) => {
 
   // To verify reCATCHA token
   app.use(verifyReCAPTCHA);
+
+  app.get('/send-email', sendEmail);
 });
 
 module.exports = cds.server;
