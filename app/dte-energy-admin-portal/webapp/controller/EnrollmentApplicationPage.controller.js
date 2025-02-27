@@ -209,7 +209,7 @@ sap.ui.define([
 
     /**
      * Handles Attachment button's press event
-     * @param {*} oEvent 
+     * @param {event} oEvent 
      * @returns 
      */
     onDownloadAttachmentPress : async function (oEvent) {
@@ -238,7 +238,7 @@ sap.ui.define([
       const appId = oBindingContext.getProperty("AppId");
 
       try {
-        // Make an API call to generate the URL
+        // Make an API call to dwonload attachment
         const {data} = await axios.get(this.baseUrl+`admin/service/ApplicationDetail(${appId})/DownloadAttachment`);        
 
          // Save spreadsheet template in client system
