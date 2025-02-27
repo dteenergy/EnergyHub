@@ -123,8 +123,6 @@ const getFile = async (attachmentURL) => {
 }
 
 
-
-
 module.exports = {
     getAccessToken,
     uploadFile,
