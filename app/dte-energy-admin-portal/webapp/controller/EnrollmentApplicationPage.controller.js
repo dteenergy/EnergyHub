@@ -145,6 +145,10 @@ sap.ui.define([
       const that = this;
       LinkEHApplication.handleLinkPress(that);
     },
+    handleUnLinkPress: function () {
+      const that = this;
+      LinkEHApplication.handleUnLinkPress(that);
+    },
     /**
      * Handles the confirmation action for linking applications.
      * Delegates the action to the LinkEHApplication's onConfirmLink method.

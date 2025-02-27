@@ -43,7 +43,7 @@ sap.ui.define([
         }).join(", ");
 
         // Show a warning message toast
-        MessageBox.warning(`The following applications are already linked: ${sLinkedAppNumbers}. Please unlink applications for perform further actions.`);
+        MessageBox.warning(`The following applications are already linked: ${sLinkedAppNumbers}. Please unlink the applications to perform further actions.`);
         return;
       }
 
@@ -56,6 +56,33 @@ sap.ui.define([
 
       // Open the dialog to allow the user to link the selected applications
       that.byId('idLinkDialog').open();
+    },
+    handleUnLinkPress: async function (that) {
+      // Retrieve the table control by its ID
+      const oTable = that.getView().byId('idApplicationTable');
+
+      // Get the selected items (rows) from the table
+      const aSelectedRows = oTable.getSelectedItems();
+
+      // Map the selected rows to their corresponding data objects
+      const aSelectedData = aSelectedRows.map(function (oItem) {
+        return oItem.getBindingContext("MainModel").getObject();
+      }).filter(function (oData) {
+        return oData.LinkId; // Assuming LinkId is a truthy value when present
+      });
+      console.log(aSelectedRows);
+      console.log(aSelectedData);
+
+      console.log(aSelectedRows.length);
+      console.log(aSelectedData.length);
+      if(aSelectedData.length === 0 || (aSelectedRows.length !== aSelectedData.length)) {
+        MessageBox.warning(`Please select only linked application to unlink.`);
+        return;
+      }
+
+      const parentApp = aSelectedData.filter(item => item.LinkId === item.ApplicationNumber);
+      const childApp = aSelectedData.filter(item => item.LinkId !== item.ApplicationNumber);
+      console.log(parentApp, childApp);
     },
     /**
      * Handles the confirmation of linking selected applications to a parent application.
