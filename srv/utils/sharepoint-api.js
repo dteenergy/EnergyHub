@@ -83,7 +83,7 @@ const uploadFile = async (attachment) => {
 
 /**
  * Get file from Sharepoint Folder
- * @param {object} attachmentURL
+ * @param {String} attachmentURL
  * @returns {object} name, url => file
  */
 const getFile = async (attachmentURL) => {
@@ -105,7 +105,7 @@ const getFile = async (attachmentURL) => {
             }
         };
         
-        //Call sharepoint get file API
+        // Call sharepoint's file API to retrive file
         const response = await axios.request(config);
 
         const fileBase64 = Buffer.from(response.data).toString('base64'); // Convert buffer into base64

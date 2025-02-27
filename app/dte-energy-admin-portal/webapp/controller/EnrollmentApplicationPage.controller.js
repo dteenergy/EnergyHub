@@ -238,7 +238,7 @@ sap.ui.define([
       const appId = oBindingContext.getProperty("AppId");
 
       try {
-        // Make an API call to dwonload attachment
+        // Make an API call to download attachment
         const {data} = await axios.get(this.baseUrl+`admin/service/ApplicationDetail(${appId})/DownloadAttachment`);        
 
          // Save spreadsheet template in client system
