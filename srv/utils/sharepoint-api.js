@@ -1,5 +1,4 @@
 // This file contains Sharepoint APIs
-const cdsTypes = require('@sap/cds');
 const axios = require('axios');
 const FormData = require('form-data');
 
@@ -47,7 +46,7 @@ const getAccessToken = async () => {
 }
 
 /**
- * Upload file to Sharepoint
+ * Upload file to Sharepoint Folder
  * @param {object} attachment
  * @returns {object}
  */
@@ -67,7 +66,7 @@ const uploadFile = async (attachment) => {
             headers: {
                 'Authorization': `${token_type} ${access_token}`,
                 'Accept': 'application/json',
-                'Content-Type': 'text/plain'
+                'Content-Type': 'application/octet-stream'
             },
             data: data
         };
@@ -82,9 +81,52 @@ const uploadFile = async (attachment) => {
     }
 }
 
+/**
+ * Get file from Sharepoint Folder
+ * @param {String} attachmentURL
+ * @returns {object} name, url => file
+ */
+const getFile = async (attachmentURL) => {
+    try {        
+        //Get access token
+        const {token_type, access_token} = await getAccessToken();
+
+        // Http request config
+        const config = {
+            method: 'get',
+            maxBodyLength: Infinity,
+            encoding: null,
+            responseType: 'arraybuffer',
+            url: `https://${spDomain}${spSite}/_api/web/GetFileByServerRelativePath(decodedurl='${attachmentURL}')/$value`,
+            headers: {
+                'Authorization': `${token_type} ${access_token}`,
+                'Accept': 'application/json;odata=verbos',
+                'Content-Type': 'application/octet-stream',
+            }
+        };
+        
+        // Call sharepoint's file API to retrive file
+        const response = await axios.request(config);
+
+        const fileBase64 = Buffer.from(response.data).toString('base64'); // Convert buffer into base64
+        const fileURL = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${fileBase64}`; // Create file URL
+        const fileName = `${attachmentURL}`.split('/').slice(-1)[0];  //Split file name
+
+        return {
+            name : fileName,
+            url : fileURL
+        };
+    } catch (error) {
+        console.error("Sharepoint Get File Error:", error.message);
+        throw (error);
+    }
+}
+
+
 module.exports = {
     getAccessToken,
-    uploadFile
+    uploadFile,
+    getFile
 }
 
 
