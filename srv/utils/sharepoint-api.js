@@ -14,8 +14,6 @@ const spConfig = {
     folderPath : `${process.env.SP_SITE}/${process.env.SP_SITE_CONTENT_LIST}/${process.env.SP_FOLDER_NAME}`
 };
 
-console.log(JSON.stringify(spConfig));
-
 /**
  * Get Sharepoint API access token
  * @returns {Object} token
