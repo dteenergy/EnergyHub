@@ -1,10 +1,7 @@
 const { sendMail } = require("@sap-cloud-sdk/mail-client");
 
  /**
- * Method to send a notification mail
- * @param {Array<string>} to 
- * @param {string} subject 
- * @param {string} text
+ * Method to send a mail
  * @returns {object} - Returns a response after sending mail
  */
 const sendEmail = async(req, res)=>{
@@ -12,7 +9,7 @@ const sendEmail = async(req, res)=>{
   try{
   
     const mailConfig = {
-      to: 'kokila.ss@smartsoftus.com',
+      to: 'kokila.sivakumar@dteenergy.com',
       subject: 'Test mail service',
       // text: 'Testing mail service! Thanks.',
       html:  `<html>
@@ -45,3 +42,8 @@ const sendEmail = async(req, res)=>{
 };
 
 module.exports = {sendEmail};
+
+
+// * @param {Array<string>} to 
+// * @param {string} subject 
+// * @param {string} text
