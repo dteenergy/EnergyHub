@@ -97,6 +97,11 @@ service DTEEnergyAdminPortal {
     selectedAppNumber: String,
     selectedApplicationNumbers: array of String
   ) returns String;
+
+  action UnLink(
+    selectedAppNumber: String,
+    selectedApplicationNumbers: array of String
+  ) returns String;
   
 }
 

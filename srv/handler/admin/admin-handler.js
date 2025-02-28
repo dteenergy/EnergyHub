@@ -1,7 +1,9 @@
 const cds = require('@sap/cds');
+
 const { generateConsentUrl } = require('./generate-consent-url');
 const { LinkApplications } = require('./link-applications');
 const { readApplicationDetail } = require('./read-application-detail');
+const { UnLinkApplications } = require('./unlink-applications');
 
 module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
   const { ApplicationConsent, ApplicationDetail } = this.entities;
@@ -33,6 +35,9 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
 
   // Register the 'Link' event handler with the LinkApplications function
   srv.on('Link', LinkApplications),
+
+  // Register the 'UnLink' event handler with the UnLinkApplications function
+  srv.on('UnLink', UnLinkApplications);
 
   // Method to add the NoOfConsentReceived Field.
   srv.after('READ', 'ApplicationDetail', async (data) => {

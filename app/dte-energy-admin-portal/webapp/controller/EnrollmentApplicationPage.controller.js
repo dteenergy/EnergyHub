@@ -5,8 +5,9 @@ sap.ui.define([
   "sap/ui/model/FilterOperator",
   "sap/m/MessageBox",
   "sap/m/MessageToast",
-  "dteenergyadminportal/utils/LinkEHApplication"
-], (BaseController, PersonalizationController, Filter, FilterOperator, MessageBox, MessageToast, LinkEHApplication) => {
+  "dteenergyadminportal/utils/LinkEHApplication",
+  "dteenergyadminportal/utils/UnLinkEHApplication"
+], (BaseController, PersonalizationController, Filter, FilterOperator, MessageBox, MessageToast, LinkEHApplication, UnLinkEHApplication) => {
   "use strict";
 
   return BaseController.extend("dteenergyadminportal.controller.EnrollmentApplicationPage", {
@@ -147,7 +148,7 @@ sap.ui.define([
     },
     handleUnLinkPress: function () {
       const that = this;
-      LinkEHApplication.handleUnLinkPress(that);
+      UnLinkEHApplication.handleUnLinkPress(that);
     },
     /**
      * Handles the confirmation action for linking applications.

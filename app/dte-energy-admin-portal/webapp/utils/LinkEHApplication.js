@@ -1,8 +1,7 @@
 sap.ui.define([
   "sap/m/MessageToast",
-  "sap/m/MessageBox",
-  "dteenergyadminportal/controller/BaseController"
-], function (MessageToast, MessageBox, BaseController) {
+  "sap/m/MessageBox"
+], function (MessageToast, MessageBox) {
   return {
     /**
      * Handles the press event of a link, opening a dialog to link selected applications.
@@ -57,33 +56,6 @@ sap.ui.define([
       // Open the dialog to allow the user to link the selected applications
       that.byId('idLinkDialog').open();
     },
-    handleUnLinkPress: async function (that) {
-      // Retrieve the table control by its ID
-      const oTable = that.getView().byId('idApplicationTable');
-
-      // Get the selected items (rows) from the table
-      const aSelectedRows = oTable.getSelectedItems();
-
-      // Map the selected rows to their corresponding data objects
-      const aSelectedData = aSelectedRows.map(function (oItem) {
-        return oItem.getBindingContext("MainModel").getObject();
-      }).filter(function (oData) {
-        return oData.LinkId; // Assuming LinkId is a truthy value when present
-      });
-      console.log(aSelectedRows);
-      console.log(aSelectedData);
-
-      console.log(aSelectedRows.length);
-      console.log(aSelectedData.length);
-      if(aSelectedData.length === 0 || (aSelectedRows.length !== aSelectedData.length)) {
-        MessageBox.warning(`Please select only linked application to unlink.`);
-        return;
-      }
-
-      const parentApp = aSelectedData.filter(item => item.LinkId === item.ApplicationNumber);
-      const childApp = aSelectedData.filter(item => item.LinkId !== item.ApplicationNumber);
-      console.log(parentApp, childApp);
-    },
     /**
      * Handles the confirmation of linking selected applications to a parent application.
      * This function is triggered when the user clicks the "Confirm" button in the linking dialog.
@@ -104,7 +76,7 @@ sap.ui.define([
       // Bind the context to the 'Link' function import with the specified parameters
       const oFunctionContext = oModel.bindContext('/Link(...)');
       oFunctionContext.setParameter("selectedAppNumber", sParentAppNumber);
-      oFunctionContext.setParameter( "selectedApplicationNumbers", selectedApplicationNumbers);
+      oFunctionContext.setParameter("selectedApplicationNumbers", selectedApplicationNumbers);
 
       try {
         // Execute the function import to perform the linking operation
@@ -125,7 +97,7 @@ sap.ui.define([
           MessageBox.warning(oResponse.value.message); // Show warning if status is not 200
         }
       } catch (error) {
-        BaseController.errorHandler(error)
+        that.errorHandler(error);
       }
 
       oDialog.close();
