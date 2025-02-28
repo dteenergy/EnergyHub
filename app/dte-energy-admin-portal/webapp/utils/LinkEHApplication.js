@@ -1,8 +1,7 @@
 sap.ui.define([
   "sap/m/MessageToast",
-  "sap/m/MessageBox",
-  "dteenergyadminportal/controller/BaseController"
-], function (MessageToast, MessageBox, BaseController) {
+  "sap/m/MessageBox"
+], function (MessageToast, MessageBox) {
   return {
     /**
      * Handles the press event of a link, opening a dialog to link selected applications.
@@ -77,7 +76,7 @@ sap.ui.define([
       // Bind the context to the 'Link' function import with the specified parameters
       const oFunctionContext = oModel.bindContext('/Link(...)');
       oFunctionContext.setParameter("selectedAppNumber", sParentAppNumber);
-      oFunctionContext.setParameter( "selectedApplicationNumbers", selectedApplicationNumbers);
+      oFunctionContext.setParameter("selectedApplicationNumbers", selectedApplicationNumbers);
 
       try {
         // Execute the function import to perform the linking operation
@@ -98,7 +97,7 @@ sap.ui.define([
           MessageBox.warning(oResponse.value.message); // Show warning if status is not 200
         }
       } catch (error) {
-        BaseController.errorHandler(error)
+        that.errorHandler(error);
       }
 
       oDialog.close();
