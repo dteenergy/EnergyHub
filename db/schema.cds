@@ -96,7 +96,7 @@ entity Attachment{
     key AttachmentId : UUID;
     fileName: String @assert.format : '\.xlsx$' @mandatory;
     fileType: String @mandatory;
-    fileContent : LargeBinary @mandatory;
+    fileContent : LargeBinary not null;
 }
 
 //Defining Unique Number
