@@ -1,5 +1,4 @@
 const { sendMail } = require("@sap-cloud-sdk/mail-client");
-const {getDestinations, getAccessToken} = require('./get-destination');
 
  /**
  * Method to send a mail
@@ -8,12 +7,6 @@ const {getDestinations, getAccessToken} = require('./get-destination');
 const sendEmail = async(req, res)=>{
 
   try{
-
-    const access_token = await getAccessToken();
-    const destinationResponse = await getDestinations(access_token);
-
-    console.log(destinationResponse, "destination response");
-    
   
     const mailConfig = {
       to: 'kokila.sivakumar@dteenergy.com',
@@ -30,19 +23,21 @@ const sendEmail = async(req, res)=>{
     };
 
   // Calling the sendMail method to send email through the configured destination  
-  // const response = await sendMail(
-  //   { destinationName: "ssiTimeSheetMailDestination" },
-  //    [mailConfig]
-  //   );
+  const response = await sendMail(
+    { destinationName: "sap_process_automation_mail" },
+     [mailConfig]
+    );
   
   // log the response for debugging purpose
   // console.log(response);  
 
-  // if (!response) throw 'Failed to send mail notification';
+  if (!response) throw 'Failed to send mail notification';
   
   res.json({"Message": "Mail send successfully"});
 
   }catch(err){
+    console.log(err);
+    
     res.json({"Message": err.message});
   }
 

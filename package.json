@@ -70,7 +70,7 @@
 				"mailService": {
 					"kind": "rest",
 					"credentials": {
-						"destination": "ssiTimeSheetMailDestination"
+						"destination": "sap_process_automation_mail"
 					}
 				}
 			}
