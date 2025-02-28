@@ -18,7 +18,7 @@ sap.ui.define([
      *
      * @public
      */
-    onInit() {
+    onInit: async function () {
       // Destructure view data properties
       const {
         baseUrl,
@@ -31,7 +31,8 @@ sap.ui.define([
         filteredFirstName,
         filteredLastName,
         filteredUpdatedBy,
-        tenantConsentFormURL
+        tenantConsentFormURL,
+        filteredAppIds
        } = this.getView().getViewData();
 
       // Set instance variables for later use
@@ -64,15 +65,15 @@ sap.ui.define([
         table: this.byId("idBuildingTable")
       });
 
-       // Ensure this ID matches your XML table ID
-
       // Apply a filter to display only relevant building details for the given AppId
       const oTable = this.byId("idBuildingTable");
       const oBinding = oTable.getBinding("items");
-      const oFilter = new sap.ui.model.Filter("AppId", "EQ", AppId);
 
-      // Apply the filter if the table binding exists
-      if (oBinding) oBinding.filter([oFilter]);
+      // Apply filters to show only relevant AppIds
+      const aFilters = filteredAppIds.map(appId => new sap.ui.model.Filter("AppId", sap.ui.model.FilterOperator.EQ, appId));
+
+      // Apply filtering and sorting
+      if (oBinding) oBinding.filter(new sap.ui.model.Filter({ filters: aFilters, and: false }));
     },
     /**
      * Opens the personalization dialog for the building table.

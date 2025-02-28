@@ -17,6 +17,7 @@ entity ApplicationDetail{
     UpdatedAt: Timestamp @cds.on.insert: $now  @cds.on.update: $now;
 
     virtual NoOfConsentReceived : Integer;
+    virtual hasAttachment : Boolean;
 
     AccountDetailRefId : Association to one AccountDetail on AccountDetailRefId.AppRefId = $self;
     BuildingDetailRefId : Association to many BuildingDetail on BuildingDetailRefId.AppRefId = $self;
@@ -96,7 +97,7 @@ entity Attachment{
     key AttachmentId : UUID;
     fileName: String @assert.format : '\.xlsx$' @mandatory;
     fileType: String @mandatory;
-    fileContent : LargeBinary @mandatory;
+    fileContent : LargeBinary not null;
 }
 
 //Defining Unique Number

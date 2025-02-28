@@ -32,7 +32,7 @@ const createEnrollmentFormDetail = async (req) => {
     ApplicationDetail.ApplicationNumber = applicationNumber;
 
      //Upload attachment to sharepoint
-    if(Attachment){
+    if(Attachment && Attachment.fileContent){
       Attachment.fileName = `${applicationNumber}-${Attachment.fileName}`; //Append application to file name
       const response = await sharepoint.uploadFile(Attachment);
       ApplicationDetail.AttachmentURL = response.ServerRelativeUrl; // insert attachment loaction in Application Detail entity

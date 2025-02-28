@@ -44,6 +44,7 @@
         </items>
       </ComboBox>
       <Button id="idLinkButton" type="Emphasized" class="rightPaddingAlignment" text="Link" press="handleLinkPress" tooltip="Settings"/>
+      <Button id="idUnLinkButton" type="Emphasized" class="rightPaddingAlignment" text="Unlink" press="handleUnLinkPress" tooltip="Settings"/>
       <Button id="idP13nButton" icon="sap-icon://action-settings" press="setupPersonalization" tooltip="Settings"/>
     </FlexBox>
     <ScrollContainer id="_idScrollContainer" horizontal="true" vertical="false" width="100%" height="auto" class="paddingAlignment">
@@ -112,7 +113,7 @@
               <Text text="{MainModel>SignatureSignedBy}"></Text>
               <Text text="{MainModel>EmailAddr}"></Text>
               <Text text="{MainModel>EnergyPrgmParticipated}"></Text>
-              <Button text="Generate" press="onGenerateUrlPress"></Button>
+              <Button text="Generate" press="onGenerateUrlPress" enabled="{MainModel>hasAttachment}"></Button>
               <Button text="Download" press="onDownloadAttachmentPress"></Button>
               <Input value="{MainModel>Comment}" change="onUpdateField" type="Text" placeholder="Give your comment here"></Input>
               <Input value="{MainModel>AssignedTo}" change="onUpdateField" type="Text" placeholder="Enter assignee name"></Input>

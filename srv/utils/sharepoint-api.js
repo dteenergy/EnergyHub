@@ -99,7 +99,7 @@ const getFile = async (attachmentURL) => {
             maxBodyLength: Infinity,
             encoding: null,
             responseType: 'arraybuffer',
-            url: `https://${spDomain}${spSite}/_api/web/GetFileByServerRelativePath(decodedurl='${attachmentURL}')/$value`,
+            url: `https://${spConfig.domain}${spConfig.site}/_api/web/GetFileByServerRelativePath(decodedurl='${attachmentURL}')/$value`,
             headers: {
                 'Authorization': `${token_type} ${access_token}`,
                 'Accept': 'application/json;odata=verbos',
