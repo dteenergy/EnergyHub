@@ -12,7 +12,7 @@ service DTEConsentAppPortal {
     
     action CreateEnrollmentFormDetail(
         ApplicationDetail : ApplicationDetail @mandatory,
-        BuildingDetail : array of BuildingDetail ,
+        BuildingDetail : array of BuildingDetail,
         AccountDetail : AccountDetail @mandatory,
         ConsentDetail : ApplicationConsent @mandatory,
         Attachment : Attachment

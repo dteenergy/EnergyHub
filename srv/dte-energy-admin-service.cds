@@ -5,7 +5,7 @@ using {dteConsentApp as db} from '../db/schema';
 service DTEEnergyAdminPortal {
 
   entity ApplicationDetail  @(restrict: [{
-    grant: ['READ', 'UPDATE', 'GenerateUrl', 'GetEnvironmentVariables'], 
+    grant: ['READ', 'UPDATE', 'GenerateUrl', 'GetEnvironmentVariables','DownloadAttachment'], 
     to: 'Administrator'
     }]) as projection on db.ApplicationDetail {
     AppId,
@@ -42,6 +42,7 @@ service DTEEnergyAdminPortal {
   }
   actions{
     function GenerateUrl() returns String;
+    function DownloadAttachment () returns String;
   } function GetEnvironmentVariables() returns String;
 
   entity ApplicationConsent @(restrict: [{
@@ -92,6 +93,8 @@ service DTEEnergyAdminPortal {
     grant: ['READ'], 
     to: 'Administrator'
     }]) as projection on db.AccountDetail;
+
+  entity Attachment as projection on db.Attachment;
 
   action Link(
     selectedAppNumber: String,

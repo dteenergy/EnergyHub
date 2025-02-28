@@ -211,6 +211,50 @@ sap.ui.define([
         MessageBox.error("Failed to generate the URL.");
       }
     },
+
+    /**
+     * Handles Attachment button's press event
+     * @param {event} oEvent 
+     * @returns 
+     */
+    onDownloadAttachmentPress : async function (oEvent) {
+      this.handleSessionExpiry(this.baseUrl);
+
+      // Retrieve the button and its parent list item
+      const oButton = oEvent.getSource();
+      const oListItem = oButton.getParent();
+
+      // Validate the list item
+      if (!oListItem) {
+        console.error("Parent List Item is missing for this button.");
+        return;
+      }
+
+      // Retrieve the binding context for the selected row
+      const oBindingContext = oListItem.getBindingContext("MainModel"); // Get the binding context
+
+      // Get the binding context of the selected row
+      if (!oBindingContext) {
+        console.error("Binding context is missing for this row.");
+        return;
+      }
+
+      // Extract application ID from the binding context
+      const appId = oBindingContext.getProperty("AppId");
+
+      try {
+        // Make an API call to download attachment
+        const {data} = await axios.get(this.baseUrl+`admin/service/ApplicationDetail(${appId})/DownloadAttachment`);        
+
+         // Save spreadsheet template in client system
+         const a = document.createElement('a');
+         a.download = data.value.file.name;
+         a.href = data.value.file.url;
+         a.click();
+      } catch (error) {
+        BaseController.errorHandler(error)
+      }
+    },
     /**
      * Closes the dialog - displaying the generated link.
      *
