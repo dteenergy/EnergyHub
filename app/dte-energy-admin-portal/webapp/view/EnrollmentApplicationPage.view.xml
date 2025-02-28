@@ -110,7 +110,7 @@
               <Text text="{MainModel>EmailAddr}"></Text>
               <Text text="{MainModel>EnergyPrgmParticipated}"></Text>
               <Button text="Generate" press="onGenerateUrlPress"></Button>
-              <Button text="Download" press="onDownloadAttachmentPress"></Button>
+              <Button text="Download" press="onDownloadAttachmentPress" enabled="{MainModel>hasAttachment}" ></Button>
               <Text text="{MainModel>AppCreatedAt}"></Text>
               <Text text="{MainModel>AppUpdatedAt}"></Text>
               <Text text="{MainModel>SignatureSignedDate}"></Text>

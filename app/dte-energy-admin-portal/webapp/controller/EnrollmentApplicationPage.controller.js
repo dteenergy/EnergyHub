@@ -327,6 +327,26 @@ sap.ui.define([
       const FirstName = oContext.getProperty("FirstName");
       const LastName = oContext.getProperty("LastName");
       const ApplicationNumber = oContext.getProperty("ApplicationNumber");
+      const selectedLinkId = oContext.getProperty("LinkId");
+
+      // Get the model data
+      const oModel = this.getView().getModel("MainModel");
+
+      // Fetch all data asynchronously
+      const aData = await oModel.bindList("/ApplicationDetail").requestContexts();
+      const aAllRecords = await Promise.all(aData.map(ctx => ctx.requestObject()));
+
+      // Ensure data exists
+      if (!aAllRecords || aAllRecords.length === 0) {
+        console.error("No data retrieved from OData model.");
+        return;
+      }
+
+      /**
+       *  Call the filterRecords function to get the filtered list of AppIds 
+       *  based on the selected LinkId and ApplicationNumber.
+       */
+      const filteredAppId = this.filterRecords(aAllRecords, AppId, selectedLinkId, ApplicationNumber);
 
       // Get the VBox id (EnrollmentApplicationPage)
       const oVBox = this.byId("idApplicationVBox");
@@ -341,12 +361,38 @@ sap.ui.define([
           FirstName: FirstName, LastName: LastName, filteredApplicationNumber: this.sAppNumber,
           filteredApplicationStatus: this.sApplicationStatus,
           filteredFirstName: this.sFirstName, filteredLastName: this.sLastName,
-          tenantConsentFormURL : this.tenantConsentFormURL
+          tenantConsentFormURL : this.tenantConsentFormURL, filteredAppIds: filteredAppId
         },
         viewName: `dteenergyadminportal.view.BuildingDetailPage`
       }).then(function (oView) {
         oVBox.addItem(oView);
       });
+    },
+    /**
+     * Filters application records based on the selected application and its link status.
+     *
+     * @param {Array<Object>} aAllRecords - The complete list of application records.
+     * @param {string} AppId - The ID of the selected application.
+     * @param {string} selectedLinkId - The LinkId of the selected application.
+     * @param {string} ApplicationNumber - The ApplicationNumber of the selected application.
+     * @returns {Array<string>} - An array of AppIds that are linked to the selected application, 
+     *                            or the selected AppId if no linked applications are found.
+     */
+    filterRecords: function (aAllRecords, AppId, selectedLinkId, ApplicationNumber) {
+      if (!selectedLinkId) return [AppId]; // Return AppId if no LinkId
+
+      /**
+       * - If the selected row is the parent row
+       *   then return the all AppIds linked to this application from the all records
+       * 
+       * - If the selected row is not a linked application or is a child row,
+       *   then only the selected AppId will be returned.
+       */
+      let aFilteredAllRecords = aAllRecords
+          .filter(item => item.LinkId === selectedLinkId && item.LinkId === ApplicationNumber)
+          .map(item => item.AppId);
+
+      return aFilteredAllRecords.length ? aFilteredAllRecords : [AppId];
     },
     /**
      * Navigates to the Consent Page dynamically, based on the selected application's AppId.
