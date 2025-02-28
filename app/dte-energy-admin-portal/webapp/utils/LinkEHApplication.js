@@ -43,7 +43,7 @@ sap.ui.define([
         }).join(", ");
 
         // Show a warning message toast
-        MessageBox.warning(`The following applications are already linked: ${sLinkedAppNumbers}. Please unlink applications for perform further actions.`);
+        MessageBox.warning(`The following applications are already linked: ${sLinkedAppNumbers}. Please unlink the applications to perform further actions.`);
         return;
       }
 

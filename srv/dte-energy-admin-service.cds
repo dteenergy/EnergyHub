@@ -89,6 +89,7 @@ service DTEEnergyAdminPortal {
     AppRefId.AppId,
     AppRefId.AccountDetailRefId.FirstName,
     AppRefId.AccountDetailRefId.LastName,
+    AppRefId.ApplicationNumber
   };
 
   entity AccountDetail @(restrict: [{
