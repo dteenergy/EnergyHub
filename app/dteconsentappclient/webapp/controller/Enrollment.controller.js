@@ -816,10 +816,7 @@ sap.ui.define([
 				// Format Account Detail
 				const {SiteFirstName, SiteLastName, SiteEmailAddr, AcctMgrPhoneNumber, ...otherAccountDetails} = enrollmentDetails.AccountDetail;
 
-				console.log(this.Attachment);
-				
-
-				let enrollmentFormDetails = {
+				const enrollmentFormDetails = {
 					AccountDetail: {
 						...otherAccountDetails,
 						FirstName: SiteFirstName,

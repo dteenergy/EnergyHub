@@ -10,11 +10,11 @@ const downloadSpreadsheetTemplate = async (req) => {
     try {
         // Read spreadsheet template 
         const filePath = path.join(__dirname,'../../template/Data.xlsx');
-        const templateFileContent = await fs.readFileSync(filePath,{encoding:'base64url'});
+        const templateFileContent = await fs.readFileSync(filePath,{encoding:'base64'});
 
         return {
             'statusCode' : '200',
-            'file' : Buffer.from(templateFileContent,'base64')
+            'file' : templateFileContent
           }
     } catch (error) {
         req.error({
