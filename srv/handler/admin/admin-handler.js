@@ -44,17 +44,22 @@ module.exports = cds.service.impl(async function DTEEnergyAdminPortal(srv) {
       // If data contains value
       if (Array.isArray(data)) {
         for (const el of data) {
+          el.hasAttachment = false;
           // Check the ReferenceId with the AppId and ConsentStatus
           const ConsentDetail = await cds.run(
             SELECT.from(ApplicationConsent)
               .where({ AppId: el.AppId, ConsentStatus: ['New', 'Accepted'], ConsentByTenantFlag: true })
-          )
-          
+          );
           el.NoOfConsentReceived = ConsentDetail?.length;
+   
+          if(el.AttachmentURL) el.hasAttachment = true;
+
+          delete el.AttachmentURL;
         }
       }
 
     } catch (e) {
+      console.log('Read Application Error', e);
       return {message:e?.message, code:500}
     }
   });
