@@ -8,7 +8,7 @@ const { entities } = require('@sap/cds');
  * 
  * @returns {Promise<Object>} - A response message with the status of the unlink operation.
  */
-const UnLinkApplications = async (req) => {
+const unLinkApplications = async (req) => {
   // Destructure selectedAppNumber and selectedApplicationNumbers from the request data
   const {selectedAppNumber, selectedApplicationNumbers} = req.data;
 
@@ -20,16 +20,16 @@ const UnLinkApplications = async (req) => {
     if (!selectedAppNumber && (!selectedApplicationNumbers || selectedApplicationNumbers.length === 0))
       return {message: "No applications selected for unlinking.", statusCode: 400};
 
-    // If a parent application number is provided, fetch its LinkId
+    // If a parent application is selected, fetch its LinkId
     if (selectedAppNumber) {
       const selectedApp = await SELECT.one.from(ApplicationDetail)
-          .where({ ApplicationNumber: selectedAppNumber });
+          .where({ ApplicationNumber: selectedAppNumber }).columns(['LinkId']);
 
       // Store the LinkId to be unlinked
       if (selectedApp && selectedApp.LinkId) linkId = selectedApp.LinkId;
     }
 
-    // If multiple application numbers are provided, determine if all linked apps should be unlinked
+    // If multiple application numbers are selected, determine if all linked apps should be unlinked
     if(selectedApplicationNumbers && selectedApplicationNumbers.length > 0) {
       const selectedApp = await SELECT.from(ApplicationDetail)
           .where({ ApplicationNumber: {in: selectedApplicationNumbers} });
@@ -69,4 +69,4 @@ const UnLinkApplications = async (req) => {
   }
 };
 
-module.exports = {UnLinkApplications};
+module.exports = {unLinkApplications};

@@ -96,11 +96,19 @@ service DTEEnergyAdminPortal {
 
   entity Attachment as projection on db.Attachment;
 
+  /** 
+   * Action to link applications together
+   * and returns a success message or an error message.
+   */
   action Link(
     selectedAppNumber: String,
     selectedApplicationNumbers: array of String
   ) returns String;
 
+  /** 
+   * Action to unlink applications from a parent application
+   * and returns a success message or an error message.
+   */
   action UnLink(
     selectedAppNumber: String,
     selectedApplicationNumbers: array of String
