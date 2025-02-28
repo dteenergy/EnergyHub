@@ -101,7 +101,7 @@ sap.ui.define([
 					"ConsentAccountNumber": "",
 					"ConsentPhoneNumber": null,
 					"ConsentEmailAddr": "",
-					"AuthPersonName": "",
+					"AuthPersonName": "DTE Implementation Team",
 					"AuthDate": FormatInputs.dateToDisplay(),
 					"AuthTitle": ""
 				}
@@ -822,7 +822,7 @@ sap.ui.define([
 						FirstName: SiteFirstName,
 						LastName: SiteLastName,
 						EmailAddr: SiteEmailAddr,
-						AcctMgrPhNo: AcctMgrPhoneNumber
+						AcctMgrPhNo: AcctMgrPhoneNumber ? AcctMgrPhoneNumber : undefined
 					},
 					BuildingDetail: formattedLocationDetails,
 					ApplicationDetail: { 
