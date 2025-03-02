@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 const dotenvExpand = require('dotenv-expand');
 
 const {verifyReCAPTCHA} = require('./middleware/verify-recaptcha');
-const {sendEmail} = require('./utils/mail-client-send-email');
+const {sendEmail} = require('./utils/send-email');
 
 //Expand .env configuration to support variables
 const dotenvConfig = dotenv.config();

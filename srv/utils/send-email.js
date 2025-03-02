@@ -1,5 +1,7 @@
-const { sendMail } = require("@sap-cloud-sdk/mail-client");
+const nodemailer = require('nodemailer');
+
 const {getDestinations, getAccessToken} = require('./get-destination');
+const {getMailAccessToken} = require('./get-mail-access-token');
 
  /**
  * Method to send a mail
@@ -9,16 +11,35 @@ const sendEmail = async(req, res)=>{
 
   try{
 
+    // To get the destination service access_token 
     const access_token = await getAccessToken();
-    const destinationResponse = await getDestinations(access_token);
-
-    console.log(destinationResponse, "destination response");
     
-  
+    // Retrieve the destination from SAP BTP
+    const destinationResponse = await getDestinations(access_token);    
+
+    const {tokenServiceURL, clientId, clientSecret, scope} = destinationResponse;    
+
+    // Using the destination's auth credentials get the access token
+    const mailAccessToken = await getMailAccessToken(tokenServiceURL, clientId, clientSecret, scope);
+
+    // Mail transporter configuration
+    const transporterConfig = {
+      host: destinationResponse['mail.smtp.host'],
+      port: destinationResponse['mail.smtp.port'],
+      secure: false,
+      auth: {
+        type: 'OAuth2',
+        user: destinationResponse['User'],
+        // pass: destinationResponse['Password'],
+        accessToken: mailAccessToken
+      }
+    }
+    
+    // Mail content configuration 
     const mailConfig = {
+      from: destinationResponse['mail.smtp.from'],
       to: 'kokila.sivakumar@dteenergy.com',
       subject: 'Test mail service',
-      // text: 'Testing mail service! Thanks.',
       html:  `<html>
                 <style>
                   .main-content{color:red;}
@@ -29,20 +50,21 @@ const sendEmail = async(req, res)=>{
               </html>`
     };
 
-  // Calling the sendMail method to send email through the configured destination  
-  // const response = await sendMail(
-  //   { destinationName: "ssiTimeSheetMailDestination" },
-  //    [mailConfig]
-  //   );
-  
-  // log the response for debugging purpose
-  // console.log(response);  
+   
+  const transporter = nodemailer.createTransport(transporterConfig);
 
-  // if (!response) throw 'Failed to send mail notification';
+  // Calling the sendMail method
+  const mailResponse = await transporter.sendMail(mailConfig);
+    
+  console.log(mailResponse);  
+
+  if (!mailResponse) throw 'Failed to send mail notification';
   
   res.json({"Message": "Mail send successfully"});
 
   }catch(err){
+    console.log(err);
+    
     res.json({"Message": err.message});
   }
 

@@ -13,7 +13,6 @@ const services = xsenv.getServices({'destination':'dteConsentAppPortal-destinati
  */
 const getAccessToken = async () => {
   try {
-    console.log(services, 'services');
     
     // Make a POST request to obtain the access token
     const {data} = await axios.post(
@@ -32,9 +31,6 @@ const getAccessToken = async () => {
         }
       }
     );
-
-    console.log(data);
-    
 
     // Return the access token
     return data.access_token;
@@ -66,9 +62,6 @@ const getDestinations = async (accessToken) => {
       }
     );
 
-    console.log(destinationsResponse);
-
-    
     // Return the destination details from the response
     return destinationsResponse.data;
   } catch (error) {
