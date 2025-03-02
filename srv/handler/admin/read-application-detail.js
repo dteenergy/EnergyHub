@@ -13,6 +13,9 @@ const readApplicationDetail = async (req) => {
   // Clone the original query
   const query = req.query;
 
+  // Add columns as a * in the array when it is removed from SELECT.
+  if(!query.SELECT.columns) query.SELECT.columns=['*'];
+
   // Add a computed column 'SortKey' to determine the sorting order of applications
   query.SELECT.columns.push({
     xpr: [

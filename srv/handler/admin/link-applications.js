@@ -7,7 +7,7 @@ const { entities } = require('@sap/cds');
  * @param {Request} req - The request object containing data for linking applications.
  * @returns {Promise<Object>} A promise that resolves to an object containing a message and statusCode.
  */
-const LinkApplications = async (req) => {
+const linkApplications = async (req) => {
   // Destructure selectedAppNumber and selectedApplicationNumbers from the request data
   const {selectedAppNumber, selectedApplicationNumbers} = req.data;
 
@@ -29,7 +29,7 @@ const LinkApplications = async (req) => {
     if (alreadyLinkedApplications.length > 0) {
       const linkedAppNumbers = alreadyLinkedApplications.map(app => app.ApplicationNumber).join(", ");
       return {
-        message: `The following applications are already linked: ${linkedAppNumbers}. Please unlink applications for perform further actions.`,
+        message: `The following applications are already linked: ${linkedAppNumbers}. Please unlink the applications to perform further actions.`,
         statusCode: 400
       };
     };
@@ -51,4 +51,4 @@ const LinkApplications = async (req) => {
   }
 };
 
-module.exports = { LinkApplications };
+module.exports = { linkApplications };
