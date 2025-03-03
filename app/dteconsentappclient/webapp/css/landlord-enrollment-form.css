@@ -31,9 +31,6 @@
 .customize-button.outline-button{
     border: 1px solid var(--sapButton_TextColor);
 }
-.customize-button.outline-button.upload-btn{
-    min-width: 300px;
-}
 .customize-link {
     .sapMLnkText{
         color: var(--sapButton_TextColor) !important;
@@ -233,7 +230,16 @@
         border: 1px solid var(--sapButton_TextColor);
         margin-left: 23px !important;
     }
+    .sapMBtnBase:hover{
+        .sapMBtnInner{
+            background-color: transparent;
+        }
+    }
+    .sapMBtnInner:hover {
+        background-color: transparent !important;
+    }
 }
+
 
 @media only screen and (max-width: 600px) {
     .state-and-code{
