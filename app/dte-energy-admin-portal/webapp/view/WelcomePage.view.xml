@@ -9,6 +9,7 @@
                         <tnt:NavigationListItem text="Home" key="HomePage" icon="sap-icon://home"></tnt:NavigationListItem>
                         <tnt:NavigationListItem text="Enrollment Application" key="EnrollmentApplicationPage" icon="sap-icon://request"></tnt:NavigationListItem>
                         <tnt:NavigationListItem text="Consents" key="ConsentsPage" icon="sap-icon://approvals"></tnt:NavigationListItem>
+                        <tnt:NavigationListItem text="EmailTemplate" key="EmailTemplatePage" icon="sap-icon://write-new-document"></tnt:NavigationListItem>
                     </tnt:NavigationList>
                 </tnt:SideNavigation>
             </tnt:sideContent>
