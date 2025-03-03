@@ -732,7 +732,7 @@ sap.ui.define([
 						text: '+ Add Another Location',
 						press: function () {
 							that.onAddAnotherLocation(),
-								that.oConfirmationDialog.close()
+							that.oAdditionalLocationAlertDialog.close()
 						}
 					}).addStyleClass("outline-button"),
 					new sap.m.Text({ text: 'I don’t have another location.' }),
