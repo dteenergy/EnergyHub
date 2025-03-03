@@ -20,7 +20,7 @@ sap.ui.define([
      */
     onInit() {
       // Retrieve the base URL from the view data
-      const { baseUrl, AppId } = this.getView().getViewData();
+      const { baseUrl, AppId, filteredAppIds } = this.getView().getViewData();
       this.baseUrl = baseUrl;
       this.AppId = AppId;
 
@@ -54,11 +54,17 @@ sap.ui.define([
             return;
         }
 
-        // Create a filter for AppId
-        const oFilter = new Filter({ path: "AppId", operator: FilterOperator.EQ, value1: this.AppId });
+        /**
+         * Create a filter for AppId
+         * 
+         * - If the admin click the parent application consents 
+         *   then it filter with child application details also.
+         * - Otherwise it filters selected consent details only.
+         */
+        const oFilter = filteredAppIds.map(appId => new sap.ui.model.Filter("AppId", sap.ui.model.FilterOperator.EQ, appId));
 
         // Apply the filter
-        oBinding.filter([oFilter]);
+        if (oBinding) oBinding.filter(new sap.ui.model.Filter({ filters: oFilter, and: false }));
       }
     },
 

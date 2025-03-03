@@ -9,6 +9,8 @@ sap.ui.define([
      * @param {sap.ui.core.mvc.Controller} that - The current controller instance.
      */
     handleUnLinkPress: async function (that) {
+      that.handleSessionExpiry(that.baseUrl);
+
       const oModel = that.getView().getModel('MainModel');
 
       // Retrieve the table control by its ID
