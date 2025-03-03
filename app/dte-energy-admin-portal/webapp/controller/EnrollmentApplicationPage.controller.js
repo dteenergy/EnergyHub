@@ -20,12 +20,12 @@ sap.ui.define([
      */
     onInit: function() {
       // Retrieve the base URL and filter data from the view's data
-      const { baseUrl, filteredApplicationNumber, filteredApplicationStatus, filteredFirstName, filteredLastName, filteredUpdatedBy, tenantConsentFormURL} = this.getView().getViewData();
+      const { baseUrl, filteredApplicationNumber, filteredApplicationStatus, filteredFirstName, filteredLastName, filteredAssignedTo, tenantConsentFormURL} = this.getView().getViewData();
       this.baseUrl = baseUrl;
       this.sAppNumber = filteredApplicationNumber;
       this.sFirstName = filteredFirstName;
       this.sLastName = filteredLastName;
-      this.sUpdatedBy = filteredUpdatedBy;
+      this.sAssignedTo = filteredAssignedTo;
       this.sApplicationStatus = filteredApplicationStatus;
       this.tenantConsentFormURL = tenantConsentFormURL;
 
@@ -35,7 +35,7 @@ sap.ui.define([
       if(!["", undefined].includes(this.sAppNumber)) this.byId("idAppNumberFilter").setValue(this.sAppNumber);
       if(!["", undefined].includes(this.sFirstName)) this.byId("idFirstNameFilter").setValue(this.sFirstName);
       if(!["", undefined].includes(this.sLastName)) this.byId("idLastNameFilter").setValue(this.sLastName);
-      if(!["", undefined].includes(this.sUpdatedBy)) this.byId("idUpdatedBySearch").setValue(this.sUpdatedBy);
+      if(!["", undefined].includes(this.sAssignedTo)) this.byId("idAssignedToSearch").setValue(this.sAssignedTo);
       if(!["", undefined].includes(this.sApplicationStatus)) this.byId("idApplicationStatusFilter").setSelectedKey(this.sApplicationStatus);
       
       // Create an OData V4 model using the constructed service URL
@@ -114,7 +114,7 @@ sap.ui.define([
       this.sAppNumber = this.byId("idAppNumberFilter").getValue(); // Application Number Filter
       this.sFirstName = this.byId("idFirstNameFilter").getValue(); // First Name Filter
       this.sLastName = this.byId("idLastNameFilter").getValue(); // Last Name Filter
-      this.sUpdatedBy = this.byId("idUpdatedBySearch").getValue(); // Updated By Search
+      this.sAssignedTo = this.byId("idAssignedToSearch").getValue(); // Updated By Search
       this.sApplicationStatus = this.byId("idApplicationStatusFilter").getSelectedKey(); // Application Status Filter
 
       // Create an array for filters
@@ -130,8 +130,8 @@ sap.ui.define([
       if (this.sLastName)
         aFilters.push(new Filter({path: "LastName", operator: FilterOperator.Contains, value1: this.sLastName, caseSensitive: false}));
 
-      if (this.sUpdatedBy)
-        aFilters.push(new Filter({path: "UpdatedBy", operator: FilterOperator.Contains, value1: this.sUpdatedBy, caseSensitive: false}));
+      if (this.sAssignedTo)
+        aFilters.push(new Filter({path: "AssignedTo", operator: FilterOperator.Contains, value1: this.sAssignedTo, caseSensitive: false}));
 
       if (this.sApplicationStatus) aFilters.push(new Filter("ApplicationStatus", FilterOperator.EQ, this.sApplicationStatus));
 
@@ -367,7 +367,7 @@ sap.ui.define([
           FirstName: FirstName, LastName: LastName, filteredApplicationNumber: this.sAppNumber,
           filteredApplicationStatus: this.sApplicationStatus,
           filteredFirstName: this.sFirstName, filteredLastName: this.sLastName,
-          filteredUpdatedBy: this.sUpdatedBy,
+          filteredAssignedTo: this.sAssignedTo,
           tenantConsentFormURL : this.tenantConsentFormURL, filteredAppIds: filteredAppId
         },
         viewName: `dteenergyadminportal.view.BuildingDetailPage`

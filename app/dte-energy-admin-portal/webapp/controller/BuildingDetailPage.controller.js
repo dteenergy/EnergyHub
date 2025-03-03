@@ -30,7 +30,7 @@ sap.ui.define([
         filteredApplicationStatus,
         filteredFirstName,
         filteredLastName,
-        filteredUpdatedBy,
+        filteredAssignedTo,
         tenantConsentFormURL,
         filteredAppIds
        } = this.getView().getViewData();
@@ -40,7 +40,7 @@ sap.ui.define([
       this.sAppNumber = filteredApplicationNumber;
       this.sFirstName = filteredFirstName;
       this.sLastName = filteredLastName;
-      this.sUpdatedBy = filteredUpdatedBy;
+      this.sAssignedTo = filteredAssignedTo;
       this.sApplicationStatus = filteredApplicationStatus;
       this.tenantConsentFormURL = tenantConsentFormURL;
 
@@ -115,7 +115,7 @@ sap.ui.define([
         viewData: {
           baseUrl: this.baseUrl, filteredApplicationNumber: this.sAppNumber,
           filteredLastName: this.sLastName, filteredFirstName: this.sFirstName,
-          filteredUpdatedBy: this.sUpdatedBy,
+          filteredAssignedTo: this.sAssignedTo,
           filteredApplicationStatus: this.sApplicationStatus,
           tenantConsentFormURL: this.tenantConsentFormURL
         },
