@@ -35,8 +35,8 @@
       <SearchField id="idFirstNameFilter" placeholder="Search for First Name..." liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
       <SearchField id="idLastNameFilter" placeholder="Search for Last Name..." liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
       <SearchField id="idAssignedToSearch" placeholder="Search for Assigned To..." liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
-      <DatePicker id="idStartDatePicker" change="onFilterChange" valueFormat="yyyy-MM-dd" placeholder="Start Date" class="rightPaddingAlignment"/>
-      <DatePicker id="idEndDatePicker" change="onFilterChange" valueFormat="yyyy-MM-dd" placeholder="End Date" class="rightPaddingAlignment"/>
+      <DatePicker id="idStartDatePicker" change="onFilterChange" valueFormat="yyyy-MM-dd" placeholder="Created Start Date" class="rightPaddingAlignment"/>
+      <DatePicker id="idEndDatePicker" change="onFilterChange" valueFormat="yyyy-MM-dd" placeholder="Created End Date" class="rightPaddingAlignment"/>
       <ComboBox id="idApplicationStatusFilter" selectedKey="" placeholder="Select Application Status" selectionChange="onFilterChange" class="rightPaddingAlignment">
         <items>
           <core:Item key="" text="All"/>
