@@ -12,6 +12,8 @@ sap.ui.define([
      * @param {sap.ui.core.mvc.Controller} that - The current controller instance.
      */
     handleLinkPress: async function (that) {
+      that.handleSessionExpiry(that.baseUrl);
+
       // Retrieve the table control by its ID
       const oTable = that.getView().byId('idApplicationTable');
 
@@ -20,8 +22,8 @@ sap.ui.define([
 
       // Check if fewer than two rows are selected
       if (aSelectedRows.length < 2) {
-        // Show a message toast to inform the user to select at least two applications
-        MessageToast.show("Please select at least two application.");
+        // Show a message box to inform the user to select at least two applications
+        MessageBox.warning("Please select at least two application.");
         return;
       }
 
@@ -65,6 +67,8 @@ sap.ui.define([
      * @param {sap.ui.core.mvc.Controller} that - Reference to the current controller instance.
      */
     onConfirmLink: async function (that) {
+      that.handleSessionExpiry(that.baseUrl);
+
       const oModel = that.getView().getModel('MainModel');
       const oDialog = that.byId("idLinkDialog");
       const oSelect = that.byId("idParentSelect");

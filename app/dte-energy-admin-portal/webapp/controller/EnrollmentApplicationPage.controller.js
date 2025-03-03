@@ -57,6 +57,23 @@ sap.ui.define([
       this.onFilterChange();
     },
     /**
+     * Fetches all application detail records from the MainModel.
+     *
+     * @returns {Promise<Array<Object>>} - A promise that resolves 
+     * to an array of application detail records.
+     */
+    getAllApplicationDetailRecords: async function () {
+      const oModel = this.getView().getModel("MainModel");
+
+      // Retrieve binding contexts for all records in the ApplicationDetail entity
+      const aData = await oModel.bindList("/ApplicationDetail").requestContexts();
+
+      // Extract and return the actual data objects from the retrieved contexts
+      const aAllRecords = await Promise.all(aData.map(ctx => ctx.requestObject()));
+
+      return aAllRecords;
+    },
+    /**
      * Determines the CSS class for an application row based on its LinkId and ApplicationNumber.
      *
      * @param {string} LinkId - The ID to which the application is linked.
@@ -97,7 +114,7 @@ sap.ui.define([
      *
      * @public
      */
-    onFilterChange: function () {
+    onFilterChange: async function () {
       this.handleSessionExpiry(this.baseUrl);
       
       // Retrieve the binding of the application table's items aggregation
@@ -120,9 +137,30 @@ sap.ui.define([
       // Create an array for filters
       const aFilters = [];
 
-      // Add filters if values are not empty
-      if (this.sAppNumber)
-        aFilters.push(new Filter({path: "ApplicationNumber", operator: FilterOperator.Contains, value1: this.sAppNumber, caseSensitive: false}));
+      /**
+       * Filter with child application when search with parent ApplicationNumber
+       * Otherwise it does filter with ApplicationNumber only
+       */
+      if (this.sAppNumber) {
+        const aAllRecords = await this.getAllApplicationDetailRecords();
+        const filteredIds = aAllRecords
+            .filter(oApp => oApp.LinkId === this.sAppNumber)
+            .map(item => item.ApplicationNumber);
+
+        filteredIds.push(this.sAppNumber); // Include searched ApplicationNumber
+        const uniqueFilteredIds = [...new Set(filteredIds)]; // Remove duplicates
+
+        // Use 'Contains' instead of 'EQ' to allow partial searches
+        const aApplicationFilters = uniqueFilteredIds.map(appNum =>
+            new Filter("ApplicationNumber", FilterOperator.Contains, appNum, false)
+        );
+
+        // Use 'OR' logic (AND: false) to match any of the application numbers
+        const oApplicationFilter = new Filter({
+            filters: aApplicationFilters,
+            and: false 
+        });
+      }
 
       if (this.sFirstName)
         aFilters.push(new Filter({path: "FirstName", operator: FilterOperator.Contains, value1: this.sFirstName, caseSensitive: false}));
@@ -335,12 +373,8 @@ sap.ui.define([
       const ApplicationNumber = oContext.getProperty("ApplicationNumber");
       const selectedLinkId = oContext.getProperty("LinkId");
 
-      // Get the model data
-      const oModel = this.getView().getModel("MainModel");
-
-      // Fetch all data asynchronously
-      const aData = await oModel.bindList("/ApplicationDetail").requestContexts();
-      const aAllRecords = await Promise.all(aData.map(ctx => ctx.requestObject()));
+      // Get all ApplicationDetail records
+      const aAllRecords = await this.getAllApplicationDetailRecords();
 
       // Ensure data exists
       if (!aAllRecords || aAllRecords.length === 0) {
@@ -408,7 +442,7 @@ sap.ui.define([
      * @param {sap.ui.base.Event} oEvent - The event triggered by the button press.
      * @public
      */
-    navToConsentPage: function(oEvent) {
+    navToConsentPage: async function(oEvent) {
       // Retrieve the button and its parent list item
       const oButton = oEvent.getSource();
       const oListItem = oButton.getParent();
@@ -430,6 +464,23 @@ sap.ui.define([
 
       // Extract application ID from the binding context
       const appId = oBindingContext.getProperty("AppId");
+      const ApplicationNumber = oBindingContext.getProperty("ApplicationNumber");
+      const selectedLinkId = oBindingContext.getProperty("LinkId");
+
+      // Get all ApplicationDetail records
+      const aAllRecords = await this.getAllApplicationDetailRecords();
+
+      // Ensure data exists
+      if (!aAllRecords || aAllRecords.length === 0) {
+        console.error("No data retrieved from OData model.");
+        return;
+      }
+
+      /**
+       *  Call the filterRecords function to get the filtered list of AppIds 
+       *  based on the selected LinkId and ApplicationNumber.
+       */
+      const filteredAppId = this.filterRecords(aAllRecords, appId, selectedLinkId, ApplicationNumber);
 
       // Get the VBox id (EnrollmentApplicationPage)
       const oVBox = this.byId("idApplicationVBox");
@@ -439,7 +490,7 @@ sap.ui.define([
 
       // Dynamically create and add the view for consent page
       sap.ui.core.mvc.XMLView.create({
-        viewData: { baseUrl: this.baseUrl, AppId: appId},
+        viewData: { baseUrl: this.baseUrl, AppId: appId, filteredAppIds: filteredAppId},
         viewName: `dteenergyadminportal.view.ConsentsPage`
       }).then(function (oView) {
         oVBox.addItem(oView);

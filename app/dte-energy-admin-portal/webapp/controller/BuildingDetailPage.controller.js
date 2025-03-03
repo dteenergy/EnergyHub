@@ -73,7 +73,7 @@ sap.ui.define([
       const aFilters = filteredAppIds.map(appId => new sap.ui.model.Filter("AppId", sap.ui.model.FilterOperator.EQ, appId));
 
       // Apply filtering and sorting
-      if (oBinding) oBinding.filter(new sap.ui.model.Filter({ filters: aFilters, and: false }));
+      filteredAppIds.map(appId => new sap.ui.model.Filter("AppId", sap.ui.model.FilterOperator.EQ, appId))
     },
     /**
      * Opens the personalization dialog for the building table.
