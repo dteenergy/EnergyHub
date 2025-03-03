@@ -49,8 +49,6 @@ sap.ui.define([
 
             // Customize content of the dialog for Upload Spreadsheet
             const dialogContent = new sap.m.FlexBox({
-                direction:'Column',
-                width : '100%',
                 items: [
                     new sap.m.FormattedText({ htmlText: "<p style='letter-spacing: .7px; font-size: 14px; font-weigt: 400; margin-bottom: 0;'> Lorem ipsum dolor sit amet consectetur. Neque bibendum ultrices sit mattis sit elit. </p>" }),
 
@@ -123,6 +121,29 @@ sap.ui.define([
                 };
             };
             reader.readAsDataURL(that.spreadsheet);
+        },
+        /**
+         * Download spreadsheet template
+         * @param {Controller} that => Parent controller this instance
+         */
+        downloadSpreadsheetTemplate: async function (that) {
+            try {
+                // Url to create the enrollment application
+                const downloadSpreadsheetTemplateUrl = that.SERVERHOST + 'service/DownloadSpreadsheetTemplate';
+
+                // Post request to create a enrollment application.
+                const { data } = await axios.get(downloadSpreadsheetTemplateUrl);
+                
+                // Save spreadsheet template in client system
+                const file =`data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${data.value.file}`;
+                const a = document.createElement('a');
+                a.download = 'Data.xlsx';
+                a.href = file;
+                a.click();
+
+            } catch (error) {
+                that.errorHandler(error);
+            }
         }
     };
 });

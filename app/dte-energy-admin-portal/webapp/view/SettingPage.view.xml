@@ -1,0 +1,35 @@
+<mvc:View xmlns:unified="sap.ui.unified" xmlns:tnt="sap.tnt" 
+            controllerName="dteenergyadminportal.controller.SettingPage"
+          xmlns:mvc="sap.ui.core.mvc"
+          xmlns="sap.m">
+    <VBox class="paddingAlignment">
+       <VBox class="uploadConatiner">
+           <Text
+               emptyIndicatorMode="Off"
+               renderWhitespace="false"
+               text="Spreadsheet Template"
+               textAlign="Begin"
+               textDirection="Inherit"
+               width="150px"
+               wrapping="true"
+               wrappingType="Normal"
+           >  
+           </Text>
+       
+        <Button
+            activeIcon=""
+            ariaHasPopup="None"
+            enabled="true"
+            iconDensityAware="true"
+            iconFirst="true"
+            text="Upload"
+            textDirection="Inherit"
+            type="Default"
+            width="200px"
+            press="onUploadButtonPress"
+        >
+            
+        </Button>
+       </VBox>
+    </VBox>
+</mvc:View>
