@@ -113,8 +113,8 @@
               <Text text="{MainModel>SignatureSignedBy}"></Text>
               <Text text="{MainModel>EmailAddr}"></Text>
               <Text text="{MainModel>EnergyPrgmParticipated}"></Text>
-              <Button text="Generate" press="onGenerateUrlPress" enabled="{MainModel>hasAttachment}"></Button>
-              <Button text="Download" press="onDownloadAttachmentPress"></Button>
+             <Button text="Generate" press="onGenerateUrlPress"></Button>
+              <Button text="Download" press="onDownloadAttachmentPress" enabled="{MainModel>hasAttachment}" ></Button>
               <Input value="{MainModel>Comment}" change="onUpdateField" type="Text" placeholder="Give your comment here"></Input>
               <Input value="{MainModel>AssignedTo}" change="onUpdateField" type="Text" placeholder="Enter assignee name"></Input>
               <Text text="{MainModel>UpdatedBy}"></Text>
