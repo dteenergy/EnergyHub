@@ -481,7 +481,7 @@ sap.ui.define([
        *  based on the selected LinkId and ApplicationNumber.
        */
       const filteredAppId = this.filterRecords(aAllRecords, appId, selectedLinkId, ApplicationNumber);
-      console.log(filteredAppId, 12345)
+
       // Get the VBox id (EnrollmentApplicationPage)
       const oVBox = this.byId("idApplicationVBox");
 
