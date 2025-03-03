@@ -34,6 +34,7 @@
       <SearchField id="idAppNumberFilter" placeholder="Search for Application Number..." liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
       <SearchField id="idFirstNameFilter" placeholder="Search for First Name..." liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
       <SearchField id="idLastNameFilter" placeholder="Search for Last Name..." liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
+      <SearchField id="idAssignedToSearch" placeholder="Search for Assigned To..." liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
       <ComboBox id="idApplicationStatusFilter" selectedKey="" placeholder="Select Application Status" selectionChange="onFilterChange" class="rightPaddingAlignment">
         <items>
           <core:Item key="" text="All"/>
@@ -63,6 +64,9 @@
           <Column width="150px"><header><Text text="Energy Program Participated" class="boldText"></Text></header></Column>
           <Column width="150px"><header><Text text="Consent Link" class="boldText"></Text></header></Column>
           <Column width="150px"><header><Text text="Attachment" class="boldText"></Text></header></Column>
+          <Column width="200px"><header><Text text="Comment" class="boldText"></Text></header></Column>
+          <Column width="200px"><header><Text text="Assigned To" class="boldText"></Text></header></Column>
+          <Column width="150px"><header><Text text="Updated By" class="boldText"></Text></header></Column>
           <!-- Additional columns marked as invisible -->
           <Column visible="false" width="150px"><header><Text text="Application CreatedAt" class="boldText"></Text></header></Column>
           <Column visible="false" width="150px"><header><Text text="Application UpdatedAt" class="boldText"></Text></header></Column>
@@ -109,8 +113,11 @@
               <Text text="{MainModel>SignatureSignedBy}"></Text>
               <Text text="{MainModel>EmailAddr}"></Text>
               <Text text="{MainModel>EnergyPrgmParticipated}"></Text>
-              <Button text="Generate" press="onGenerateUrlPress"></Button>
-              <Button text="Download" press="onDownloadAttachmentPress" enabled="{MainModel>hasAttachment}" ></Button>
+              <Button text="Generate" press="onGenerateUrlPress" enabled="{MainModel>hasAttachment}"></Button>
+              <Button text="Download" press="onDownloadAttachmentPress"></Button>
+              <Input value="{MainModel>Comment}" change="onUpdateField" type="Text" placeholder="Give your comment here"></Input>
+              <Input value="{MainModel>AssignedTo}" change="onUpdateField" type="Text" placeholder="Enter assignee name"></Input>
+              <Text text="{MainModel>UpdatedBy}"></Text>
               <Text text="{MainModel>AppCreatedAt}"></Text>
               <Text text="{MainModel>AppUpdatedAt}"></Text>
               <Text text="{MainModel>SignatureSignedDate}"></Text>
