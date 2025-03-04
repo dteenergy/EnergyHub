@@ -31,6 +31,8 @@ sap.ui.define([
         filteredFirstName,
         filteredLastName,
         filteredAssignedTo,
+        filteredStartDate,
+        filteredEndDate,
         tenantConsentFormURL,
         filteredAppIds
        } = this.getView().getViewData();
@@ -42,6 +44,8 @@ sap.ui.define([
       this.sLastName = filteredLastName;
       this.sAssignedTo = filteredAssignedTo;
       this.sApplicationStatus = filteredApplicationStatus;
+      this.sStartDate = filteredStartDate;
+      this.sEndDate = filteredEndDate;
       this.tenantConsentFormURL = tenantConsentFormURL;
 
       this.handleSessionExpiry(this.baseUrl);
@@ -117,6 +121,7 @@ sap.ui.define([
           filteredLastName: this.sLastName, filteredFirstName: this.sFirstName,
           filteredAssignedTo: this.sAssignedTo,
           filteredApplicationStatus: this.sApplicationStatus,
+          filteredStartDate: this.sStartDate, filteredEndDate: this.sEndDate,
           tenantConsentFormURL: this.tenantConsentFormURL
         },
         viewName: `dteenergyadminportal.view.EnrollmentApplicationPage`

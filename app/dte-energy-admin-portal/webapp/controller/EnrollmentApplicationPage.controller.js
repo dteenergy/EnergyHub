@@ -20,7 +20,9 @@ sap.ui.define([
      */
     onInit: function() {
       // Retrieve the base URL and filter data from the view's data
-      const { baseUrl, filteredApplicationNumber, filteredApplicationStatus, filteredFirstName, filteredLastName, filteredAssignedTo, tenantConsentFormURL} = this.getView().getViewData();
+      const { baseUrl, filteredApplicationNumber, filteredApplicationStatus,
+        filteredFirstName, filteredLastName, filteredAssignedTo,
+        tenantConsentFormURL, filteredStartDate, filteredEndDate } = this.getView().getViewData();
       this.baseUrl = baseUrl;
       this.sAppNumber = filteredApplicationNumber;
       this.sFirstName = filteredFirstName;
@@ -28,6 +30,8 @@ sap.ui.define([
       this.sAssignedTo = filteredAssignedTo;
       this.sApplicationStatus = filteredApplicationStatus;
       this.tenantConsentFormURL = tenantConsentFormURL;
+      this.sStartDate = filteredStartDate;
+      this.sEndDate = filteredEndDate;
 
       this.handleSessionExpiry(this.baseUrl);
 
@@ -37,6 +41,8 @@ sap.ui.define([
       if(!["", undefined].includes(this.sLastName)) this.byId("idLastNameFilter").setValue(this.sLastName);
       if(!["", undefined].includes(this.sAssignedTo)) this.byId("idAssignedToSearch").setValue(this.sAssignedTo);
       if(!["", undefined].includes(this.sApplicationStatus)) this.byId("idApplicationStatusFilter").setSelectedKey(this.sApplicationStatus);
+      if(!["", undefined].includes(this.sStartDate)) this.byId("idStartDatePicker").setValue(this.sStartDate);
+      if(!["", undefined].includes(this.sEndDate)) this.byId("idEndDatePicker").setValue(this.sEndDate);
       
       // Create an OData V4 model using the constructed service URL
       this.model = new sap.ui.model.odata.v4.ODataModel({
@@ -133,6 +139,8 @@ sap.ui.define([
       this.sLastName = this.byId("idLastNameFilter").getValue(); // Last Name Filter
       this.sAssignedTo = this.byId("idAssignedToSearch").getValue(); // Updated By Search
       this.sApplicationStatus = this.byId("idApplicationStatusFilter").getSelectedKey(); // Application Status Filter
+      this.sStartDate = this.byId("idStartDatePicker").getValue();
+      this.sEndDate = this.byId("idEndDatePicker").getValue();
 
       // Create an array for filters
       const aFilters = [];
@@ -172,6 +180,13 @@ sap.ui.define([
         aFilters.push(new Filter({path: "AssignedTo", operator: FilterOperator.Contains, value1: this.sAssignedTo, caseSensitive: false}));
 
       if (this.sApplicationStatus) aFilters.push(new Filter("ApplicationStatus", FilterOperator.EQ, this.sApplicationStatus));
+
+      if (this.sStartDate && this.sEndDate)
+        aFilters.push(new Filter("AppCreatedAt", FilterOperator.BT, this.sStartDate, this.sEndDate));
+      else if (this.sStartDate)
+        aFilters.push(new Filter("AppCreatedAt", FilterOperator.GE, this.sStartDate));
+      else if (this.sEndDate)
+        aFilters.push(new Filter("AppCreatedAt", FilterOperator.LE, this.sEndDate));
 
       // Combine filters with AND logic
       const oCombinedFilter = new Filter({
@@ -399,9 +414,9 @@ sap.ui.define([
         viewData: {
           baseUrl: this.baseUrl, AppId: AppId, ApplicationNumber: ApplicationNumber,
           FirstName: FirstName, LastName: LastName, filteredApplicationNumber: this.sAppNumber,
-          filteredApplicationStatus: this.sApplicationStatus,
-          filteredFirstName: this.sFirstName, filteredLastName: this.sLastName,
-          filteredAssignedTo: this.sAssignedTo,
+          filteredApplicationStatus: this.sApplicationStatus, filteredFirstName: this.sFirstName,
+          filteredLastName: this.sLastName, filteredAssignedTo: this.sAssignedTo,
+          filteredStartDate: this.sStartDate, filteredEndDate: this.sEndDate,
           tenantConsentFormURL : this.tenantConsentFormURL, filteredAppIds: filteredAppId
         },
         viewName: `dteenergyadminportal.view.BuildingDetailPage`
