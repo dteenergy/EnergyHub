@@ -86,8 +86,12 @@ sap.ui.define([
 
         },
 
-        onFileNameLinkPress : function (oEvent) {
-            console.log(oEvent);
+        onFileNameLinkPress : function (oEvent, sFileName, sFileType, sFileContent ) {
+            this.fileName = sFileName;
+            this.fileType = sFileType;
+            this.fileContent = sFileContent;
+
+            UploadSpreadsheetDialog.downloadSpreadsheetTemplate(this)
         }
 
     });

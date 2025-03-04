@@ -131,16 +131,11 @@ sap.ui.define([
          */
         downloadSpreadsheetTemplate: async function (that) {
             try {
-                // Url to create the enrollment application
-                const downloadSpreadsheetTemplateUrl = that.SERVERHOST + 'service/DownloadSpreadsheetTemplate';
-
-                // Post request to create a enrollment application.
-                const { data } = await axios.get(downloadSpreadsheetTemplateUrl);
-                
                 // Save spreadsheet template in client system
-                const file =`data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${data.value.file}`;
+                const file =`data:${that.fileType};base64,${that.fileContent}`;
+    
                 const a = document.createElement('a');
-                a.download = 'Data.xlsx';
+                a.download = that.fileName;
                 a.href = file;
                 a.click();
 

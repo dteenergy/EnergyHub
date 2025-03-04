@@ -1,5 +1,4 @@
-const fs = require('fs');
-const path = require('path');
+const cds = require('@sap/cds');
 
 /**
  * Download landlord spreadsheet template
@@ -8,13 +7,16 @@ const path = require('path');
  */
 const downloadSpreadsheetTemplate = async (req) => {
     try {
-        // Read spreadsheet template 
-        const filePath = path.join(__dirname,'../../template/Data.xlsx');
-        const templateFileContent = await fs.readFileSync(filePath,{encoding:'base64'});
+        const {Attachment} = cds.entities;
+
+        // get spreadsheet template 
+        const templateFile = await SELECT.one.from(Attachment);
+        console.log(templateFile, Attachment);
+        
 
         return {
             'statusCode' : '200',
-            'file' : templateFileContent
+            'file' : templateFile
           }
     } catch (error) {
         req.error({

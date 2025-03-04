@@ -16,7 +16,7 @@
             </columns>
             <items>
               <ColumnListItem id="idSpreadsheetTemplateColumnListItem" type="Active">
-                <Link text="{MainModel>fileName}" press="onFileNameLinkPress"/>
+                <Link text="{MainModel>fileName}" press=".onFileNameLinkPress($event, ${MainModel>fileName}, ${MainModel>fileType}, ${MainModel>fileContent})"/>
                 <Text text="{MainModel>CreatedAt}"></Text>
                 <Text text="{MainModel>UpdatedBy}"></Text>
                 <Text text="{MainModel>UpdatedAt}"></Text>

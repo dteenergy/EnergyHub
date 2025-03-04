@@ -123,6 +123,31 @@ sap.ui.define([
                 };
             };
             reader.readAsDataURL(that.spreadsheet);
+        },
+        /**
+         * Download spreadsheet template
+         * @param {Controller} that => Parent controller this instance
+         */
+        downloadSpreadsheetTemplate: async function (that) {
+            try {
+                // Url to create the enrollment application
+                const downloadSpreadsheetTemplateUrl = that.SERVERHOST + 'service/Attachment';
+
+                // Post request to create a enrollment application.
+                const { data } = await axios.get(downloadSpreadsheetTemplateUrl);
+                console.log(data.value[0]);
+                
+                if(data.value.length === 0) throw new Error('Content Not Found')
+                // Save spreadsheet template in client system
+                const file =`data:${data.value[0].filetype};base64,${data.value[0].fileContent}`;
+                const a = document.createElement('a');
+                a.download = data.value[0].fileName;
+                a.href = file;
+                a.click();
+
+            } catch (error) {
+                that.errorHandler(error);
+            }
         }
     };
 });
