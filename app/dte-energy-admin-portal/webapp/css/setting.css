@@ -1,0 +1,12 @@
+.template-upload-title{
+    font-size: 20px;
+    padding: 10px;
+}
+.upload-template-main-container{
+    width: 30%;
+    min-width: 450px;
+
+}
+.upload-dialog-content{
+    padding: 10px;
+}

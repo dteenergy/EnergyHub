@@ -36,11 +36,15 @@ sap.ui.define([
                             oFileUploader.setValueStateText("Only .xlsx files are allowed!");
                         },
                         change: function (oEvent) {
-                            that.spreadsheet = oEvent.getParameter("files")[0];                          
+                            that.spreadsheet = oEvent.getParameter("files")[0];      
+                            //Get attachment, only when spreadsheet file selected 
+                            if (that.spreadsheet) {
+                                // Reset value state on valid file selection
+                                const oFileUploader = oEvent.getSource();
+                                oFileUploader.setValueState("None");
 
-                            // Reset value state on valid file selection
-                            const oFileUploader = oEvent.getSource();
-                            oFileUploader.setValueState("None");
+                                that.getAttachment();
+                            }
                         },
                         width: '100%'
                     }).addStyleClass("upload-dialog-file-uploader"),
@@ -49,34 +53,33 @@ sap.ui.define([
 
             // Customize content of the dialog for Upload Spreadsheet
             const dialogContent = new sap.m.FlexBox({
+                direction:'Column',
                 items: [
-                    new sap.m.FormattedText({ htmlText: "<p style='letter-spacing: .7px; font-size: 14px; font-weigt: 400; margin-bottom: 0;'> Lorem ipsum dolor sit amet consectetur. Neque bibendum ultrices sit mattis sit elit. </p>" }),
-
                     fileUploadContainer,
                 
                     // Upload buttton element
                     new sap.m.Button({
                         text: 'Upload',
                         type: sap.m.ButtonType.Emphasized,
-                        press: function () {                            
+                        press: function () {  
                             //Allow upload press, only when spreadsheet file selected 
                             if (that.spreadsheet) {
                                 that.oUploadDialog.close();
-                                that.getAttachment();
-                            }
+                                that.handleUploadSpreadsheet();
+                            }                
                         }
                     }).addStyleClass("dialog-submit-action")
                 ],
             });
 
             // Add the class for the dialog content
-            dialogContent.addStyleClass("confirmation-dialog-content upload-dialog-content");
+            dialogContent.addStyleClass("upload-dialog-content");
 
             // Custom header for the dialog
             const dialogTitle = new sap.m.Bar({
                 contentMiddle: [
                     new sap.m.Text({
-                        text: 'Upload Spreadsheet'
+                        text: 'Upload Spreadsheet Template'
                     }).addStyleClass("alert-title")
                 ],
                 contentRight: [
@@ -98,7 +101,7 @@ sap.ui.define([
                 that.oUploadDialog = new Dialog({
                     customHeader: dialogTitle,
                     content: dialogContent
-                }).addStyleClass("dialog-main-container");
+                }).addStyleClass("upload-template-main-container");
             }
 
             that.oUploadDialog.open();

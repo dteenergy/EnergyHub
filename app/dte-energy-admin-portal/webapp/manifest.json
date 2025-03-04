@@ -86,6 +86,9 @@
         },
         {
           "uri": "css/home.css"
+        },
+        {
+          "uri": "css/setting.css"
         }
       ],
       "js": [

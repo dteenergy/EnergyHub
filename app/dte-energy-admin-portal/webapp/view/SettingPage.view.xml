@@ -4,32 +4,26 @@
           xmlns="sap.m">
     <VBox class="paddingAlignment">
        <VBox class="uploadConatiner">
-           <Text
-               emptyIndicatorMode="Off"
-               renderWhitespace="false"
-               text="Spreadsheet Template"
-               textAlign="Begin"
-               textDirection="Inherit"
-               width="150px"
-               wrapping="true"
-               wrappingType="Normal"
-           >  
+           <Text id="idSpreadsheetTemplateText" class='template-upload-title' text="Spreadsheet Template">  
            </Text>
-       
-        <Button
-            activeIcon=""
-            ariaHasPopup="None"
-            enabled="true"
-            iconDensityAware="true"
-            iconFirst="true"
-            text="Upload"
-            textDirection="Inherit"
-            type="Default"
-            width="200px"
-            press="onUploadButtonPress"
-        >
-            
-        </Button>
+        <Table id="idSpreadsheetTemplateTable" items="{MainModel>/Attachment}" sticky="ColumnHeaders" width="100%">
+            <columns>
+                <Column width="150px"><header><Text text="Name" class="boldText"></Text></header></Column>
+                <Column width="150px"><header><Text text="CreatedAt" class="boldText"></Text></header></Column>
+                <Column width="150px"><header><Text text="UpdatedBy" class="boldText"></Text></header></Column>
+                <Column width="150px"><header><Text text="UpdatedAt" class="boldText"></Text></header></Column>
+                <Column width="150px"><header><Button id="idUploadSpreadsheetTemplateButton" text="Upload" press="onUploadButtonPress" visible="false"></Button></header></Column>
+            </columns>
+            <items>
+              <ColumnListItem id="idSpreadsheetTemplateColumnListItem" type="Active">
+                <Link text="{MainModel>fileName}" press="onFileNameLinkPress"/>
+                <Text text="{MainModel>CreatedAt}"></Text>
+                <Text text="{MainModel>UpdatedBy}"></Text>
+                <Text text="{MainModel>UpdatedAt}"></Text>
+                <Button icon="sap-icon://edit" press=".onUploadButtonPress($event, ${MainModel>AttachmentId})"></Button>
+              </ColumnListItem>
+            </items>
+        </Table>
        </VBox>
     </VBox>
 </mvc:View>

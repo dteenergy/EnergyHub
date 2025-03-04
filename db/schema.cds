@@ -95,9 +95,13 @@ entity ApplicationConsent {
 
 entity Attachment{
     key AttachmentId : UUID;
+    fileContent : LargeString not null @Core.MediaType : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        @Core.ContentDisposition : 
+        {
+            Filename : fileName
+        };
     fileName: String @assert.format : '\.xlsx$' @mandatory;
     fileType: String @mandatory;
-    fileContent : LargeBinary not null;
     UpdatedBy : String  @cds.on.insert: $user @cds.on.update: $user;
     CreatedAt: Timestamp @cds.on.insert: $now;
     UpdatedAt: Timestamp @cds.on.insert: $now  @cds.on.update: $now;
