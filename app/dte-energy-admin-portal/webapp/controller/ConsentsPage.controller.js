@@ -65,6 +65,10 @@ sap.ui.define([
 
         // Apply the filter
         if (oBinding) oBinding.filter(new sap.ui.model.Filter({ filters: oFilter, and: false }));
+
+        // Create a sorter for sorting by 'ApplicationNumber' in ascending order (false means ascending)
+        const oSorter = new sap.ui.model.Sorter("ApplicationNumber", false, null);
+        oBinding.sort([oSorter]); // Apply the sorting to the binding
       }
     },
 
