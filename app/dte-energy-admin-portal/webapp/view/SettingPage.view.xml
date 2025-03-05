@@ -1,29 +1,9 @@
-<mvc:View xmlns:unified="sap.ui.unified" xmlns:tnt="sap.tnt" 
-            controllerName="dteenergyadminportal.controller.SettingPage"
+<mvc:View xmlns:core="sap.ui.core"
+          controllerName="dteenergyadminportal.controller.SettingPage"
           xmlns:mvc="sap.ui.core.mvc"
           xmlns="sap.m">
     <VBox class="paddingAlignment">
-       <VBox class="uploadConatiner">
-           <Text id="idSpreadsheetTemplateText" class='template-upload-title' text="Spreadsheet Template">  
-           </Text>
-        <Table id="idSpreadsheetTemplateTable" items="{MainModel>/Attachment}" sticky="ColumnHeaders" width="100%">
-            <columns>
-                <Column width="150px"><header><Text text="Name" class="boldText"></Text></header></Column>
-                <Column width="150px"><header><Text text="CreatedAt" class="boldText"></Text></header></Column>
-                <Column width="150px"><header><Text text="UpdatedBy" class="boldText"></Text></header></Column>
-                <Column width="150px"><header><Text text="UpdatedAt" class="boldText"></Text></header></Column>
-                <Column width="150px"><header><Button id="idUploadSpreadsheetTemplateButton" text="Upload" press="onUploadButtonPress" visible="false"></Button></header></Column>
-            </columns>
-            <items>
-              <ColumnListItem id="idSpreadsheetTemplateColumnListItem" type="Active">
-                <Link text="{MainModel>fileName}" press=".onFileNameLinkPress($event, ${MainModel>fileName}, ${MainModel>fileType}, ${MainModel>fileContent})"/>
-                <Text text="{MainModel>CreatedAt}"></Text>
-                <Text text="{MainModel>UpdatedBy}"></Text>
-                <Text text="{MainModel>UpdatedAt}"></Text>
-                <Button icon="sap-icon://edit" press=".onUploadButtonPress($event, ${MainModel>AttachmentId})"></Button>
-              </ColumnListItem>
-            </items>
-        </Table>
-       </VBox>
+      <!-- Upload Spreadsheet Template Table-->
+      <core:Fragment fragmentName="dteenergyadminportal.fragment.SpreadsheetUploadTable" type="XML"></core:Fragment>
     </VBox>
 </mvc:View>

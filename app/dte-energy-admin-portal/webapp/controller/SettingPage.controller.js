@@ -21,13 +21,17 @@ sap.ui.define([
             // Create an OData V4 model using the constructed service URL
             this.setModel();
 
-            await this.handleUploadBtnEnable();
+            await this.handleUploadBtnVisble();
         },
-        handleUploadBtnEnable : async function() {
+        /**
+         * Handle upload button visible
+         */
+        handleUploadBtnVisble : async function() {
             try {
                 const url = `${this.baseUrl}admin/service/Attachment`;
                 const result = await axios.get(url);
-                console.log(result, !result?.data?.value || result.data.value.length === 0);
+            
+
                 // Disable upload button when Attachment has value
                 if(result.status == 200 && result.data.value.length === 0)  this.uploadButton.setVisible(true);            
             } catch (error) {
@@ -50,12 +54,22 @@ sap.ui.define([
             }
         },
 
+        /**
+         * Handle upload/edit button press event
+         * @param {Event} oEvent 
+         * @param {String} sAttachmentId 
+         */
         onUploadButtonPress: function (oEvent, sAttachmentId) {
+            // Render upload dialog
             UploadSpreadsheetDialog.render(this);
            this.attachmentId = sAttachmentId;
             
         },
+        /**
+         * Get attachment from upload dialog
+         */
         getAttachment: function () {
+            // Read file and covert into attachment object
             UploadSpreadsheetDialog.readFile(this);
         },
         /**
@@ -68,12 +82,15 @@ sap.ui.define([
                 console.log(url);
 
                 let result = null;
+
+                /**
+                 * Decide either creat file or update file by attachment id existence
+                 */
                 if(this.attachmentId){
-                    result = await axios.put(`${url}(${this.attachmentId})`, attachment);  
+                    result = await axios.put(`${url}(${this.attachmentId})`, attachment);   // Update file
                 }else{
-                    result = await axios.post(url, attachment);
+                    result = await axios.post(url, attachment); // Create new file
                 }
-                console.log(result);
                 
                 if ([200, 201].includes(result.status)) {
                     MessageBox.success("Template upload successfully");
@@ -86,11 +103,19 @@ sap.ui.define([
 
         },
 
+        /**
+         * Download file When file name press event
+         * @param {Event} oEvent 
+         * @param {String} sFileName 
+         * @param {String} sFileType 
+         * @param {LargeString} sFileContent 
+         */
         onFileNameLinkPress : function (oEvent, sFileName, sFileType, sFileContent ) {
             this.fileName = sFileName;
             this.fileType = sFileType;
             this.fileContent = sFileContent;
 
+            // Download file 
             UploadSpreadsheetDialog.downloadSpreadsheetTemplate(this)
         }
 
