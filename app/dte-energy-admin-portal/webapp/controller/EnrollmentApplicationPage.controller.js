@@ -181,12 +181,22 @@ sap.ui.define([
 
       if (this.sApplicationStatus) aFilters.push(new Filter("ApplicationStatus", FilterOperator.EQ, this.sApplicationStatus));
 
-      if (this.sStartDate && this.sEndDate)
-        aFilters.push(new Filter("AppCreatedAt", FilterOperator.BT, this.sStartDate, this.sEndDate));
+      if (this.sStartDate && this.sEndDate) {
+        let adjustedEndDate = new Date(this.sEndDate);
+        adjustedEndDate.setHours(23, 59, 59, 999); // Set end date to the last millisecond of the day
+        adjustedEndDate = adjustedEndDate.getTime(); // Convert to timestamp for comparison
+
+        aFilters.push(new Filter("AppCreatedAt", FilterOperator.BT, this.sStartDate, adjustedEndDate));
+      }
       else if (this.sStartDate)
         aFilters.push(new Filter("AppCreatedAt", FilterOperator.GE, this.sStartDate));
-      else if (this.sEndDate)
-        aFilters.push(new Filter("AppCreatedAt", FilterOperator.LE, this.sEndDate));
+      else if (this.sEndDate) {
+        let adjustedEndDate = new Date(this.sEndDate);
+        adjustedEndDate.setHours(23, 59, 59, 999); // Set end date to the last millisecond of the day 
+        adjustedEndDate = adjustedEndDate.getTime(); // Convert to timestamp for comparison
+
+        aFilters.push(new Filter("AppCreatedAt", FilterOperator.LE, adjustedEndDate));
+      }
 
       // Combine filters with AND logic
       const oCombinedFilter = new Filter({
@@ -379,6 +389,8 @@ sap.ui.define([
      * @public
      */
     navToBuildingDetailPage: async function (oEvent) {
+      this.handleSessionExpiry(this.baseUrl);
+
       // Get the selected row's binding context
       const oSelectedItem = oEvent.getSource();
       const oContext = oSelectedItem.getBindingContext("MainModel");
@@ -458,6 +470,8 @@ sap.ui.define([
      * @public
      */
     navToConsentPage: async function(oEvent) {
+      this.handleSessionExpiry(this.baseUrl);
+
       // Retrieve the button and its parent list item
       const oButton = oEvent.getSource();
       const oListItem = oButton.getParent();
