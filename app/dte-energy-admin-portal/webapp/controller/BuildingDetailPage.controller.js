@@ -31,6 +31,8 @@ sap.ui.define([
         filteredFirstName,
         filteredLastName,
         filteredAssignedTo,
+        filteredStartDate,
+        filteredEndDate,
         tenantConsentFormURL,
         filteredAppIds
        } = this.getView().getViewData();
@@ -42,6 +44,8 @@ sap.ui.define([
       this.sLastName = filteredLastName;
       this.sAssignedTo = filteredAssignedTo;
       this.sApplicationStatus = filteredApplicationStatus;
+      this.sStartDate = filteredStartDate;
+      this.sEndDate = filteredEndDate;
       this.tenantConsentFormURL = tenantConsentFormURL;
 
       this.handleSessionExpiry(this.baseUrl);
@@ -69,11 +73,15 @@ sap.ui.define([
       const oTable = this.byId("idBuildingTable");
       const oBinding = oTable.getBinding("items");
 
-      // Apply filters to show only relevant AppIds
+      // Create an array of filter objects for each AppId in the filteredAppIds array
       const aFilters = filteredAppIds.map(appId => new sap.ui.model.Filter("AppId", sap.ui.model.FilterOperator.EQ, appId));
 
-      // Apply filtering and sorting
-      filteredAppIds.map(appId => new sap.ui.model.Filter("AppId", sap.ui.model.FilterOperator.EQ, appId))
+      // Apply the filters to the binding of the table if the binding exists
+      if (oBinding) oBinding.filter(new sap.ui.model.Filter({ filters: aFilters, and: false }));
+
+      // Create a sorter for sorting by 'ApplicationNumber' in ascending order (false means ascending)
+      const oSorter = new sap.ui.model.Sorter("ApplicationNumber", false, null);
+      oBinding.sort([oSorter]); // Apply the sorting to the binding
     },
     /**
      * Opens the personalization dialog for the building table.
@@ -104,6 +112,8 @@ sap.ui.define([
      * @public
      */
     navToApplication: function () {
+      this.handleSessionExpiry(this.baseUrl);
+
       // Get the VBox id (EnrollmentApplicationPage)
       const oVBox = this.byId("idBuildingVBox");
 
@@ -117,6 +127,7 @@ sap.ui.define([
           filteredLastName: this.sLastName, filteredFirstName: this.sFirstName,
           filteredAssignedTo: this.sAssignedTo,
           filteredApplicationStatus: this.sApplicationStatus,
+          filteredStartDate: this.sStartDate, filteredEndDate: this.sEndDate,
           tenantConsentFormURL: this.tenantConsentFormURL
         },
         viewName: `dteenergyadminportal.view.EnrollmentApplicationPage`
