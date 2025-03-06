@@ -17,6 +17,7 @@ const getMailAccessToken = async (tokenUrl, clientId, clientSecret, scope) => {
         'client_secret': clientSecret,
         // 'scope':scope
         'scope': "https://outlook.office365.com/.default"
+        // scope: "https://graph.microsoft.com/.default"
       }),
 
       {
@@ -25,6 +26,9 @@ const getMailAccessToken = async (tokenUrl, clientId, clientSecret, scope) => {
         }
       }
     );
+
+    // console.log(data.access_token);
+    
     
     // Return the access token
     return data.access_token;
@@ -32,7 +36,7 @@ const getMailAccessToken = async (tokenUrl, clientId, clientSecret, scope) => {
     console.log(error);
     
     // Throw an error with the response data if available, otherwise the error message
-    throw error?.response ? error.response.data : error;
+    throw error?.data;
   }
 };
 

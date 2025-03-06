@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 
-const {getDestinations, getAccessToken} = require('./get-destination');
-const {getMailAccessToken} = require('./get-mail-access-token');
+const {getDestination, getDestinationServiceAccessToken} = require('../automated-mail/get-destination');
+const {getMailAccessToken} = require('../automated-mail/get-mail-access-token');
 
  /**
  * Method to send a mail
@@ -12,14 +12,14 @@ const sendEmail = async(req, res)=>{
   try{
 
     // To get the destination service access_token 
-    const access_token = await getAccessToken();
+    const access_token = await getDestinationServiceAccessToken();
     
     // Retrieve the destination from SAP BTP
-    const destinationResponse = await getDestinations(access_token);    
+    const destinationResponse = await getDestination(access_token);  
 
     const {tokenServiceURL, clientId, clientSecret, scope} = destinationResponse;    
 
-    // Using the destination's auth credentials get the access token
+    // Using the destination's auth credentials,get the access token
     const mailAccessToken = await getMailAccessToken(tokenServiceURL, clientId, clientSecret, scope);
 
     // Mail transporter configuration
@@ -65,7 +65,7 @@ const sendEmail = async(req, res)=>{
   }catch(err){
     console.log(err);
     
-    res.json({"Message": err.message});
+    res.json({"Message": err?.message});
   }
 
 };

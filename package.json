@@ -7,8 +7,6 @@
 	"private": true,
 	"dependencies": {
 		"@cap-js/postgres": "^1.10.4",
-		"@sap-cloud-sdk/connectivity": "^3.26.1",
-		"@sap-cloud-sdk/mail-client": "^3.24.0",
 		"@sap/cds": "^8.5.1",
 		"@sap/cds-dk": "^8.4.2",
 		"@sap/xsenv": "^5.4.0",
@@ -66,12 +64,6 @@
 								"Administrator"
 							]
 						}
-					}
-				},
-				"mailService": {
-					"kind": "rest",
-					"credentials": {
-						"destination": "sap_process_automation_mail"
 					}
 				}
 			}
