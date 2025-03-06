@@ -113,6 +113,7 @@ modules:
         name: dteConsentAppPortal-srv
         url: ~{srv-url}
 
+#App
 - name: dteConsentAppPortal-destination-content
   type: com.sap.application.content
   requires:
@@ -128,6 +129,10 @@ modules:
     parameters:
       service-key:
         name: dteConsentAppPortal-auth-key
+  - name: MalwareScanning
+    parameters:
+      service-key:
+        name: MalwareScanning_Key
   parameters:
     content:
       instance:
@@ -148,10 +153,14 @@ modules:
           URL: ~{srv-api/srv-url}
           forwardAuthToken: false
           sap.cloud.service: dteConsentAppPortal
+        - Name: dteConsentAppPortal-malwarescanner-dest
+          ServiceInstanceName: MalwareScanning
+          ServiceKeyName: MalwareScanning_Key
         existing_destinations_policy: ignore
   build-parameters:
     no-source: true
 
+# App
 - name: dteConsentAppPortal-app-content
   type: com.sap.application.content
   path: .
@@ -171,6 +180,7 @@ modules:
       name: dteenergyadminportal
       target-path: resources/
 
+# DB
 - name: dteConsentAppPortal-db-deployer
   type: nodejs
   path: gen/pg
@@ -184,6 +194,7 @@ modules:
     - command: npm start
       name: deploy-to-postgresql
 
+# Form HTML5
 - name: dteconsentappclient
   type: html5
   path: app/dteconsentappclient
@@ -195,6 +206,7 @@ modules:
     - npm run build:cf
     supported-platforms: []
 
+# Admin HTML5
 - name: dteenergyadminportal
   type: html5
   path: app/dte-energy-admin-portal
@@ -206,8 +218,9 @@ modules:
     - npm run build:cf
     supported-platforms: []
 
-
 resources:
+
+#Destination
 - name: dteConsentAppPortal-destination-service
   type: org.cloudfoundry.managed-service
   parameters:
@@ -226,22 +239,36 @@ resources:
     service: destination
     service-name: dteConsentAppPortal-destination-service
     service-plan: lite
+
+# HTML5 Apps Repo : App Host
 - name: dteConsentAppPortal_html_repo_host
   type: org.cloudfoundry.managed-service
   parameters:
     service: html5-apps-repo
     service-name: dteConsentAppPortal-html5-app-host-service
     service-plan: app-host
-- name: PostgreSQL-Reference
-  type: org.cloudfoundry.managed-service
-  parameters:
-    service: postgresql-db
-    service-plan: reference
+# HTML5 Apps Repo : App Runtime
 - name: dteConsentAppPortal_html5-app-repo-runtime
   type: org.cloudfoundry.managed-service
   parameters:
     service-plan: app-runtime
     service: html5-apps-repo
+
+#Postgresql DB
+- name: PostgreSQL-Reference
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: postgresql-db
+    service-plan: reference
+
+#SAP Malware Scanning Service
+- name: MalwareScanning
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: malware-scanner
+    service-plan: clamav
+
+#XSUAA
 - name: dteConsentAppPortal-auth
   type: org.cloudfoundry.managed-service
   parameters:

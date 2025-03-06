@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const dotenvExpand = require('dotenv-expand');
 
 const {verifyReCAPTCHA} = require('./middleware/verify-recaptcha');
+const malwareScanner = require('./utils/malware-scanner');
 
 //Expand .env configuration to support variables
 const dotenvConfig = dotenv.config();
