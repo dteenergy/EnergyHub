@@ -49,7 +49,6 @@ sap.ui.define([
 
             // Customize content of the dialog for Upload Spreadsheet
             const dialogContent = new sap.m.FlexBox({
-                direction:'Column',
                 width : '100%',
                 items: [
                     new sap.m.FormattedText({ htmlText: "<p style='letter-spacing: .7px; font-size: 14px; font-weigt: 400; margin-bottom: 0;'> Please upload additional building information that may be needed once enrollment has been verified </p>" }),
