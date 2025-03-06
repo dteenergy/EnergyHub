@@ -112,6 +112,8 @@ sap.ui.define([
      * @public
      */
     navToApplication: function () {
+      this.handleSessionExpiry(this.baseUrl);
+
       // Get the VBox id (EnrollmentApplicationPage)
       const oVBox = this.byId("idBuildingVBox");
 
