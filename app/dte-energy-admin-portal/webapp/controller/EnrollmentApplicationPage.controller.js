@@ -311,7 +311,7 @@ sap.ui.define([
          a.href = data.value.file.url;
          a.click();
       } catch (error) {
-        MessageBox.error("Failed to download attachment.")
+        MessageBox.error("Failed to download attachment.");
       }
     },
     /**

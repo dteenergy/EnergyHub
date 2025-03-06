@@ -135,7 +135,6 @@ sap.ui.define([
 
                 // Post request to create a enrollment application.
                 const { data } = await axios.get(downloadSpreadsheetTemplateUrl);
-                console.log(data.value[0]);
                 
                 if(data.value.length === 0) throw new Error('Content Not Found')
                 // Save spreadsheet template in client system
@@ -146,7 +145,7 @@ sap.ui.define([
                 a.click();
 
             } catch (error) {
-                that.errorHandler(error);
+                MessageBox.error("Failed to download attachment.")
             }
         }
     };

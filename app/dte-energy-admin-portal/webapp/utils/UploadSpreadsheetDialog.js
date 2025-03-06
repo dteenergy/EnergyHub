@@ -8,7 +8,7 @@ sap.ui.define([
     "use strict";
     return {
         /**
-         * Render upload spreadsheet dialog
+         * Render upload spreadsheet Template dialog
          * @param {Controller} that => Parent controller this instance
          */
         render: function (that) {
@@ -51,7 +51,7 @@ sap.ui.define([
                 ]
             }) 
 
-            // Customize content of the dialog for Upload Spreadsheet
+            // Customize content of the dialog for Upload Spreadsheet Template
             const dialogContent = new sap.m.FlexBox({
                 direction:'Column',
                 items: [
@@ -96,7 +96,7 @@ sap.ui.define([
             // Add the class for the dialog content
             dialogTitle.addStyleClass("confirmation-dialog-title");
 
-            // Open the upload spreadsheet dialog while submit pressed
+            // Open the upload spreadsheet Template dialog while submit pressed
             if (!that.oUploadDialog) {
                 that.oUploadDialog = new Dialog({
                     customHeader: dialogTitle,
@@ -140,7 +140,7 @@ sap.ui.define([
                 a.click();
 
             } catch (error) {
-                that.errorHandler(error);
+                MessageBox.error("Failed to download attachment.")
             }
         }
     };

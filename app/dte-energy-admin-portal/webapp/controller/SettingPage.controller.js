@@ -79,7 +79,6 @@ sap.ui.define([
             try {
                 const url = `${this.baseUrl}admin/service/Attachment`;
                 const attachment = this.attachment;
-                console.log(url);
 
                 let result = null;
 
@@ -93,7 +92,7 @@ sap.ui.define([
                 }
                 
                 if ([200, 201].includes(result.status)) {
-                    MessageBox.success("Template upload successfully");
+                    MessageBox.success("Template uploaded successfully");
                     this.setModel();
                     this.uploadButton.setVisible(false);
                 }
