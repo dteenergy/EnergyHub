@@ -168,6 +168,7 @@ sap.ui.define([
             filters: aApplicationFilters,
             and: false 
         });
+        aFilters.push(oApplicationFilter);
       }
 
       if (this.sFirstName)
