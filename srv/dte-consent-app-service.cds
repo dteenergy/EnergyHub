@@ -8,7 +8,7 @@ service DTEConsentAppPortal {
     entity AccountDetail as projection on db.AccountDetail;
     entity BuildingDetail as projection on db.BuildingDetail;
     entity ApplicationConsent as projection on db.ApplicationConsent;
-    entity Attachment as projection on db.Attachment;
+    entity Attachment as projection on db.Attachment limit 1;
     
     action CreateEnrollmentFormDetail(
         ApplicationDetail : ApplicationDetail @mandatory,
@@ -27,7 +27,4 @@ service DTEConsentAppPortal {
 
     // Get environment variable (AEM Navigation page url and address validation url)
     function getEnvironmentVariables () returns String;
-
-    // Download landlord location template spreadsheet template
-    function DownloadSpreadsheetTemplate () returns LargeBinary;
 };

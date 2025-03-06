@@ -86,6 +86,9 @@
         },
         {
           "uri": "css/home.css"
+        },
+        {
+          "uri": "css/setting.css"
         }
       ],
       "js": [
@@ -128,7 +131,7 @@
     "config": {
       "routerConfig": {
         "localApi": {
-          "uri": "https://port4004-workspaces-ws-25hxf.us20.applicationstudio.cloud.sap/"
+          "uri": "https://port4004-workspaces-ws-m8j8p.us20.applicationstudio.cloud.sap/"
         },
         "productionApi": {
           "uri": ""

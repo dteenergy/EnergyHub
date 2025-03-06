@@ -100,7 +100,11 @@ service DTEEnergyAdminPortal {
     to: 'Administrator'
     }]) as projection on db.AccountDetail;
 
-  entity Attachment as projection on db.Attachment;
+  entity Attachment @(restrict: [{
+    grant: ['READ', 
+    'CREATE', 'UPDATE'], 
+    to: 'Administrator'
+    }]) as projection on db.Attachment limit 1;
 
   /** 
    * Action to link applications together
