@@ -52,7 +52,7 @@ sap.ui.define([
                 direction:'Column',
                 width : '100%',
                 items: [
-                    new sap.m.FormattedText({ htmlText: "<p style='letter-spacing: .7px; font-size: 14px; font-weigt: 400; margin-bottom: 0;'> Lorem ipsum dolor sit amet consectetur. Neque bibendum ultrices sit mattis sit elit. </p>" }),
+                    new sap.m.FormattedText({ htmlText: "<p style='letter-spacing: .7px; font-size: 14px; font-weigt: 400; margin-bottom: 0;'> Please upload additional building information that may be needed once enrollment has been verified </p>" }),
 
                     fileUploadContainer,
                 
