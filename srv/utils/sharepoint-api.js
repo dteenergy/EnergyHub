@@ -64,7 +64,6 @@ const uploadFile = async (attachment) => {
 
         await malwareScanner.scanfile(data.toString('binary'));
 
-
         // Http request config
         const config = {
             method: 'post',

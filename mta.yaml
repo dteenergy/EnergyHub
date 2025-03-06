@@ -156,7 +156,7 @@ modules:
         - Name: dteConsentAppPortal-malwarescanner-dest
           ServiceInstanceName: MalwareScanning
           ServiceKeyName: MalwareScanning_Key
-        existing_destinations_policy: ignore
+        existing_destinations_policy: update
   build-parameters:
     no-source: true
 

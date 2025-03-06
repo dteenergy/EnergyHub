@@ -1,4 +1,5 @@
 const cds = require('@sap/cds');
+const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const dotenvExpand = require('dotenv-expand');
 
@@ -10,6 +11,8 @@ const dotenvConfig = dotenv.config();
 dotenvExpand.expand(dotenvConfig);
 
 cds.on('bootstrap', async (app) => {
+  // Middleware to parse JSON with an increased limit (e.g., 5MB) 
+  app.use(bodyParser.json({ limit: '5mb' })); 
 
   app.use((req, res, next) => {
     const corsAllowOrigins = JSON.parse(process.env.CORS_ALLOW_ORIGINS || '[]');
