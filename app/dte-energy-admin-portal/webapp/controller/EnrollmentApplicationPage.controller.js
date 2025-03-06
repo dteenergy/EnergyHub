@@ -168,6 +168,7 @@ sap.ui.define([
             filters: aApplicationFilters,
             and: false 
         });
+        aFilters.push(oApplicationFilter);
       }
 
       if (this.sFirstName)
@@ -321,7 +322,7 @@ sap.ui.define([
          a.href = data.value.file.url;
          a.click();
       } catch (error) {
-        BaseController.errorHandler(error)
+        MessageBox.error("Failed to download attachment.");
       }
     },
     /**

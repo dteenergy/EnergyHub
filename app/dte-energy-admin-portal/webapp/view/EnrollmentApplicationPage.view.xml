@@ -60,7 +60,7 @@
           <Column width="150px"><header><Text text="Linked Id" class="boldText"></Text></header></Column>
           <Column width="150px"><header><Text text="Application Status" class="boldText"></Text></header></Column>
           <Column width="150px"><header><Text text="Number of Tenants" class="boldText"></Text></header></Column>
-          <Column width="150px"><header><Text text="Number of Consents Recieved" class="boldText"></Text></header></Column>
+          <Column width="150px"><header><Text text="Number of Consents Received" class="boldText"></Text></header></Column>
           <Column width="150px"><header><Text text="Signed By" class="boldText"></Text></header></Column>
           <Column width="150px"><header><Text text="Email Address" class="boldText"></Text></header></Column>
           <Column width="150px"><header><Text text="Energy Program Participated" class="boldText"></Text></header></Column>

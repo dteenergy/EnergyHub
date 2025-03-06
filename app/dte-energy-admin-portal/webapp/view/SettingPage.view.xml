@@ -1,0 +1,9 @@
+<mvc:View xmlns:core="sap.ui.core"
+          controllerName="dteenergyadminportal.controller.SettingPage"
+          xmlns:mvc="sap.ui.core.mvc"
+          xmlns="sap.m">
+    <VBox class="paddingAlignment">
+      <!-- Upload Spreadsheet Template Table-->
+      <core:Fragment fragmentName="dteenergyadminportal.fragment.SpreadsheetUploadTable" type="XML"></core:Fragment>
+    </VBox>
+</mvc:View>
