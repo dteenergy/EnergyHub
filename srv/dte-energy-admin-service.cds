@@ -1,11 +1,11 @@
 using {dteConsentApp as db} from '../db/schema';
 
 @path : '/admin/service'
-@impl : './handler/admin-handler.js'
+@impl : './handler/admin/admin-handler.js'
 service DTEEnergyAdminPortal {
 
   entity ApplicationDetail  @(restrict: [{
-    grant: ['READ', 'UPDATE', 'GenerateUrl', 'GetEnvironmentVariables'], 
+    grant: ['READ', 'UPDATE', 'GenerateUrl', 'GetEnvironmentVariables','DownloadAttachment'], 
     to: 'Administrator'
     }]) as projection on db.ApplicationDetail {
     AppId,
@@ -34,13 +34,20 @@ service DTEEnergyAdminPortal {
     ApplicationStatus,
     NoOfConsentReceived,
     ApplicationNumber,
+    LinkId,
+    Comment,
+    AssignedTo,
+    UpdatedBy,
+    hasAttachment,
+    AttachmentURL,
     SignatureSignedBy,
     SignatureSignedDate,
     UpdatedAt as AppUpdatedAt,
     CreatedAt as AppCreatedAt
-  } order by AppCreatedAt desc
+  }
   actions{
     function GenerateUrl() returns String;
+    function DownloadAttachment () returns String;
   } function GetEnvironmentVariables() returns String;
 
   entity ApplicationConsent @(restrict: [{
@@ -85,12 +92,37 @@ service DTEEnergyAdminPortal {
     AppRefId.AppId,
     AppRefId.AccountDetailRefId.FirstName,
     AppRefId.AccountDetailRefId.LastName,
+    AppRefId.ApplicationNumber
   };
 
   entity AccountDetail @(restrict: [{
     grant: ['READ'], 
     to: 'Administrator'
     }]) as projection on db.AccountDetail;
+
+  entity Attachment @(restrict: [{
+    grant: ['READ', 
+    'CREATE', 'UPDATE'], 
+    to: 'Administrator'
+    }]) as projection on db.Document limit 1;
+
+  /** 
+   * Action to link applications together
+   * and returns a success message or an error message.
+   */
+  action Link(
+    selectedAppNumber: String,
+    selectedApplicationNumbers: array of String
+  ) returns String;
+
+  /** 
+   * Action to unlink applications from a parent application
+   * and returns a success message or an error message.
+   */
+  action UnLink(
+    selectedAppNumber: String,
+    selectedApplicationNumbers: array of String
+  ) returns String;
   
 }
 

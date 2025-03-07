@@ -149,7 +149,14 @@
                         </VBox>
                     </VBox>
 
-                    <Button id="add-building-detail" text=" + Add Another Location" press="onAddAnotherLocation" class="customize-button outline-button" ></Button>
+                   <!-- Location information Button -->
+                   <VBox id="location-info-btn-container" fitContainer="true" width="100%" class="location-info-btn-container">
+                        <!-- Add Another Location Button -->
+                        <Button id="add-building-detail" text=" + Add Another Location" press="onAddAnotherLocation" class="customize-button outline-button" ></Button>
+
+                        <!-- Upload Spreadsheet -->
+                        <core:Fragment fragmentName="dteconsentappclient.fragment.UploadSpreadsheet" type="XML"></core:Fragment>
+                   </VBox>
 
                     <!-- Enrollment form customer authorization -->
                     <VBox id="auth-info-container" fitContainer="true" width="100%" class="auth-contact-info-container">
@@ -188,6 +195,10 @@
                         <Title id="auth-and-release-title" text="Customer Authorization and Release" class="form-segment-heading" titleStyle="H6" wrapping="true" />
                     </VBox>
 
+					<!-- Embeds the Recaptcha fragment -->
+                    <core:Fragment fragmentName="dteconsentappclient.fragment.Recaptcha" type="XML" />
+
+                    <!-- Container to display the error message for invalid inputs -->
                     <VBox id="message-strip-container" class="message-strip-container">
                         <MessageStrip
                             text="Complete these fields to continue."
@@ -202,6 +213,14 @@
                             type="Error"
                             showIcon="true"
                             visible="{oErrorVisibilityModel>/isTermsAndConditionVerifiedStatus}"
+                            class="error-message-strip"
+                        >
+                        </MessageStrip>
+                        <MessageStrip
+                            id = "enrollment-recaptcha-error-strip"
+                            type="Error"
+                            showIcon="true"
+                            visible="{oErrorVisibilityModel>/recaptchaErrorMessageVisibilityStatus}"
                             class="error-message-strip"
                         >
                         </MessageStrip>

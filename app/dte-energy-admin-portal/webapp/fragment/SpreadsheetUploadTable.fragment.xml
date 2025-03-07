@@ -1,0 +1,30 @@
+<c:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:c="sap.ui.core"
+>
+    <VBox class="uploadConatiner">
+        <!-- Upload Spreadsheet Title -->
+        <Text id="idSpreadsheetTemplateText" class='template-upload-title' text="Spreadsheet Template"></Text>
+
+        <!-- Upload Spreadsheet Table -->
+        <Table id="idSpreadsheetTemplateTable" items="{MainModel>/Attachment}" sticky="ColumnHeaders" width="100%">
+            <columns>
+                <Column width="150px"><header><Text text="Name" class="boldText"></Text></header></Column>
+                <Column width="150px"><header><Text text="CreatedAt" class="boldText"></Text></header></Column>
+                <Column width="150px"><header><Text text="UpdatedBy" class="boldText"></Text></header></Column>
+                <Column width="150px"><header><Text text="UpdatedAt" class="boldText"></Text></header></Column>
+                <Column width="150px"><header><Button id="idUploadSpreadsheetTemplateButton" text="Upload" press="onUploadButtonPress" visible="false"></Button></header></Column>
+            </columns>
+            
+            <items>
+              <ColumnListItem id="idSpreadsheetTemplateColumnListItem" type="Active">
+                <Link text="{MainModel>FileName}" press=".onFileNameLinkPress($event, ${MainModel>FileName}, ${MainModel>FileType}, ${MainModel>Content})"/>
+                <Text text="{MainModel>CreatedAt}"></Text>
+                <Text text="{MainModel>UpdatedBy}"></Text>
+                <Text text="{MainModel>UpdatedAt}"></Text>
+                <Button icon="sap-icon://edit" press=".onUploadButtonPress($event, ${MainModel>DocumentId})"></Button>
+              </ColumnListItem>
+            </items>
+        </Table>
+    </VBox>
+</c:FragmentDefinition>

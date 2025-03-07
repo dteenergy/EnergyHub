@@ -1,6 +1,6 @@
 using {dteConsentApp as db} from '../db/schema';
 
-@impl: './handler/main-handler.js'
+@impl: './handler/form/main-handler.js'
 @path : '/service'
 service DTEConsentAppPortal {
     // Entity Projections or Action configuration
@@ -8,23 +8,22 @@ service DTEConsentAppPortal {
     entity AccountDetail as projection on db.AccountDetail;
     entity BuildingDetail as projection on db.BuildingDetail;
     entity ApplicationConsent as projection on db.ApplicationConsent;
+    entity Attachment as projection on db.Document limit 1;
     
     action CreateEnrollmentFormDetail(
-        ApplicationDetail : String,
-        BuildingDetail : String,
-        AccountDetail : String,
-        ConsentDetail : String
+        ApplicationDetail : ApplicationDetail @mandatory,
+        BuildingDetail : array of BuildingDetail,
+        AccountDetail : AccountDetail @mandatory,
+        ConsentDetail : ApplicationConsent @mandatory,
+        Attachment : Attachment
     ) returns String;
 
     action CreateConsentFormDetail(
-        ConsentDetail : String
+        ConsentDetail : ApplicationConsent @mandatory
     ) returns String;
 
     // Validate the Application Id
     function validateApplicationId () returns String;
-    
-    // Testing AppId Encrypt Function
-    function AppIdEncrypt() returns String;
 
     // Get environment variable (AEM Navigation page url and address validation url)
     function getEnvironmentVariables () returns String;

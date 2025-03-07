@@ -1,20 +1,42 @@
 <mvc:View xmlns:tnt="sap.tnt" controllerName="dteenergyadminportal.controller.EnrollmentApplicationPage"
-  xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
-  xmlns="sap.m">
+  xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns="sap.m">
+
+  <!-- Dialog for displaying a generated link with a copy button -->
   <Dialog id="linkDialog" title="Generated Link">
     <HBox justifyContent="SpaceAround" alignItems="Center" width="500px" class="linkHBox">
       <FlexBox width="70%"><Text id="linkInput" text="" width="100%" /></FlexBox>
       <Button width="30%" icon="sap-icon://copy" press="onCopyLink" tooltip="Copy Link" />
     </HBox>
     <endButton>
-        <Button text="Close" press="onCloseDialog" />
+      <Button text="Close" press="onCloseDialog" />
     </endButton>
   </Dialog>
+
+  <!-- Dialog for selecting a parent application to link with selected applications -->
+  <Dialog id="idLinkDialog" title="Select Parent Application" afterClose="onLinkCloseDialog">
+    <VBox class="sapUiSmallMargin">
+      <Text text="Select the Parent Application to link with the selected applications:" />
+      <Select id="idParentSelect" items="{SelectedRowsModel>/}">
+        <core:Item key="{SelectedRowsModel>AppId}" text="{SelectedRowsModel>ApplicationNumber}" />
+      </Select>
+    </VBox>
+    <beginButton>
+      <Button text="Cancel" type="Default" press="onLinkCloseDialog" />
+    </beginButton>
+    <endButton>
+      <Button text="Confirm" type="Emphasized" press="onConfirmLink" />
+    </endButton>
+  </Dialog>
+
+  <!-- Main container for the application table and its toolbar -->
   <VBox id="idApplicationVBox">
     <FlexBox id="idToolBar" wrap="Wrap" justifyContent="End" class="paddingAlignment">
-      <SearchField id="idAppNumberFilter" placeholder="Search for Application Number..." liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
+      <SearchField id="idAppNumberFilter" placeholder="Search for App Number..." liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
       <SearchField id="idFirstNameFilter" placeholder="Search for First Name..." liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
       <SearchField id="idLastNameFilter" placeholder="Search for Last Name..." liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
+      <SearchField id="idAssignedToSearch" placeholder="Search for Assigned To..." liveChange="onFilterChange" class="rightPaddingAlignment"></SearchField>
+      <DatePicker id="idStartDatePicker" change="onFilterChange" valueFormat="yyyy-MM-dd" placeholder="Created Start Date" class="rightPaddingAlignment"/>
+      <DatePicker id="idEndDatePicker" change="onFilterChange" valueFormat="yyyy-MM-dd" placeholder="Created End Date" class="rightPaddingAlignment"/>
       <ComboBox id="idApplicationStatusFilter" selectedKey="" placeholder="Select Application Status" selectionChange="onFilterChange" class="rightPaddingAlignment">
         <items>
           <core:Item key="" text="All"/>
@@ -23,23 +45,33 @@
           <core:Item key="Rejected" text="Rejected"/>
         </items>
       </ComboBox>
+      <Button id="idLinkButton" type="Emphasized" class="rightPaddingAlignment" text="Link" press="handleLinkPress" tooltip="Settings"/>
+      <Button id="idUnLinkButton" type="Emphasized" class="rightPaddingAlignment" text="Unlink" press="handleUnLinkPress" tooltip="Settings"/>
       <Button id="idP13nButton" icon="sap-icon://action-settings" press="setupPersonalization" tooltip="Settings"/>
     </FlexBox>
     <ScrollContainer id="_idScrollContainer" horizontal="true" vertical="false" width="100%" height="auto" class="paddingAlignment">
-      <Table id="idApplicationTable" items="{MainModel>/ApplicationDetail}" growing="true" growingThreshold="10" sticky="ColumnHeaders" width="100%" class="setTableHeight">
+      <!-- Table displaying application details with multiple columns -->
+      <Table id="idApplicationTable" mode="MultiSelect" items="{MainModel>/ApplicationDetail}" growing="true" growingThreshold="10" sticky="ColumnHeaders" width="100%" class="setTableHeight">
         <columns>
           <Column width="150px"><header><Text text="Application Number" class="boldText"></Text></header></Column>
           <Column width="150px"><header><Text text="Site Contact" class="boldText"></Text></header></Column>
           <Column width="150px"><header><Text text="Company Name" class="boldText"></Text></header></Column>
           <Column width="150px"><header><Text text="Company Address" class="boldText"></Text></header></Column>
+          <Column width="150px"><header><Text text="Linked Id" class="boldText"></Text></header></Column>
           <Column width="150px"><header><Text text="Application Status" class="boldText"></Text></header></Column>
           <Column width="150px"><header><Text text="Number of Tenants" class="boldText"></Text></header></Column>
-          <Column width="150px"><header><Text text="Number of Consents Recieved" class="boldText"></Text></header></Column>
+          <Column width="150px"><header><Text text="Number of Consents Received" class="boldText"></Text></header></Column>
           <Column width="150px"><header><Text text="Signed By" class="boldText"></Text></header></Column>
           <Column width="150px"><header><Text text="Email Address" class="boldText"></Text></header></Column>
           <Column width="150px"><header><Text text="Energy Program Participated" class="boldText"></Text></header></Column>
           <Column width="150px"><header><Text text="Consent Link" class="boldText"></Text></header></Column>
-          <Column visible="false" width="150px"><header><Text text="Application CreatedAt" class="boldText"></Text></header></Column>
+          <Column width="150px"><header><Text text="Attachment" class="boldText"></Text></header></Column>
+          <Column width="200px"><header><Text text="Comment" class="boldText"></Text></header></Column>
+          <Column width="200px"><header><Text text="Assigned To" class="boldText"></Text></header></Column>
+          <Column width="150px"><header><Text text="Updated By" class="boldText"></Text></header></Column>
+          <Column width="150px"><header><Text text="Application CreatedAt" class="boldText"></Text></header></Column>
+          <!-- Additional columns marked as invisible -->
+          
           <Column visible="false" width="150px"><header><Text text="Application UpdatedAt" class="boldText"></Text></header></Column>
           <Column visible="false" width="150px"><header><Text text="Signed Date" class="boldText"></Text></header></Column>
           <Column visible="false" width="150px"><header><Text text="App Id" class="boldText"></Text></header></Column>
@@ -58,10 +90,18 @@
         </columns>
           <items>
             <ColumnListItem id="idColumnListItem" type="Navigation" press="navToBuildingDetailPage">
-              <Text text="{MainModel>ApplicationNumber}"></Text>
+              <!-- 
+                This core:HTML control dynamically formats the ApplicationNumber based on the LinkId.  
+                - It binds two properties from the MainModel: LinkId and ApplicationNumber.  
+                - The formatter function (.formatApplicationNumber) applies the necessary formatting  
+                  and indentation based on the relationship between LinkId and ApplicationNumber.  
+                - The formatted content is injected into the HTML control.  
+              -->
+              <core:HTML content="{parts: [{path: 'MainModel>LinkId'}, {path: 'MainModel>ApplicationNumber'}], formatter: '.formatApplicationNumber'}" />
               <Text text="{MainModel>FirstName} {MainModel>LastName}"></Text>
               <Text text="{MainModel>CompanyName}"></Text>
               <Text text="{parts: [{path: 'MainModel>CompanyAddress'}, {path: 'MainModel>CompanyAddrLineTwo'}, {path: 'MainModel>City'}, {path: 'MainModel>State'}], formatter: '.formatCompanyAddress'}"></Text>
+              <Text text="{= ${MainModel>LinkId} ? ${MainModel>LinkId} : '-'}"></Text>
               <ComboBox
                 selectedKey="{MainModel>ApplicationStatus}"
                 selectionChange="" change="onUpdateField">
@@ -76,7 +116,11 @@
               <Text text="{MainModel>SignatureSignedBy}"></Text>
               <Text text="{MainModel>EmailAddr}"></Text>
               <Text text="{MainModel>EnergyPrgmParticipated}"></Text>
-              <Button text="Generate" press="onGenerateUrlPress"></Button>
+             <Button text="Generate" press="onGenerateUrlPress"></Button>
+              <Button text="Download" press="onDownloadAttachmentPress" enabled="{MainModel>hasAttachment}" ></Button>
+              <Input value="{MainModel>Comment}" change="onUpdateField" type="Text" placeholder="Give your comment here"></Input>
+              <Input value="{MainModel>AssignedTo}" change="onUpdateField" type="Text" placeholder="Enter assignee name"></Input>
+              <Text text="{MainModel>UpdatedBy}"></Text>
               <Text text="{MainModel>AppCreatedAt}"></Text>
               <Text text="{MainModel>AppUpdatedAt}"></Text>
               <Text text="{MainModel>SignatureSignedDate}"></Text>

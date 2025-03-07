@@ -4,8 +4,10 @@ sap.ui.define([
   "sap/ui/model/Filter",
   "sap/ui/model/FilterOperator",
   "sap/m/MessageBox",
-  "sap/m/MessageToast"
-], (BaseController, PersonalizationController, Filter, FilterOperator, MessageBox, MessageToast) => {
+  "sap/m/MessageToast",
+  "dteenergyadminportal/utils/LinkEHApplication",
+  "dteenergyadminportal/utils/UnLinkEHApplication"
+], (BaseController, PersonalizationController, Filter, FilterOperator, MessageBox, MessageToast, LinkEHApplication, UnLinkEHApplication) => {
   "use strict";
 
   return BaseController.extend("dteenergyadminportal.controller.EnrollmentApplicationPage", {
@@ -18,13 +20,18 @@ sap.ui.define([
      */
     onInit: function() {
       // Retrieve the base URL and filter data from the view's data
-      const { baseUrl, filteredApplicationNumber, filteredApplicationStatus, filteredFirstName, filteredLastName, tenantConsentFormURL} = this.getView().getViewData();
+      const { baseUrl, filteredApplicationNumber, filteredApplicationStatus,
+        filteredFirstName, filteredLastName, filteredAssignedTo,
+        tenantConsentFormURL, filteredStartDate, filteredEndDate } = this.getView().getViewData();
       this.baseUrl = baseUrl;
       this.sAppNumber = filteredApplicationNumber;
       this.sFirstName = filteredFirstName;
       this.sLastName = filteredLastName;
+      this.sAssignedTo = filteredAssignedTo;
       this.sApplicationStatus = filteredApplicationStatus;
       this.tenantConsentFormURL = tenantConsentFormURL;
+      this.sStartDate = filteredStartDate;
+      this.sEndDate = filteredEndDate;
 
       this.handleSessionExpiry(this.baseUrl);
 
@@ -32,17 +39,20 @@ sap.ui.define([
       if(!["", undefined].includes(this.sAppNumber)) this.byId("idAppNumberFilter").setValue(this.sAppNumber);
       if(!["", undefined].includes(this.sFirstName)) this.byId("idFirstNameFilter").setValue(this.sFirstName);
       if(!["", undefined].includes(this.sLastName)) this.byId("idLastNameFilter").setValue(this.sLastName);
+      if(!["", undefined].includes(this.sAssignedTo)) this.byId("idAssignedToSearch").setValue(this.sAssignedTo);
       if(!["", undefined].includes(this.sApplicationStatus)) this.byId("idApplicationStatusFilter").setSelectedKey(this.sApplicationStatus);
+      if(!["", undefined].includes(this.sStartDate)) this.byId("idStartDatePicker").setValue(this.sStartDate);
+      if(!["", undefined].includes(this.sEndDate)) this.byId("idEndDatePicker").setValue(this.sEndDate);
       
       // Create an OData V4 model using the constructed service URL
-      const model = new sap.ui.model.odata.v4.ODataModel({
+      this.model = new sap.ui.model.odata.v4.ODataModel({
         serviceUrl: `${this.baseUrl}admin/service/`,
         synchronizationMode: "None",
         operationMode: "Server",
       });
 
       // Set the newly created model as the "MainModel" for this view
-      this.getView().setModel(model, "MainModel");
+      this.getView().setModel(this.model, "MainModel");
 
       // Initialize the Personalization Controller for the application table
       this.oPersonalizationController = new PersonalizationController({
@@ -51,6 +61,50 @@ sap.ui.define([
 
       // Apply initial filters
       this.onFilterChange();
+    },
+    /**
+     * Fetches all application detail records from the MainModel.
+     *
+     * @returns {Promise<Array<Object>>} - A promise that resolves 
+     * to an array of application detail records.
+     */
+    getAllApplicationDetailRecords: async function () {
+      const oModel = this.getView().getModel("MainModel");
+
+      // Retrieve binding contexts for all records in the ApplicationDetail entity
+      const aData = await oModel.bindList("/ApplicationDetail").requestContexts();
+
+      // Extract and return the actual data objects from the retrieved contexts
+      const aAllRecords = await Promise.all(aData.map(ctx => ctx.requestObject()));
+
+      return aAllRecords;
+    },
+    /**
+     * Determines the CSS class for an application row based on its LinkId and ApplicationNumber.
+     *
+     * @param {string} LinkId - The ID to which the application is linked.
+     * @param {string} ApplicationNumber - The unique identifier of the current application.
+     * @returns {string} - The CSS class name to apply for indentation styling.
+     */
+    getIndentClass: function(LinkId, ApplicationNumber) {
+      if(LinkId && (LinkId !== ApplicationNumber))
+        return 'indentRow';
+      else if(LinkId && (LinkId === ApplicationNumber))
+        return 'parentApp';
+      else '';
+    },
+    /**
+     * Formats the ApplicationNumber by wrapping it in a span with a dynamic CSS class.
+     * The function helps in visually distinguishing parent and child applications in the UI.
+     *
+     * @param {string} LinkId - The ID to which the application is linked.
+     * @param {string} ApplicationNumber - The unique identifier of the current application.
+     * @returns {string} - An HTML string with the formatted ApplicationNumber wrapped in a span.
+     */
+    formatApplicationNumber: function (LinkId, ApplicationNumber) {
+      const sClass = this.getIndentClass(LinkId, ApplicationNumber);
+      const sText = ApplicationNumber || ''; // Fallback to empty string if ApplicationNumber is undefined
+      return '<span class="'+sClass+'">' + sText + '</span>';
     },
     /**
      * Opens the personalization dialog for the application table.
@@ -66,7 +120,7 @@ sap.ui.define([
      *
      * @public
      */
-    onFilterChange: function () {
+    onFilterChange: async function () {
       this.handleSessionExpiry(this.baseUrl);
       
       // Retrieve the binding of the application table's items aggregation
@@ -83,14 +137,39 @@ sap.ui.define([
       this.sAppNumber = this.byId("idAppNumberFilter").getValue(); // Application Number Filter
       this.sFirstName = this.byId("idFirstNameFilter").getValue(); // First Name Filter
       this.sLastName = this.byId("idLastNameFilter").getValue(); // Last Name Filter
+      this.sAssignedTo = this.byId("idAssignedToSearch").getValue(); // Updated By Search
       this.sApplicationStatus = this.byId("idApplicationStatusFilter").getSelectedKey(); // Application Status Filter
+      this.sStartDate = this.byId("idStartDatePicker").getValue();
+      this.sEndDate = this.byId("idEndDatePicker").getValue();
 
       // Create an array for filters
       const aFilters = [];
 
-      // Add filters if values are not empty
-      if (this.sAppNumber)
-        aFilters.push(new Filter({path: "ApplicationNumber", operator: FilterOperator.Contains, value1: this.sAppNumber, caseSensitive: false}));
+      /**
+       * Filter with child application when search with parent ApplicationNumber
+       * Otherwise it does filter with ApplicationNumber only
+       */
+      if (this.sAppNumber) {
+        const aAllRecords = await this.getAllApplicationDetailRecords();
+        const filteredIds = aAllRecords
+            .filter(oApp => oApp.LinkId === this.sAppNumber)
+            .map(item => item.ApplicationNumber);
+
+        filteredIds.push(this.sAppNumber); // Include searched ApplicationNumber
+        const uniqueFilteredIds = [...new Set(filteredIds)]; // Remove duplicates
+
+        // Use 'Contains' instead of 'EQ' to allow partial searches
+        const aApplicationFilters = uniqueFilteredIds.map(appNum =>
+            new Filter("ApplicationNumber", FilterOperator.Contains, appNum, false)
+        );
+
+        // Use 'OR' logic (AND: false) to match any of the application numbers
+        const oApplicationFilter = new Filter({
+            filters: aApplicationFilters,
+            and: false 
+        });
+        aFilters.push(oApplicationFilter);
+      }
 
       if (this.sFirstName)
         aFilters.push(new Filter({path: "FirstName", operator: FilterOperator.Contains, value1: this.sFirstName, caseSensitive: false}));
@@ -98,7 +177,27 @@ sap.ui.define([
       if (this.sLastName)
         aFilters.push(new Filter({path: "LastName", operator: FilterOperator.Contains, value1: this.sLastName, caseSensitive: false}));
 
+      if (this.sAssignedTo)
+        aFilters.push(new Filter({path: "AssignedTo", operator: FilterOperator.Contains, value1: this.sAssignedTo, caseSensitive: false}));
+
       if (this.sApplicationStatus) aFilters.push(new Filter("ApplicationStatus", FilterOperator.EQ, this.sApplicationStatus));
+
+      if (this.sStartDate && this.sEndDate) {
+        let adjustedEndDate = new Date(this.sEndDate);
+        adjustedEndDate.setHours(23, 59, 59, 999); // Set end date to the last millisecond of the day
+        adjustedEndDate = adjustedEndDate.getTime(); // Convert to timestamp for comparison
+
+        aFilters.push(new Filter("AppCreatedAt", FilterOperator.BT, this.sStartDate, adjustedEndDate));
+      }
+      else if (this.sStartDate)
+        aFilters.push(new Filter("AppCreatedAt", FilterOperator.GE, this.sStartDate));
+      else if (this.sEndDate) {
+        let adjustedEndDate = new Date(this.sEndDate);
+        adjustedEndDate.setHours(23, 59, 59, 999); // Set end date to the last millisecond of the day 
+        adjustedEndDate = adjustedEndDate.getTime(); // Convert to timestamp for comparison
+
+        aFilters.push(new Filter("AppCreatedAt", FilterOperator.LE, adjustedEndDate));
+      }
 
       // Combine filters with AND logic
       const oCombinedFilter = new Filter({
@@ -110,6 +209,34 @@ sap.ui.define([
       oBinding.filter(aFilters.length > 0 ? oCombinedFilter : []);
     },
     /**
+     * Handles the press event for linking applications.
+     * Delegates the action to the LinkEHApplication's handleLinkPress method.
+     */
+    handleLinkPress: function () {
+      const that = this;
+      LinkEHApplication.handleLinkPress(that);
+    },
+    handleUnLinkPress: function () {
+      const that = this;
+      UnLinkEHApplication.handleUnLinkPress(that);
+    },
+    /**
+     * Handles the confirmation action for linking applications.
+     * Delegates the action to the LinkEHApplication's onConfirmLink method.
+     */
+    onConfirmLink: function () {
+      const that = this;
+      LinkEHApplication.onConfirmLink(that);
+    },
+    /**
+     * Handles the action to close the link dialog.
+     * Delegates the action to the LinkEHApplication's onLinkCloseDialog method.
+     */
+    onLinkCloseDialog: function () {
+      const that = this;
+      LinkEHApplication.onLinkCloseDialog(that);
+    },
+    /** 
      * Generates a URL for the selected application and displays it in a dialog.
      *
      * @param {sap.ui.base.Event} oEvent - The event triggered by button press.
@@ -154,6 +281,50 @@ sap.ui.define([
         MessageBox.error("Failed to generate the URL.");
       }
     },
+
+    /**
+     * Handles Attachment button's press event
+     * @param {event} oEvent 
+     * @returns 
+     */
+    onDownloadAttachmentPress : async function (oEvent) {
+      this.handleSessionExpiry(this.baseUrl);
+
+      // Retrieve the button and its parent list item
+      const oButton = oEvent.getSource();
+      const oListItem = oButton.getParent();
+
+      // Validate the list item
+      if (!oListItem) {
+        console.error("Parent List Item is missing for this button.");
+        return;
+      }
+
+      // Retrieve the binding context for the selected row
+      const oBindingContext = oListItem.getBindingContext("MainModel"); // Get the binding context
+
+      // Get the binding context of the selected row
+      if (!oBindingContext) {
+        console.error("Binding context is missing for this row.");
+        return;
+      }
+
+      // Extract application ID from the binding context
+      const appId = oBindingContext.getProperty("AppId");
+
+      try {
+        // Make an API call to download attachment
+        const {data} = await axios.get(this.baseUrl+`admin/service/ApplicationDetail(${appId})/DownloadAttachment`);        
+
+         // Save spreadsheet template in client system
+         const a = document.createElement('a');
+         a.download = data.value.file.name;
+         a.href = data.value.file.url;
+         a.click();
+      } catch (error) {
+        MessageBox.error("Failed to download attachment.");
+      }
+    },
     /**
      * Closes the dialog - displaying the generated link.
      *
@@ -170,8 +341,8 @@ sap.ui.define([
      */
     onCopyLink: function() {
       // Get the link from the input box
-      var linkInputBox = this.byId("linkInput");
-      var sLink = linkInputBox.getText();
+      const linkInputBox = this.byId("linkInput");
+      const sLink = linkInputBox.getText();
   
       // Copy the link to clipboard
       navigator.clipboard.writeText(sLink).then(function() {
@@ -219,6 +390,8 @@ sap.ui.define([
      * @public
      */
     navToBuildingDetailPage: async function (oEvent) {
+      this.handleSessionExpiry(this.baseUrl);
+
       // Get the selected row's binding context
       const oSelectedItem = oEvent.getSource();
       const oContext = oSelectedItem.getBindingContext("MainModel");
@@ -226,6 +399,22 @@ sap.ui.define([
       const FirstName = oContext.getProperty("FirstName");
       const LastName = oContext.getProperty("LastName");
       const ApplicationNumber = oContext.getProperty("ApplicationNumber");
+      const selectedLinkId = oContext.getProperty("LinkId");
+
+      // Get all ApplicationDetail records
+      const aAllRecords = await this.getAllApplicationDetailRecords();
+
+      // Ensure data exists
+      if (!aAllRecords || aAllRecords.length === 0) {
+        console.error("No data retrieved from OData model.");
+        return;
+      }
+
+      /**
+       *  Call the filterRecords function to get the filtered list of AppIds 
+       *  based on the selected LinkId and ApplicationNumber.
+       */
+      const filteredAppId = this.filterRecords(aAllRecords, AppId, selectedLinkId, ApplicationNumber);
 
       // Get the VBox id (EnrollmentApplicationPage)
       const oVBox = this.byId("idApplicationVBox");
@@ -238,14 +427,41 @@ sap.ui.define([
         viewData: {
           baseUrl: this.baseUrl, AppId: AppId, ApplicationNumber: ApplicationNumber,
           FirstName: FirstName, LastName: LastName, filteredApplicationNumber: this.sAppNumber,
-          filteredApplicationStatus: this.sApplicationStatus,
-          filteredFirstName: this.sFirstName, filteredLastName: this.sLastName,
-          tenantConsentFormURL : this.tenantConsentFormURL
+          filteredApplicationStatus: this.sApplicationStatus, filteredFirstName: this.sFirstName,
+          filteredLastName: this.sLastName, filteredAssignedTo: this.sAssignedTo,
+          filteredStartDate: this.sStartDate, filteredEndDate: this.sEndDate,
+          tenantConsentFormURL : this.tenantConsentFormURL, filteredAppIds: filteredAppId
         },
         viewName: `dteenergyadminportal.view.BuildingDetailPage`
       }).then(function (oView) {
         oVBox.addItem(oView);
       });
+    },
+    /**
+     * Filters application records based on the selected application and its link status.
+     *
+     * @param {Array<Object>} aAllRecords - The complete list of application records.
+     * @param {string} AppId - The ID of the selected application.
+     * @param {string} selectedLinkId - The LinkId of the selected application.
+     * @param {string} ApplicationNumber - The ApplicationNumber of the selected application.
+     * @returns {Array<string>} - An array of AppIds that are linked to the selected application, 
+     *                            or the selected AppId if no linked applications are found.
+     */
+    filterRecords: function (aAllRecords, AppId, selectedLinkId, ApplicationNumber) {
+      if (!selectedLinkId) return [AppId]; // Return AppId if no LinkId
+
+      /**
+       * - If the selected row is the parent row
+       *   then return the all AppIds linked to this application from the all records
+       * 
+       * - If the selected row is not a linked application or is a child row,
+       *   then only the selected AppId will be returned.
+       */
+      let aFilteredAllRecords = aAllRecords
+          .filter(item => item.LinkId === selectedLinkId && item.LinkId === ApplicationNumber)
+          .map(item => item.AppId);
+
+      return aFilteredAllRecords.length ? aFilteredAllRecords : [AppId];
     },
     /**
      * Navigates to the Consent Page dynamically, based on the selected application's AppId.
@@ -254,7 +470,9 @@ sap.ui.define([
      * @param {sap.ui.base.Event} oEvent - The event triggered by the button press.
      * @public
      */
-    navToConsentPage: function(oEvent) {
+    navToConsentPage: async function(oEvent) {
+      this.handleSessionExpiry(this.baseUrl);
+
       // Retrieve the button and its parent list item
       const oButton = oEvent.getSource();
       const oListItem = oButton.getParent();
@@ -276,6 +494,23 @@ sap.ui.define([
 
       // Extract application ID from the binding context
       const appId = oBindingContext.getProperty("AppId");
+      const ApplicationNumber = oBindingContext.getProperty("ApplicationNumber");
+      const selectedLinkId = oBindingContext.getProperty("LinkId");
+
+      // Get all ApplicationDetail records
+      const aAllRecords = await this.getAllApplicationDetailRecords();
+
+      // Ensure data exists
+      if (!aAllRecords || aAllRecords.length === 0) {
+        console.error("No data retrieved from OData model.");
+        return;
+      }
+
+      /**
+       *  Call the filterRecords function to get the filtered list of AppIds 
+       *  based on the selected LinkId and ApplicationNumber.
+       */
+      const filteredAppId = this.filterRecords(aAllRecords, appId, selectedLinkId, ApplicationNumber);
 
       // Get the VBox id (EnrollmentApplicationPage)
       const oVBox = this.byId("idApplicationVBox");
@@ -285,7 +520,7 @@ sap.ui.define([
 
       // Dynamically create and add the view for consent page
       sap.ui.core.mvc.XMLView.create({
-        viewData: { baseUrl: this.baseUrl, AppId: appId},
+        viewData: { baseUrl: this.baseUrl, AppId: appId, filteredAppIds: filteredAppId},
         viewName: `dteenergyadminportal.view.ConsentsPage`
       }).then(function (oView) {
         oVBox.addItem(oView);

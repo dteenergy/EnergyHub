@@ -5,7 +5,7 @@
 	<VBox class="auth-and-release-container" width="100%">
 		<l:VerticalLayout class="vertical-layout">
 			<Label text="Name of Authorized Person" required="true"></Label>
-			<Input class="inputBox" type="Text" liveChange="onLiveChange" required="true" value="{oConsentModel>/ConsentDetail/AuthPersonName}"></Input>
+			<Input class="inputBox" type="Text" required="true" value="{oConsentModel>/ConsentDetail/AuthPersonName}" editable="false"></Input>
 		</l:VerticalLayout>
 
 		<l:VerticalLayout class="vertical-layout">

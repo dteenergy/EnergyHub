@@ -7,6 +7,8 @@ sap.ui.define([
 	"dteconsentappclient/utils/ConsentAddressSuggestion",
 	"dteconsentappclient/utils/ChecksInputValidation",
 	"dteconsentappclient/utils/FormatInputs",
+	"dteconsentappclient/utils/RenderRecaptcha",
+	"dteconsentappclient/utils/ConfirmationDialog",
 	"dteconsentappclient/utils/DataLayer"
 ], function(
 	BaseController,
@@ -17,6 +19,8 @@ sap.ui.define([
 	ConsentAddressSuggestion,
 	ChecksInputValidation,
 	FormatInputs,
+	RenderRecaptcha,
+	ConfirmationDialog,
 	DataLayer
 ) {
 	"use strict";
@@ -36,7 +40,8 @@ sap.ui.define([
 								url, 
 								TenantConfirmationPageUrl, 
 								ErrorPageUrl, 
-								DTEAddressValidationUrl
+								DTEAddressValidationUrl,
+								RecaptchaSiteKey
 							} = this.getView().getViewData();
 					
 					// Get the required properties from the parent view
@@ -44,7 +49,8 @@ sap.ui.define([
 					this.SERVERHOST = url;
 					this.TenantConfirmationPageUrl = TenantConfirmationPageUrl;
 					this.ErrorPageUrl = ErrorPageUrl;	
-					this.DTEAddressValidationUrl = DTEAddressValidationUrl
+					this.DTEAddressValidationUrl = DTEAddressValidationUrl;
+					this.RecaptchaSiteKey = RecaptchaSiteKey;
 					
 					//Initialize Model for this view
 					this.initializeModel();
@@ -66,7 +72,7 @@ sap.ui.define([
 							"ConsentZipcode": null,
 							"ConsentAccountNumber":"",
 							"ConsentEmailAddr":"",
-							"AuthPersonName":"",
+							"AuthPersonName":"DTE Implementation Team",
 							"AuthDate": FormatInputs.dateToDisplay(),
 							"AuthTitle":"",
 							"suggestions": []
@@ -88,9 +94,20 @@ sap.ui.define([
 					// Model to hold the visibility status of error message
 					const oErrorVisibilityModel = new JSONModel({
 						"isInputInValid":false,
-						"isTermsAndConditionVerifiedStatus":false
+						"isTermsAndConditionVerifiedStatus":false,
+						"recaptchaErrorMessageVisibilityStatus":false
 					});
 					this.getView().setModel(oErrorVisibilityModel, "oErrorVisibilityModel");
+					this.errorVisibilityModel = this.getView().getModel("oErrorVisibilityModel");
+
+					// Retrieve the Recaptcha error strip element by its Id
+					this.recaptchaErrorStrip = this.byId("tenant-recaptcha-error-strip");
+				},
+
+				// After ConsentForm view is rendered, load and render the reCAPTCHA component 
+				onAfterRendering: function(){
+					// To render recaptcha and obtain varification token
+					RenderRecaptcha.renderRecaptcha(this);
 				},
 
         // Define model and load the Customer Auth and Release section fragment to the enrollment form
@@ -291,7 +308,18 @@ sap.ui.define([
 					
 				const consentDetails = this.getView().getModel("oConsentModel").getData()?.ConsentDetail;
 					
-					if(!oErrorVisibilityModelData?.isInputInValid && !oErrorVisibilityModelData?.isTermsAndConditionVerifiedStatus){
+				/**
+				 * Checks if the error message strip was in inVisible state
+				 * If it is all inputs are valid, proceed to recaptcha verification
+				 */
+				if(!oErrorVisibilityModelData?.isInputInValid && !oErrorVisibilityModelData?.isTermsAndConditionVerifiedStatus){
+
+					// If recaptcha is not verified display the error message and stop the further process.
+					if(!this.isRecaptchaVerified) {
+						this.errorVisibilityModel.setProperty('/recaptchaErrorMessageVisibilityStatus', true);
+						this.recaptchaErrorStrip.setText("Please verify the reCAPTCHA to continue");
+						return;
+					}
 
 						// Push the "form_submit" event to the dataLayer
 						DataLayer.pushEventToDataLayer("tenant_form", "form_submit", "form_submit", false);
@@ -300,36 +328,53 @@ sap.ui.define([
 						const tenantConsentCreateUrl = this.SERVERHOST + `service/CreateConsentFormDetail?encrAppId=${this.applicationId}`;
 
 						const tenantConsentFormDetails = {
-							ConsentDetail: JSON.stringify({
+							ConsentDetail: {
 								"FirstName": consentDetails['ConsentFirstName'],
 								"LastName": consentDetails['ConsentLastName'],
 								"Address": consentDetails['ConsentAddress'],
 								"AddrLineTwo": consentDetails['ConsentAddrLineTwo'],
 								"City": consentDetails['ConsentCity'],
 								"State": consentDetails['ConsentState'],
-								"Zipcode": consentDetails['ConsentZipcode'],
+								"Zipcode": `${consentDetails['ConsentZipcode']}`,
 								"AccountNumber": consentDetails['ConsentAccountNumber'],
 								"EmailAddr": consentDetails['ConsentEmailAddr'],
 								"AuthPersonName": consentDetails['AuthPersonName'],
 								"AuthDate": FormatInputs.convertDateFormat(consentDetails['AuthDate']),
 								"AuthTitle": consentDetails['AuthTitle'],
-							})
+							}
 						}
 				
 				try{		
+					
 					// Post request to create a tenant consent.
-					const {data} = await axios.post(tenantConsentCreateUrl, tenantConsentFormDetails);
+					const headers = { 'X-Recaptcha-Token': this.recaptchaToken };  // Pass the recaptcha token in headers.
+					const {data} = await axios.post(tenantConsentCreateUrl, tenantConsentFormDetails, {headers});
 						
+					/**
+					* If get the success(200) response:
+					* - Display the confirmation dialog for the Tenant user type.  
+					*/
 					if(data.value.statusCode === 200){
-						// Navigate to the tenant confirmation page
-						window.open(this.TenantConfirmationPageUrl, '_self');
+						ConfirmationDialog.showConfirmationDialog(this, 'Tenant');
 					}else{
 						// Navigate to the error page
-						window.open(this.ErrorPageUrl, '_self');
+						window.location.href = this.ErrorPageUrl;
 					}
 				}catch(err){
-					// Navigate to the error page
-					window.open(this.ErrorPageUrl, '_self');
+
+					/**
+					  * If reCAPTCHA verification fails:
+						* - Reset the reCAPTCHA widget
+						* - Mark reCAPTCHA as not verified
+						* - Display an error message strip to inform the user
+					 */
+					if(err?.response?.status === 403) {
+						grecaptcha.reset();
+						this.isRecaptchaVerified = false;
+						this.errorVisibilityModel.setProperty('/recaptchaErrorMessageVisibilityStatus', true);
+						this.recaptchaErrorStrip.setText("ReCAPTCHA verfication failed. Please try again.")
+
+					} else window.location.href = this.ErrorPageUrl; // Navigate to the error page
 				}	
 			}
 		},

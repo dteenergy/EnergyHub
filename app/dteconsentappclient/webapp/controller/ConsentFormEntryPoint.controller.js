@@ -19,6 +19,7 @@ sap.ui.define([
                 this.TenantConfirmationPageUrl = envVariables.TenantConfirmationPageUrl;
                 this.ErrorPageUrl = envVariables.ErrorPageUrl;
                 this.DTEAddressValidationUrl = envVariables.DTEAddressValidationUrl;
+                this.RecaptchaSiteKey = envVariables.RecaptchaSiteKey;
             });
         },
         /**
@@ -64,7 +65,8 @@ sap.ui.define([
                             url: this.SERVERHOST,
                             TenantConfirmationPageUrl: this.TenantConfirmationPageUrl,
                             ErrorPageUrl: this.ErrorPageUrl,
-                            DTEAddressValidationUrl: this.DTEAddressValidationUrl
+                            DTEAddressValidationUrl: this.DTEAddressValidationUrl,
+                            RecaptchaSiteKey: this.RecaptchaSiteKey
                         },
                     }).then(function(oView) {
                         // Render the created view into the App view
@@ -77,11 +79,11 @@ sap.ui.define([
                     }.bind(this));
                 }else{
                     // Navigate to the error page
-					window.open(this.ErrorPageUrl, '_self');
+					window.location.href = this.ErrorPageUrl;
                 }
             }catch(err){
                 // Navigate to the error page
-				window.open(this.ErrorPageUrl, '_self');
+				window.location.href = this.ErrorPageUrl;
             }
         }
 
