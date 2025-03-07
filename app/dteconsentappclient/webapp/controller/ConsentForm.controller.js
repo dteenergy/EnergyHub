@@ -335,7 +335,7 @@ sap.ui.define([
 								"AddrLineTwo": consentDetails['ConsentAddrLineTwo'],
 								"City": consentDetails['ConsentCity'],
 								"State": consentDetails['ConsentState'],
-								"Zipcode": consentDetails['ConsentZipcode'],
+								"Zipcode": `${consentDetails['ConsentZipcode']}`,
 								"AccountNumber": consentDetails['ConsentAccountNumber'],
 								"EmailAddr": consentDetails['ConsentEmailAddr'],
 								"AuthPersonName": consentDetails['AuthPersonName'],

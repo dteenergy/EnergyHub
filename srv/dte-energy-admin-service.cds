@@ -104,7 +104,7 @@ service DTEEnergyAdminPortal {
     grant: ['READ', 
     'CREATE', 'UPDATE'], 
     to: 'Administrator'
-    }]) as projection on db.Attachment limit 1;
+    }]) as projection on db.Document limit 1;
 
   /** 
    * Action to link applications together

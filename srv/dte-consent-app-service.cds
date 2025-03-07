@@ -8,7 +8,7 @@ service DTEConsentAppPortal {
     entity AccountDetail as projection on db.AccountDetail;
     entity BuildingDetail as projection on db.BuildingDetail;
     entity ApplicationConsent as projection on db.ApplicationConsent;
-    entity Attachment as projection on db.Attachment limit 1;
+    entity Attachment as projection on db.Document limit 1;
     
     action CreateEnrollmentFormDetail(
         ApplicationDetail : ApplicationDetail @mandatory,

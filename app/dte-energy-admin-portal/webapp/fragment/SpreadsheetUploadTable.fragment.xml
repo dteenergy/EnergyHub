@@ -18,11 +18,11 @@
             
             <items>
               <ColumnListItem id="idSpreadsheetTemplateColumnListItem" type="Active">
-                <Link text="{MainModel>fileName}" press=".onFileNameLinkPress($event, ${MainModel>fileName}, ${MainModel>fileType}, ${MainModel>fileContent})"/>
+                <Link text="{MainModel>FileName}" press=".onFileNameLinkPress($event, ${MainModel>FileName}, ${MainModel>FileType}, ${MainModel>Content})"/>
                 <Text text="{MainModel>CreatedAt}"></Text>
                 <Text text="{MainModel>UpdatedBy}"></Text>
                 <Text text="{MainModel>UpdatedAt}"></Text>
-                <Button icon="sap-icon://edit" press=".onUploadButtonPress($event, ${MainModel>AttachmentId})"></Button>
+                <Button icon="sap-icon://edit" press=".onUploadButtonPress($event, ${MainModel>DocumentId})"></Button>
               </ColumnListItem>
             </items>
         </Table>
