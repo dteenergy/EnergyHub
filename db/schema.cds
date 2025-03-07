@@ -103,9 +103,17 @@ entity Attachment{
     UpdatedAt: Timestamp @cds.on.insert: $now  @cds.on.update: $now;
 }
 
+entity EmailTemplate{
+    key TemplateId: UUID;
+    Name: String;
+    Content: String(500);
+    Variables: array of String; 
+}
+
 //Defining Unique Number
 @assert.unique: {
     ApplicationNumber: [ApplicationNumber],
+    Name: [Name]
 }
 
 // Defining Custom Data types

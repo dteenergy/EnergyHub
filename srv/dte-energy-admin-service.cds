@@ -106,6 +106,12 @@ service DTEEnergyAdminPortal {
     to: 'Administrator'
     }]) as projection on db.Attachment limit 1;
 
+    entity EmailTemplate  @(restrict: [{
+    grant: ['READ', 
+    'CREATE', 'UPDATE'], 
+    to: 'Administrator'
+    }]) as projection on db.EmailTemplate;
+
   /** 
    * Action to link applications together
    * and returns a success message or an error message.

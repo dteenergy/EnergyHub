@@ -3,12 +3,14 @@ using {dteConsentApp as db} from '../db/schema';
 @impl: './handler/form/main-handler.js'
 @path : '/service'
 service DTEConsentAppPortal {
+    
     // Entity Projections or Action configuration
     entity ApplicationDetail as projection on db.ApplicationDetail;
     entity AccountDetail as projection on db.AccountDetail;
     entity BuildingDetail as projection on db.BuildingDetail;
     entity ApplicationConsent as projection on db.ApplicationConsent;
     entity Attachment as projection on db.Attachment limit 1;
+    entity EmailTemplate as projection on db.EmailTemplate;
     
     action CreateEnrollmentFormDetail(
         ApplicationDetail : ApplicationDetail @mandatory,

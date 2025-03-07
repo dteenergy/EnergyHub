@@ -10,6 +10,7 @@ const getMailAccessToken = async (tokenUrl, clientId, clientSecret, scope) => {
     // Make a POST request to obtain the access token
     const {data} = await axios.post(
       tokenUrl,
+      
       // Pass the required parameters in the body of the request
       new URLSearchParams({
         'grant_type':'client_credentials',
@@ -17,7 +18,6 @@ const getMailAccessToken = async (tokenUrl, clientId, clientSecret, scope) => {
         'client_secret': clientSecret,
         // 'scope':scope
         'scope': "https://outlook.office365.com/.default"
-        // scope: "https://graph.microsoft.com/.default"
       }),
 
       {

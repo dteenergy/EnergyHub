@@ -34,7 +34,7 @@ cds.on('bootstrap', async (app) => {
   });
 
   // To verify reCATCHA token
-  app.use(verifyReCAPTCHA);
+  // app.use(verifyReCAPTCHA);
 
   app.get('/test/send-email', sendEmail);
 });

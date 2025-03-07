@@ -11,11 +11,13 @@ const sendEmail = async(req, res)=>{
 
   try{
 
+    const destinationName = process.env.MAIL_DESTINATION;
+
     // To get the destination service access_token 
     const access_token = await getDestinationServiceAccessToken();
     
     // Retrieve the destination from SAP BTP
-    const destinationResponse = await getDestination(access_token);  
+    const destinationResponse = await getDestination(access_token, destinationName);  
 
     const {tokenServiceURL, clientId, clientSecret, scope} = destinationResponse;    
 
@@ -50,7 +52,6 @@ const sendEmail = async(req, res)=>{
               </html>`
     };
 
-   
   const transporter = nodemailer.createTransport(transporterConfig);
 
   // Calling the sendMail method

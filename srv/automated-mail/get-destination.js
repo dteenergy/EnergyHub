@@ -43,12 +43,14 @@ const getDestinationServiceAccessToken = async () => {
 /**
  * Fetch destinations from the subaccount using destination service rest API
  * @param {string} accessToken - The access token for authorization
+ * @param {string} destinationName - Name of the destination
  * @returns {object} Destination details
  */
-const getDestination = async (accessToken) => {
+const getDestination = async (accessToken, destinationName) => {
   try {
-    // Determine the destination sevice Rest API to fetch destinations available in the subaccount
-    const endpoint =`${service.destination.uri}/destination-configuration/v1/subaccountDestinations/sap_process_automation_mail`;
+
+    // Determine the destination sevice Rest API endpoint to fetch destinations available in the subaccount
+    const endpoint =`${service.destination.uri}/destination-configuration/v1/subaccountDestinations/${destinationName}`;
 
     // Make a GET request with the access token
     const destinationsResponse = await axios.get(
