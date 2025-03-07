@@ -93,11 +93,11 @@ entity ApplicationConsent {
     AppRefId : Association to ApplicationDetail;
 }
 
-entity Attachment{
-    key AttachmentId : UUID;
-    fileContent : LargeString not null ;
-    fileName: String @assert.format : '\.xlsx$' @mandatory;
-    fileType: String @mandatory;
+entity Document{
+    key DocumentId : UUID;
+    Content : LargeString not null ;
+    FileName: String @assert.format : '\.xlsx$' @mandatory;
+    FileType: String @mandatory;
     UpdatedBy : String  @cds.on.insert: $user @cds.on.update: $user;
     CreatedAt: Timestamp @cds.on.insert: $now;
     UpdatedAt: Timestamp @cds.on.insert: $now  @cds.on.update: $now;
