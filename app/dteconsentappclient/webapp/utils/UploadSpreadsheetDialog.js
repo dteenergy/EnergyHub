@@ -113,7 +113,7 @@ sap.ui.define([
          * Read spreadsheet content
          * @param {Controller} that => Parent controller this instance
          */
-        readFile: async function (that) {
+        readFile: function (that) {
             const reader = new FileReader();
             
             // Read spreadsheet to create attachment JSON

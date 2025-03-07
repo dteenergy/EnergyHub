@@ -307,7 +307,7 @@ sap.ui.define([
 		/**
 		 * Get attachment object from file buffer
 		 */
-		getAttachment : async function(){
+		getAttachment : function(){
 			UploadSpreadsheetDialog.readFile(this);
 		},
 		/**
