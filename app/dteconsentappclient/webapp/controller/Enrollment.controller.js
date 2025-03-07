@@ -67,7 +67,7 @@ sap.ui.define([
 					"CompanyAddrLineTwo": "",
 					"City": "",
 					"State": "",
-					"Zipcode": "",
+					"Zipcode": null,
 					"EnergyPrgmParticipated": true,
 					"AcctMgrName": "",
 					"AcctMgrPhoneNumber": null,
@@ -167,7 +167,7 @@ sap.ui.define([
 				Address: "",
 				City: "",
 				State: "Michigan",
-				Zipcode: "",
+				Zipcode: null,
 				AddrLineTwo: "",
 				suggestions: []
 			}
@@ -814,7 +814,7 @@ sap.ui.define([
 					}
 				});
 				// Format Account Detail
-				const {SiteFirstName, SiteLastName, SiteEmailAddr, AcctMgrPhoneNumber, ...otherAccountDetails} = enrollmentDetails.AccountDetail;
+				const {SiteFirstName, SiteLastName, SiteEmailAddr, AcctMgrPhoneNumber, SiteZipcode, Zipcode, ...otherAccountDetails} = enrollmentDetails.AccountDetail;
 
 				const enrollmentFormDetails = {
 					AccountDetail: {
@@ -822,7 +822,10 @@ sap.ui.define([
 						FirstName: SiteFirstName,
 						LastName: SiteLastName,
 						EmailAddr: SiteEmailAddr,
-						AcctMgrPhNo: AcctMgrPhoneNumber ? AcctMgrPhoneNumber : undefined
+						AcctMgrPhNo: AcctMgrPhoneNumber ? AcctMgrPhoneNumber : undefined,
+						SiteZipcode: `${SiteZipcode}`,
+						Zipcode: `${Zipcode}`
+
 					},
 					BuildingDetail: formattedLocationDetails,
 					ApplicationDetail: { 
@@ -837,7 +840,7 @@ sap.ui.define([
 						"AddrLineTwo": consentDetails['ConsentAddrLineTwo'],
 						"City": consentDetails['ConsentCity'],
 						"State": consentDetails['ConsentState'],
-						"Zipcode": consentDetails['ConsentZipcode'],
+						"Zipcode": `${consentDetails['ConsentZipcode']}`,
 						"AccountNumber": consentDetails['ConsentAccountNumber'],
 						"PhoneNumber": consentDetails['ConsentPhoneNumber'],
 						"EmailAddr": consentDetails['ConsentEmailAddr'],
