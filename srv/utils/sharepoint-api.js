@@ -2,7 +2,7 @@
 const axios = require('axios');
 const FormData = require('form-data');
 
-const malwareScanner = require('./malware-scanner');
+const malwareScanningService = require('./malware-scanning-service');
 
 //Sharepoint Config detail
 const spConfig = {
@@ -62,7 +62,7 @@ const uploadFile = async (attachment) => {
         // Convert base64 to buffer
         const data = Buffer.from(attachment.fileContent,'base64');
 
-        await malwareScanner.scanfile(data.toString('binary'));
+        await malwareScanningService.scanfile(data.toString('binary'));
 
         // Http request config
         const config = {

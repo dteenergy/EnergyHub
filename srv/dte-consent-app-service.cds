@@ -10,6 +10,7 @@ service DTEConsentAppPortal {
     entity ApplicationConsent as projection on db.ApplicationConsent;
     entity Attachment as projection on db.Attachment limit 1;
     
+    // Create enrollment form action
     action CreateEnrollmentFormDetail(
         ApplicationDetail : ApplicationDetail @mandatory,
         BuildingDetail : array of BuildingDetail,
@@ -18,8 +19,14 @@ service DTEConsentAppPortal {
         Attachment : Attachment
     ) returns String;
 
+    // Create consent form action
     action CreateConsentFormDetail(
         ConsentDetail : ApplicationConsent @mandatory
+    ) returns String;
+
+    //Malware scanner
+    action ScanMalware (
+        Attachment : Attachment
     ) returns String;
 
     // Validate the Application Id
@@ -27,4 +34,6 @@ service DTEConsentAppPortal {
 
     // Get environment variable (AEM Navigation page url and address validation url)
     function getEnvironmentVariables () returns String;
+
+    
 };
