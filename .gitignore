@@ -11,6 +11,7 @@ target/
 db/data/
 mta_archives/
 dist/
+destinations.js
 
 # Web IDE, App Studio
 .che/
@@ -38,3 +39,6 @@ resources/
 
 # @cap-js/cds-typer
 @cds-models
+
+# auto generated wildcard
+srv/.env

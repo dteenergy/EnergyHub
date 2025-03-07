@@ -9,12 +9,16 @@ const createEnrollmentFormDetail = require('./create-enrollment-form-action');
 const createConsentFormDetail = require('./create-consent-form-action');
 const { valueDecrypt } = require('../../utils/encrypt-and-decrypt-id');
 const validateApplicationId = require('./validate-app-id');
+const { scanMalware } = require('./scan-malware');
 
 module.exports = cds.service.impl(async function (srv) {
 
 	// Landlord enrollment form create action
 	srv.on('CreateEnrollmentFormDetail', createEnrollmentFormDetail);
 
+	// Scan malware action
+	srv.on('ScanMalware', scanMalware);
+	
 	// Validate the Application Id
 	srv.on('validateApplicationId', async (req) => {
 		const res = req._.res;

@@ -7,6 +7,9 @@
 	"private": true,
 	"dependencies": {
 		"@cap-js/postgres": "^1.10.4",
+		"@sap-cloud-sdk/core": "^1.54.2",
+		"@sap-cloud-sdk/generator": "^4.0.0",
+		"@sap-cloud-sdk/openapi-generator": "^4.0.0",
 		"@sap/cds": "^8.5.1",
 		"@sap/cds-dk": "^8.4.2",
 		"@sap/xsenv": "^5.4.0",
@@ -24,6 +27,7 @@
 	"devDependencies": {
 		"@cap-js/cds-types": "^0.7.0",
 		"@cap-js/sqlite": "^1",
+		"@sap-cloud-sdk/openapi": "^4.0.0",
 		"@sap/cds-dk": "^8",
 		"@sap/dev-cap-tools": "^1.31.0",
 		"mbt": "^1.2.29",
@@ -33,7 +37,7 @@
 		"start": "cds-serve",
 		"undeploy": "cf undeploy dteConsentAppPortal --delete-services --delete-service-keys --delete-service-brokers",
 		"build": "rimraf resources mta_archives && mbt build --mtar archive",
-		"deploy": "cf deploy mta_archives/archive.mtar --delete-services --retries 1",
+		"deploy": "cf deploy mta_archives/archive.mtar --delete-services --delete-service-keys --delete-service-brokers --retries 1",
 		"watch-dteconsentappclient": "cds watch --open dteconsentappclient/webapp/index.html?sap-ui-xx-viewCache=false",
 		"watch-dte-energy-admin-portal": "cds watch --open dte-energy-admin-portal/webapp/index.html?sap-ui-xx-viewCache=false"
 	},

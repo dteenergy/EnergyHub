@@ -1,9 +1,10 @@
 const cds = require('@sap/cds');
 const { v4: uuidv4 } = require('uuid');
+const { entities } = require('@sap/cds');
 
 const sharepoint = require('../../utils/sharepoint-api');
 const { generateAppNumber } = require('../../utils/generate-application-number');
-const { entities } = require('@sap/cds');
+
 
 /**
  * Create landlord Enrollment Form 

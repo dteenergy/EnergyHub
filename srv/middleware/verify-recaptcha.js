@@ -12,7 +12,7 @@ const axios= require('axios');
 const verifyReCAPTCHA = async (req, res, next) => {
   
   // List of paths that should pypass the reCAPTCHA verification process
-  const excludePaths = ["/service/getEnvironmentVariables", "/service/validateApplicationId", "/service/Attachment"];
+  const excludePaths = ["/service/getEnvironmentVariables", "/service/validateApplicationId", "/service/Attachment", "/service/ScanMalware"];
   
   const originalUrl = req.originalUrl;
   const recaptchaSecretKey = process.env.RECAPTCHA_SECRET_KEY;
